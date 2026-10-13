@@ -38,17 +38,17 @@
             [ 1, "MOVE_LEER" ],
             [ 1, "MOVE_ABSORB" ],
             [ 1, "MOVE_QUICK_ATTACK" ],
-            [ 6, "MOVE_ABSORB" ],
-            [ 11, "MOVE_QUICK_ATTACK" ],
+            [ 13, "MOVE_MEGA_DRAIN" ],
             [ 16, "MOVE_FURY_CUTTER" ],
-            [ 17, "MOVE_PURSUIT" ],
-            [ 23, "MOVE_SCREECH" ],
-            [ 29, "MOVE_LEAF_BLADE" ],
-            [ 35, "MOVE_AGILITY" ],
-            [ 41, "MOVE_SLAM" ],
-            [ 47, "MOVE_DETECT" ],
+            [ 18, "MOVE_PURSUIT" ],
+            [ 23, "MOVE_DOUBLE_TEAM" ],
+            [ 28, "MOVE_LEAF_BLADE" ],
+            [ 33, "MOVE_SLAM" ],
+            [ 38, "MOVE_DETECT" ],
+            [ 43, "MOVE_X_SCISSOR" ],
+            [ 48, "MOVE_SCREECH" ],
             [ 53, "MOVE_FALSE_SWIPE" ],
-            [ 59, "MOVE_LEAF_STORM" ]
+            [ 58, "MOVE_LEAF_STORM" ]
         ],
         "by_tm": [
             "TM01",
@@ -157,7 +157,10 @@
         "it": {
             "name": "GROVYLE",
             "category": "Pokémon Legnogeco",
-            "entry_text": [ "Vive in giungle fitte. Si avvicina\n", "alle prede saltando di ramo in ramo." ]
+            "entry_text": [
+                "Vive in giungle fitte. Si avvicina\n",
+                "alle prede saltando di ramo in ramo."
+            ]
         },
         "es": {
             "name": "GROVYLE",

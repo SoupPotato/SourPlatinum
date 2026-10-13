@@ -38,8 +38,6 @@
             [ 1, "MOVE_PROTECT" ],
             [ 1, "MOVE_TAUNT" ],
             [ 1, "MOVE_METAL_SOUND" ],
-            [ 6, "MOVE_TAUNT" ],
-            [ 10, "MOVE_METAL_SOUND" ],
             [ 15, "MOVE_TAKE_DOWN" ],
             [ 19, "MOVE_IRON_DEFENSE" ],
             [ 24, "MOVE_SWAGGER" ],

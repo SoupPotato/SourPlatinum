@@ -35,6 +35,7 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_POISON_STING" ],
+            [ 1, "MOVE_WATER_GUN" ],
             [ 5, "MOVE_SUPERSONIC" ],
             [ 8, "MOVE_CONSTRICT" ],
             [ 12, "MOVE_ACID" ],

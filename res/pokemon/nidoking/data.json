@@ -1,7 +1,7 @@
 {
     "base_stats": {
         "hp": 81,
-        "attack": 92,
+        "attack": 102,
         "defense": 77,
         "speed": 85,
         "special_attack": 85,
@@ -38,8 +38,8 @@
             [ 1, "MOVE_FOCUS_ENERGY" ],
             [ 1, "MOVE_DOUBLE_KICK" ],
             [ 1, "MOVE_POISON_STING" ],
-            [ 23, "MOVE_THRASH" ],
-            [ 43, "MOVE_EARTH_POWER" ],
+            [ 29, "MOVE_THRASH" ],
+            [ 40, "MOVE_EARTH_POWER" ],
             [ 58, "MOVE_MEGAHORN" ]
         ],
         "by_tm": [

@@ -44,12 +44,12 @@
     },
     "evolutions": [
         [
-            "EVO_LEVEL_PID_LOW",
+            "EVO_LEVEL_FEMALE",
             7,
             "SPECIES_SILCOON"
         ],
         [
-            "EVO_LEVEL_PID_HIGH",
+            "EVO_LEVEL_MALE",
             7,
             "SPECIES_CASCOON"
         ]

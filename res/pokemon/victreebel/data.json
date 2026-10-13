@@ -5,7 +5,7 @@
         "defense": 65,
         "speed": 70,
         "special_attack": 100,
-        "special_defense": 60
+        "special_defense": 70
     },
     "types": [ "TYPE_GRASS", "TYPE_POISON" ],
     "catch_rate": 45,
@@ -41,8 +41,8 @@
             [ 1, "MOVE_SLEEP_POWDER" ],
             [ 1, "MOVE_SWEET_SCENT" ],
             [ 1, "MOVE_RAZOR_LEAF" ],
-            [ 47, "MOVE_LEAF_STORM" ],
-            [ 47, "MOVE_LEAF_BLADE" ]
+            [ 40, "MOVE_LEAF_STORM" ],
+            [ 45, "MOVE_LEAF_BLADE" ]
         ],
         "by_tm": [
             "TM06",
@@ -70,6 +70,7 @@
             "TM78",
             "TM82",
             "TM83",
+            "TM84",
             "TM86",
             "TM87",
             "TM90",

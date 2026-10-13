@@ -28,7 +28,7 @@
     "exp_rate": "EXP_RATE_SLOW",
     "egg_groups": [ "EGG_GROUP_MONSTER", "EGG_GROUP_WATER_1" ],
     "abilities": [ "ABILITY_WATER_ABSORB", "ABILITY_SHELL_ARMOR" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 60,
     "body_color": "MON_COLOR_BLUE",
     "flip_sprite": false,
     "icon_palette": 2,
@@ -44,11 +44,11 @@
             [ 18, "MOVE_BODY_SLAM" ],
             [ 22, "MOVE_RAIN_DANCE" ],
             [ 27, "MOVE_PERISH_SONG" ],
-            [ 32, "MOVE_ICE_BEAM" ],
-            [ 37, "MOVE_BRINE" ],
+            [ 32, "MOVE_BRINE" ],
+            [ 37, "MOVE_ICE_BEAM" ],
             [ 43, "MOVE_SAFEGUARD" ],
-            [ 49, "MOVE_HYDRO_PUMP" ],
-            [ 55, "MOVE_SHEER_COLD" ]
+            [ 47, "MOVE_HYDRO_PUMP" ],
+            [ 50, "MOVE_SHEER_COLD" ]
         ],
         "by_tm": [
             "TM03",

@@ -34,20 +34,25 @@
     "icon_palette": 2,
     "learnset": {
         "by_level": [
+            [ 1, "MOVE_SACRED_FIRE" ],
+            [ 1, "MOVE_EXTREME_SPEED" ],
             [ 1, "MOVE_BITE" ],
             [ 1, "MOVE_LEER" ],
-            [ 8, "MOVE_EMBER" ],
-            [ 15, "MOVE_ROAR" ],
-            [ 22, "MOVE_FIRE_SPIN" ],
-            [ 29, "MOVE_STOMP" ],
-            [ 36, "MOVE_FLAMETHROWER" ],
-            [ 43, "MOVE_SWAGGER" ],
-            [ 50, "MOVE_FIRE_FANG" ],
-            [ 57, "MOVE_LAVA_PLUME" ],
-            [ 64, "MOVE_EXTRASENSORY" ],
-            [ 71, "MOVE_FIRE_BLAST" ],
-            [ 78, "MOVE_CALM_MIND" ],
-            [ 85, "MOVE_ERUPTION" ]
+            [ 1, "MOVE_EMBER" ],
+            [ 1, "MOVE_FIRE_SPIN" ],
+            [ 12, "MOVE_STOMP" ],
+            [ 18, "MOVE_ROAR" ],
+            [ 24, "MOVE_FLAME_WHEEL" ],
+            [ 30, "MOVE_SWAGGER" ],
+            [ 36, "MOVE_CRUNCH" ],
+            [ 42, "MOVE_FIRE_FANG" ],
+            [ 48, "MOVE_SCARY_FACE" ],
+            [ 54, "MOVE_LAVA_PLUME" ],
+            [ 60, "MOVE_EXTRASENSORY" ],
+            [ 66, "MOVE_SUNNY_DAY" ],
+            [ 72, "MOVE_CALM_MIND" ],
+            [ 78, "MOVE_FIRE_BLAST" ],
+            [ 84, "MOVE_ERUPTION" ]
         ],
         "by_tm": [
             "TM04",
@@ -136,7 +141,10 @@
         "de": {
             "name": "ENTEI",
             "category": "Vulkan",
-            "entry_text": [ "Man sagt, wenn es br\u00fcllt, bricht\n", "irgendwo in der Welt ein Vulkan aus." ]
+            "entry_text": [
+                "Man sagt, wenn es brüllt, bricht\n",
+                "irgendwo in der Welt ein Vulkan aus."
+            ]
         },
         "it": {
             "name": "ENTEI",

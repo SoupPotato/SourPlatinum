@@ -1,7 +1,7 @@
 {
     "base_stats": {
         "hp": 65,
-        "attack": 80,
+        "attack": 90,
         "defense": 40,
         "speed": 75,
         "special_attack": 45,
@@ -36,16 +36,17 @@
         "by_level": [
             [ 1, "MOVE_FURY_ATTACK" ],
             [ 10, "MOVE_FURY_ATTACK" ],
-            [ 13, "MOVE_FOCUS_ENERGY" ],
-            [ 16, "MOVE_TWINEEDLE" ],
-            [ 19, "MOVE_RAGE" ],
-            [ 22, "MOVE_PURSUIT" ],
-            [ 25, "MOVE_TOXIC_SPIKES" ],
-            [ 28, "MOVE_PIN_MISSILE" ],
-            [ 31, "MOVE_AGILITY" ],
-            [ 34, "MOVE_ASSURANCE" ],
-            [ 37, "MOVE_POISON_JAB" ],
-            [ 40, "MOVE_ENDEAVOR" ]
+            [ 11, "MOVE_FOCUS_ENERGY" ],
+            [ 14, "MOVE_RAGE" ],
+            [ 17, "MOVE_TWINEEDLE" ],
+            [ 20, "MOVE_PURSUIT" ],
+            [ 23, "MOVE_TOXIC_SPIKES" ],
+            [ 26, "MOVE_PIN_MISSILE" ],
+            [ 29, "MOVE_AGILITY" ],
+            [ 32, "MOVE_ASSURANCE" ],
+            [ 35, "MOVE_POISON_JAB" ],
+            [ 38, "MOVE_ENDEAVOR" ],
+            [ 41, "MOVE_OUTRAGE" ]
         ],
         "by_tm": [
             "TM06",

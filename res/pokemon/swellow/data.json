@@ -4,7 +4,7 @@
         "attack": 85,
         "defense": 60,
         "speed": 125,
-        "special_attack": 50,
+        "special_attack": 75,
         "special_defense": 50
     },
     "types": [ "TYPE_NORMAL", "TYPE_FLYING" ],
@@ -39,14 +39,14 @@
             [ 1, "MOVE_GROWL" ],
             [ 1, "MOVE_FOCUS_ENERGY" ],
             [ 1, "MOVE_QUICK_ATTACK" ],
-            [ 4, "MOVE_FOCUS_ENERGY" ],
-            [ 8, "MOVE_QUICK_ATTACK" ],
             [ 13, "MOVE_WING_ATTACK" ],
-            [ 19, "MOVE_DOUBLE_TEAM" ],
-            [ 28, "MOVE_ENDEAVOR" ],
-            [ 38, "MOVE_AERIAL_ACE" ],
-            [ 49, "MOVE_AGILITY" ],
-            [ 61, "MOVE_AIR_SLASH" ]
+            [ 17, "MOVE_DOUBLE_TEAM" ],
+            [ 21, "MOVE_AERIAL_ACE" ],
+            [ 27, "MOVE_AGILITY" ],
+            [ 33, "MOVE_AIR_SLASH" ],
+            [ 39, "MOVE_ENDEAVOR" ],
+            [ 45, "MOVE_BRAVE_BIRD" ],
+            [ 51, "MOVE_REVERSAL" ]
         ],
         "by_tm": [
             "TM06",

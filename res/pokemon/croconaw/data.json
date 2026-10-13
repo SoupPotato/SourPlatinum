@@ -37,7 +37,6 @@
             [ 1, "MOVE_SCRATCH" ],
             [ 1, "MOVE_LEER" ],
             [ 1, "MOVE_WATER_GUN" ],
-            [ 6, "MOVE_WATER_GUN" ],
             [ 8, "MOVE_RAGE" ],
             [ 13, "MOVE_BITE" ],
             [ 15, "MOVE_SCARY_FACE" ],

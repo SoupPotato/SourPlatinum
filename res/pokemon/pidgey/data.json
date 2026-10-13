@@ -28,7 +28,7 @@
     "exp_rate": "EXP_RATE_MEDIUM_SLOW",
     "egg_groups": [ "EGG_GROUP_FLYING", "EGG_GROUP_FLYING" ],
     "abilities": [ "ABILITY_KEEN_EYE", "ABILITY_TANGLED_FEET" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 90,
     "body_color": "MON_COLOR_BROWN",
     "flip_sprite": false,
     "icon_palette": 0,
@@ -143,7 +143,10 @@
         "de": {
             "name": "TAUBSI",
             "category": "Kleinvogel",
-            "entry_text": [ "Reizt man dieses an sich gutm\u00fctige\n", "Pok\u00e9mon, wehrt es sich w\u00fctend." ]
+            "entry_text": [
+                "Reizt man dieses an sich gutmütige\n",
+                "Pokémon, wehrt es sich wütend."
+            ]
         },
         "it": {
             "name": "PIDGEY",

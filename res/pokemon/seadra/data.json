@@ -35,20 +35,19 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_BUBBLE" ],
-            [ 1, "MOVE_SMOKE_SCREEN" ],
             [ 1, "MOVE_LEER" ],
+            [ 1, "MOVE_SMOKE_SCREEN" ],
             [ 1, "MOVE_WATER_GUN" ],
-            [ 4, "MOVE_SMOKE_SCREEN" ],
-            [ 8, "MOVE_LEER" ],
-            [ 11, "MOVE_WATER_GUN" ],
-            [ 14, "MOVE_FOCUS_ENERGY" ],
-            [ 18, "MOVE_BUBBLE_BEAM" ],
-            [ 23, "MOVE_AGILITY" ],
-            [ 26, "MOVE_TWISTER" ],
-            [ 30, "MOVE_BRINE" ],
-            [ 40, "MOVE_HYDRO_PUMP" ],
-            [ 48, "MOVE_DRAGON_DANCE" ],
-            [ 57, "MOVE_DRAGON_PULSE" ]
+            [ 14, "MOVE_TWISTER" ],
+            [ 19, "MOVE_FOCUS_ENERGY" ],
+            [ 23, "MOVE_BUBBLE_BEAM" ],
+            [ 28, "MOVE_DRAGON_BREATH" ],
+            [ 32, "MOVE_AGILITY" ],
+            [ 39, "MOVE_BRINE" ],
+            [ 45, "MOVE_DRAGON_PULSE" ],
+            [ 52, "MOVE_HYDRO_PUMP" ],
+            [ 58, "MOVE_DRAGON_DANCE" ],
+            [ 64, "MOVE_RAIN_DANCE" ]
         ],
         "by_tm": [
             "TM03",
@@ -93,7 +92,7 @@
     },
     "evolutions": [
         [
-            "EVO_TRADE_WITH_HELD_ITEM",
+            "EVO_USE_ITEM",
             "ITEM_DRAGON_SCALE",
             "SPECIES_KINGDRA"
         ]

@@ -28,26 +28,27 @@
     "exp_rate": "EXP_RATE_SLOW",
     "egg_groups": [ "EGG_GROUP_MONSTER", "EGG_GROUP_FIELD" ],
     "abilities": [ "ABILITY_LIGHTNING_ROD", "ABILITY_ROCK_HEAD" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 60,
     "body_color": "MON_COLOR_GRAY",
     "flip_sprite": false,
     "icon_palette": 1,
     "learnset": {
         "by_level": [
-            [ 1, "MOVE_HORN_ATTACK" ],
+            [ 1, "MOVE_TACKLE" ],
             [ 1, "MOVE_TAIL_WHIP" ],
-            [ 1, "MOVE_STOMP" ],
             [ 1, "MOVE_FURY_ATTACK" ],
-            [ 9, "MOVE_STOMP" ],
-            [ 13, "MOVE_FURY_ATTACK" ],
-            [ 21, "MOVE_SCARY_FACE" ],
-            [ 25, "MOVE_ROCK_BLAST" ],
-            [ 33, "MOVE_TAKE_DOWN" ],
-            [ 37, "MOVE_HORN_DRILL" ],
+            [ 10, "MOVE_ROCK_THROW" ],
+            [ 14, "MOVE_MAGNITUDE" ],
+            [ 19, "MOVE_HORN_ATTACK" ],
+            [ 23, "MOVE_SCARY_FACE" ],
+            [ 28, "MOVE_STOMP" ],
+            [ 32, "MOVE_ROCK_BLAST" ],
+            [ 37, "MOVE_TAKE_DOWN" ],
+            [ 41, "MOVE_STONE_EDGE" ],
             [ 42, "MOVE_HAMMER_ARM" ],
-            [ 45, "MOVE_STONE_EDGE" ],
-            [ 49, "MOVE_EARTHQUAKE" ],
-            [ 57, "MOVE_MEGAHORN" ]
+            [ 48, "MOVE_EARTHQUAKE" ],
+            [ 55, "MOVE_MEGAHORN" ],
+            [ 62, "MOVE_HORN_DRILL" ]
         ],
         "by_tm": [
             "TM01",
@@ -125,7 +126,7 @@
     },
     "evolutions": [
         [
-            "EVO_TRADE_WITH_HELD_ITEM",
+            "EVO_USE_ITEM",
             "ITEM_PROTECTOR",
             "SPECIES_RHYPERIOR"
         ]

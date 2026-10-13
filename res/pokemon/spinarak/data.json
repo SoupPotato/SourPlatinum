@@ -36,9 +36,9 @@
         "by_level": [
             [ 1, "MOVE_POISON_STING" ],
             [ 1, "MOVE_STRING_SHOT" ],
-            [ 5, "MOVE_SCARY_FACE" ],
-            [ 8, "MOVE_CONSTRICT" ],
-            [ 12, "MOVE_LEECH_LIFE" ],
+            [ 5, "MOVE_CONSTRICT" ],
+            [ 8, "MOVE_LEECH_LIFE" ],
+            [ 12, "MOVE_SCARY_FACE" ],
             [ 15, "MOVE_NIGHT_SHADE" ],
             [ 19, "MOVE_SHADOW_SNEAK" ],
             [ 22, "MOVE_FURY_SWIPES" ],
@@ -47,7 +47,8 @@
             [ 33, "MOVE_AGILITY" ],
             [ 36, "MOVE_PIN_MISSILE" ],
             [ 40, "MOVE_PSYCHIC" ],
-            [ 43, "MOVE_POISON_JAB" ]
+            [ 43, "MOVE_POISON_JAB" ],
+            [ 47, "MOVE_CROSS_POISON" ]
         ],
         "by_tm": [
             "TM06",

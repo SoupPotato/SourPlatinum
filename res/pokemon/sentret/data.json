@@ -28,7 +28,7 @@
     "exp_rate": "EXP_RATE_MEDIUM_FAST",
     "egg_groups": [ "EGG_GROUP_FIELD", "EGG_GROUP_FIELD" ],
     "abilities": [ "ABILITY_RUN_AWAY", "ABILITY_KEEN_EYE" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 120,
     "body_color": "MON_COLOR_BROWN",
     "flip_sprite": false,
     "icon_palette": 2,
@@ -47,7 +47,8 @@
             [ 36, "MOVE_AMNESIA" ],
             [ 39, "MOVE_BATON_PASS" ],
             [ 42, "MOVE_ME_FIRST" ],
-            [ 47, "MOVE_HYPER_VOICE" ]
+            [ 47, "MOVE_HYPER_VOICE" ],
+            [ 50, "MOVE_DOUBLE_EDGE" ]
         ],
         "by_tm": [
             "TM01",

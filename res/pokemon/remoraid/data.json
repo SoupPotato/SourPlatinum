@@ -38,13 +38,14 @@
             [ 6, "MOVE_LOCK_ON" ],
             [ 10, "MOVE_PSYBEAM" ],
             [ 14, "MOVE_AURORA_BEAM" ],
-            [ 19, "MOVE_BUBBLE_BEAM" ],
-            [ 23, "MOVE_FOCUS_ENERGY" ],
-            [ 27, "MOVE_BULLET_SEED" ],
-            [ 32, "MOVE_WATER_PULSE" ],
-            [ 36, "MOVE_SIGNAL_BEAM" ],
-            [ 40, "MOVE_ICE_BEAM" ],
-            [ 45, "MOVE_HYPER_BEAM" ]
+            [ 18, "MOVE_BUBBLE_BEAM" ],
+            [ 22, "MOVE_FOCUS_ENERGY" ],
+            [ 26, "MOVE_BULLET_SEED" ],
+            [ 30, "MOVE_WATER_PULSE" ],
+            [ 34, "MOVE_SIGNAL_BEAM" ],
+            [ 38, "MOVE_ICE_BEAM" ],
+            [ 42, "MOVE_HYDRO_PUMP" ],
+            [ 46, "MOVE_HYPER_BEAM" ]
         ],
         "by_tm": [
             "TM03",
@@ -140,7 +141,10 @@
         "fr": {
             "name": "REMORAID",
             "category": "Pokémon Jet",
-            "entry_text": [ "Il crache un puissant jet d\u2019eau\n", "pour abattre les proies volantes." ]
+            "entry_text": [
+                "Il crache un puissant jet d’eau\n",
+                "pour abattre les proies volantes."
+            ]
         },
         "de": {
             "name": "REMORAID",
@@ -163,7 +167,10 @@
         "es": {
             "name": "REMORAID",
             "category": "Pokémon Reactor",
-            "entry_text": [ "Escupe potentes chorros de agua\n", "para derribar presas voladoras." ]
+            "entry_text": [
+                "Escupe potentes chorros de agua\n",
+                "para derribar presas voladoras."
+            ]
         },
         "jp": {
             "name": "テッポウオ",

@@ -36,16 +36,17 @@
         "by_level": [
             [ 1, "MOVE_WATER_PULSE" ],
             [ 5, "MOVE_SCARY_FACE" ],
-            [ 15, "MOVE_ANCIENT_POWER" ],
-            [ 20, "MOVE_BODY_SLAM" ],
-            [ 30, "MOVE_CALM_MIND" ],
+            [ 15, "MOVE_BODY_SLAM" ],
+            [ 20, "MOVE_MUDDY_WATER" ],
+            [ 30, "MOVE_AQUA_RING" ],
             [ 35, "MOVE_ICE_BEAM" ],
-            [ 45, "MOVE_HYDRO_PUMP" ],
-            [ 50, "MOVE_REST" ],
-            [ 60, "MOVE_SHEER_COLD" ],
-            [ 65, "MOVE_DOUBLE_EDGE" ],
-            [ 75, "MOVE_AQUA_TAIL" ],
-            [ 80, "MOVE_WATER_SPOUT" ]
+            [ 45, "MOVE_ANCIENT_POWER" ],
+            [ 50, "MOVE_WATER_SPOUT" ],
+            [ 60, "MOVE_CALM_MIND" ],
+            [ 65, "MOVE_AQUA_TAIL" ],
+            [ 75, "MOVE_SHEER_COLD" ],
+            [ 80, "MOVE_DOUBLE_EDGE" ],
+            [ 90, "MOVE_HYDRO_PUMP" ]
         ],
         "by_tm": [
             "TM03",

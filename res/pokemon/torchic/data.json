@@ -36,15 +36,17 @@
         "by_level": [
             [ 1, "MOVE_SCRATCH" ],
             [ 1, "MOVE_GROWL" ],
-            [ 7, "MOVE_FOCUS_ENERGY" ],
-            [ 10, "MOVE_EMBER" ],
-            [ 16, "MOVE_PECK" ],
-            [ 19, "MOVE_SAND_ATTACK" ],
-            [ 25, "MOVE_FIRE_SPIN" ],
-            [ 28, "MOVE_QUICK_ATTACK" ],
-            [ 34, "MOVE_SLASH" ],
-            [ 37, "MOVE_MIRROR_MOVE" ],
-            [ 43, "MOVE_FLAMETHROWER" ]
+            [ 6, "MOVE_EMBER" ],
+            [ 10, "MOVE_SAND_ATTACK" ],
+            [ 14, "MOVE_PECK" ],
+            [ 19, "MOVE_FIRE_SPIN" ],
+            [ 23, "MOVE_QUICK_ATTACK" ],
+            [ 28, "MOVE_FEATHER_DANCE" ],
+            [ 32, "MOVE_FOCUS_ENERGY" ],
+            [ 37, "MOVE_SLASH" ],
+            [ 41, "MOVE_MIRROR_MOVE" ],
+            [ 46, "MOVE_REVERSAL" ],
+            [ 50, "MOVE_FLAMETHROWER" ]
         ],
         "by_tm": [
             "TM06",
@@ -76,7 +78,8 @@
             "TM90",
             "HM01",
             "HM04",
-            "HM06"
+            "HM06",
+            "HM08"
         ],
         "by_tutor": [
             "MOVE_MUD_SLAP",

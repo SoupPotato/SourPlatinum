@@ -34,17 +34,19 @@
     "icon_palette": 0,
     "learnset": {
         "by_level": [
-            [ 1, "MOVE_DRAGON_BREATH" ],
+            [ 1, "MOVE_SHADOW_SNEAK" ],
             [ 1, "MOVE_SCARY_FACE" ],
-            [ 10, "MOVE_OMINOUS_WIND" ],
-            [ 20, "MOVE_ANCIENT_POWER" ],
-            [ 30, "MOVE_DRAGON_CLAW" ],
+            [ 8, "MOVE_DRAGON_BREATH" ],
+            [ 16, "MOVE_OMINOUS_WIND" ],
+            [ 24, "MOVE_ANCIENT_POWER" ],
+            [ 32, "MOVE_DRAGON_CLAW" ],
             [ 40, "MOVE_SHADOW_FORCE" ],
-            [ 50, "MOVE_HEAL_BLOCK" ],
-            [ 60, "MOVE_EARTH_POWER" ],
-            [ 70, "MOVE_SLASH" ],
-            [ 80, "MOVE_SHADOW_CLAW" ],
-            [ 90, "MOVE_AURA_SPHERE" ]
+            [ 48, "MOVE_SLASH" ],
+            [ 56, "MOVE_PAIN_SPLIT" ],
+            [ 64, "MOVE_AURA_SPHERE" ],
+            [ 72, "MOVE_SHADOW_CLAW" ],
+            [ 80, "MOVE_EARTH_POWER" ],
+            [ 88, "MOVE_DESTINY_BOND" ]
         ],
         "by_tm": [
             "TM02",

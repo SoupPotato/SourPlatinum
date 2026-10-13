@@ -30,7 +30,7 @@
     "abilities": [ "ABILITY_STATIC", "ABILITY_NONE" ],
     "safari_flee_rate": 0,
     "body_color": "MON_COLOR_YELLOW",
-    "flip_sprite": false,
+    "flip_sprite": true,
     "icon_palette": 0,
     "learnset": {
         "by_level": [

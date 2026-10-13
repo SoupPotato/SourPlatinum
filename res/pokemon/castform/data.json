@@ -38,10 +38,14 @@
             [ 10, "MOVE_WATER_GUN" ],
             [ 10, "MOVE_EMBER" ],
             [ 10, "MOVE_POWDER_SNOW" ],
+            [ 15, "MOVE_HEADBUTT" ],
             [ 20, "MOVE_RAIN_DANCE" ],
             [ 20, "MOVE_SUNNY_DAY" ],
             [ 20, "MOVE_HAIL" ],
-            [ 30, "MOVE_WEATHER_BALL" ]
+            [ 25, "MOVE_WEATHER_BALL" ],
+            [ 35, "MOVE_HYDRO_PUMP" ],
+            [ 35, "MOVE_FIRE_BLAST" ],
+            [ 35, "MOVE_BLIZZARD" ]
         ],
         "by_tm": [
             "TM03",

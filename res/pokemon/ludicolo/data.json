@@ -34,10 +34,14 @@
     "icon_palette": 1,
     "learnset": {
         "by_level": [
-            [ 1, "MOVE_ASTONISH" ],
-            [ 1, "MOVE_GROWL" ],
+            [ 1, "MOVE_BUBBLE_BEAM" ],
             [ 1, "MOVE_MEGA_DRAIN" ],
-            [ 1, "MOVE_NATURE_POWER" ]
+            [ 1, "MOVE_NATURE_POWER" ],
+            [ 1, "MOVE_RAIN_DANCE" ],
+            [ 30, "MOVE_TEETER_DANCE" ],
+            [ 50, "MOVE_ZEN_HEADBUTT" ],
+            [ 54, "MOVE_ENERGY_BALL" ],
+            [ 58, "MOVE_HYDRO_PUMP" ]
         ],
         "by_tm": [
             "TM01",

@@ -35,18 +35,20 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_TACKLE" ],
-            [ 4, "MOVE_CHARM" ],
-            [ 7, "MOVE_WATER_GUN" ],
+            [ 1, "MOVE_CHARM" ],
+            [ 6, "MOVE_WATER_GUN" ],
             [ 9, "MOVE_AGILITY" ],
-            [ 14, "MOVE_TAKE_DOWN" ],
-            [ 17, "MOVE_LUCKY_CHANT" ],
-            [ 22, "MOVE_ATTRACT" ],
-            [ 27, "MOVE_SWEET_KISS" ],
-            [ 31, "MOVE_WATER_PULSE" ],
-            [ 37, "MOVE_AQUA_RING" ],
-            [ 40, "MOVE_CAPTIVATE" ],
-            [ 46, "MOVE_FLAIL" ],
-            [ 51, "MOVE_SAFEGUARD" ]
+            [ 13, "MOVE_LUCKY_CHANT" ],
+            [ 17, "MOVE_WATER_PULSE" ],
+            [ 21, "MOVE_ATTRACT" ],
+            [ 25, "MOVE_FLAIL" ],
+            [ 30, "MOVE_SWEET_KISS" ],
+            [ 34, "MOVE_TAKE_DOWN" ],
+            [ 37, "MOVE_CAPTIVATE" ],
+            [ 41, "MOVE_AQUA_RING" ],
+            [ 45, "MOVE_HYDRO_PUMP" ],
+            [ 49, "MOVE_SAFEGUARD" ],
+            [ 52, "MOVE_WISH" ]
         ],
         "by_tm": [
             "TM03",

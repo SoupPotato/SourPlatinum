@@ -37,17 +37,19 @@
             [ 1, "MOVE_LEER" ],
             [ 1, "MOVE_PECK" ],
             [ 6, "MOVE_SAND_ATTACK" ],
-            [ 9, "MOVE_SWIFT" ],
-            [ 12, "MOVE_AGILITY" ],
-            [ 17, "MOVE_FURY_ATTACK" ],
-            [ 20, "MOVE_FEINT" ],
-            [ 23, "MOVE_AIR_CUTTER" ],
-            [ 28, "MOVE_SPIKES" ],
-            [ 31, "MOVE_METAL_SOUND" ],
-            [ 34, "MOVE_STEEL_WING" ],
-            [ 39, "MOVE_AIR_SLASH" ],
-            [ 42, "MOVE_SLASH" ],
-            [ 45, "MOVE_NIGHT_SLASH" ]
+            [ 9, "MOVE_FURY_ATTACK" ],
+            [ 12, "MOVE_METAL_CLAW" ],
+            [ 17, "MOVE_AGILITY" ],
+            [ 20, "MOVE_WING_ATTACK" ],
+            [ 23, "MOVE_SLASH" ],
+            [ 28, "MOVE_STEEL_WING" ],
+            [ 31, "MOVE_FEINT" ],
+            [ 34, "MOVE_DRILL_PECK" ],
+            [ 39, "MOVE_METAL_SOUND" ],
+            [ 42, "MOVE_SPIKES" ],
+            [ 45, "MOVE_IRON_DEFENSE" ],
+            [ 50, "MOVE_BRAVE_BIRD" ],
+            [ 53, "MOVE_NIGHT_SLASH" ]
         ],
         "by_tm": [
             "TM05",
@@ -87,7 +89,6 @@
             "TM91",
             "HM01",
             "HM02",
-            "HM05",
             "HM06"
         ],
         "by_tutor": [

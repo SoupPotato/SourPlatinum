@@ -4,7 +4,7 @@
         "attack": 70,
         "defense": 45,
         "speed": 45,
-        "special_attack": 75,
+        "special_attack": 85,
         "special_defense": 50
     },
     "types": [ "TYPE_NORMAL", "TYPE_NORMAL" ],
@@ -35,7 +35,7 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_SING" ],
-            [ 1, "MOVE_DISABLE" ],
+            [ 1, "MOVE_POUND" ],
             [ 1, "MOVE_DEFENSE_CURL" ],
             [ 1, "MOVE_DOUBLE_SLAP" ]
         ],

@@ -36,17 +36,18 @@
         "by_level": [
             [ 1, "MOVE_TACKLE" ],
             [ 1, "MOVE_GROWL" ],
+            [ 1, "MOVE_THUNDER_WAVE" ],
             [ 1, "MOVE_THUNDER_SHOCK" ],
-            [ 5, "MOVE_GROWL" ],
-            [ 10, "MOVE_THUNDER_SHOCK" ],
-            [ 14, "MOVE_THUNDER_WAVE" ],
-            [ 20, "MOVE_COTTON_SPORE" ],
-            [ 25, "MOVE_CHARGE" ],
-            [ 31, "MOVE_DISCHARGE" ],
-            [ 36, "MOVE_SIGNAL_BEAM" ],
-            [ 42, "MOVE_LIGHT_SCREEN" ],
-            [ 47, "MOVE_POWER_GEM" ],
-            [ 53, "MOVE_THUNDER" ]
+            [ 11, "MOVE_COTTON_SPORE" ],
+            [ 16, "MOVE_CHARGE" ],
+            [ 20, "MOVE_TAKE_DOWN" ],
+            [ 25, "MOVE_CHARGE_BEAM" ],
+            [ 29, "MOVE_CONFUSE_RAY" ],
+            [ 34, "MOVE_POWER_GEM" ],
+            [ 38, "MOVE_DISCHARGE" ],
+            [ 43, "MOVE_LIGHT_SCREEN" ],
+            [ 47, "MOVE_SIGNAL_BEAM" ],
+            [ 52, "MOVE_THUNDER" ]
         ],
         "by_tm": [
             "TM01",

@@ -85,7 +85,6 @@
             "TM89",
             "TM90",
             "HM01",
-            "HM05",
             "HM06"
         ],
         "by_tutor": [
@@ -110,7 +109,7 @@
     },
     "evolutions": [
         [
-            "EVO_TRADE_WITH_HELD_ITEM",
+            "EVO_USE_ITEM",
             "ITEM_METAL_COAT",
             "SPECIES_SCIZOR"
         ]

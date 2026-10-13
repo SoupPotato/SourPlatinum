@@ -37,16 +37,17 @@
             [ 1, "MOVE_TACKLE" ],
             [ 1, "MOVE_BUBBLE" ],
             [ 4, "MOVE_SUPERSONIC" ],
-            [ 10, "MOVE_BUBBLE_BEAM" ],
-            [ 13, "MOVE_HEADBUTT" ],
-            [ 19, "MOVE_AGILITY" ],
-            [ 22, "MOVE_WING_ATTACK" ],
-            [ 28, "MOVE_WATER_PULSE" ],
-            [ 31, "MOVE_TAKE_DOWN" ],
-            [ 37, "MOVE_CONFUSE_RAY" ],
+            [ 8, "MOVE_WING_ATTACK" ],
+            [ 12, "MOVE_WATER_PULSE" ],
+            [ 16, "MOVE_CONFUSE_RAY" ],
+            [ 20, "MOVE_AGILITY" ],
+            [ 24, "MOVE_BUBBLE_BEAM" ],
+            [ 28, "MOVE_HEADBUTT" ],
+            [ 32, "MOVE_AIR_SLASH" ],
+            [ 36, "MOVE_AQUA_RING" ],
             [ 40, "MOVE_BOUNCE" ],
-            [ 46, "MOVE_AQUA_RING" ],
-            [ 49, "MOVE_HYDRO_PUMP" ]
+            [ 44, "MOVE_TAKE_DOWN" ],
+            [ 48, "MOVE_HYDRO_PUMP" ]
         ],
         "by_tm": [
             "TM03",
@@ -100,8 +101,8 @@
     },
     "evolutions": [
         [
-            "EVO_LEVEL_SPECIES_IN_PARTY",
-            "SPECIES_REMORAID",
+            "EVO_LEVEL",
+            31,
             "SPECIES_MANTINE"
         ]
     ],

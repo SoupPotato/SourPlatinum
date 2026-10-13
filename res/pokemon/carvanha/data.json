@@ -36,17 +36,18 @@
         "by_level": [
             [ 1, "MOVE_LEER" ],
             [ 1, "MOVE_BITE" ],
-            [ 6, "MOVE_RAGE" ],
+            [ 4, "MOVE_RAGE" ],
             [ 8, "MOVE_FOCUS_ENERGY" ],
-            [ 11, "MOVE_SCARY_FACE" ],
-            [ 16, "MOVE_ICE_FANG" ],
+            [ 11, "MOVE_AQUA_JET" ],
+            [ 15, "MOVE_ASSURANCE" ],
             [ 18, "MOVE_SCREECH" ],
-            [ 21, "MOVE_SWAGGER" ],
-            [ 26, "MOVE_ASSURANCE" ],
-            [ 28, "MOVE_CRUNCH" ],
-            [ 31, "MOVE_AQUA_JET" ],
-            [ 36, "MOVE_AGILITY" ],
-            [ 38, "MOVE_TAKE_DOWN" ]
+            [ 22, "MOVE_SWAGGER" ],
+            [ 25, "MOVE_ICE_FANG" ],
+            [ 29, "MOVE_SCARY_FACE" ],
+            [ 32, "MOVE_POISON_FANG" ],
+            [ 36, "MOVE_CRUNCH" ],
+            [ 39, "MOVE_AGILITY" ],
+            [ 43, "MOVE_TAKE_DOWN" ]
         ],
         "by_tm": [
             "TM03",

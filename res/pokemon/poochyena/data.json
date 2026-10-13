@@ -35,19 +35,20 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_TACKLE" ],
-            [ 5, "MOVE_HOWL" ],
-            [ 9, "MOVE_SAND_ATTACK" ],
-            [ 13, "MOVE_BITE" ],
-            [ 17, "MOVE_ODOR_SLEUTH" ],
-            [ 21, "MOVE_ROAR" ],
-            [ 25, "MOVE_SWAGGER" ],
-            [ 29, "MOVE_ASSURANCE" ],
-            [ 33, "MOVE_SCARY_FACE" ],
-            [ 37, "MOVE_TAUNT" ],
-            [ 41, "MOVE_EMBARGO" ],
-            [ 45, "MOVE_TAKE_DOWN" ],
-            [ 49, "MOVE_SUCKER_PUNCH" ],
-            [ 53, "MOVE_CRUNCH" ]
+            [ 4, "MOVE_HOWL" ],
+            [ 7, "MOVE_SAND_ATTACK" ],
+            [ 10, "MOVE_BITE" ],
+            [ 13, "MOVE_ODOR_SLEUTH" ],
+            [ 16, "MOVE_ROAR" ],
+            [ 19, "MOVE_SWAGGER" ],
+            [ 22, "MOVE_ASSURANCE" ],
+            [ 25, "MOVE_SCARY_FACE" ],
+            [ 28, "MOVE_EMBARGO" ],
+            [ 31, "MOVE_TAUNT" ],
+            [ 34, "MOVE_CRUNCH" ],
+            [ 37, "MOVE_YAWN" ],
+            [ 40, "MOVE_TAKE_DOWN" ],
+            [ 43, "MOVE_SUCKER_PUNCH" ]
         ],
         "by_tm": [
             "TM05",

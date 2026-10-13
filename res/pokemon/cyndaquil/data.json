@@ -36,17 +36,18 @@
         "by_level": [
             [ 1, "MOVE_TACKLE" ],
             [ 1, "MOVE_LEER" ],
-            [ 4, "MOVE_SMOKE_SCREEN" ],
+            [ 6, "MOVE_SMOKE_SCREEN" ],
             [ 10, "MOVE_EMBER" ],
             [ 13, "MOVE_QUICK_ATTACK" ],
             [ 19, "MOVE_FLAME_WHEEL" ],
-            [ 22, "MOVE_DEFENSE_CURL" ],
-            [ 28, "MOVE_SWIFT" ],
-            [ 31, "MOVE_LAVA_PLUME" ],
-            [ 37, "MOVE_FLAMETHROWER" ],
+            [ 23, "MOVE_DEFENSE_CURL" ],
+            [ 27, "MOVE_SWIFT" ],
+            [ 30, "MOVE_LAVA_PLUME" ],
+            [ 36, "MOVE_FLAMETHROWER" ],
             [ 40, "MOVE_ROLLOUT" ],
-            [ 46, "MOVE_DOUBLE_EDGE" ],
-            [ 49, "MOVE_ERUPTION" ]
+            [ 43, "MOVE_DOUBLE_EDGE" ],
+            [ 49, "MOVE_OVERHEAT" ],
+            [ 53, "MOVE_ERUPTION" ]
         ],
         "by_tm": [
             "TM06",

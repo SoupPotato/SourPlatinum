@@ -5,7 +5,7 @@
         "defense": 70,
         "speed": 110,
         "special_attack": 55,
-        "special_defense": 85
+        "special_defense": 95
     },
     "types": [ "TYPE_GRASS", "TYPE_FLYING" ],
     "catch_rate": 45,
@@ -28,31 +28,28 @@
     "exp_rate": "EXP_RATE_MEDIUM_SLOW",
     "egg_groups": [ "EGG_GROUP_FAIRY", "EGG_GROUP_GRASS" ],
     "abilities": [ "ABILITY_CHLOROPHYLL", "ABILITY_LEAF_GUARD" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 120,
     "body_color": "MON_COLOR_BLUE",
     "flip_sprite": false,
     "icon_palette": 2,
     "learnset": {
         "by_level": [
             [ 1, "MOVE_SPLASH" ],
+            [ 1, "MOVE_ABSORB" ],
             [ 1, "MOVE_SYNTHESIS" ],
             [ 1, "MOVE_TAIL_WHIP" ],
-            [ 1, "MOVE_TACKLE" ],
-            [ 4, "MOVE_SYNTHESIS" ],
-            [ 7, "MOVE_TAIL_WHIP" ],
             [ 10, "MOVE_TACKLE" ],
             [ 12, "MOVE_POISON_POWDER" ],
             [ 14, "MOVE_STUN_SPORE" ],
             [ 16, "MOVE_SLEEP_POWDER" ],
             [ 20, "MOVE_BULLET_SEED" ],
             [ 24, "MOVE_LEECH_SEED" ],
-            [ 28, "MOVE_MEGA_DRAIN" ],
-            [ 32, "MOVE_COTTON_SPORE" ],
-            [ 36, "MOVE_U_TURN" ],
-            [ 40, "MOVE_WORRY_SEED" ],
+            [ 29, "MOVE_MEGA_DRAIN" ],
+            [ 34, "MOVE_COTTON_SPORE" ],
+            [ 39, "MOVE_U_TURN" ],
             [ 44, "MOVE_GIGA_DRAIN" ],
-            [ 48, "MOVE_BOUNCE" ],
-            [ 52, "MOVE_MEMENTO" ]
+            [ 49, "MOVE_BOUNCE" ],
+            [ 54, "MOVE_MEMENTO" ]
         ],
         "by_tm": [
             "TM06",

@@ -34,6 +34,7 @@
     "icon_palette": 1,
     "learnset": {
         "by_level": [
+            [ 1, "MOVE_SUCKER_PUNCH" ],
             [ 1, "MOVE_ASTONISH" ],
             [ 1, "MOVE_PURSUIT" ],
             [ 1, "MOVE_HAZE" ],

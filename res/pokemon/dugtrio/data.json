@@ -1,7 +1,7 @@
 {
     "base_stats": {
         "hp": 35,
-        "attack": 80,
+        "attack": 100,
         "defense": 50,
         "speed": 120,
         "special_attack": 50,
@@ -39,18 +39,18 @@
             [ 1, "MOVE_SCRATCH" ],
             [ 1, "MOVE_SAND_ATTACK" ],
             [ 1, "MOVE_GROWL" ],
-            [ 4, "MOVE_GROWL" ],
-            [ 7, "MOVE_ASTONISH" ],
-            [ 12, "MOVE_MAGNITUDE" ],
-            [ 15, "MOVE_MUD_SLAP" ],
-            [ 18, "MOVE_DIG" ],
-            [ 23, "MOVE_SUCKER_PUNCH" ],
+            [ 1, "MOVE_ASTONISH" ],
+            [ 13, "MOVE_MUD_SLAP" ],
+            [ 16, "MOVE_MAGNITUDE" ],
+            [ 20, "MOVE_SUCKER_PUNCH" ],
+            [ 25, "MOVE_MUD_BOMB" ],
             [ 26, "MOVE_SAND_TOMB" ],
-            [ 28, "MOVE_EARTH_POWER" ],
-            [ 33, "MOVE_MUD_BOMB" ],
-            [ 40, "MOVE_SLASH" ],
-            [ 45, "MOVE_EARTHQUAKE" ],
-            [ 50, "MOVE_FISSURE" ]
+            [ 29, "MOVE_SANDSTORM" ],
+            [ 34, "MOVE_DIG" ],
+            [ 41, "MOVE_SLASH" ],
+            [ 45, "MOVE_EARTH_POWER" ],
+            [ 50, "MOVE_EARTHQUAKE" ],
+            [ 56, "MOVE_FISSURE" ]
         ],
         "by_tm": [
             "TM06",

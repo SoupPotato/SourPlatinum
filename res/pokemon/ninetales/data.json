@@ -34,8 +34,9 @@
     "icon_palette": 1,
     "learnset": {
         "by_level": [
+            [ 1, "MOVE_IMPRISON" ],
             [ 1, "MOVE_NASTY_PLOT" ],
-            [ 1, "MOVE_EMBER" ],
+            [ 1, "MOVE_FLAMETHROWER" ],
             [ 1, "MOVE_QUICK_ATTACK" ],
             [ 1, "MOVE_CONFUSE_RAY" ],
             [ 1, "MOVE_SAFEGUARD" ]

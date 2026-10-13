@@ -28,7 +28,7 @@
     "exp_rate": "EXP_RATE_SLOW",
     "egg_groups": [ "EGG_GROUP_MINERAL", "EGG_GROUP_MINERAL" ],
     "abilities": [ "ABILITY_CLEAR_BODY", "ABILITY_NONE" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 90,
     "body_color": "MON_COLOR_BLUE",
     "flip_sprite": false,
     "icon_palette": 0,

@@ -1,11 +1,11 @@
 {
     "base_stats": {
-        "hp": 40,
+        "hp": 50,
         "attack": 40,
-        "defense": 40,
+        "defense": 50,
         "speed": 20,
         "special_attack": 70,
-        "special_defense": 40
+        "special_defense": 50
     },
     "types": [ "TYPE_FIRE", "TYPE_FIRE" ],
     "catch_rate": 190,
@@ -36,17 +36,18 @@
         "by_level": [
             [ 1, "MOVE_YAWN" ],
             [ 1, "MOVE_SMOG" ],
-            [ 8, "MOVE_EMBER" ],
-            [ 11, "MOVE_ROCK_THROW" ],
-            [ 16, "MOVE_HARDEN" ],
-            [ 23, "MOVE_RECOVER" ],
-            [ 26, "MOVE_ANCIENT_POWER" ],
-            [ 31, "MOVE_AMNESIA" ],
-            [ 38, "MOVE_LAVA_PLUME" ],
-            [ 41, "MOVE_ROCK_SLIDE" ],
-            [ 46, "MOVE_BODY_SLAM" ],
-            [ 53, "MOVE_FLAMETHROWER" ],
-            [ 56, "MOVE_EARTH_POWER" ]
+            [ 5, "MOVE_EMBER" ],
+            [ 10, "MOVE_ROCK_THROW" ],
+            [ 14, "MOVE_HARDEN" ],
+            [ 19, "MOVE_RECOVER" ],
+            [ 23, "MOVE_ANCIENT_POWER" ],
+            [ 28, "MOVE_LAVA_PLUME" ],
+            [ 32, "MOVE_ROCK_SLIDE" ],
+            [ 37, "MOVE_AMNESIA" ],
+            [ 41, "MOVE_BODY_SLAM" ],
+            [ 46, "MOVE_FLAMETHROWER" ],
+            [ 50, "MOVE_POWER_GEM" ],
+            [ 55, "MOVE_EARTH_POWER" ]
         ],
         "by_tm": [
             "TM06",
@@ -74,6 +75,7 @@
             "TM83",
             "TM87",
             "TM90",
+            "HM04",
             "HM06"
         ],
         "by_tutor": [

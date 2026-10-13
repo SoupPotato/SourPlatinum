@@ -45,7 +45,7 @@
             [ 32, "MOVE_CAPTIVATE" ],
             [ 37, "MOVE_SLASH" ],
             [ 41, "MOVE_SUCKER_PUNCH" ],
-            [ 45, "MOVE_ATTRACT" ]
+            [ 44, "MOVE_ATTRACT" ]
         ],
         "by_tm": [
             "TM03",

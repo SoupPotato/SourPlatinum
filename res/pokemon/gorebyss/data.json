@@ -35,17 +35,18 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_WHIRLPOOL" ],
-            [ 6, "MOVE_CONFUSION" ],
+            [ 1, "MOVE_CONFUSION" ],
+            [ 6, "MOVE_WATER_SPORT" ],
             [ 10, "MOVE_AGILITY" ],
-            [ 15, "MOVE_WATER_PULSE" ],
-            [ 19, "MOVE_AMNESIA" ],
-            [ 24, "MOVE_AQUA_RING" ],
-            [ 28, "MOVE_CAPTIVATE" ],
-            [ 33, "MOVE_BATON_PASS" ],
-            [ 37, "MOVE_DIVE" ],
-            [ 42, "MOVE_PSYCHIC" ],
-            [ 46, "MOVE_AQUA_TAIL" ],
-            [ 51, "MOVE_HYDRO_PUMP" ]
+            [ 14, "MOVE_WATER_PULSE" ],
+            [ 16, "MOVE_AMNESIA" ],
+            [ 19, "MOVE_AQUA_RING" ],
+            [ 23, "MOVE_CAPTIVATE" ],
+            [ 26, "MOVE_DIVE" ],
+            [ 29, "MOVE_BATON_PASS" ],
+            [ 34, "MOVE_PSYCHIC" ],
+            [ 39, "MOVE_AQUA_RING" ],
+            [ 45, "MOVE_HYDRO_PUMP" ]
         ],
         "by_tm": [
             "TM03",

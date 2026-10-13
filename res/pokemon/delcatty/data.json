@@ -3,7 +3,7 @@
         "hp": 70,
         "attack": 65,
         "defense": 65,
-        "speed": 70,
+        "speed": 90,
         "special_attack": 55,
         "special_defense": 55
     },
@@ -35,8 +35,8 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_FAKE_OUT" ],
-            [ 1, "MOVE_ATTRACT" ],
             [ 1, "MOVE_SING" ],
+            [ 1, "MOVE_ATTRACT" ],
             [ 1, "MOVE_DOUBLE_SLAP" ]
         ],
         "by_tm": [

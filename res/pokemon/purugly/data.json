@@ -37,9 +37,7 @@
             [ 1, "MOVE_FAKE_OUT" ],
             [ 1, "MOVE_SCRATCH" ],
             [ 1, "MOVE_GROWL" ],
-            [ 5, "MOVE_SCRATCH" ],
-            [ 8, "MOVE_GROWL" ],
-            [ 13, "MOVE_HYPNOSIS" ],
+            [ 1, "MOVE_HYPNOSIS" ],
             [ 17, "MOVE_FAINT_ATTACK" ],
             [ 20, "MOVE_FURY_SWIPES" ],
             [ 25, "MOVE_CHARM" ],
@@ -48,7 +46,7 @@
             [ 37, "MOVE_SLASH" ],
             [ 38, "MOVE_SWAGGER" ],
             [ 45, "MOVE_BODY_SLAM" ],
-            [ 53, "MOVE_ATTRACT" ]
+            [ 52, "MOVE_ATTRACT" ]
         ],
         "by_tm": [
             "TM03",

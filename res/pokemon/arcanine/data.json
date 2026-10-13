@@ -39,7 +39,7 @@
             [ 1, "MOVE_ROAR" ],
             [ 1, "MOVE_FIRE_FANG" ],
             [ 1, "MOVE_ODOR_SLEUTH" ],
-            [ 39, "MOVE_EXTREME_SPEED" ]
+            [ 34, "MOVE_EXTREME_SPEED" ]
         ],
         "by_tm": [
             "TM05",

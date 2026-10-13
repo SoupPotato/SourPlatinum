@@ -28,7 +28,7 @@
     "exp_rate": "EXP_RATE_MEDIUM_SLOW",
     "egg_groups": [ "EGG_GROUP_WATER_1", "EGG_GROUP_WATER_1" ],
     "abilities": [ "ABILITY_WATER_ABSORB", "ABILITY_DAMP" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 60,
     "body_color": "MON_COLOR_BLUE",
     "flip_sprite": true,
     "icon_palette": 0,
@@ -37,18 +37,18 @@
             [ 1, "MOVE_WATER_SPORT" ],
             [ 1, "MOVE_BUBBLE" ],
             [ 1, "MOVE_HYPNOSIS" ],
-            [ 5, "MOVE_BUBBLE" ],
-            [ 8, "MOVE_HYPNOSIS" ],
-            [ 11, "MOVE_WATER_GUN" ],
-            [ 15, "MOVE_DOUBLE_SLAP" ],
-            [ 18, "MOVE_RAIN_DANCE" ],
-            [ 21, "MOVE_BODY_SLAM" ],
-            [ 27, "MOVE_BUBBLE_BEAM" ],
-            [ 32, "MOVE_MUD_SHOT" ],
-            [ 37, "MOVE_BELLY_DRUM" ],
-            [ 43, "MOVE_WAKE_UP_SLAP" ],
-            [ 48, "MOVE_HYDRO_PUMP" ],
-            [ 53, "MOVE_MUD_BOMB" ]
+            [ 10, "MOVE_WATER_GUN" ],
+            [ 13, "MOVE_DOUBLE_SLAP" ],
+            [ 16, "MOVE_MUD_SHOT" ],
+            [ 20, "MOVE_BUBBLE_BEAM" ],
+            [ 23, "MOVE_RAIN_DANCE" ],
+            [ 27, "MOVE_BODY_SLAM" ],
+            [ 32, "MOVE_MUD_BOMB" ],
+            [ 36, "MOVE_BELLY_DRUM" ],
+            [ 41, "MOVE_WAKE_UP_SLAP" ],
+            [ 45, "MOVE_HYDRO_PUMP" ],
+            [ 50, "MOVE_EARTH_POWER" ],
+            [ 54, "MOVE_DOUBLE_EDGE" ]
         ],
         "by_tm": [
             "TM01",
@@ -79,6 +79,7 @@
             "TM83",
             "TM87",
             "TM90",
+            "HM01",
             "HM03",
             "HM04",
             "HM06",
@@ -100,7 +101,7 @@
             "SPECIES_POLIWRATH"
         ],
         [
-            "EVO_TRADE_WITH_HELD_ITEM",
+            "EVO_USE_ITEM",
             "ITEM_KINGS_ROCK",
             "SPECIES_POLITOED"
         ]

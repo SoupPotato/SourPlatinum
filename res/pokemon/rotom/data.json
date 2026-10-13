@@ -34,18 +34,18 @@
     "icon_palette": 0,
     "learnset": {
         "by_level": [
-            [ 1, "MOVE_TRICK" ],
             [ 1, "MOVE_ASTONISH" ],
-            [ 1, "MOVE_THUNDER_WAVE" ],
+            [ 1, "MOVE_CHARGE" ],
             [ 1, "MOVE_THUNDER_SHOCK" ],
             [ 1, "MOVE_CONFUSE_RAY" ],
-            [ 8, "MOVE_UPROAR" ],
-            [ 15, "MOVE_DOUBLE_TEAM" ],
+            [ 8, "MOVE_DOUBLE_TEAM" ],
+            [ 15, "MOVE_THUNDER_WAVE" ],
             [ 22, "MOVE_SHOCK_WAVE" ],
             [ 29, "MOVE_OMINOUS_WIND" ],
             [ 36, "MOVE_SUBSTITUTE" ],
-            [ 43, "MOVE_CHARGE" ],
-            [ 50, "MOVE_DISCHARGE" ]
+            [ 43, "MOVE_TRICK" ],
+            [ 50, "MOVE_DISCHARGE" ],
+            [ 57, "MOVE_UPROAR" ]
         ],
         "by_tm": [
             "TM06",

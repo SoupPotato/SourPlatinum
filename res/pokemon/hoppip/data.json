@@ -28,13 +28,14 @@
     "exp_rate": "EXP_RATE_MEDIUM_SLOW",
     "egg_groups": [ "EGG_GROUP_FAIRY", "EGG_GROUP_GRASS" ],
     "abilities": [ "ABILITY_CHLOROPHYLL", "ABILITY_LEAF_GUARD" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 90,
     "body_color": "MON_COLOR_PINK",
     "flip_sprite": false,
     "icon_palette": 1,
     "learnset": {
         "by_level": [
             [ 1, "MOVE_SPLASH" ],
+            [ 1, "MOVE_ABSORB" ],
             [ 4, "MOVE_SYNTHESIS" ],
             [ 7, "MOVE_TAIL_WHIP" ],
             [ 10, "MOVE_TACKLE" ],
@@ -46,10 +47,9 @@
             [ 25, "MOVE_MEGA_DRAIN" ],
             [ 28, "MOVE_COTTON_SPORE" ],
             [ 31, "MOVE_U_TURN" ],
-            [ 34, "MOVE_WORRY_SEED" ],
-            [ 37, "MOVE_GIGA_DRAIN" ],
-            [ 40, "MOVE_BOUNCE" ],
-            [ 43, "MOVE_MEMENTO" ]
+            [ 34, "MOVE_GIGA_DRAIN" ],
+            [ 37, "MOVE_BOUNCE" ],
+            [ 40, "MOVE_MEMENTO" ]
         ],
         "by_tm": [
             "TM06",

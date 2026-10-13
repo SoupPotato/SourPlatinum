@@ -44,10 +44,10 @@
             [ 23, "MOVE_TAKE_DOWN" ],
             [ 28, "MOVE_BUBBLE_BEAM" ],
             [ 31, "MOVE_SIGNAL_BEAM" ],
-            [ 34, "MOVE_DISCHARGE" ],
-            [ 39, "MOVE_AQUA_RING" ],
-            [ 42, "MOVE_HYDRO_PUMP" ],
-            [ 45, "MOVE_CHARGE" ]
+            [ 34, "MOVE_CHARGE" ],
+            [ 39, "MOVE_DISCHARGE" ],
+            [ 42, "MOVE_AQUA_RING" ],
+            [ 45, "MOVE_HYDRO_PUMP" ]
         ],
         "by_tm": [
             "TM03",

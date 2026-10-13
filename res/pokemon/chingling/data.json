@@ -28,18 +28,19 @@
     "exp_rate": "EXP_RATE_FAST",
     "egg_groups": [ "EGG_GROUP_UNDISCOVERED", "EGG_GROUP_UNDISCOVERED" ],
     "abilities": [ "ABILITY_LEVITATE", "ABILITY_NONE" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 120,
     "body_color": "MON_COLOR_YELLOW",
     "flip_sprite": false,
     "icon_palette": 0,
     "learnset": {
         "by_level": [
             [ 1, "MOVE_WRAP" ],
-            [ 6, "MOVE_GROWL" ],
-            [ 9, "MOVE_ASTONISH" ],
-            [ 14, "MOVE_CONFUSION" ],
-            [ 17, "MOVE_UPROAR" ],
-            [ 22, "MOVE_LAST_RESORT" ]
+            [ 4, "MOVE_GROWL" ],
+            [ 7, "MOVE_ASTONISH" ],
+            [ 10, "MOVE_CONFUSION" ],
+            [ 13, "MOVE_YAWN" ],
+            [ 16, "MOVE_LAST_RESORT" ],
+            [ 19, "MOVE_UPROAR" ]
         ],
         "by_tm": [
             "TM04",

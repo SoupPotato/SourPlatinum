@@ -36,16 +36,17 @@
         "by_level": [
             [ 1, "MOVE_GROWL" ],
             [ 1, "MOVE_WATER_GUN" ],
-            [ 6, "MOVE_SUPERSONIC" ],
-            [ 11, "MOVE_WING_ATTACK" ],
-            [ 16, "MOVE_MIST" ],
-            [ 19, "MOVE_WATER_PULSE" ],
-            [ 24, "MOVE_QUICK_ATTACK" ],
-            [ 29, "MOVE_ROOST" ],
-            [ 34, "MOVE_PURSUIT" ],
-            [ 37, "MOVE_AGILITY" ],
-            [ 42, "MOVE_AERIAL_ACE" ],
-            [ 47, "MOVE_AIR_SLASH" ]
+            [ 5, "MOVE_SUPERSONIC" ],
+            [ 8, "MOVE_WING_ATTACK" ],
+            [ 12, "MOVE_MIST" ],
+            [ 15, "MOVE_WATER_PULSE" ],
+            [ 19, "MOVE_QUICK_ATTACK" ],
+            [ 22, "MOVE_AIR_CUTTER" ],
+            [ 26, "MOVE_PURSUIT" ],
+            [ 29, "MOVE_AERIAL_ACE" ],
+            [ 33, "MOVE_ROOST" ],
+            [ 36, "MOVE_AGILITY" ],
+            [ 40, "MOVE_AIR_SLASH" ]
         ],
         "by_tm": [
             "TM03",

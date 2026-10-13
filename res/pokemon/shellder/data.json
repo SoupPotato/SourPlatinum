@@ -35,6 +35,7 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_TACKLE" ],
+            [ 1, "MOVE_WATER_GUN" ],
             [ 4, "MOVE_WITHDRAW" ],
             [ 8, "MOVE_SUPERSONIC" ],
             [ 13, "MOVE_ICICLE_SPEAR" ],
@@ -46,7 +47,8 @@
             [ 37, "MOVE_WHIRLPOOL" ],
             [ 40, "MOVE_IRON_DEFENSE" ],
             [ 44, "MOVE_BRINE" ],
-            [ 49, "MOVE_ICE_BEAM" ]
+            [ 49, "MOVE_ICE_BEAM" ],
+            [ 52, "MOVE_HYDRO_PUMP" ]
         ],
         "by_tm": [
             "TM03",

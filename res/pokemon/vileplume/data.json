@@ -4,7 +4,7 @@
         "attack": 80,
         "defense": 85,
         "speed": 50,
-        "special_attack": 100,
+        "special_attack": 110,
         "special_defense": 90
     },
     "types": [ "TYPE_GRASS", "TYPE_POISON" ],
@@ -38,8 +38,8 @@
             [ 1, "MOVE_AROMATHERAPY" ],
             [ 1, "MOVE_STUN_SPORE" ],
             [ 1, "MOVE_POISON_POWDER" ],
-            [ 53, "MOVE_PETAL_DANCE" ],
-            [ 65, "MOVE_SOLAR_BEAM" ]
+            [ 49, "MOVE_PETAL_DANCE" ],
+            [ 59, "MOVE_SOLAR_BEAM" ]
         ],
         "by_tm": [
             "TM06",

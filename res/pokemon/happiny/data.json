@@ -36,9 +36,11 @@
         "by_level": [
             [ 1, "MOVE_POUND" ],
             [ 1, "MOVE_CHARM" ],
-            [ 5, "MOVE_COPYCAT" ],
-            [ 9, "MOVE_REFRESH" ],
-            [ 12, "MOVE_SWEET_KISS" ]
+            [ 1, "MOVE_COPYCAT" ],
+            [ 4, "MOVE_DEFENSE_CURL" ],
+            [ 8, "MOVE_SWEET_KISS" ],
+            [ 12, "MOVE_REFRESH" ],
+            [ 16, "MOVE_COVET" ]
         ],
         "by_tm": [
             "TM03",

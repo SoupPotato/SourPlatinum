@@ -1,10 +1,10 @@
 {
     "base_stats": {
-        "hp": 50,
+        "hp": 80,
         "attack": 50,
         "defense": 120,
         "speed": 30,
-        "special_attack": 80,
+        "special_attack": 90,
         "special_defense": 80
     },
     "types": [ "TYPE_FIRE", "TYPE_ROCK" ],
@@ -38,17 +38,16 @@
             [ 1, "MOVE_SMOG" ],
             [ 1, "MOVE_EMBER" ],
             [ 1, "MOVE_ROCK_THROW" ],
-            [ 8, "MOVE_EMBER" ],
-            [ 11, "MOVE_ROCK_THROW" ],
-            [ 16, "MOVE_HARDEN" ],
-            [ 23, "MOVE_RECOVER" ],
-            [ 26, "MOVE_ANCIENT_POWER" ],
-            [ 31, "MOVE_AMNESIA" ],
-            [ 40, "MOVE_LAVA_PLUME" ],
-            [ 45, "MOVE_ROCK_SLIDE" ],
-            [ 52, "MOVE_BODY_SLAM" ],
-            [ 61, "MOVE_FLAMETHROWER" ],
-            [ 66, "MOVE_EARTH_POWER" ]
+            [ 14, "MOVE_HARDEN" ],
+            [ 19, "MOVE_RECOVER" ],
+            [ 23, "MOVE_ANCIENT_POWER" ],
+            [ 28, "MOVE_LAVA_PLUME" ],
+            [ 32, "MOVE_ROCK_SLIDE" ],
+            [ 37, "MOVE_AMNESIA" ],
+            [ 43, "MOVE_BODY_SLAM" ],
+            [ 50, "MOVE_FLAMETHROWER" ],
+            [ 56, "MOVE_POWER_GEM" ],
+            [ 63, "MOVE_EARTH_POWER" ]
         ],
         "by_tm": [
             "TM06",

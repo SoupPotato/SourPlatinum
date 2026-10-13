@@ -34,6 +34,7 @@
     "icon_palette": 2,
     "learnset": {
         "by_level": [
+            [ 1, "MOVE_HYDRO_PUMP" ],
             [ 1, "MOVE_TOXIC_SPIKES" ],
             [ 1, "MOVE_WITHDRAW" ],
             [ 1, "MOVE_SUPERSONIC" ],

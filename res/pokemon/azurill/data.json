@@ -35,11 +35,15 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_SPLASH" ],
-            [ 2, "MOVE_CHARM" ],
-            [ 7, "MOVE_TAIL_WHIP" ],
-            [ 10, "MOVE_BUBBLE" ],
-            [ 15, "MOVE_SLAM" ],
-            [ 18, "MOVE_WATER_GUN" ]
+            [ 1, "MOVE_BUBBLE" ],
+            [ 2, "MOVE_TAIL_WHIP" ],
+            [ 5, "MOVE_WATER_SPORT" ],
+            [ 7, "MOVE_WATER_GUN" ],
+            [ 10, "MOVE_CHARM" ],
+            [ 13, "MOVE_BUBBLE_BEAM" ],
+            [ 16, "MOVE_HELPING_HAND" ],
+            [ 20, "MOVE_SLAM" ],
+            [ 23, "MOVE_BOUNCE" ]
         ],
         "by_tm": [
             "TM03",

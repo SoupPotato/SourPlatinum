@@ -37,7 +37,7 @@
             [ 1, "MOVE_TACKLE" ],
             [ 1, "MOVE_HELPING_HAND" ],
             [ 1, "MOVE_FAKE_OUT" ],
-            [ 1, "MOVE_FORESIGHT" ]
+            [ 1, "MOVE_FOCUS_ENERGY" ]
         ],
         "by_tm": [
             "TM06",

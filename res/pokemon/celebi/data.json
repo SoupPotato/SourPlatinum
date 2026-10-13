@@ -36,18 +36,18 @@
         "by_level": [
             [ 1, "MOVE_LEECH_SEED" ],
             [ 1, "MOVE_CONFUSION" ],
-            [ 1, "MOVE_RECOVER" ],
             [ 1, "MOVE_HEAL_BELL" ],
-            [ 10, "MOVE_SAFEGUARD" ],
-            [ 19, "MOVE_MAGICAL_LEAF" ],
+            [ 10, "MOVE_MAGICAL_LEAF" ],
+            [ 19, "MOVE_SAFEGUARD" ],
             [ 28, "MOVE_ANCIENT_POWER" ],
             [ 37, "MOVE_BATON_PASS" ],
-            [ 46, "MOVE_NATURAL_GIFT" ],
-            [ 55, "MOVE_HEAL_BLOCK" ],
+            [ 46, "MOVE_RECOVER" ],
+            [ 55, "MOVE_NATURAL_GIFT" ],
             [ 64, "MOVE_FUTURE_SIGHT" ],
-            [ 73, "MOVE_HEALING_WISH" ],
-            [ 82, "MOVE_LEAF_STORM" ],
-            [ 91, "MOVE_PERISH_SONG" ]
+            [ 73, "MOVE_HEAL_BLOCK" ],
+            [ 82, "MOVE_HEALING_WISH" ],
+            [ 91, "MOVE_LEAF_STORM" ],
+            [ 100, "MOVE_PERISH_SONG" ]
         ],
         "by_tm": [
             "TM03",

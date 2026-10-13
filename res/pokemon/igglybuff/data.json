@@ -35,11 +35,13 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_SING" ],
+            [ 1, "MOVE_POUND" ],
             [ 1, "MOVE_CHARM" ],
-            [ 5, "MOVE_DEFENSE_CURL" ],
-            [ 9, "MOVE_POUND" ],
-            [ 13, "MOVE_SWEET_KISS" ],
-            [ 17, "MOVE_COPYCAT" ]
+            [ 4, "MOVE_DEFENSE_CURL" ],
+            [ 8, "MOVE_DOUBLE_SLAP" ],
+            [ 12, "MOVE_SWEET_KISS" ],
+            [ 16, "MOVE_DISABLE" ],
+            [ 20, "MOVE_COPYCAT" ]
         ],
         "by_tm": [
             "TM03",
