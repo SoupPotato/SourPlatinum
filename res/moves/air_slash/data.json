@@ -11,7 +11,7 @@
     "type": "TYPE_FLYING",
     "power": 75,
     "accuracy": 95,
-    "pp": 20,
+    "pp": 15,
     "effect": {
         "type": "BATTLE_EFFECT_FLINCH_HIT",
         "chance": 30

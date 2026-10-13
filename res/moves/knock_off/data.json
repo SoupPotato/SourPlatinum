@@ -9,7 +9,7 @@
     ],
     "class": "CLASS_PHYSICAL",
     "type": "TYPE_DARK",
-    "power": 20,
+    "power": 65,
     "accuracy": 100,
     "pp": 20,
     "effect": {

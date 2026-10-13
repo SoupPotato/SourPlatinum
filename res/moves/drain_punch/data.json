@@ -9,9 +9,9 @@
     ],
     "class": "CLASS_PHYSICAL",
     "type": "TYPE_FIGHTING",
-    "power": 60,
+    "power": 75,
     "accuracy": 100,
-    "pp": 5,
+    "pp": 10,
     "effect": {
         "type": "BATTLE_EFFECT_RECOVER_HALF_DAMAGE_DEALT",
         "chance": 0

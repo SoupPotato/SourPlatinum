@@ -8,8 +8,8 @@
     ],
     "class": "CLASS_PHYSICAL",
     "type": "TYPE_WATER",
-    "power": 90,
-    "accuracy": 85,
+    "power": 100,
+    "accuracy": 90,
     "pp": 10,
     "effect": {
         "type": "BATTLE_EFFECT_HIGH_CRITICAL",

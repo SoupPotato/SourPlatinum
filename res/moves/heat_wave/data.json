@@ -9,7 +9,7 @@
     ],
     "class": "CLASS_SPECIAL",
     "type": "TYPE_FIRE",
-    "power": 100,
+    "power": 95,
     "accuracy": 90,
     "pp": 10,
     "effect": {

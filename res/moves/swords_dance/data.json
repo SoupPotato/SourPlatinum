@@ -11,7 +11,7 @@
     "type": "TYPE_NORMAL",
     "power": 0,
     "accuracy": 0,
-    "pp": 30,
+    "pp": 20,
     "effect": {
         "type": "BATTLE_EFFECT_ATK_UP_2",
         "chance": 0

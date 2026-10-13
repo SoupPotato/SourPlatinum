@@ -9,9 +9,9 @@
     ],
     "class": "CLASS_PHYSICAL",
     "type": "TYPE_NORMAL",
-    "power": 100,
+    "power": 130,
     "accuracy": 100,
-    "pp": 15,
+    "pp": 10,
     "effect": {
         "type": "BATTLE_EFFECT_CHARGE_TURN_DEF_UP",
         "chance": 100

@@ -11,7 +11,7 @@
     "type": "TYPE_NORMAL",
     "power": 0,
     "accuracy": 0,
-    "pp": 20,
+    "pp": 10,
     "effect": {
         "type": "BATTLE_EFFECT_EVA_UP_2_MINIMIZE",
         "chance": 0

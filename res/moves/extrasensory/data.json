@@ -11,7 +11,7 @@
     "type": "TYPE_PSYCHIC",
     "power": 80,
     "accuracy": 100,
-    "pp": 30,
+    "pp": 20,
     "effect": {
         "type": "BATTLE_EFFECT_FLINCH_HIT",
         "chance": 10

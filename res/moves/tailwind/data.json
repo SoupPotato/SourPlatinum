@@ -11,7 +11,7 @@
     "type": "TYPE_FLYING",
     "power": 0,
     "accuracy": 0,
-    "pp": 30,
+    "pp": 15,
     "effect": {
         "type": "BATTLE_EFFECT_DOUBLE_SPEED_3_TURNS",
         "chance": 0

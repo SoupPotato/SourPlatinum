@@ -9,9 +9,9 @@
     ],
     "class": "CLASS_SPECIAL",
     "type": "TYPE_GRASS",
-    "power": 90,
+    "power": 120,
     "accuracy": 100,
-    "pp": 20,
+    "pp": 10,
     "effect": {
         "type": "BATTLE_EFFECT_CONTINUE_AND_CONFUSE_SELF",
         "chance": 0
