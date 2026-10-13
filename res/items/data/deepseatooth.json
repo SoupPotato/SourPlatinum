@@ -3,7 +3,7 @@
   "plural": "DeepSeaTeeth",
   "article": "a",
   "description": [
-    "An item to be held by CLAMPERL.\n",
+    "An item to be held by Clamperl.\n",
     "A fang that gleams a sharp silver, it\n",
     "raises the Sp. Atk stat."
   ],
@@ -24,7 +24,7 @@
   "canRegister": false,
   "fieldPocket": "POCKET_ITEMS",
   "battlePocket": "BATTLE_POCKET_MASK_NONE",
-  "fieldUseFunc": "ITEM_USE_FUNC_NONE",
+  "fieldUseFunc": "ITEM_USE_FUNC_EVO_STONE",
   "battleUseCategory": "BATTLE_USE_CATEGORY_NONE",
-  "itemUseParams": null
+  "itemUseParams": {}
 }

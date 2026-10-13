@@ -3,7 +3,7 @@
   "plural": "DeepSeaScales",
   "article": "a",
   "description": [
-    "An item to be held by CLAMPERL.\n",
+    "An item to be held by Clamperl.\n",
     "A scale that shines a faint pink, it\n",
     "raises the Sp. Def stat."
   ],
@@ -24,7 +24,7 @@
   "canRegister": false,
   "fieldPocket": "POCKET_ITEMS",
   "battlePocket": "BATTLE_POCKET_MASK_NONE",
-  "fieldUseFunc": "ITEM_USE_FUNC_NONE",
+  "fieldUseFunc": "ITEM_USE_FUNC_EVO_STONE",
   "battleUseCategory": "BATTLE_USE_CATEGORY_NONE",
-  "itemUseParams": null
+  "itemUseParams": {}
 }
