@@ -112,7 +112,7 @@
         [ "EVO_TRADE", "SPECIES_GENGAR" ],
         [
             "EVO_USE_ITEM",
-            "ITEM_LOOT_SACK",
+            "ITEM_LINKING_CORD",
             "SPECIES_GENGAR"
         ]
     ],

@@ -101,7 +101,7 @@
         [ "EVO_TRADE", "SPECIES_GOLEM" ],
         [
             "EVO_USE_ITEM",
-            "ITEM_LOOT_SACK",
+            "ITEM_LINKING_CORD",
             "SPECIES_GOLEM"
         ]
     ],

@@ -73,8 +73,8 @@
     },
     "back": {
         "y_offset": {
-            "female": 10,
-            "male": 10
+            "female": 7,
+            "male": 7
         },
         "animation": 4,
         "cry_delay": 15,

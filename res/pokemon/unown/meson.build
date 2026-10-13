@@ -1,7 +1,7 @@
 species_data_files += files('data.json', 'sprite_data.json')
 
 poke_icon_files += files('icon.png')
-unown_a_icon = files('icon.png') # We actually need this for later
+unown_a_icon = files('forms/a/icon.png')
 unown_b_icon = files('forms/b/icon.png')
 unown_c_icon = files('forms/c/icon.png')
 unown_d_icon = files('forms/d/icon.png')
