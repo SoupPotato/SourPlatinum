@@ -10,6 +10,7 @@
     ScriptEntry Route210South_ArrowSignpostSolaceonTown
     ScriptEntry Route210South_JoggerWyatt
     ScriptEntry Route210South_OnTransition
+    ScriptEntry Route210South_HoneyTree
     ScriptEntryEnd
 
 Route210South_OnTransition:
@@ -257,5 +258,77 @@ Route210South_ArrowSignpostSolaceonTown:
 Route210South_JoggerWyatt:
     NPCMessage Route210South_Text_WellKeepOnRunning
     End
+
+Route210South_HoneyTree:
+    PlaySE SE_CONFIRM_sseq_3
+    LockAll
+    CheckItem ITEM_HONEY, 1, VAR_RESULT
+    GoToIfEq VAR_RESULT, FALSE, Route210South_HoneyTreeNoHoney
+    Message Route210South_Text_HoneyTreeSlatherBark
+    ShowYesNoMenu VAR_RESULT
+    GoToIfEq VAR_RESULT, MENU_NO, Route210South_HoneyTreeDeclined
+    RemoveItem ITEM_HONEY, 1, VAR_RESULT
+    Message Route210South_Text_HoneyTreeBarkSlathered
+    WaitButton
+    CloseMessage
+    WaitTime 30, VAR_RESULT
+    Call Route210South_HoneyTreePickSpecies
+    PlayCry VAR_0x8004
+    WaitCry
+    StartLegendaryBattle VAR_0x8004, 12
+    ClearFlag FLAG_MAP_LOCAL_REMOVE_OBJECT
+    CheckWonBattle VAR_RESULT
+    GoToIfEq VAR_RESULT, FALSE, Route210South_HoneyTreeBlackOut
+    ReleaseAll
+    End
+
+Route210South_HoneyTreeNoHoney:
+    Message Route210South_Text_HoneyTreeSweetScent
+    WaitButton
+    CloseMessage
+    ReleaseAll
+    End
+
+Route210South_HoneyTreeDeclined:
+    CloseMessage
+    ReleaseAll
+    End
+
+Route210South_HoneyTreePickSpecies:
+    GetRandom VAR_RESULT, 13
+    SetVar VAR_0x8004, SPECIES_COMBEE
+    GoToIfEq VAR_RESULT, 0, Route210South_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_COMBEE
+    GoToIfEq VAR_RESULT, 1, Route210South_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_COMBEE
+    GoToIfEq VAR_RESULT, 2, Route210South_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_WURMPLE
+    GoToIfEq VAR_RESULT, 3, Route210South_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_WURMPLE
+    GoToIfEq VAR_RESULT, 4, Route210South_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_BURMY
+    GoToIfEq VAR_RESULT, 5, Route210South_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_BURMY
+    GoToIfEq VAR_RESULT, 6, Route210South_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_CHERUBI
+    GoToIfEq VAR_RESULT, 7, Route210South_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_CHERUBI
+    GoToIfEq VAR_RESULT, 8, Route210South_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_AIPOM
+    GoToIfEq VAR_RESULT, 9, Route210South_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_AIPOM
+    GoToIfEq VAR_RESULT, 10, Route210South_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_HERACROSS
+    GoToIfEq VAR_RESULT, 11, Route210South_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_MUNCHLAX
+    Return
+
+Route210South_HoneyTreeBlackOut:
+    BlackOutFromBattle
+    ReleaseAll
+    End
+
+Route210South_HoneyTreePickSpeciesEnd:
+    Return
 
     .balign 4, 0

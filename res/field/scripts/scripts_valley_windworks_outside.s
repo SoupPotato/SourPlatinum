@@ -11,6 +11,7 @@
     ScriptEntry ValleyWindworksOutside_Drifloon
     ScriptEntry ValleyWindworksOutside_OnResume
     ScriptEntry ValleyWindworksOutside_OnFrame_Looker
+    ScriptEntry ValleyWindworksOutside_HoneyTree
     ScriptEntryEnd
 
 ValleyWindworksOutside_OnResume:
@@ -256,3 +257,75 @@ ValleyWindworksOutside_Movement_LookerLeave:
     WalkFastSouth 6
     WalkFastWest 9
     EndMovement
+
+ValleyWindworksOutside_HoneyTree:
+    PlaySE SE_CONFIRM_sseq_3
+    LockAll
+    CheckItem ITEM_HONEY, 1, VAR_RESULT
+    GoToIfEq VAR_RESULT, FALSE, ValleyWindworksOutside_HoneyTreeNoHoney
+    Message ValleyWindworksOutside_Text_HoneyTreeSlatherBark
+    ShowYesNoMenu VAR_RESULT
+    GoToIfEq VAR_RESULT, MENU_NO, ValleyWindworksOutside_HoneyTreeDeclined
+    RemoveItem ITEM_HONEY, 1, VAR_RESULT
+    Message ValleyWindworksOutside_Text_HoneyTreeBarkSlathered
+    WaitButton
+    CloseMessage
+    WaitTime 30, VAR_RESULT
+    Call ValleyWindworksOutside_HoneyTreePickSpecies
+    PlayCry VAR_0x8004
+    WaitCry
+    StartLegendaryBattle VAR_0x8004, 12
+    ClearFlag FLAG_MAP_LOCAL_REMOVE_OBJECT
+    CheckWonBattle VAR_RESULT
+    GoToIfEq VAR_RESULT, FALSE, ValleyWindworksOutside_HoneyTreeBlackOut
+    ReleaseAll
+    End
+
+ValleyWindworksOutside_HoneyTreeNoHoney:
+    Message ValleyWindworksOutside_Text_HoneyTreeSweetScent
+    WaitButton
+    CloseMessage
+    ReleaseAll
+    End
+
+ValleyWindworksOutside_HoneyTreeDeclined:
+    CloseMessage
+    ReleaseAll
+    End
+
+ValleyWindworksOutside_HoneyTreePickSpecies:
+    GetRandom VAR_RESULT, 13
+    SetVar VAR_0x8004, SPECIES_COMBEE
+    GoToIfEq VAR_RESULT, 0, ValleyWindworksOutside_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_COMBEE
+    GoToIfEq VAR_RESULT, 1, ValleyWindworksOutside_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_COMBEE
+    GoToIfEq VAR_RESULT, 2, ValleyWindworksOutside_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_WURMPLE
+    GoToIfEq VAR_RESULT, 3, ValleyWindworksOutside_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_WURMPLE
+    GoToIfEq VAR_RESULT, 4, ValleyWindworksOutside_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_BURMY
+    GoToIfEq VAR_RESULT, 5, ValleyWindworksOutside_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_BURMY
+    GoToIfEq VAR_RESULT, 6, ValleyWindworksOutside_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_CHERUBI
+    GoToIfEq VAR_RESULT, 7, ValleyWindworksOutside_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_CHERUBI
+    GoToIfEq VAR_RESULT, 8, ValleyWindworksOutside_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_AIPOM
+    GoToIfEq VAR_RESULT, 9, ValleyWindworksOutside_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_AIPOM
+    GoToIfEq VAR_RESULT, 10, ValleyWindworksOutside_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_HERACROSS
+    GoToIfEq VAR_RESULT, 11, ValleyWindworksOutside_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_MUNCHLAX
+    Return
+
+ValleyWindworksOutside_HoneyTreeBlackOut:
+    BlackOutFromBattle
+    ReleaseAll
+    End
+
+ValleyWindworksOutside_HoneyTreePickSpeciesEnd:
+    Return

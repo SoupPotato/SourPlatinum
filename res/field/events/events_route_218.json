@@ -1,5 +1,22 @@
 {
-    "bg_events": [],
+    "bg_events": [
+        {
+            "script": 8,
+            "type": 0,
+            "x": 85,
+            "z": 753,
+            "y": 0,
+            "player_facing_dir": "BG_EVENT_DIR_NORTH"
+        },
+        {
+            "script": 8,
+            "type": 0,
+            "x": 86,
+            "z": 753,
+            "y": 0,
+            "player_facing_dir": "BG_EVENT_DIR_NORTH"
+        }
+    ],
     "object_events": [
         {
             "id": "LOCALID_GUITARIST_TONY",

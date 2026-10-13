@@ -19,16 +19,14 @@
       ]
     },
     {
-      "id": "EternaForestOutside_Text_Dummy2",
-      "garbage": 12,
+      "id": "EternaForestOutside_Text_HoneyTreeSlatherBark",
       "en_US": [
         "There is a sweet scent in the air...\r",
         "Slather the bark with Honey?"
       ]
     },
     {
-      "id": "EternaForestOutside_Text_Dummy3",
-      "garbage": 54,
+      "id": "EternaForestOutside_Text_HoneyTreeBarkSlathered",
       "en_US": "The bark was slathered with Honey."
     },
     {
