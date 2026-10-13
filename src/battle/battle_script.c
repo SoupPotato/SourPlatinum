@@ -6008,13 +6008,6 @@ static BOOL BtlCmd_CalcHiddenPowerParams(BattleSystem *battleSys, BattleContext 
 {
     BattleScript_Iter(battleCtx, 1);
 
-    battleCtx->movePower = ((ATTACKING_MON.hpIV & 2) >> 1)
-        | (ATTACKING_MON.attackIV & 2)
-        | ((ATTACKING_MON.defenseIV & 2) << 1)
-        | ((ATTACKING_MON.speedIV & 2) << 2)
-        | ((ATTACKING_MON.spAttackIV & 2) << 3)
-        | ((ATTACKING_MON.spDefenseIV & 2) << 4);
-
     battleCtx->moveType = (ATTACKING_MON.hpIV & 1)
         | ((ATTACKING_MON.attackIV & 1) << 1)
         | ((ATTACKING_MON.defenseIV & 1) << 2)
@@ -6022,7 +6015,8 @@ static BOOL BtlCmd_CalcHiddenPowerParams(BattleSystem *battleSys, BattleContext 
         | ((ATTACKING_MON.spAttackIV & 1) << 4)
         | ((ATTACKING_MON.spDefenseIV & 1) << 5);
 
-    battleCtx->movePower = battleCtx->movePower * 40 / 63 + 30;
+    // Hidden Power always has a base power of 60; only its type depends on IVs.
+    battleCtx->movePower = 60;
     battleCtx->moveType = battleCtx->moveType * 15 / 63 + 1;
 
     if (battleCtx->moveType >= TYPE_MYSTERY) {
