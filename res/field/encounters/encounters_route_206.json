@@ -6,7 +6,7 @@
             "species": "SPECIES_PONYTA"
         },
         {
-            "level": 16,
+            "level": 17,
             "species": "SPECIES_GEODUDE"
         },
         {
@@ -31,7 +31,7 @@
         },
         {
             "level": 18,
-            "species": "SPECIES_GEODUDE"
+            "species": "SPECIES_STUNKY"
         },
         {
             "level": 19,
@@ -39,7 +39,7 @@
         },
         {
             "level": 18,
-            "species": "SPECIES_GEODUDE"
+            "species": "SPECIES_STUNKY"
         },
         {
             "level": 19,
@@ -47,7 +47,7 @@
         },
         {
             "level": 18,
-            "species": "SPECIES_GEODUDE"
+            "species": "SPECIES_STUNKY"
         }
     ],
     "swarms": [
