@@ -9,8 +9,8 @@
     ],
     "class": "CLASS_PHYSICAL",
     "type": "TYPE_BUG",
-    "power": 14,
-    "accuracy": 85,
+    "power": 25,
+    "accuracy": 95,
     "pp": 20,
     "effect": {
         "type": "BATTLE_EFFECT_MULTI_HIT",

@@ -10,7 +10,7 @@
     "class": "CLASS_SPECIAL",
     "type": "TYPE_PSYCHIC",
     "power": 1,
-    "accuracy": 80,
+    "accuracy": 100,
     "pp": 15,
     "effect": {
         "type": "BATTLE_EFFECT_RANDOM_DAMAGE_1_TO_150_LEVEL",

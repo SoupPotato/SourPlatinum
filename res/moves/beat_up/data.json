@@ -9,9 +9,9 @@
     ],
     "class": "CLASS_PHYSICAL",
     "type": "TYPE_DARK",
-    "power": 10,
+    "power": 15,
     "accuracy": 100,
-    "pp": 10,
+    "pp": 20,
     "effect": {
         "type": "BATTLE_EFFECT_BEAT_UP",
         "chance": 0

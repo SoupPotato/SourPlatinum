@@ -9,7 +9,7 @@
     ],
     "class": "CLASS_SPECIAL",
     "type": "TYPE_FLYING",
-    "power": 55,
+    "power": 60,
     "accuracy": 95,
     "pp": 25,
     "effect": {

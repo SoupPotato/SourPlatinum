@@ -9,7 +9,7 @@
     ],
     "class": "CLASS_SPECIAL",
     "type": "TYPE_ELECTRIC",
-    "power": 120,
+    "power": 110,
     "accuracy": 70,
     "pp": 10,
     "effect": {

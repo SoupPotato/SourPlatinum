@@ -10,7 +10,7 @@
     "type": "TYPE_PSYCHIC",
     "power": 0,
     "accuracy": 0,
-    "pp": 30,
+    "pp": 20,
     "effect": {
         "type": "BATTLE_EFFECT_DEF_UP_2",
         "chance": 0

@@ -9,8 +9,8 @@
     ],
     "class": "CLASS_SPECIAL",
     "type": "TYPE_FIRE",
-    "power": 120,
-    "accuracy": 70,
+    "power": 100,
+    "accuracy": 75,
     "pp": 5,
     "effect": {
         "type": "BATTLE_EFFECT_BIND_HIT",

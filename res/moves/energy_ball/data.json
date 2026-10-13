@@ -9,7 +9,7 @@
     ],
     "class": "CLASS_SPECIAL",
     "type": "TYPE_GRASS",
-    "power": 80,
+    "power": 90,
     "accuracy": 100,
     "pp": 10,
     "effect": {

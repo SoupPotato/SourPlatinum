@@ -8,9 +8,9 @@
     ],
     "class": "CLASS_PHYSICAL",
     "type": "TYPE_GRASS",
-    "power": 35,
+    "power": 45,
     "accuracy": 100,
-    "pp": 15,
+    "pp": 25,
     "effect": {
         "type": "BATTLE_EFFECT_HIT",
         "chance": 0

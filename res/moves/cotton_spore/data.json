@@ -10,7 +10,7 @@
     "class": "CLASS_STATUS",
     "type": "TYPE_GRASS",
     "power": 0,
-    "accuracy": 85,
+    "accuracy": 100,
     "pp": 40,
     "effect": {
         "type": "BATTLE_EFFECT_SPEED_DOWN_2",

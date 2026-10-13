@@ -8,9 +8,9 @@
     ],
     "class": "CLASS_PHYSICAL",
     "type": "TYPE_NORMAL",
-    "power": 40,
+    "power": 60,
     "accuracy": 100,
-    "pp": 40,
+    "pp": 25,
     "effect": {
         "type": "BATTLE_EFFECT_STEAL_HELD_ITEM",
         "chance": 0

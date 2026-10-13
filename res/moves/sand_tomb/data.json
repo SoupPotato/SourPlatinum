@@ -8,8 +8,8 @@
     ],
     "class": "CLASS_PHYSICAL",
     "type": "TYPE_GROUND",
-    "power": 15,
-    "accuracy": 70,
+    "power": 35,
+    "accuracy": 85,
     "pp": 15,
     "effect": {
         "type": "BATTLE_EFFECT_BIND_HIT",
