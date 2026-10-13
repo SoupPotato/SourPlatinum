@@ -3,39 +3,39 @@
   "messages": [
     {
       "id": "pl_msg_00000624_00000",
-      "en_US": "NORMAL"
+      "en_US": "Normal"
     },
     {
       "id": "pl_msg_00000624_00001",
-      "en_US": "FIGHTING"
+      "en_US": "Fighting"
     },
     {
       "id": "pl_msg_00000624_00002",
-      "en_US": "FLYING"
+      "en_US": "Flying"
     },
     {
       "id": "pl_msg_00000624_00003",
-      "en_US": "POISON"
+      "en_US": "Poison"
     },
     {
       "id": "pl_msg_00000624_00004",
-      "en_US": "GROUND"
+      "en_US": "Ground"
     },
     {
       "id": "pl_msg_00000624_00005",
-      "en_US": "ROCK"
+      "en_US": "Rock"
     },
     {
       "id": "pl_msg_00000624_00006",
-      "en_US": "BUG"
+      "en_US": "Bug"
     },
     {
       "id": "pl_msg_00000624_00007",
-      "en_US": "GHOST"
+      "en_US": "Ghost"
     },
     {
       "id": "pl_msg_00000624_00008",
-      "en_US": "STEEL"
+      "en_US": "Steel"
     },
     {
       "id": "pl_msg_00000624_00009",
@@ -43,35 +43,35 @@
     },
     {
       "id": "pl_msg_00000624_00010",
-      "en_US": "FIRE"
+      "en_US": "Fire"
     },
     {
       "id": "pl_msg_00000624_00011",
-      "en_US": "WATER"
+      "en_US": "Water"
     },
     {
       "id": "pl_msg_00000624_00012",
-      "en_US": "GRASS"
+      "en_US": "Grass"
     },
     {
       "id": "pl_msg_00000624_00013",
-      "en_US": "ELECTRIC"
+      "en_US": "Electric"
     },
     {
       "id": "pl_msg_00000624_00014",
-      "en_US": "PSYCHIC"
+      "en_US": "Psychic"
     },
     {
       "id": "pl_msg_00000624_00015",
-      "en_US": "ICE"
+      "en_US": "Ice"
     },
     {
       "id": "pl_msg_00000624_00016",
-      "en_US": "DRAGON"
+      "en_US": "Dragon"
     },
     {
       "id": "pl_msg_00000624_00017",
-      "en_US": "DARK"
+      "en_US": "Dark"
     }
   ]
 }

@@ -118,11 +118,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 18,
         "en": {
-            "name": "HONCHKROW",
+            "name": "Honchkrow",
             "category": "Big Boss Pokémon",
             "entry_text": [
                 "If one utters a deep cry, many\n",
-                "MURKROW gather quickly. For this,\n",
+                "Murkrow gather quickly. For this,\n",
                 "it is called “Summoner of Night.”"
             ]
         },

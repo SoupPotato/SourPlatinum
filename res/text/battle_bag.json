@@ -7,15 +7,15 @@
     },
     {
       "id": "BattleBag_Text_MenuTitleRestore",
-      "en_US": "RESTORE"
+      "en_US": "Restore"
     },
     {
       "id": "BattleBag_Text_MenuTitleStatus",
-      "en_US": "STATUS"
+      "en_US": "Status"
     },
     {
       "id": "BattleBag_Text_MenuTitleHealers",
-      "en_US": "HEALERS"
+      "en_US": "Healers"
     },
     {
       "id": "pl_msg_00000002_00004",
@@ -27,11 +27,11 @@
     },
     {
       "id": "BattleBag_Text_MenuTitleBattleItems",
-      "en_US": "BATTLE ITEMS"
+      "en_US": "Battle Items"
     },
     {
       "id": "BattleBag_Text_MenuTitlePokeBalls",
-      "en_US": "POKé BALLS"
+      "en_US": "Poké Balls"
     },
     {
       "id": "BattleBag_Text_ItemUsedLast",
@@ -95,23 +95,23 @@
     },
     {
       "id": "BattleBag_Text_PocketNameRestore",
-      "en_US": "RESTORE"
+      "en_US": "Restore"
     },
     {
       "id": "BattleBag_Text_PocketNameStatus",
-      "en_US": "STATUS"
+      "en_US": "Status"
     },
     {
       "id": "BattleBag_Text_PocketNameHealers",
-      "en_US": "HEALERS"
+      "en_US": "Healers"
     },
     {
       "id": "BattleBag_Text_PocketNamePokeBalls",
-      "en_US": "POKé BALLS"
+      "en_US": "Poké Balls"
     },
     {
       "id": "BattleBag_Text_PocketNameBattleItems",
-      "en_US": "BATTLE ITEMS"
+      "en_US": "Battle Items"
     },
     {
       "id": "BattleBag_Text_PocketPageDivider",
@@ -127,7 +127,7 @@
     },
     {
       "id": "BattleBag_Text_Use",
-      "en_US": "USE"
+      "en_US": "Use"
     },
     {
       "id": "pl_msg_00000002_00032",

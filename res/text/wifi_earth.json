@@ -58,23 +58,23 @@
     },
     {
       "id": "WiFiEarth_Text_Yes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "WiFiEarth_Text_No",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "WiFiEarth_Text_SeeList",
-      "en_US": "SEE LIST"
+      "en_US": "See List"
     },
     {
       "id": "WiFiEarth_Text_Register",
-      "en_US": "REGISTER"
+      "en_US": "Register"
     },
     {
       "id": "WiFiEarth_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "WiFiEarth_Text_RegisteredLocation",

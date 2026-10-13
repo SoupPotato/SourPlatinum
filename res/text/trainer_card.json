@@ -7,43 +7,43 @@
     },
     {
       "id": "TrainerCard_Text_Name",
-      "en_US": "NAME"
+      "en_US": "Name"
     },
     {
       "id": "TrainerCard_Text_Money",
-      "en_US": "MONEY"
+      "en_US": "Money"
     },
     {
       "id": "TrainerCard_Text_Pokedex",
-      "en_US": "POKéDEX"
+      "en_US": "Pokédex"
     },
     {
       "id": "TrainerCard_Text_Score",
-      "en_US": "SCORE"
+      "en_US": "Score"
     },
     {
       "id": "TrainerCard_Text_Time",
-      "en_US": "TIME"
+      "en_US": "Time"
     },
     {
       "id": "TrainerCard_Text_AdventureStarted",
-      "en_US": "ADVENTURE STARTED"
+      "en_US": "Adventure Started"
     },
     {
       "id": "TrainerCard_Text_HallOfFameDebut",
-      "en_US": "HALL OF FAME DEBUT"
+      "en_US": "Hall of Fame Debut"
     },
     {
       "id": "TrainerCard_Text_TimesLinked",
-      "en_US": "TIMES LINKED"
+      "en_US": "Times Linked"
     },
     {
       "id": "TrainerCard_Text_LinkBattles",
-      "en_US": "LINK BATTLES"
+      "en_US": "Link Battles"
     },
     {
       "id": "TrainerCard_Text_LinkTrades",
-      "en_US": "LINK TRADES"
+      "en_US": "Link Trades"
     },
     {
       "id": "TrainerCard_Text_Colon",

@@ -163,7 +163,7 @@
       "id": "PastoriaCity_Text_CroagunksWhereItsAt",
       "en_US": [
         "{STRVAR_1 3, 0, 0}: Does my new outfit look\n",
-        "good or what? CROAGUNK’s where it’s at."
+        "good or what? Croagunk’s where it’s at."
       ]
     },
     {
@@ -331,7 +331,7 @@
     },
     {
       "id": "PastoriaCity_Text_ClefairyCry",
-      "en_US": "CLEFAIRY: Fiiih?!"
+      "en_US": "Clefairy: Fiiih?!"
     },
     {
       "id": "PastoriaCity_Text_TryDressingUpPokemon",

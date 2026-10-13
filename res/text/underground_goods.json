@@ -3,7 +3,7 @@
   "messages": [
     {
       "id": "UndergroundGoods_Text_Close",
-      "en_US": "CLOSE"
+      "en_US": "Close"
     },
     {
       "id": "UndergroundGoods_Text_PCNormalFlag_Unused",
@@ -371,151 +371,151 @@
     },
     {
       "id": "UndergroundGoods_Text_CharmanderDoll",
-      "en_US": "CHARMANDER Doll"
+      "en_US": "Charmander Doll"
     },
     {
       "id": "UndergroundGoods_Text_BulbasaurDoll",
-      "en_US": "BULBASAUR Doll"
+      "en_US": "Bulbasaur Doll"
     },
     {
       "id": "UndergroundGoods_Text_SquirtleDoll",
-      "en_US": "SQUIRTLE Doll"
+      "en_US": "Squirtle Doll"
     },
     {
       "id": "UndergroundGoods_Text_CyndaquilDoll",
-      "en_US": "CYNDAQUIL Doll"
+      "en_US": "Cyndaquil Doll"
     },
     {
       "id": "UndergroundGoods_Text_ChikoritaDoll",
-      "en_US": "CHIKORITA Doll"
+      "en_US": "Chikorita Doll"
     },
     {
       "id": "UndergroundGoods_Text_TotodileDoll",
-      "en_US": "TOTODILE Doll"
+      "en_US": "Totodile Doll"
     },
     {
       "id": "UndergroundGoods_Text_TorchicDoll",
-      "en_US": "TORCHIC Doll"
+      "en_US": "Torchic Doll"
     },
     {
       "id": "UndergroundGoods_Text_TreeckoDoll",
-      "en_US": "TREECKO Doll"
+      "en_US": "Treecko Doll"
     },
     {
       "id": "UndergroundGoods_Text_MudkipDoll",
-      "en_US": "MUDKIP Doll"
+      "en_US": "Mudkip Doll"
     },
     {
       "id": "UndergroundGoods_Text_ChimcharDoll",
-      "en_US": "CHIMCHAR Doll"
+      "en_US": "Chimchar Doll"
     },
     {
       "id": "UndergroundGoods_Text_TurtwigDoll",
-      "en_US": "TURTWIG Doll"
+      "en_US": "Turtwig Doll"
     },
     {
       "id": "UndergroundGoods_Text_PiplupDoll",
-      "en_US": "PIPLUP Doll"
+      "en_US": "Piplup Doll"
     },
     {
       "id": "UndergroundGoods_Text_PikachuDoll",
-      "en_US": "PIKACHU Doll"
+      "en_US": "Pikachu Doll"
     },
     {
       "id": "UndergroundGoods_Text_PlusleDoll",
-      "en_US": "PLUSLE Doll"
+      "en_US": "Plusle Doll"
     },
     {
       "id": "UndergroundGoods_Text_MinunDoll",
-      "en_US": "MINUN Doll"
+      "en_US": "Minun Doll"
     },
     {
       "id": "UndergroundGoods_Text_ClefairyDoll",
-      "en_US": "CLEFAIRY Doll"
+      "en_US": "Clefairy Doll"
     },
     {
       "id": "UndergroundGoods_Text_JigglypuffDoll",
-      "en_US": "JIGGLYPUFF Doll"
+      "en_US": "Jigglypuff Doll"
     },
     {
       "id": "UndergroundGoods_Text_WobbuffetDoll",
-      "en_US": "WOBBUFFET Doll"
+      "en_US": "Wobbuffet Doll"
     },
     {
       "id": "UndergroundGoods_Text_MeowthDoll",
-      "en_US": "MEOWTH Doll"
+      "en_US": "Meowth Doll"
     },
     {
       "id": "UndergroundGoods_Text_SkittyDoll",
-      "en_US": "SKITTY Doll"
+      "en_US": "Skitty Doll"
     },
     {
       "id": "UndergroundGoods_Text_GlameowDoll",
-      "en_US": "GLAMEOW Doll"
+      "en_US": "Glameow Doll"
     },
     {
       "id": "UndergroundGoods_Text_BunearyDoll",
-      "en_US": "BUNEARY Doll"
+      "en_US": "Buneary Doll"
     },
     {
       "id": "UndergroundGoods_Text_WeavileDoll",
-      "en_US": "WEAVILE Doll"
+      "en_US": "Weavile Doll"
     },
     {
       "id": "UndergroundGoods_Text_MunchlaxDoll",
-      "en_US": "MUNCHLAX Doll"
+      "en_US": "Munchlax Doll"
     },
     {
       "id": "UndergroundGoods_Text_BonslyDoll",
-      "en_US": "BONSLY Doll"
+      "en_US": "Bonsly Doll"
     },
     {
       "id": "UndergroundGoods_Text_MimeJrDoll",
-      "en_US": "MIME JR. Doll"
+      "en_US": "Mime Jr. Doll"
     },
     {
       "id": "UndergroundGoods_Text_LucarioDoll",
-      "en_US": "LUCARIO Doll"
+      "en_US": "Lucario Doll"
     },
     {
       "id": "UndergroundGoods_Text_MantykeDoll",
-      "en_US": "MANTYKE Doll"
+      "en_US": "Mantyke Doll"
     },
     {
       "id": "UndergroundGoods_Text_BuizelDoll",
-      "en_US": "BUIZEL Doll"
+      "en_US": "Buizel Doll"
     },
     {
       "id": "UndergroundGoods_Text_ChatotDoll",
-      "en_US": "CHATOT Doll"
+      "en_US": "Chatot Doll"
     },
     {
       "id": "UndergroundGoods_Text_ManaphyDoll_Unused",
-      "en_US": "MANAPHY Doll"
+      "en_US": "Manaphy Doll"
     },
     {
       "id": "UndergroundGoods_Text_SnorlaxDoll",
-      "en_US": "SNORLAX Doll"
+      "en_US": "Snorlax Doll"
     },
     {
       "id": "UndergroundGoods_Text_WailordDoll",
-      "en_US": "WAILORD Doll"
+      "en_US": "Wailord Doll"
     },
     {
       "id": "UndergroundGoods_Text_MagnezoneDoll_Unused",
-      "en_US": "MAGNEZONE Doll"
+      "en_US": "Magnezone Doll"
     },
     {
       "id": "UndergroundGoods_Text_DrifloonDoll",
-      "en_US": "DRIFLOON Doll"
+      "en_US": "Drifloon Doll"
     },
     {
       "id": "UndergroundGoods_Text_HappinyDoll",
-      "en_US": "HAPPINY Doll"
+      "en_US": "Happiny Doll"
     },
     {
       "id": "UndergroundGoods_Text_PachirisuDoll",
-      "en_US": "PACHIRISU Doll"
+      "en_US": "Pachirisu Doll"
     },
     {
       "id": "UndergroundGoods_Text_SecretBaseEntranceSouth_Dummy",
@@ -1175,151 +1175,151 @@
     },
     {
       "id": "UndergroundGoods_Text_CharmanderDollDescription",
-      "en_US": "A cute CHARMANDER Doll."
+      "en_US": "A cute Charmander Doll."
     },
     {
       "id": "UndergroundGoods_Text_BulbasaurDollDescription",
-      "en_US": "A cute BULBASAUR Doll."
+      "en_US": "A cute Bulbasaur Doll."
     },
     {
       "id": "UndergroundGoods_Text_SquirtleDollDescription",
-      "en_US": "A cute SQUIRTLE Doll."
+      "en_US": "A cute Squirtle Doll."
     },
     {
       "id": "UndergroundGoods_Text_CyndaquilDollDescription",
-      "en_US": "A cute CYNDAQUIL Doll."
+      "en_US": "A cute Cyndaquil Doll."
     },
     {
       "id": "UndergroundGoods_Text_ChikoritaDollDescription",
-      "en_US": "A cute CHIKORITA Doll."
+      "en_US": "A cute Chikorita Doll."
     },
     {
       "id": "UndergroundGoods_Text_TotodileDollDescription",
-      "en_US": "A cute TOTODILE Doll."
+      "en_US": "A cute Totodile Doll."
     },
     {
       "id": "UndergroundGoods_Text_TorchicDollDescription",
-      "en_US": "A cute TORCHIC Doll."
+      "en_US": "A cute Torchic Doll."
     },
     {
       "id": "UndergroundGoods_Text_TreeckoDollDescription",
-      "en_US": "A cute TREECKO Doll."
+      "en_US": "A cute Treecko Doll."
     },
     {
       "id": "UndergroundGoods_Text_MudkipDollDescription",
-      "en_US": "A cute MUDKIP Doll."
+      "en_US": "A cute MudkipDoll."
     },
     {
       "id": "UndergroundGoods_Text_ChimcharDollDescription",
-      "en_US": "A cute CHIMCHAR Doll."
+      "en_US": "A cute Chimchar Doll."
     },
     {
       "id": "UndergroundGoods_Text_TurtwigDollDescription",
-      "en_US": "A cute TURTWIG Doll."
+      "en_US": "A cute Turtwig Doll."
     },
     {
       "id": "UndergroundGoods_Text_PiplupDollDescription",
-      "en_US": "A cute PIPLUP Doll."
+      "en_US": "A cute Piplup Doll."
     },
     {
       "id": "UndergroundGoods_Text_PikachuDollDescription",
-      "en_US": "A cute PIKACHU Doll."
+      "en_US": "A cute Pikachu Doll."
     },
     {
       "id": "UndergroundGoods_Text_PlusleDollDescription",
-      "en_US": "A cute PLUSLE Doll."
+      "en_US": "A cute Plusle Doll."
     },
     {
       "id": "UndergroundGoods_Text_MinunDollDescription",
-      "en_US": "A cute MINUN Doll."
+      "en_US": "A cute Minun Doll."
     },
     {
       "id": "UndergroundGoods_Text_ClefairyDollDescription",
-      "en_US": "A cute CLEFAIRY Doll."
+      "en_US": "A cute Clefairy Doll."
     },
     {
       "id": "UndergroundGoods_Text_JigglypuffDollDescription",
-      "en_US": "A cute JIGGLYPUFF Doll."
+      "en_US": "A cute Jigglypuff Doll."
     },
     {
       "id": "UndergroundGoods_Text_WobbuffetDollDescription",
-      "en_US": "A cute WOBBUFFET Doll."
+      "en_US": "A cute Wobbuffet Doll."
     },
     {
       "id": "UndergroundGoods_Text_MeowthDollDescription",
-      "en_US": "A cute MEOWTH Doll."
+      "en_US": "A cute Meowth Doll."
     },
     {
       "id": "UndergroundGoods_Text_SkittyDollDescription",
-      "en_US": "A cute SKITTY Doll."
+      "en_US": "A cute Skitty Doll."
     },
     {
       "id": "UndergroundGoods_Text_GlameowDollDescription",
-      "en_US": "A cute GLAMEOW Doll."
+      "en_US": "A cute Glameow Doll."
     },
     {
       "id": "UndergroundGoods_Text_BunearyDollDescription",
-      "en_US": "A cute BUNEARY Doll."
+      "en_US": "A cute Buneary Doll."
     },
     {
       "id": "UndergroundGoods_Text_WeavileDollDescription",
-      "en_US": "A cute WEAVILE Doll."
+      "en_US": "A cute Weavile Doll."
     },
     {
       "id": "UndergroundGoods_Text_MunchlaxDollDescription",
-      "en_US": "A cute MUNCHLAX Doll."
+      "en_US": "A cute Munchlax Doll."
     },
     {
       "id": "UndergroundGoods_Text_BonslyDollDescription",
-      "en_US": "A cute BONSLY Doll."
+      "en_US": "A cute Bonsly Doll."
     },
     {
       "id": "UndergroundGoods_Text_MimeJrDollDescription",
-      "en_US": "A cute MIME JR. Doll."
+      "en_US": "A cute Mime Jr. Doll."
     },
     {
       "id": "UndergroundGoods_Text_LucarioDollDescription",
-      "en_US": "A rare LUCARIO Doll."
+      "en_US": "A rare Lucario Doll."
     },
     {
       "id": "UndergroundGoods_Text_MantykeDollDescription",
-      "en_US": "A cute MANTYKE Doll."
+      "en_US": "A cute Mantyke Doll."
     },
     {
       "id": "UndergroundGoods_Text_BuizelDollDescription",
-      "en_US": "A cute BUIZEL Doll."
+      "en_US": "A cute Buizel Doll."
     },
     {
       "id": "UndergroundGoods_Text_ChatotDollDescription",
-      "en_US": "A cute CHATOT Doll."
+      "en_US": "A cute Chatot Doll."
     },
     {
       "id": "UndergroundGoods_Text_ManaphyDollDescription_Unused",
-      "en_US": "A rare MANAPHY Doll."
+      "en_US": "A rare Manaphy Doll."
     },
     {
       "id": "UndergroundGoods_Text_SnorlaxDollDescription",
-      "en_US": "A big SNORLAX Doll."
+      "en_US": "A big Snorlax Doll."
     },
     {
       "id": "UndergroundGoods_Text_WailordDollDescription",
-      "en_US": "A big WAILORD Doll."
+      "en_US": "A big Wailord Doll."
     },
     {
       "id": "UndergroundGoods_Text_MagnezoneDollDescription_Unused",
-      "en_US": "A big MAGNEZONE Doll."
+      "en_US": "A big Magnezone Doll."
     },
     {
       "id": "UndergroundGoods_Text_DrifloonDollDescription",
-      "en_US": "A cute DRIFLOON Doll."
+      "en_US": "A cute Drifloon Doll."
     },
     {
       "id": "UndergroundGoods_Text_HappinyDollDescription",
-      "en_US": "A cute HAPPINY Doll."
+      "en_US": "A cute Happiny Doll."
     },
     {
       "id": "UndergroundGoods_Text_PachirisuDollDescription",
-      "en_US": "A cute PACHIRISU Doll."
+      "en_US": "A cute Pachirisu Doll."
     },
     {
       "id": "UndergroundGoods_Text_SecretBaseEntranceSouthDescription_Dummy",
@@ -1372,7 +1372,7 @@
     },
     {
       "id": "UndergroundGoods_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "UndergroundGoods_Text_ExitDescription",

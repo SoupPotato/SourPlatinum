@@ -21,19 +21,19 @@
     },
     {
       "id": "UndergroundCommon_Text_Greet",
-      "en_US": "GREET"
+      "en_US": "Greet"
     },
     {
       "id": "UndergroundCommon_Text_Question",
-      "en_US": "QUESTION"
+      "en_US": "Question"
     },
     {
       "id": "UndergroundCommon_Text_GiveGoods",
-      "en_US": "GIVE GOODS"
+      "en_US": "Give Goods"
     },
     {
       "id": "UndergroundCommon_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "UndergroundCommon_Text_IllShowTrainerCaseAsWell",
@@ -709,19 +709,19 @@
     },
     {
       "id": "UndergroundCommon_Text_Traps",
-      "en_US": "TRAPS"
+      "en_US": "Traps"
     },
     {
       "id": "UndergroundCommon_Text_Spheres",
-      "en_US": "SPHERES"
+      "en_US": "Spheres"
     },
     {
       "id": "UndergroundCommon_Text_Goods",
-      "en_US": "GOODS"
+      "en_US": "Goods"
     },
     {
       "id": "UndergroundCommon_Text_Treasures",
-      "en_US": "TREASURES"
+      "en_US": "Treasures"
     },
     {
       "id": "UndergroundCommon_Text_PlayerTemplate",
@@ -729,11 +729,11 @@
     },
     {
       "id": "UndergroundCommon_Text_GoUp",
-      "en_US": "GO UP"
+      "en_US": "Go Up"
     },
     {
       "id": "UndergroundCommon_Text_Close",
-      "en_US": "CLOSE"
+      "en_US": "Close"
     },
     {
       "id": "UndergroundCommon_Text_SphereTemplate",
@@ -759,19 +759,19 @@
     },
     {
       "id": "UndergroundCommon_Text_Trash",
-      "en_US": "TRASH"
+      "en_US": "Trash"
     },
     {
       "id": "UndergroundCommon_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "UndergroundCommon_Text_Bury",
-      "en_US": "BURY"
+      "en_US": "Bury"
     },
     {
       "id": "UndergroundCommon_Text_PutInBag",
-      "en_US": "PUT IN BAG"
+      "en_US": "Put in Bag"
     },
     {
       "id": "UndergroundCommon_Text_YouWantedToAskSomething_Male",

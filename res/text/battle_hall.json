@@ -136,23 +136,23 @@
     },
     {
       "id": "BattleHall_Text_SingleBattle",
-      "en_US": "SINGLE BATTLE"
+      "en_US": "Single Battle"
     },
     {
       "id": "BattleHall_Text_DoubleBattle",
-      "en_US": "DOUBLE BATTLE"
+      "en_US": "Double Battle"
     },
     {
       "id": "BattleHall_Text_TakeChallenge",
-      "en_US": "TAKE CHALLENGE"
+      "en_US": "Take Challenge"
     },
     {
       "id": "BattleHall_Text_Info",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "BattleHall_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleHall_Text_Dummy4",
@@ -194,9 +194,9 @@
       "id": "BattleHall_Text_BecomeLeaderOrJoinGroup",
       "en_US": [
         "One Trainer should select\n",
-        "“BECOME LEADER.”\r",
+        "“Become Leader.”\r",
         "The other Trainer must select\n",
-        "“JOIN GROUP.”"
+        "“Join Group.”"
       ]
     },
     {
@@ -485,7 +485,7 @@
       "id": "BattleHall_Text_PachirisusACutie",
       "en_US": [
         "Pachipachi...\r",
-        "My PACHIRISU is a cutie, but he’s even\n",
+        "My Pachirisu is a cutie, but he’s even\n",
         "battled the Brain here.\r",
         "The Brain will take your Pokémon on at\n",
         "the same level, to be fair."
@@ -493,7 +493,7 @@
     },
     {
       "id": "BattleHall_Text_PachirisuCry",
-      "en_US": "PACHIRISU: Pachipachi pacchipachii!"
+      "en_US": "Pachirisu: Pachipachi pacchipachii!"
     },
     {
       "id": "BattleHall_Text_TryDifferentPokemon",
@@ -520,7 +520,7 @@
     {
       "id": "BattleHall_Text_CroagunkHasTwoTypes",
       "en_US": [
-        "You know how CROAGUNK has two types:\n",
+        "You know how Croagunk has two types:\n",
         "Poison and Fighting?\r",
         "That means it can appear as a Poison\n",
         "type and as a Fighting type."

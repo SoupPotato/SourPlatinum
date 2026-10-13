@@ -3,59 +3,59 @@
   "messages": [
     {
       "id": "RankingsMachine_Text_SingleBattlesRecordTitle",
-      "en_US": "SINGLE BATTLES"
+      "en_US": "Single Battles"
     },
     {
       "id": "RankingsMachine_Text_DoubleBattlesRecordTitle",
-      "en_US": "DOUBLE BATTLES"
+      "en_US": "Double Battles"
     },
     {
       "id": "RankingsMachine_Text_MultiBattlesRecordTitle",
-      "en_US": "MULTI BATTLES"
+      "en_US": "Multi Battles"
     },
     {
       "id": "RankingsMachine_Text_LinkMultiBattlesRecordTitle",
-      "en_US": "LINK MULTI BATTLES"
+      "en_US": "Link Multi Battles"
     },
     {
       "id": "RankingsMachine_Text_WiFiBattleRoomRecordTitle",
-      "en_US": "WI-FI BATTLE ROOM"
+      "en_US": "Wi-Fi Battle Room"
     },
     {
       "id": "RankingsMachine_Text_AvgWinStreakRecordTitle",
-      "en_US": "AVG WIN STREAK"
+      "en_US": "Avg Win Streak"
     },
     {
       "id": "RankingsMachine_Text_PokemonDefeatedRecordTitle",
-      "en_US": "POKéMON DEFEATED"
+      "en_US": "Pokémon Defeated"
     },
     {
       "id": "RankingsMachine_Text_PokemonCaughtRecordTitle",
-      "en_US": "POKéMON CAUGHT"
+      "en_US": "Pokémon Caught"
     },
     {
       "id": "RankingsMachine_Text_PokemonEggsRecordTitle",
-      "en_US": "POKéMON EGGS"
+      "en_US": "Pokémon Eggs"
     },
     {
       "id": "RankingsMachine_Text_EncounteredWhileFishingRecordTitle",
-      "en_US": "ENCOUNTERED WHILE FISHING"
+      "en_US": "Encountered While Fishing"
     },
     {
       "id": "RankingsMachine_Text_ContestWinsRecordTitle",
-      "en_US": "CONTEST WINS"
+      "en_US": "Contest Wins"
     },
     {
       "id": "RankingsMachine_Text_ContestWinPercentRecordTitle",
-      "en_US": "CONTEST WIN %"
+      "en_US": "Contest Win %"
     },
     {
       "id": "RankingsMachine_Text_RibbonsRecordTitle",
-      "en_US": "RIBBONS"
+      "en_US": "Ribbons"
     },
     {
       "id": "RankingsMachine_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "RankingsMachine_Text_RecordEntryInfo",
@@ -177,7 +177,7 @@
     },
     {
       "id": "RankingsMachine_Text_DeleteRecord",
-      "en_US": "DEL RECORD"
+      "en_US": "Del Record"
     },
     {
       "id": "RankingsMachine_Text_SelectTheRecordYouWantToDeleteThenPressA",

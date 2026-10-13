@@ -91,6 +91,21 @@
         "Valley Windworks\n",
         "Ecological, Wind-Driven Energy"
       ]
+    },
+    {
+      "id": "ValleyWindworksOutside_Text_HoneyTreeSlatherBark",
+      "en_US": [
+        "There is a sweet scent in the air...\r",
+        "Slather the bark with Honey?"
+      ]
+    },
+    {
+      "id": "ValleyWindworksOutside_Text_HoneyTreeBarkSlathered",
+      "en_US": "The bark was slathered with Honey."
+    },
+    {
+      "id": "ValleyWindworksOutside_Text_HoneyTreeSweetScent",
+      "en_US": "There is a sweet scent in the air..."
     }
   ]
 }

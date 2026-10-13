@@ -120,11 +120,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 27,
         "en": {
-            "name": "PIKACHU",
+            "name": "Pikachu",
             "category": "Mouse Pokémon",
             "entry_text": [
                 "It occasionally uses an electric\n",
-                "shock to recharge a fellow PIKACHU\n",
+                "shock to recharge a fellow Pikachu\n",
                 "that is in a weakened state."
             ]
         },

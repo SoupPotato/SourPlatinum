@@ -134,12 +134,12 @@
         "trainer_pos_m": 23,
         "pokemon_pos_m": 3,
         "en": {
-            "name": "GROUDON",
+            "name": "Groudon",
             "category": "Continent Pokémon",
             "entry_text": [
                 "It had been asleep in underground\n",
                 "magma ever since it fiercely\n",
-                "fought KYOGRE long ago."
+                "fought Kyogre long ago."
             ]
         },
         "fr": {

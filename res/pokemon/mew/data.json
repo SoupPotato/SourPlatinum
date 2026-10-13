@@ -210,11 +210,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 65522,
         "en": {
-            "name": "MEW",
+            "name": "Mew",
             "category": "New Species Pokémon",
             "entry_text": [
                 "Because it can use all kinds of\n",
-                "moves, many scientists believe MEW\n",
+                "moves, many scientists believe Mew\n",
                 "to be the ancestor of Pokémon."
             ]
         },

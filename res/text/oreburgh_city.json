@@ -179,7 +179,7 @@
     {
       "id": "OreburghCity_Text_ChopChopAwayOnRocks",
       "en_US": [
-        "Chop, chop, MACHOP!\n",
+        "Chop, chop, Machop!\n",
         "Chop, chop away on rocks! ~♫"
       ]
     },
@@ -211,15 +211,15 @@
     },
     {
       "id": "OreburghCity_Text_MachopCryMachoChopo",
-      "en_US": "MACHOP: Macho! Chopo!"
+      "en_US": "Machop: Macho! Chopo!"
     },
     {
       "id": "OreburghCity_Text_MachopCryPigyooh",
-      "en_US": "MACHOP: Pigyooh!"
+      "en_US": "Machop: Pigyooh!"
     },
     {
       "id": "OreburghCity_Text_MachopCryGwoohGogogooh",
-      "en_US": "MACHOP: Gwooh! Gogogooh!"
+      "en_US": "Machop: Gwooh! Gogogooh!"
     },
     {
       "id": "OreburghCity_Text_MapSign",

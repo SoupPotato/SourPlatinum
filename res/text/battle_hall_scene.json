@@ -117,19 +117,19 @@
     },
     {
       "id": "BattleHallScene_Text_ContinueOption",
-      "en_US": "CONTINUE"
+      "en_US": "Continue"
     },
     {
       "id": "BattleHallScene_Text_RecordOption",
-      "en_US": "RECORD"
+      "en_US": "Record"
     },
     {
       "id": "BattleHallScene_Text_RestOption",
-      "en_US": "REST"
+      "en_US": "Rest"
     },
     {
       "id": "BattleHallScene_Text_RetireOption",
-      "en_US": "RETIRE"
+      "en_US": "Retire"
     },
     {
       "id": "BattleHallScene_Text_ChooseType",
@@ -155,11 +155,11 @@
     },
     {
       "id": "BattleHallScene_Text_Yes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "BattleHallScene_Text_No",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "BattleHallScene_Text_Dummy7",

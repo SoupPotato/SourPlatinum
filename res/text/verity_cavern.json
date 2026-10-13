@@ -7,14 +7,14 @@
     },
     {
       "id": "VerityCavern_Text_MespritFlewOff",
-      "en_US": "MESPRIT flew off somewhere...\r"
+      "en_US": "Mesprit flew off somewhere...\r"
     },
     {
       "id": "VerityCavern_Text_RowanThatWasMesprit",
       "en_US": [
         "Rowan: ...\n",
         "...\r",
-        "{STRVAR_1 3, 0, 0}, that was MESPRIT,\n",
+        "{STRVAR_1 3, 0, 0}, that was Mesprit,\n",
         "wasn’t it?\r",
         "You’ve accomplished what I’d asked\n",
         "you to do at the Canalave Library...\r",
@@ -34,7 +34,7 @@
       "id": "VerityCavern_Text_RowanChaseAfterMesprit",
       "en_US": [
         "{STRVAR_1 3, 0, 0}, why don’t you chase\n",
-        "after MESPRIT?\r",
+        "after Mesprit?\r",
         "To me, it seemed as if it wanted to\n",
         "play with you.\r",
         "If you were to use the Pokétch app\n",

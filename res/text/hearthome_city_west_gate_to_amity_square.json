@@ -11,7 +11,7 @@
     {
       "id": "HearthomeCityWestGateToAmitySquare_Text_MyPikachuSeemsDelighted",
       "en_US": [
-        "My PIKACHU seems delighted to be out\n",
+        "My Pikachu seems delighted to be out\n",
         "of its Poké Ball for a walk outside.\r",
         "See? You can tell because its cheeks\n",
         "are twitching away!"
@@ -19,7 +19,7 @@
     },
     {
       "id": "HearthomeCityWestGateToAmitySquare_Text_PikachuCryPikappi",
-      "en_US": "PIKACHU: Pikappi!"
+      "en_US": "Pikachu: Pikappi!"
     }
   ]
 }

@@ -1554,21 +1554,21 @@
       "id": "pl_msg_00000662_00276",
       "en_US": [
         "{STRVAR_1 3, 0, 0}:\n",
-        "I’d say SWALOT Plop.\r"
+        "I’d say Swalot Plop.\r"
       ]
     },
     {
       "id": "pl_msg_00000662_00277",
       "en_US": [
         "{STRVAR_1 3, 0, 0}:\n",
-        "I’d say MIME JR. Top.\r"
+        "I’d say Mime Jr. Top.\r"
       ]
     },
     {
       "id": "pl_msg_00000662_00278",
       "en_US": [
         "{STRVAR_1 3, 0, 0}:\n",
-        "I’d say WOBBUFFET Pop.\r"
+        "I’d say Wobbuffet Pop.\r"
       ]
     },
     {
@@ -2403,21 +2403,21 @@
       "id": "pl_msg_00000662_00397",
       "en_US": [
         "{STRVAR_1 3, 0, 0}:\n",
-        "Oh, you’re good at SWALOT Plop!\r"
+        "Oh, you’re good at Swalot Plop!\r"
       ]
     },
     {
       "id": "pl_msg_00000662_00398",
       "en_US": [
         "{STRVAR_1 3, 0, 0}:\n",
-        "Oh, you’re good at MIME JR. Top!\r"
+        "Oh, you’re good at Mime Jr. Top!\r"
       ]
     },
     {
       "id": "pl_msg_00000662_00399",
       "en_US": [
         "{STRVAR_1 3, 0, 0}:\n",
-        "Oh, you’re good at WOBBUFFET Pop!\r"
+        "Oh, you’re good at Wobbuffet Pop!\r"
       ]
     },
     {
@@ -3264,19 +3264,19 @@
     },
     {
       "id": "pl_msg_00000662_00515",
-      "en_US": "TAP TOYS"
+      "en_US": "Tap Toys"
     },
     {
       "id": "pl_msg_00000662_00516",
-      "en_US": "CHAT"
+      "en_US": "Chat"
     },
     {
       "id": "pl_msg_00000662_00517",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "pl_msg_00000662_00518",
-      "en_US": "GET"
+      "en_US": "Get"
     },
     {
       "id": "pl_msg_00000662_00519",
@@ -4680,21 +4680,21 @@
       "id": "pl_msg_00000662_00729",
       "en_US": [
         "{COLOR 2}{STRVAR_1 3, 0, 0}{COLOR 0}:\n",
-        "I’d say SWALOT Plop.\r"
+        "I’d say Swalot Plop.\r"
       ]
     },
     {
       "id": "pl_msg_00000662_00730",
       "en_US": [
         "{COLOR 2}{STRVAR_1 3, 0, 0}{COLOR 0}:\n",
-        "I’d say MIME JR. Top.\r"
+        "I’d say Mime Jr. Top.\r"
       ]
     },
     {
       "id": "pl_msg_00000662_00731",
       "en_US": [
         "{COLOR 2}{STRVAR_1 3, 0, 0}{COLOR 0}:\n",
-        "I’d say WOBBUFFET Pop.\r"
+        "I’d say Wobbuffet Pop.\r"
       ]
     },
     {
@@ -5240,21 +5240,21 @@
       "id": "pl_msg_00000662_00809",
       "en_US": [
         "{COLOR 2}{STRVAR_1 3, 0, 0}{COLOR 0}:\n",
-        "Oh, you’re good at SWALOT Plop!\r"
+        "Oh, you’re good at Swalot Plop!\r"
       ]
     },
     {
       "id": "pl_msg_00000662_00810",
       "en_US": [
         "{COLOR 2}{STRVAR_1 3, 0, 0}{COLOR 0}:\n",
-        "Oh, you’re good at MIME JR. Top!\r"
+        "Oh, you’re good at Mime Jr. Top!\r"
       ]
     },
     {
       "id": "pl_msg_00000662_00811",
       "en_US": [
         "{COLOR 2}{STRVAR_1 3, 0, 0}{COLOR 0}:\n",
-        "Oh, you’re good at WOBBUFFET Pop!\r"
+        "Oh, you’re good at Wobbuffet Pop!\r"
       ]
     },
     {

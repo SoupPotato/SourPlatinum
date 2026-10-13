@@ -144,10 +144,10 @@
     {
       "id": "Battleground_Text_RoarkIntro2",
       "en_US": [
-        "Roark: I’ve got a TYRANITAR I’m going\n",
+        "Roark: I’ve got a Tyranitar I’m going\n",
         "to send out.\r",
         "It’s tougher than even my dad’s\n",
-        "AGGRON!\r"
+        "Aggron!\r"
       ]
     },
     {
@@ -771,7 +771,7 @@
     {
       "id": "Battleground_Text_VolknerAskBattle2",
       "en_US": [
-        "Volkner: My ELECTIVIRE demands tough\n",
+        "Volkner: My Electivire demands tough\n",
         "opponents.\r",
         "I’m willing to beg.\n",
         "Let’s battle!"
@@ -787,7 +787,7 @@
     {
       "id": "Battleground_Text_VolknerDeclinedBattle2",
       "en_US": [
-        "Volkner: Well, yeah, an ELECTIVIRE is\n",
+        "Volkner: Well, yeah, an Electivire is\n",
         "intimidating. I hear you..."
       ]
     },
@@ -795,7 +795,7 @@
       "id": "Battleground_Text_VolknerAskBattleAgain2",
       "en_US": [
         "Volkner: Hm? What’s up?\n",
-        "You’re willing to face my ELECTIVIRE?\f",
+        "You’re willing to face my Electivire?\f",
         "And help toughen up my Pokémon?"
       ]
     },
@@ -804,7 +804,7 @@
       "en_US": [
         "Volkner: Some Trainers have Pokémon\n",
         "they just have to have in their party.\r",
-        "For me, ELECTIVIRE is that Pokémon..."
+        "For me, Electivire is that Pokémon..."
       ]
     },
     {

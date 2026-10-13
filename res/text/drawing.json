@@ -40,7 +40,7 @@
     },
     {
       "id": "Drawing_Text_Quit",
-      "en_US": "QUIT"
+      "en_US": "Quit"
     },
     {
       "id": "pl_msg_00000425_00008",
@@ -63,7 +63,7 @@
     },
     {
       "id": "Drawing_Text_Done",
-      "en_US": "DONE"
+      "en_US": "Done"
     },
     {
       "id": "Drawing_Text_JoinedSession",

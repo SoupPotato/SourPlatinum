@@ -163,7 +163,7 @@
       "en_US": [
         "Let’s get on with the show!\n",
         "Battle! Watch!\r"
-       ]
+      ]
     },
     {
       "id": "TVBroadcast_Text_BattleWatch_NextSegment",
@@ -526,7 +526,7 @@
       "id": "TVBroadcast_Text_VarietyHour_GoodMorning",
       "en_US": [
         "MC: Good morning, everyone!\n",
-        "Feeling groovy like GROVYLE?\f",
+        "Feeling groovy like Grovyle?\f",
         "The Pokémon Variety Hour’s here!\r",
         "Let’s spend an exciting, dreamy time\n",
         "together!\r"
@@ -536,7 +536,7 @@
       "id": "TVBroadcast_Text_VarietyHour_GoodDay",
       "en_US": [
         "MC: Hey there, everyone!\n",
-        "Everyone feel happy like HAPPINY?\f",
+        "Everyone feel happy like Happiny?\f",
         "The Pokémon Variety Hour’s here!\r",
         "Let’s spend an exciting, dreamy time\n",
         "together!\r"
@@ -546,7 +546,7 @@
       "id": "TVBroadcast_Text_VarietyHour_GoodEvening",
       "en_US": [
         "MC: Good evening, everyone!\n",
-        "Ready to buzz through like ELECTABUZZ?\f",
+        "Ready to buzz through like Electabuzz?\f",
         "The Pokémon Variety Hour’s here!\r",
         "Let’s spend an exciting, dreamy time\n",
         "together!\r"
@@ -573,7 +573,7 @@
         "MC: OK, everyone! Hope you enjoyed\n",
         "the Pokémon Variety Hour!\r",
         "See you again!\n",
-        "Can you DIGLETT?"
+        "Can you Diglett?"
       ]
     },
     {
@@ -583,8 +583,8 @@
         "you all sorts of hot programs!\r",
         "Be sure to tune in and check us out\n",
         "as often as you can!\r",
-        "See you LATIAS, amigos!\n",
-        "Keep it mellow like SWELLOW!"
+        "See you Latias, amigos!\n",
+        "Keep it mellow like Swellow!"
       ]
     }
   ]

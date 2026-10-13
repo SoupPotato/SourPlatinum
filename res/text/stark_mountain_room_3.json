@@ -35,7 +35,7 @@
         "I like seeing children try their best,\n",
         "but too bad for you--you’re too late.\r",
         "With this Magma Stone I will let awaken\n",
-        "the legendary HEATRAN!\r",
+        "the legendary Heatran!\r",
         "I will control the volcano’s eruptions\n",
         "to extort money by the millions!\r",
         "Fear me! For I am Charon!\n",
@@ -55,7 +55,7 @@
     },
     {
       "id": "StarkMountainRoom3_Text_ExcellentWorkCroagunk",
-      "en_US": "???: Excellent work, CROAGUNK!\r"
+      "en_US": "???: Excellent work, Croagunk!\r"
     },
     {
       "id": "StarkMountainRoom3_Text_DisguisingWasNotEasy",
@@ -105,7 +105,7 @@
         "...Uh, International Police?\n",
         "What are you saying? I know nothing!\r",
         "A new Team Galactic?\n",
-        "Extorting with HEATRAN?\r",
+        "Extorting with Heatran?\r",
         "Merely the blathering of this harmless\n",
         "old man! All said in jest!\r",
         "Besides, among Team Galactic’s\n",
@@ -149,7 +149,7 @@
     {
       "id": "StarkMountainRoom3_Text_HeatranDisappeared",
       "en_US": [
-        "HEATRAN disappeared into\n",
+        "Heatran disappeared into\n",
         "the volcano..."
       ]
     },

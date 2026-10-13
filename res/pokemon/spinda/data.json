@@ -140,10 +140,10 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 16,
         "en": {
-            "name": "SPINDA",
+            "name": "Spinda",
             "category": "Spot Panda Pokémon",
             "entry_text": [
-                "No two SPINDA have the same\n",
+                "No two Spinda have the same\n",
                 "pattern of spots. Its tottering\n",
                 "step fouls the aim of foes."
             ]

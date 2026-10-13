@@ -125,11 +125,11 @@
         "trainer_pos_m": 4,
         "pokemon_pos_m": 6,
         "en": {
-            "name": "SEVIPER",
+            "name": "Seviper",
             "category": "Fang Snake Pokémon",
             "entry_text": [
                 "For many generations, it has\n",
-                "feuded with ZANGOOSE. It whets its\n",
+                "feuded with Zangoose. It whets its\n",
                 "bladed tail on rocks for battle."
             ]
         },

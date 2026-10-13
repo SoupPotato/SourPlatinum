@@ -118,11 +118,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 65529,
         "en": {
-            "name": "MAGNEZONE",
+            "name": "Magnezone",
             "category": "Magnet Area Pokémon",
             "entry_text": [
                 "A group tried to use scientific\n",
-                "means to make MAGNEZONE evolve,\n",
+                "means to make Magnezone evolve,\n",
                 "but their efforts ended in failure."
             ]
         },

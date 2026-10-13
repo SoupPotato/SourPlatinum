@@ -15,15 +15,15 @@
     },
     {
       "id": "ScratchOffCards_Text_Scratch",
-      "en_US": "SCRATCH"
+      "en_US": "Scratch"
     },
     {
       "id": "ScratchOffCards_Text_Info",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "ScratchOffCards_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "ScratchOffCards_Text_PleaseVisitAgain",
@@ -102,7 +102,7 @@
         "a card three times.\r",
         "If the same icon appears three times,\n",
         "you will win a prize, like a Berry.\r",
-        "Also, DITTO’s icon can transform into\n",
+        "Also, Ditto’s icon can transform into\n",
         "any other Pokémon.\r",
         "Good luck matching Pokémon icons!\r"
       ]

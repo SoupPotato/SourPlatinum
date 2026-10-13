@@ -3,23 +3,23 @@
   "messages": [
     {
       "id": "PoffinCase_Text_PoffinCase",
-      "en_US": "POFFIN CASE"
+      "en_US": "Poffin Case"
     },
     {
       "id": "PoffinCase_Text_Give",
-      "en_US": "GIVE"
+      "en_US": "Give"
     },
     {
       "id": "PoffinCase_Text_Trash",
-      "en_US": "TRASH"
+      "en_US": "Trash"
     },
     {
       "id": "PoffinCase_Text_Back",
-      "en_US": "BACK"
+      "en_US": "Back"
     },
     {
       "id": "PoffinCase_Text_Smooth",
-      "en_US": "SMOOTH / {STRVAR_1 51, 0, 0}"
+      "en_US": "Smooth / {STRVAR_1 51, 0, 0}"
     },
     {
       "id": "PoffinCase_Text_Dummy",
@@ -27,7 +27,7 @@
     },
     {
       "id": "PoffinCase_Text_Close",
-      "en_US": "CLOSE"
+      "en_US": "Close"
     },
     {
       "id": "PoffinCase_Text_Discard",
@@ -45,35 +45,35 @@
     },
     {
       "id": "PoffinCase_Text_Yes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "PoffinCase_Text_No",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "PoffinCase_Text_Spicy",
-      "en_US": "SPICY"
+      "en_US": "Spicy"
     },
     {
       "id": "PoffinCase_Text_Dry",
-      "en_US": "DRY"
+      "en_US": "Dry"
     },
     {
       "id": "PoffinCase_Text_Sweet",
-      "en_US": "SWEET"
+      "en_US": "Sweet"
     },
     {
       "id": "PoffinCase_Text_Bitter",
-      "en_US": "BITTER"
+      "en_US": "Bitter"
     },
     {
       "id": "PoffinCase_Text_Sour",
-      "en_US": "SOUR"
+      "en_US": "Sour"
     },
     {
       "id": "PoffinCase_Text_All",
-      "en_US": "ALL"
+      "en_US": "All"
     },
     {
       "id": "PoffinCase_Text_RaiseCoolness",

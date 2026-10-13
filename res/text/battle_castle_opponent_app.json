@@ -26,7 +26,7 @@
     },
     {
       "id": "BattleCastleOpponentApp_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "BattleCastleOpponentApp_Text_Dummy3",
@@ -38,19 +38,19 @@
     },
     {
       "id": "BattleCastleOpponentApp_Text_Check",
-      "en_US": "CHECK"
+      "en_US": "Check"
     },
     {
       "id": "BattleCastleOpponentApp_Text_Level",
-      "en_US": "LEVEL"
+      "en_US": "Level"
     },
     {
       "id": "BattleCastleOpponentApp_Text_Summary",
-      "en_US": "SUMMARY"
+      "en_US": "Summary"
     },
     {
       "id": "BattleCastleOpponentApp_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleCastleOpponentApp_Text_CheckIdentity",
@@ -115,15 +115,15 @@
     },
     {
       "id": "BattleCastleOpponentApp_Text_LevelUp5",
-      "en_US": "LEVEL +5"
+      "en_US": "Level +5"
     },
     {
       "id": "BattleCastleOpponentApp_Text_LevelDown5",
-      "en_US": "LEVEL -5"
+      "en_US": "Level -5"
     },
     {
       "id": "BattleCastleOpponentApp_Text_Cancel2",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleCastleOpponentApp_Text_WillCostCP",
@@ -134,11 +134,11 @@
     },
     {
       "id": "BattleCastleOpponentApp_Text_Yes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "BattleCastleOpponentApp_Text_No",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "BattleCastleOpponentApp_Text_NotEnoughCP3",
@@ -174,19 +174,19 @@
     },
     {
       "id": "BattleCastleOpponentApp_Text_Summary2",
-      "en_US": "SUMMARY"
+      "en_US": "Summary"
     },
     {
       "id": "BattleCastleOpponentApp_Text_Moves",
-      "en_US": "MOVES"
+      "en_US": "Moves"
     },
     {
       "id": "BattleCastleOpponentApp_Text_RankUp",
-      "en_US": "RANK UP"
+      "en_US": "Rank Up"
     },
     {
       "id": "BattleCastleOpponentApp_Text_Cancel3",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleCastleOpponentApp_Text_CheckStats",

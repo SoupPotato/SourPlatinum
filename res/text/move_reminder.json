@@ -166,15 +166,15 @@
     },
     {
       "id": "MoveReminder_Text_Category",
-      "en_US": "CATEGORY"
+      "en_US": "Category"
     },
     {
       "id": "MoveReminder_Text_Power",
-      "en_US": "POWER"
+      "en_US": "Power"
     },
     {
       "id": "MoveReminder_Text_Accuracy",
-      "en_US": "ACCURACY"
+      "en_US": "Accuracy"
     },
     {
       "id": "MoveReminder_Text_Pp",
@@ -182,15 +182,15 @@
     },
     {
       "id": "MoveReminder_Text_BattleMoves",
-      "en_US": "BATTLE MOVES"
+      "en_US": "Battle Moves"
     },
     {
       "id": "MoveReminder_Text_AppealPts",
-      "en_US": "APPEAL PTS"
+      "en_US": "Appeal Pts"
     },
     {
       "id": "MoveReminder_Text_ContestMoves",
-      "en_US": "CONTEST MOVES"
+      "en_US": "Contest Moves"
     },
     {
       "id": "MoveReminder_Text_PowerValue",
@@ -206,7 +206,7 @@
     },
     {
       "id": "MoveReminder_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "MoveReminder_Text_Dashes",

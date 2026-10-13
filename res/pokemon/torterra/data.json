@@ -124,11 +124,11 @@
         "trainer_pos_m": 16,
         "pokemon_pos_m": 0,
         "en": {
-            "name": "TORTERRA",
+            "name": "Torterra",
             "category": "Continent Pokémon",
             "entry_text": [
                 "Some Pokémon are born on a\n",
-                "TORTERRA’s back and spend their\n",
+                "Torterra’s back and spend their\n",
                 "entire life there."
             ]
         },

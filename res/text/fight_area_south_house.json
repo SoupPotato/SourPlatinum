@@ -25,7 +25,7 @@
     },
     {
       "id": "FightAreaSouthHouse_Text_TorchicCry",
-      "en_US": "TORCHIC: Chiic chic!"
+      "en_US": "Torchic: Chiic chic!"
     },
     {
       "id": "FightAreaSouthHouse_Text_IAmTheItemExpert",
@@ -145,39 +145,39 @@
     },
     {
       "id": "FightAreaSouthHouse_Text_LumBerry",
-      "en_US": "LUM BERRY"
+      "en_US": "Lum Berry"
     },
     {
       "id": "FightAreaSouthHouse_Text_FocusSash",
-      "en_US": "FOCUS SASH"
+      "en_US": "Focus Sash"
     },
     {
       "id": "FightAreaSouthHouse_Text_ExpertBelt",
-      "en_US": "EXPERT BELT"
+      "en_US": "Expert Belt"
     },
     {
       "id": "FightAreaSouthHouse_Text_LifeOrb",
-      "en_US": "LIFE ORB"
+      "en_US": "Life Orb"
     },
     {
       "id": "FightAreaSouthHouse_Text_ChoiceScarf",
-      "en_US": "CHOICE SCARF"
+      "en_US": "Choice Scarf"
     },
     {
       "id": "FightAreaSouthHouse_Text_ChoiceBand",
-      "en_US": "CHOICE BAND"
+      "en_US": "Choice Band"
     },
     {
       "id": "FightAreaSouthHouse_Text_ChoiceSpecs",
-      "en_US": "CHOICE SPECS"
+      "en_US": "Choice Specs"
     },
     {
       "id": "FightAreaSouthHouse_Text_Leftovers",
-      "en_US": "LEFTOVERS"
+      "en_US": "Leftovers"
     },
     {
       "id": "FightAreaSouthHouse_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     }
   ]
 }

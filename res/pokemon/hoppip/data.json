@@ -125,11 +125,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 65530,
         "en": {
-            "name": "HOPPIP",
+            "name": "Hoppip",
             "category": "Cottonweed Pokémon",
             "entry_text": [
                 "It drifts on winds. It is said that\n",
-                "when HOPPIP gather in fields and\n",
+                "when Hoppip gather in fields and\n",
                 "mountains, spring is on the way."
             ]
         },

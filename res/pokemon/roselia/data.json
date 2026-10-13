@@ -128,10 +128,10 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 29,
         "en": {
-            "name": "ROSELIA",
+            "name": "Roselia",
             "category": "Thorn Pokémon",
             "entry_text": [
-                "The more healthy the ROSELIA, the\n",
+                "The more healthy the Roselia, the\n",
                 "more pleasant its flowers’ aroma.\n",
                 "Its scent deeply relaxes people."
             ]

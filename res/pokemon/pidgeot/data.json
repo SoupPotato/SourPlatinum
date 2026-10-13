@@ -109,11 +109,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 6,
         "en": {
-            "name": "PIDGEOT",
+            "name": "Pidgeot",
             "category": "Bird Pokémon",
             "entry_text": [
                 "By flapping its wings with all its\n",
-                "might, PIDGEOT can make a gust of\n",
+                "might, Pidgeot can make a gust of\n",
                 "wind capable of bending tall trees."
             ]
         },

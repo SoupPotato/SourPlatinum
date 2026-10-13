@@ -39,7 +39,7 @@
         {
             "type": "TRMSG_PRE_BATTLE",
             "en_US": [
-                "ZUBAT! Doesn’t that sound like a\n",
+                "Zubat! Doesn’t that sound like a\n",
                 "ninja bursting from cover?\r"
             ]
         },
@@ -47,7 +47,7 @@
             "type": "TRMSG_DEFEAT",
             "en_US": [
                 "Oh!\n",
-                "My ZUBAT tristars...\n"
+                "My Zubat tristars...\n"
             ]
         },
         {

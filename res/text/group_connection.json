@@ -104,19 +104,19 @@
     },
     {
       "id": "GroupConnection_Text_MakeGroup",
-      "en_US": "MAKE GROUP"
+      "en_US": "Make Group"
     },
     {
       "id": "GroupConnection_Text_JoinGroup",
-      "en_US": "JOIN GROUP"
+      "en_US": "Join Group"
     },
     {
       "id": "GroupConnection_Text_Info",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "GroupConnection_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "GroupConnection_Text_GroupPlayerOriginal",
@@ -140,7 +140,7 @@
     },
     {
       "id": "GroupConnection_Text_GroupSelectionExit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "GroupConnection_Text_DidntPlayerMakeThatAlready",

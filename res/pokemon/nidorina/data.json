@@ -116,12 +116,12 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 19,
         "en": {
-            "name": "NIDORINA",
+            "name": "Nidorina",
             "category": "Poison Pin Pokémon",
             "entry_text": [
                 "When it senses danger, it raises\n",
                 "all the barbs on its body. These\n",
-                "barbs grow slower than NIDORINO’s."
+                "barbs grow slower than Nidorino’s."
             ]
         },
         "fr": {

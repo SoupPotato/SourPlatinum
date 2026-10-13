@@ -3,27 +3,27 @@
   "messages": [
     {
       "id": "BerryTag_Text_BerryTag",
-      "en_US": "BERRY TAG"
+      "en_US": "Berry Tag"
     },
     {
       "id": "BerryTag_Text_Spicy",
-      "en_US": "SPICY"
+      "en_US": "Spicy"
     },
     {
       "id": "BerryTag_Text_Dry",
-      "en_US": "DRY"
+      "en_US": "Dry"
     },
     {
       "id": "BerryTag_Text_Sweet",
-      "en_US": "SWEET"
+      "en_US": "Sweet"
     },
     {
       "id": "BerryTag_Text_Bitter",
-      "en_US": "BITTER"
+      "en_US": "Bitter"
     },
     {
       "id": "BerryTag_Text_Sour",
-      "en_US": "SOUR"
+      "en_US": "Sour"
     },
     {
       "id": "BerryTag_Text_BerryID",
@@ -35,7 +35,7 @@
     },
     {
       "id": "BerryTag_Text_LabelSize",
-      "en_US": "SIZE /"
+      "en_US": "Size /"
     },
     {
       "id": "BerryTag_Text_Size",
@@ -43,7 +43,7 @@
     },
     {
       "id": "BerryTag_Text_LabelFirm",
-      "en_US": "FIRM /"
+      "en_US": "Firm /"
     },
     {
       "id": "BerryTag_Text_VerySoft",

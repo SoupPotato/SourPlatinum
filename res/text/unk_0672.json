@@ -10,15 +10,15 @@
     },
     {
       "id": "pl_msg_00000672_00001",
-      "en_US": "JOIN"
+      "en_US": "Join"
     },
     {
       "id": "pl_msg_00000672_00002",
-      "en_US": "RULES"
+      "en_US": "Rules"
     },
     {
       "id": "pl_msg_00000672_00003",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "pl_msg_00000672_00004",
@@ -143,11 +143,11 @@
     },
     {
       "id": "pl_msg_00000672_00024",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "pl_msg_00000672_00025",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "pl_msg_00000672_00026",
@@ -159,11 +159,11 @@
     },
     {
       "id": "pl_msg_00000672_00027",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "pl_msg_00000672_00028",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "pl_msg_00000672_00029",
@@ -196,7 +196,7 @@
       "en_US": [
         "{STRVAR_6 0, 0, 0}\r",
         "Flick Berries into the mouth of a\n",
-        "rotating SWALOT.\r",
+        "rotating Swalot.\r",
         "Score bonus points for getting Berries\n",
         "in consecutively.\r",
         "Score even more during Fever Time.\r",
@@ -208,13 +208,13 @@
       "id": "pl_msg_00000672_00035",
       "en_US": [
         "{STRVAR_6 0, 0, 0}\r",
-        "Roll a ball while keeping a MIME JR.\n",
+        "Roll a ball while keeping a Mime Jr.\n",
         "balanced on top.\r",
-        "If the MIME JR. manages to stay on,\n",
+        "If the Mime Jr. manages to stay on,\n",
         "lights flash and the applause begins.\r",
         "If everyone manages to keep going,\n",
         "the curtains will rise.\r",
-        "Try to keep your MIME JR. balanced\n",
+        "Try to keep your Mime Jr. balanced\n",
         "and on the ball!\r"
       ]
     },
@@ -228,11 +228,11 @@
         "Pop balloons until time runs out.\r",
         "Pressing the pump hard will make it\n",
         "turn red, increasing its capacity.\r",
-        "The circling WYNAUT can also help.\r",
-        "Line a WYNAUT up with the pump to\n",
+        "The circling Wynaut can also help.\r",
+        "Line a Wynaut up with the pump to\n",
         "boost the air volume, but beware:\r",
         "lining up the pump with a skinny\n",
-        "WYNAUT reduces the air volume.\r"
+        "Wynaut reduces the air volume.\r"
       ]
     }
   ]

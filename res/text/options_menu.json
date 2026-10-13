@@ -3,87 +3,87 @@
   "messages": [
     {
       "id": "OptionsMenu_Text_Title",
-      "en_US": "OPTIONS"
+      "en_US": "Options"
     },
     {
       "id": "pl_msg_00000220_00001",
-      "en_US": "POKéMON DIAMOND"
+      "en_US": "Pokémon Diamond"
     },
     {
       "id": "pl_msg_00000220_00002",
-      "en_US": "POKéMON PEARL"
+      "en_US": "Pokémon Pearl"
     },
     {
       "id": "OptionsMenu_Text_TextSpeedLabel",
-      "en_US": "TEXT SPEED"
+      "en_US": "Text Speed"
     },
     {
       "id": "OptionsMenu_Text_BattleSceneLabel",
-      "en_US": "BATTLE SCENE"
+      "en_US": "Battle Scene"
     },
     {
       "id": "OptionsMenu_Text_BattleStyleLabel",
-      "en_US": "BATTLE STYLE"
+      "en_US": "Battle Style"
     },
     {
       "id": "OptionsMenu_Text_SoundModeLabel",
-      "en_US": "SOUND"
+      "en_US": "Sound"
     },
     {
       "id": "OptionsMenu_Text_ButtonModeLabel",
-      "en_US": "BUTTON MODE"
+      "en_US": "Button Mode"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyleLabel",
-      "en_US": "FRAME"
+      "en_US": "Frame"
     },
     {
       "id": "OptionsMenu_Text_ConfirmLabel",
-      "en_US": "CONFIRM"
+      "en_US": "Confirm"
     },
     {
       "id": "OptionsMenu_Text_TextSpeedSlow",
-      "en_US": "SLOW"
+      "en_US": "Slow"
     },
     {
       "id": "OptionsMenu_Text_TextSpeedMid",
-      "en_US": "MID"
+      "en_US": "Mid"
     },
     {
       "id": "OptionsMenu_Text_TextSpeedFast",
-      "en_US": "FAST"
+      "en_US": "Fast"
     },
     {
       "id": "OptionsMenu_Text_BattleSceneOn",
-      "en_US": "ON"
+      "en_US": "On"
     },
     {
       "id": "OptionsMenu_Text_BattleSceneOff",
-      "en_US": "OFF"
+      "en_US": "Off"
     },
     {
       "id": "OptionsMenu_Text_BattleStyleShift",
-      "en_US": "SHIFT"
+      "en_US": "Shift"
     },
     {
       "id": "OptionsMenu_Text_BattleStyleSet",
-      "en_US": "SET"
+      "en_US": "Set"
     },
     {
       "id": "OptionsMenu_Text_SoundModeStereo",
-      "en_US": "STEREO"
+      "en_US": "Stereo"
     },
     {
       "id": "OptionsMenu_Text_SoundModeMono",
-      "en_US": "MONO"
+      "en_US": "Mono"
     },
     {
       "id": "OptionsMenu_Text_ButtonModeNormal",
-      "en_US": "NORMAL"
+      "en_US": "Normal"
     },
     {
       "id": "OptionsMenu_Text_ButtonModeStartIs_x",
-      "en_US": "START = X"
+      "en_US": "Start = X"
     },
     {
       "id": "OptionsMenu_Text_ButtonMode_l_is_a",
@@ -91,87 +91,87 @@
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_01",
-      "en_US": "TYPE 1"
+      "en_US": "Type 1"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_02",
-      "en_US": "TYPE 2"
+      "en_US": "Type 2"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_03",
-      "en_US": "TYPE 3"
+      "en_US": "Type 3"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_04",
-      "en_US": "TYPE 4"
+      "en_US": "Type 4"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_05",
-      "en_US": "TYPE 5"
+      "en_US": "Type 5"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_06",
-      "en_US": "TYPE 6"
+      "en_US": "Type 6"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_07",
-      "en_US": "TYPE 7"
+      "en_US": "Type 7"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_08",
-      "en_US": "TYPE 8"
+      "en_US": "Type 8"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_09",
-      "en_US": "TYPE 9"
+      "en_US": "Type 9"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_10",
-      "en_US": "TYPE 10"
+      "en_US": "Type 10"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_11",
-      "en_US": "TYPE 11"
+      "en_US": "Type 11"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_12",
-      "en_US": "TYPE 12"
+      "en_US": "Type 12"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_13",
-      "en_US": "TYPE 13"
+      "en_US": "Type 13"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_14",
-      "en_US": "TYPE 14"
+      "en_US": "Type 14"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_15",
-      "en_US": "TYPE 15"
+      "en_US": "Type 15"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_16",
-      "en_US": "TYPE 16"
+      "en_US": "Type 16"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_17",
-      "en_US": "TYPE 17"
+      "en_US": "Type 17"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_18",
-      "en_US": "TYPE 18"
+      "en_US": "Type 18"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_19",
-      "en_US": "TYPE 19"
+      "en_US": "Type 19"
     },
     {
       "id": "OptionsMenu_Text_MessageBoxStyle_20",
-      "en_US": "TYPE 20"
+      "en_US": "Type 20"
     },
     {
       "id": "OptionsMenu_Text_CloseLabel",
-      "en_US": "CLOSE"
+      "en_US": "Close"
     },
     {
       "id": "OptionsMenu_Text_TextSpeedDescription",
@@ -215,11 +215,11 @@
     },
     {
       "id": "OptionsMenu_Text_ConfirmDialogYes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "OptionsMenu_Text_ConfirmDialogNo",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "OptionsMenu_Text_CloseDescription",

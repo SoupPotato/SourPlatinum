@@ -6276,7 +6276,7 @@
         "stopped evolving!\r"
       ]
     },
-    {           
+    {
       "id": "BattleStrings_Text_EllipsesEllipses",
       "en_US": "... ...?\r"
     },
@@ -6410,7 +6410,7 @@
     },
     {
       "id": "BattleStrings_Text_SafariBalls",
-      "en_US": "SAFARI BALLS"
+      "en_US": "Safari Balls"
     },
     {
       "id": "BattleStrings_Text_SafariBallsLeft",
@@ -7940,7 +7940,7 @@
       "id": "BattleStrings_Text_PokemonWasTransferredToBoxInSomeonesPC",
       "en_US": [
         "{STRVAR_1 1, 0, 0} was transferred to\n",
-        "{STRVAR_1 11, 1, 0} in someone’s PC!"
+        "{STRVAR_1 11, 1, 0} in Someone’s PC!"
       ]
     },
     {
@@ -8205,7 +8205,7 @@
     },
     {
       "id": "BattleStrings_Text_ParkBalls",
-      "en_US": "PARK BALLS"
+      "en_US": "Park Balls"
     },
     {
       "id": "BattleStrings_Text_ParkBallsLeft",
@@ -8452,7 +8452,7 @@
     },
     {
       "id": "BattleStrings_Text_Stop",
-      "en_US": "STOP"
+      "en_US": "Stop"
     },
     {
       "id": "BattleStrings_Text_PlaybackPaused",

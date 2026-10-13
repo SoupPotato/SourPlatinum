@@ -25,11 +25,11 @@
     },
     {
       "id": "PoffinCommon_Text_Yes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "PoffinCommon_Text_No",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "PoffinCommon_Text_Dummy5",
@@ -52,27 +52,27 @@
     },
     {
       "id": "PoffinCommon_Text_Alone",
-      "en_US": "ALONE"
+      "en_US": "Alone"
     },
     {
       "id": "PoffinCommon_Text_InAGroup",
-      "en_US": "IN A GROUP"
+      "en_US": "In a Group"
     },
     {
       "id": "PoffinCommon_Text_Info",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "PoffinCommon_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "PoffinCommon_Text_BecomeLeaderOrJoinGroup",
       "en_US": [
         "One person in the group needs to\n",
-        "choose “BECOME LEADER.”\r",
+        "choose “Become Leader.”\r",
         "Everyone else must choose\n",
-        "“JOIN GROUP.”"
+        "“Join Group.”"
       ]
     },
     {

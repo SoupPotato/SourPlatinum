@@ -3,23 +3,23 @@
   "messages": [
     {
       "id": "UndergroundBaseDecoration_Text_Decor",
-      "en_US": "DECOR"
+      "en_US": "Decor"
     },
     {
       "id": "UndergroundBaseDecoration_Text_Decorate",
-      "en_US": "DECORATE"
+      "en_US": "Decorate"
     },
     {
       "id": "UndergroundBaseDecoration_Text_PutAway",
-      "en_US": "PUT AWAY"
+      "en_US": "Put Away"
     },
     {
       "id": "UndergroundBaseDecoration_Text_MoveGoods",
-      "en_US": "MOVE GOODS"
+      "en_US": "Move Goods"
     },
     {
       "id": "UndergroundBaseDecoration_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "UndergroundBaseDecoration_Text_DecorateDescription",

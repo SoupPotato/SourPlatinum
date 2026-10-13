@@ -141,7 +141,7 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 26,
         "en": {
-            "name": "MEOWTH",
+            "name": "Meowth",
             "category": "Scratch Cat Pokémon",
             "entry_text": [
                 "It is nocturnal in nature. If it\n",
@@ -179,7 +179,10 @@
         "es": {
             "name": "MEOWTH",
             "category": "Pokémon Gato Araña",
-            "entry_text": [ "Es de naturaleza nocturna.\n", "Le atraen los objetos brillantes." ]
+            "entry_text": [
+                "Es de naturaleza nocturna.\n",
+                "Le atraen los objetos brillantes."
+            ]
         },
         "jp": {
             "name": "ニャ－ス",

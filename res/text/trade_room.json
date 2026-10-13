@@ -3,7 +3,7 @@
   "messages": [
     {
       "id": "pl_msg_00000354_00000",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "pl_msg_00000354_00001",
@@ -74,15 +74,15 @@
     },
     {
       "id": "TradeRoom_Text_SummaryOption",
-      "en_US": "SUMMARY"
+      "en_US": "Summary"
     },
     {
       "id": "TradeRoom_Text_TradeOption",
-      "en_US": "TRADE"
+      "en_US": "Trade"
     },
     {
       "id": "TradeRoom_Text_CancelOption",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "TradeRoom_Text_Communicating",
@@ -97,11 +97,11 @@
     },
     {
       "id": "pl_msg_00000354_00022",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "pl_msg_00000354_00023",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "TradeRoom_Text_TradeCanceled",
@@ -116,11 +116,11 @@
     },
     {
       "id": "pl_msg_00000354_00026",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "pl_msg_00000354_00027",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "TradeRoom_Text_WaitingForFriend",
@@ -201,7 +201,7 @@
     },
     {
       "id": "TradeRoom_Text_ItemLabel",
-      "en_US": "ITEM"
+      "en_US": "Item"
     },
     {
       "id": "pl_msg_00000354_00043",

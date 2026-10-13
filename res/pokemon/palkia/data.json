@@ -136,12 +136,12 @@
         "trainer_pos_m": 26,
         "pokemon_pos_m": 2,
         "en": {
-            "name": "PALKIA",
+            "name": "Palkia",
             "category": "Spatial Pokémon",
             "entry_text": [
                 "A legendary Pokémon of Sinnoh.\n",
                 "It is said that space becomes more\n",
-                "stable with PALKIA’s every breath."
+                "stable with Palkia’s every breath."
             ]
         },
         "fr": {

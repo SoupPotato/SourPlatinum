@@ -160,23 +160,23 @@
     },
     {
       "id": "Route208House_Text_GrowthMulch",
-      "en_US": "GROWTH MULCH"
+      "en_US": "Growth Mulch"
     },
     {
       "id": "Route208House_Text_DampMulch",
-      "en_US": "DAMP MULCH"
+      "en_US": "Damp Mulch"
     },
     {
       "id": "Route208House_Text_StableMulch",
-      "en_US": "STABLE MULCH"
+      "en_US": "Stable Mulch"
     },
     {
       "id": "Route208House_Text_GooeyMulch",
-      "en_US": "GOOEY MULCH"
+      "en_US": "Gooey Mulch"
     },
     {
       "id": "Route208House_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     }
   ]
 }

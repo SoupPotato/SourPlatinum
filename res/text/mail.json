@@ -3,11 +3,11 @@
   "messages": [
     {
       "id": "Mail_Text_Confirm",
-      "en_US": "CONFIRM"
+      "en_US": "Confirm"
     },
     {
       "id": "Mail_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "Mail_Text_EnterPhraseOrWord",

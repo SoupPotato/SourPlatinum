@@ -3,7 +3,7 @@
   "messages": [
     {
       "id": "LinkSearcher_Text_Title",
-      "en_US": "LINK SEARCHER"
+      "en_US": "Link Searcher"
     },
     {
       "id": "LinkSearcher_Text_Searching",
@@ -30,7 +30,7 @@
     },
     {
       "id": "LinkSearcher_Text_Status",
-      "en_US": "LINK STATUS"
+      "en_US": "Link Status"
     },
     {
       "id": "LinkSearcher_Text_UnionRoom",

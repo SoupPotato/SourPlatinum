@@ -57,7 +57,7 @@
     {
       "id": "Route222_Text_SignPikachuFanClub",
       "en_US": [
-        "PIKACHU Fan Club\n",
+        "Pikachu Fan Club\n",
         "Pikapikapikah! Pikapika?"
       ]
     },
@@ -67,6 +67,21 @@
         "Pokémon Size Contest\n",
         "Big Pokémon Wanted!"
       ]
+    },
+    {
+      "id": "Route222_Text_HoneyTreeSlatherBark",
+      "en_US": [
+        "There is a sweet scent in the air...\r",
+        "Slather the bark with Honey?"
+      ]
+    },
+    {
+      "id": "Route222_Text_HoneyTreeBarkSlathered",
+      "en_US": "The bark was slathered with Honey."
+    },
+    {
+      "id": "Route222_Text_HoneyTreeSweetScent",
+      "en_US": "There is a sweet scent in the air..."
     }
   ]
 }

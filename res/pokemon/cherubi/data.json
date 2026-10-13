@@ -116,11 +116,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 25,
         "en": {
-            "name": "CHERUBI",
+            "name": "Cherubi",
             "category": "Cherry Pokémon",
             "entry_text": [
                 "The small ball is not only filled with\n",
-                "nutrients, it is also tasty. STARLY\n",
+                "nutrients, it is also tasty. Starly\n",
                 "try to peck it off."
             ]
         },

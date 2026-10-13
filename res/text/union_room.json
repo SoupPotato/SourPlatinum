@@ -1349,27 +1349,27 @@
     },
     {
       "id": "UnionRoom_Text_00189",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "UnionRoom_Text_00190",
-      "en_US": "CHAT"
+      "en_US": "Chat"
     },
     {
       "id": "UnionRoom_Text_00191",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "UnionRoom_Text_00192",
-      "en_US": "BATTLE"
+      "en_US": "Battle"
     },
     {
       "id": "UnionRoom_Text_00193",
-      "en_US": "TRADE"
+      "en_US": "Trade"
     },
     {
       "id": "UnionRoom_Text_00194",
-      "en_US": "RECORDS"
+      "en_US": "Records"
     },
     {
       "id": "UnionRoom_Text_00195",
@@ -1377,15 +1377,15 @@
     },
     {
       "id": "UnionRoom_Text_00196",
-      "en_US": "DRAW"
+      "en_US": "Draw"
     },
     {
       "id": "UnionRoom_Text_00197",
-      "en_US": "CHAT"
+      "en_US": "Chat"
     },
     {
       "id": "UnionRoom_Text_00198",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "UnionRoom_Text_TalkingToPlayer",

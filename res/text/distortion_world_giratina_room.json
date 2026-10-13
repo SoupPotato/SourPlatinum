@@ -8,7 +8,7 @@
     {
       "id": "DistortionWorldGiratinaRoom_Text_GiratinaIsEyeingPlayer",
       "en_US": [
-        "GIRATINA is quietly eyeing\n",
+        "Giratina is quietly eyeing\n",
         "{STRVAR_1 3, 0, 0}..."
       ]
     },
@@ -19,7 +19,7 @@
     {
       "id": "DistortionWorldGiratinaRoom_Text_GiratinaUnderstoodUs",
       "en_US": [
-        "Cynthia: GIRATINA seems to have\n",
+        "Cynthia: Giratina seems to have\n",
         "understood us!\r"
       ]
     },
@@ -118,9 +118,9 @@
       "id": "DistortionWorldGiratinaRoom_Text_LetsGoBackHome",
       "en_US": [
         "Let’s go back home.\r",
-        "The portal where GIRATINA was should\n",
+        "The portal where Giratina was should\n",
         "lead back to our world.\r",
-        "GIRATINA was written in legend as\n",
+        "Giratina was written in legend as\n",
         "being on the other side of our world.\r",
         "It stands to reason that it has a link\n",
         "to the other side."
@@ -129,7 +129,7 @@
     {
       "id": "DistortionWorldGiratinaRoom_Text_LeapIntoPortal",
       "en_US": [
-        "There is a portal where GIRATINA was.\n",
+        "There is a portal where Giratina was.\n",
         "Will you leap into the portal?"
       ]
     },

@@ -363,31 +363,31 @@
     },
     {
       "id": "BattleCastle_Text_SingleBattle",
-      "en_US": "SINGLE BATTLE"
+      "en_US": "Single Battle"
     },
     {
       "id": "BattleCastle_Text_DoubleBattle",
-      "en_US": "DOUBLE BATTLE"
+      "en_US": "Double Battle"
     },
     {
       "id": "BattleCastle_Text_TakeChallenge",
-      "en_US": "TAKE CHALLENGE"
+      "en_US": "Take Challenge"
     },
     {
       "id": "BattleCastle_Text_Info",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "BattleCastle_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleCastle_Text_BecomeLeaderOrJoinGroup",
       "en_US": [
         "One Trainer should select\n",
-        "“BECOME LEADER.”\r",
+        "“Become Leader.”\r",
         "The other Trainer must select\n",
-        "“JOIN GROUP.”"
+        "“Join Group.”"
       ]
     },
     {

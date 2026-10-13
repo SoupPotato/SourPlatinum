@@ -130,7 +130,7 @@
         "Please decide which of you two\n",
         "will become the leader.\r",
         "The other player must then choose\n",
-        "“JOIN GROUP.”"
+        "“Join Group.”"
       ]
     },
     {
@@ -219,7 +219,7 @@
         "Please decide which of you four\n",
         "will become the group leader.\r",
         "The other players must then choose\n",
-        "“JOIN GROUP.”"
+        "“Join Group.”"
       ]
     },
     {
@@ -576,15 +576,15 @@
     },
     {
       "id": "PokemonCenter2FCommon_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "PokemonCenter2FCommon_Text_Confirm",
-      "en_US": "CONFIRM"
+      "en_US": "Confirm"
     },
     {
       "id": "PokemonCenter2FCommon_Text_Rules",
-      "en_US": "RULES"
+      "en_US": "Rules"
     },
     {
       "id": "PokemonCenter2FCommon_Text_Dummy117",
@@ -617,7 +617,7 @@
     },
     {
       "id": "PokemonCenter2FCommon_Text_NoRestrictions",
-      "en_US": "NO RESTRICTIONS"
+      "en_US": "No Restrictions"
     },
     {
       "id": "PokemonCenter2FCommon_Text_CommsWillBeLaunched",

@@ -98,11 +98,11 @@
     },
     {
       "id": "FlowerShop_Text_Yes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "FlowerShop_Text_No",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "FlowerShop_Text_BerryNameFormat",
@@ -118,7 +118,7 @@
     },
     {
       "id": "FlowerShop_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     }
   ]
 }

@@ -137,11 +137,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 65535,
         "en": {
-            "name": "GENGAR",
+            "name": "Gengar",
             "category": "Shadow Pokémon",
             "entry_text": [
                 "The leer that floats in darkness\n",
-                "belongs to a GENGAR delighting in\n",
+                "belongs to a Gengar delighting in\n",
                 "casting curses on people."
             ]
         },

@@ -7,23 +7,23 @@
     },
     {
       "id": "BattleFrontierRecords_Text_Single",
-      "en_US": "SINGLE"
+      "en_US": "Single"
     },
     {
       "id": "BattleFrontierRecords_Text_Double",
-      "en_US": "DOUBLE"
+      "en_US": "Double"
     },
     {
       "id": "BattleFrontierRecords_Text_Multi",
-      "en_US": "MULTI"
+      "en_US": "Multi"
     },
     {
       "id": "BattleFrontierRecords_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleFrontierRecords_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "BattleFrontierRecords_Text_WhichPokemon",
@@ -78,7 +78,7 @@
     },
     {
       "id": "BattleFrontierRecords_Text_Cancel2",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleFrontierRecords_Text_Dummy3",
@@ -122,15 +122,15 @@
     },
     {
       "id": "BattleFrontierRecords_Text_Prev",
-      "en_US": "PREV"
+      "en_US": "Prev"
     },
     {
       "id": "BattleFrontierRecords_Text_Current",
-      "en_US": "CURRENT"
+      "en_US": "Current"
     },
     {
       "id": "BattleFrontierRecords_Text_Record",
-      "en_US": "RECORD"
+      "en_US": "Record"
     },
     {
       "id": "BattleFrontierRecords_Text_MultiWithTrainer",

@@ -3,7 +3,7 @@
   "messages": [
     {
       "id": "Diploma_Text_Player",
-      "en_US": "PLAYER: {STRVAR_1 3, 0, 0}"
+      "en_US": "Player: {STRVAR_1 3, 0, 0}"
     },
     {
       "id": "Diploma_Text_Sinnoh",
