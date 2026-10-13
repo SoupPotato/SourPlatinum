@@ -36,7 +36,8 @@
         "by_level": [
             [ 1, "MOVE_SWEET_SCENT" ],
             [ 1, "MOVE_GUST" ],
-            [ 13, "MOVE_BUG_BITE" ]
+            [ 13, "MOVE_BUG_BITE" ],
+            [ 29, "MOVE_BUG_BUZZ" ]
         ],
         "by_tm": [  ],
         "by_tutor": [

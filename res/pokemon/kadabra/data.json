@@ -37,6 +37,7 @@
             [ 1, "MOVE_TELEPORT" ],
             [ 1, "MOVE_KINESIS" ],
             [ 1, "MOVE_CONFUSION" ],
+            [ 16, "MOVE_KINESIS" ],
             [ 16, "MOVE_CONFUSION" ],
             [ 18, "MOVE_DISABLE" ],
             [ 22, "MOVE_MIRACLE_EYE" ],
@@ -47,7 +48,8 @@
             [ 36, "MOVE_ROLE_PLAY" ],
             [ 40, "MOVE_PSYCHIC" ],
             [ 42, "MOVE_FUTURE_SIGHT" ],
-            [ 46, "MOVE_TRICK" ]
+            [ 46, "MOVE_TRICK" ],
+            [ 48, "MOVE_CALM_MIND" ]
         ],
         "by_tm": [
             "TM01",
@@ -107,7 +109,12 @@
         ]
     },
     "evolutions": [
-        [ "EVO_TRADE", "SPECIES_ALAKAZAM" ]
+        [ "EVO_TRADE", "SPECIES_ALAKAZAM" ],
+        [
+            "EVO_USE_ITEM",
+            "ITEM_LOOT_SACK",
+            "SPECIES_ALAKAZAM"
+        ]
     ],
     "offspring": "SPECIES_ABRA",
     "footprint": {

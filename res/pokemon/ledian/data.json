@@ -2,10 +2,10 @@
     "base_stats": {
         "hp": 55,
         "attack": 35,
-        "defense": 50,
+        "defense": 40,
         "speed": 85,
-        "special_attack": 55,
-        "special_defense": 110
+        "special_attack": 85,
+        "special_defense": 100
     },
     "types": [ "TYPE_BUG", "TYPE_FLYING" ],
     "catch_rate": 90,
@@ -37,18 +37,17 @@
             [ 1, "MOVE_TACKLE" ],
             [ 1, "MOVE_SUPERSONIC" ],
             [ 1, "MOVE_COMET_PUNCH" ],
-            [ 6, "MOVE_SUPERSONIC" ],
-            [ 9, "MOVE_COMET_PUNCH" ],
-            [ 14, "MOVE_LIGHT_SCREEN" ],
-            [ 14, "MOVE_REFLECT" ],
-            [ 14, "MOVE_SAFEGUARD" ],
-            [ 17, "MOVE_MACH_PUNCH" ],
-            [ 24, "MOVE_BATON_PASS" ],
-            [ 29, "MOVE_SILVER_WIND" ],
-            [ 36, "MOVE_AGILITY" ],
-            [ 41, "MOVE_SWIFT" ],
-            [ 48, "MOVE_DOUBLE_EDGE" ],
-            [ 53, "MOVE_BUG_BUZZ" ]
+            [ 12, "MOVE_LIGHT_SCREEN" ],
+            [ 12, "MOVE_REFLECT" ],
+            [ 12, "MOVE_SAFEGUARD" ],
+            [ 15, "MOVE_MACH_PUNCH" ],
+            [ 20, "MOVE_SILVER_WIND" ],
+            [ 24, "MOVE_SWIFT" ],
+            [ 29, "MOVE_BATON_PASS" ],
+            [ 33, "MOVE_AGILITY" ],
+            [ 38, "MOVE_BUG_BUZZ" ],
+            [ 42, "MOVE_AIR_SLASH" ],
+            [ 47, "MOVE_DOUBLE_EDGE" ]
         ],
         "by_tm": [
             "TM01",

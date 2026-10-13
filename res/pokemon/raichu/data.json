@@ -3,7 +3,7 @@
         "hp": 60,
         "attack": 90,
         "defense": 55,
-        "speed": 100,
+        "speed": 110,
         "special_attack": 90,
         "special_defense": 80
     },
@@ -34,6 +34,7 @@
     "icon_palette": 0,
     "learnset": {
         "by_level": [
+            [ 1, "MOVE_THUNDER_PUNCH" ],
             [ 1, "MOVE_THUNDER_SHOCK" ],
             [ 1, "MOVE_TAIL_WHIP" ],
             [ 1, "MOVE_QUICK_ATTACK" ],

@@ -34,19 +34,20 @@
     "icon_palette": 0,
     "learnset": {
         "by_level": [
-            [ 1, "MOVE_ANCIENT_POWER" ],
-            [ 9, "MOVE_LEER" ],
-            [ 17, "MOVE_FIRE_FANG" ],
-            [ 25, "MOVE_METAL_SOUND" ],
-            [ 33, "MOVE_CRUNCH" ],
-            [ 41, "MOVE_SCARY_FACE" ],
-            [ 49, "MOVE_LAVA_PLUME" ],
-            [ 57, "MOVE_FIRE_SPIN" ],
-            [ 65, "MOVE_IRON_HEAD" ],
-            [ 73, "MOVE_EARTH_POWER" ],
-            [ 81, "MOVE_HEAT_WAVE" ],
-            [ 88, "MOVE_STONE_EDGE" ],
-            [ 96, "MOVE_MAGMA_STORM" ]
+            [ 1, "MOVE_FIRE_SPIN" ],
+            [ 1, "MOVE_LEER" ],
+            [ 6, "MOVE_METAL_CLAW" ],
+            [ 12, "MOVE_ANCIENT_POWER" ],
+            [ 18, "MOVE_FIRE_FANG" ],
+            [ 24, "MOVE_SCARY_FACE" ],
+            [ 30, "MOVE_IRON_HEAD" ],
+            [ 36, "MOVE_CRUNCH" ],
+            [ 42, "MOVE_LAVA_PLUME" ],
+            [ 48, "MOVE_METAL_SOUND" ],
+            [ 54, "MOVE_EARTH_POWER" ],
+            [ 60, "MOVE_HEAT_WAVE" ],
+            [ 66, "MOVE_STONE_EDGE" ],
+            [ 72, "MOVE_MAGMA_STORM" ]
         ],
         "by_tm": [
             "TM05",

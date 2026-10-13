@@ -2,7 +2,7 @@
     "base_stats": {
         "hp": 75,
         "attack": 80,
-        "defense": 85,
+        "defense": 95,
         "speed": 50,
         "special_attack": 90,
         "special_defense": 100
@@ -39,8 +39,9 @@
             [ 1, "MOVE_SWEET_SCENT" ],
             [ 1, "MOVE_STUN_SPORE" ],
             [ 1, "MOVE_SUNNY_DAY" ],
-            [ 23, "MOVE_MAGICAL_LEAF" ],
-            [ 53, "MOVE_LEAF_STORM" ]
+            [ 24, "MOVE_MAGICAL_LEAF" ],
+            [ 53, "MOVE_PETAL_DANCE" ],
+            [ 65, "MOVE_LEAF_STORM" ]
         ],
         "by_tm": [
             "TM06",

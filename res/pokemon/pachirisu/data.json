@@ -28,7 +28,7 @@
     "exp_rate": "EXP_RATE_MEDIUM_FAST",
     "egg_groups": [ "EGG_GROUP_FIELD", "EGG_GROUP_FAIRY" ],
     "abilities": [ "ABILITY_RUN_AWAY", "ABILITY_PICKUP" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 120,
     "body_color": "MON_COLOR_WHITE",
     "flip_sprite": false,
     "icon_palette": 0,
@@ -43,8 +43,10 @@
             [ 21, "MOVE_SWIFT" ],
             [ 25, "MOVE_SWEET_KISS" ],
             [ 29, "MOVE_DISCHARGE" ],
-            [ 33, "MOVE_SUPER_FANG" ],
-            [ 37, "MOVE_LAST_RESORT" ]
+            [ 33, "MOVE_THUNDER_WAVE" ],
+            [ 37, "MOVE_SUPER_FANG" ],
+            [ 41, "MOVE_LAST_RESORT" ],
+            [ 45, "MOVE_HYPER_FANG" ]
         ],
         "by_tm": [
             "TM06",

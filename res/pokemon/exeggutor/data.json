@@ -5,7 +5,7 @@
         "defense": 85,
         "speed": 55,
         "special_attack": 125,
-        "special_defense": 65
+        "special_defense": 75
     },
     "types": [ "TYPE_GRASS", "TYPE_PSYCHIC" ],
     "catch_rate": 45,
@@ -35,14 +35,16 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_SEED_BOMB" ],
+            [ 1, "MOVE_EXTRASENSORY" ],
             [ 1, "MOVE_BARRAGE" ],
+            [ 1, "MOVE_ABSORB" ],
             [ 1, "MOVE_HYPNOSIS" ],
-            [ 1, "MOVE_CONFUSION" ],
-            [ 1, "MOVE_STOMP" ],
-            [ 17, "MOVE_STOMP" ],
-            [ 27, "MOVE_EGG_BOMB" ],
-            [ 37, "MOVE_WOOD_HAMMER" ],
-            [ 47, "MOVE_LEAF_STORM" ]
+            [ 1, "MOVE_REFLECT" ],
+            [ 18, "MOVE_CONFUSION" ],
+            [ 27, "MOVE_STOMP" ],
+            [ 35, "MOVE_EGG_BOMB" ],
+            [ 42, "MOVE_WOOD_HAMMER" ],
+            [ 53, "MOVE_LEAF_STORM" ]
         ],
         "by_tm": [
             "TM06",

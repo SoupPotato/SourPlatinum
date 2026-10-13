@@ -34,7 +34,8 @@
     "icon_palette": 0,
     "learnset": {
         "by_level": [
-            [ 1, "MOVE_PRESENT" ]
+            [ 1, "MOVE_PRESENT" ],
+            [ 25, "MOVE_DRILL_PECK" ]
         ],
         "by_tm": [
             "TM01",

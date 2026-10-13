@@ -35,19 +35,21 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_CONFUSION" ],
-            [ 3, "MOVE_HARDEN" ],
-            [ 5, "MOVE_RAPID_SPIN" ],
+            [ 1, "MOVE_HARDEN" ],
+            [ 4, "MOVE_RAPID_SPIN" ],
             [ 7, "MOVE_MUD_SLAP" ],
-            [ 11, "MOVE_PSYBEAM" ],
-            [ 15, "MOVE_ROCK_TOMB" ],
-            [ 19, "MOVE_SELFDESTRUCT" ],
-            [ 25, "MOVE_ANCIENT_POWER" ],
-            [ 31, "MOVE_POWER_TRICK" ],
+            [ 10, "MOVE_HEAL_BLOCK" ],
+            [ 13, "MOVE_ROCK_TOMB" ],
+            [ 16, "MOVE_PSYBEAM" ],
+            [ 19, "MOVE_ANCIENT_POWER" ],
+            [ 22, "MOVE_COSMIC_POWER" ],
+            [ 25, "MOVE_POWER_TRICK" ],
+            [ 28, "MOVE_SELFDESTRUCT" ],
+            [ 31, "MOVE_EXTRASENSORY" ],
+            [ 34, "MOVE_EARTH_POWER" ],
             [ 37, "MOVE_SANDSTORM" ],
-            [ 45, "MOVE_COSMIC_POWER" ],
-            [ 53, "MOVE_EARTH_POWER" ],
-            [ 61, "MOVE_HEAL_BLOCK" ],
-            [ 71, "MOVE_EXPLOSION" ]
+            [ 40, "MOVE_IMPRISON" ],
+            [ 43, "MOVE_EXPLOSION" ]
         ],
         "by_tm": [
             "TM04",

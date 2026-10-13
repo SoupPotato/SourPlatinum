@@ -28,7 +28,7 @@
     "exp_rate": "EXP_RATE_MEDIUM_FAST",
     "egg_groups": [ "EGG_GROUP_FLYING", "EGG_GROUP_FLYING" ],
     "abilities": [ "ABILITY_KEEN_EYE", "ABILITY_NONE" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 90,
     "body_color": "MON_COLOR_BROWN",
     "flip_sprite": false,
     "icon_palette": 0,
@@ -36,15 +36,16 @@
         "by_level": [
             [ 1, "MOVE_PECK" ],
             [ 1, "MOVE_GROWL" ],
-            [ 5, "MOVE_LEER" ],
-            [ 9, "MOVE_FURY_ATTACK" ],
-            [ 13, "MOVE_PURSUIT" ],
-            [ 17, "MOVE_AERIAL_ACE" ],
-            [ 21, "MOVE_MIRROR_MOVE" ],
+            [ 4, "MOVE_LEER" ],
+            [ 8, "MOVE_PURSUIT" ],
+            [ 11, "MOVE_FURY_ATTACK" ],
+            [ 15, "MOVE_AERIAL_ACE" ],
+            [ 18, "MOVE_MIRROR_MOVE" ],
+            [ 22, "MOVE_ASSURANCE" ],
             [ 25, "MOVE_AGILITY" ],
-            [ 29, "MOVE_ASSURANCE" ],
-            [ 33, "MOVE_ROOST" ],
-            [ 37, "MOVE_DRILL_PECK" ]
+            [ 29, "MOVE_FOCUS_ENERGY" ],
+            [ 32, "MOVE_ROOST" ],
+            [ 36, "MOVE_DRILL_PECK" ]
         ],
         "by_tm": [
             "TM06",

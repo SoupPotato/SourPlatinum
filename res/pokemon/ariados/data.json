@@ -5,7 +5,7 @@
         "defense": 70,
         "speed": 40,
         "special_attack": 60,
-        "special_defense": 60
+        "special_defense": 70
     },
     "types": [ "TYPE_BUG", "TYPE_POISON" ],
     "catch_rate": 90,
@@ -34,23 +34,24 @@
     "icon_palette": 0,
     "learnset": {
         "by_level": [
+            [ 1, "MOVE_FOCUS_ENERGY" ],
             [ 1, "MOVE_BUG_BITE" ],
             [ 1, "MOVE_POISON_STING" ],
             [ 1, "MOVE_STRING_SHOT" ],
-            [ 1, "MOVE_SCARY_FACE" ],
             [ 1, "MOVE_CONSTRICT" ],
-            [ 5, "MOVE_SCARY_FACE" ],
-            [ 8, "MOVE_CONSTRICT" ],
-            [ 12, "MOVE_LEECH_LIFE" ],
+            [ 1, "MOVE_LEECH_LIFE" ],
+            [ 12, "MOVE_SCARY_FACE" ],
             [ 15, "MOVE_NIGHT_SHADE" ],
             [ 19, "MOVE_SHADOW_SNEAK" ],
+            [ 22, "MOVE_SWORDS_DANCE" ],
             [ 23, "MOVE_FURY_SWIPES" ],
             [ 28, "MOVE_SUCKER_PUNCH" ],
             [ 32, "MOVE_SPIDER_WEB" ],
             [ 37, "MOVE_AGILITY" ],
             [ 41, "MOVE_PIN_MISSILE" ],
             [ 46, "MOVE_PSYCHIC" ],
-            [ 50, "MOVE_POISON_JAB" ]
+            [ 50, "MOVE_POISON_JAB" ],
+            [ 55, "MOVE_CROSS_POISON" ]
         ],
         "by_tm": [
             "TM06",

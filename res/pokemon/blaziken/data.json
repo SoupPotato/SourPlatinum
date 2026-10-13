@@ -35,22 +35,22 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_FIRE_PUNCH" ],
+            [ 1, "MOVE_HI_JUMP_KICK" ],
             [ 1, "MOVE_SCRATCH" ],
             [ 1, "MOVE_GROWL" ],
-            [ 1, "MOVE_FOCUS_ENERGY" ],
             [ 1, "MOVE_EMBER" ],
-            [ 7, "MOVE_FOCUS_ENERGY" ],
-            [ 13, "MOVE_EMBER" ],
+            [ 1, "MOVE_SAND_ATTACK" ],
+            [ 14, "MOVE_PECK" ],
             [ 16, "MOVE_DOUBLE_KICK" ],
-            [ 17, "MOVE_PECK" ],
-            [ 21, "MOVE_SAND_ATTACK" ],
-            [ 28, "MOVE_BULK_UP" ],
-            [ 32, "MOVE_QUICK_ATTACK" ],
+            [ 20, "MOVE_FLAME_WHEEL" ],
+            [ 25, "MOVE_QUICK_ATTACK" ],
+            [ 31, "MOVE_BULK_UP" ],
             [ 36, "MOVE_BLAZE_KICK" ],
-            [ 42, "MOVE_SLASH" ],
-            [ 49, "MOVE_BRAVE_BIRD" ],
-            [ 59, "MOVE_SKY_UPPERCUT" ],
-            [ 66, "MOVE_FLARE_BLITZ" ]
+            [ 37, "MOVE_FOCUS_ENERGY" ],
+            [ 44, "MOVE_SLASH" ],
+            [ 50, "MOVE_BRAVE_BIRD" ],
+            [ 57, "MOVE_SKY_UPPERCUT" ],
+            [ 63, "MOVE_FLARE_BLITZ" ]
         ],
         "by_tm": [
             "TM01",

@@ -37,8 +37,6 @@
             [ 1, "MOVE_TACKLE" ],
             [ 1, "MOVE_SAND_ATTACK" ],
             [ 1, "MOVE_GUST" ],
-            [ 5, "MOVE_SAND_ATTACK" ],
-            [ 9, "MOVE_GUST" ],
             [ 13, "MOVE_QUICK_ATTACK" ],
             [ 17, "MOVE_WHIRLWIND" ],
             [ 22, "MOVE_TWISTER" ],

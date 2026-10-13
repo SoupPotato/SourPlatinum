@@ -34,18 +34,19 @@
     "icon_palette": 2,
     "learnset": {
         "by_level": [
-            [ 1, "MOVE_SCRATCH" ],
+            [ 1, "MOVE_ABSORB" ],
             [ 1, "MOVE_HARDEN" ],
-            [ 6, "MOVE_ABSORB" ],
-            [ 11, "MOVE_LEER" ],
-            [ 16, "MOVE_MUD_SHOT" ],
-            [ 21, "MOVE_SAND_ATTACK" ],
-            [ 26, "MOVE_ENDURE" ],
-            [ 31, "MOVE_AQUA_JET" ],
-            [ 36, "MOVE_MEGA_DRAIN" ],
-            [ 41, "MOVE_METAL_SOUND" ],
-            [ 46, "MOVE_ANCIENT_POWER" ],
-            [ 51, "MOVE_WRING_OUT" ]
+            [ 5, "MOVE_SCRATCH" ],
+            [ 10, "MOVE_SAND_ATTACK" ],
+            [ 14, "MOVE_AQUA_JET" ],
+            [ 19, "MOVE_LEER" ],
+            [ 23, "MOVE_MUD_SHOT" ],
+            [ 28, "MOVE_ANCIENT_POWER" ],
+            [ 32, "MOVE_BRINE" ],
+            [ 37, "MOVE_PROTECT" ],
+            [ 41, "MOVE_GIGA_DRAIN" ],
+            [ 46, "MOVE_METAL_SOUND" ],
+            [ 50, "MOVE_STONE_EDGE" ]
         ],
         "by_tm": [
             "TM03",

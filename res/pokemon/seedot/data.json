@@ -28,19 +28,25 @@
     "exp_rate": "EXP_RATE_MEDIUM_SLOW",
     "egg_groups": [ "EGG_GROUP_FIELD", "EGG_GROUP_GRASS" ],
     "abilities": [ "ABILITY_CHLOROPHYLL", "ABILITY_EARLY_BIRD" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 90,
     "body_color": "MON_COLOR_BROWN",
     "flip_sprite": false,
     "icon_palette": 1,
     "learnset": {
         "by_level": [
             [ 1, "MOVE_BIDE" ],
-            [ 3, "MOVE_HARDEN" ],
-            [ 7, "MOVE_GROWTH" ],
-            [ 13, "MOVE_NATURE_POWER" ],
-            [ 21, "MOVE_SYNTHESIS" ],
-            [ 31, "MOVE_SUNNY_DAY" ],
-            [ 43, "MOVE_EXPLOSION" ]
+            [ 1, "MOVE_HARDEN" ],
+            [ 3, "MOVE_ABSORB" ],
+            [ 6, "MOVE_ASTONISH" ],
+            [ 9, "MOVE_GROWTH" ],
+            [ 12, "MOVE_ROLLOUT" ],
+            [ 15, "MOVE_NATURE_POWER" ],
+            [ 18, "MOVE_MEGA_DRAIN" ],
+            [ 21, "MOVE_PAYBACK" ],
+            [ 24, "MOVE_SUNNY_DAY" ],
+            [ 27, "MOVE_SYNTHESIS" ],
+            [ 30, "MOVE_SUCKER_PUNCH" ],
+            [ 33, "MOVE_EXPLOSION" ]
         ],
         "by_tm": [
             "TM06",

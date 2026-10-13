@@ -46,8 +46,8 @@
             [ 28, "MOVE_TOXIC_SPIKES" ],
             [ 31, "MOVE_SWEET_SCENT" ],
             [ 34, "MOVE_INGRAIN" ],
-            [ 37, "MOVE_TOXIC" ],
-            [ 40, "MOVE_PETAL_DANCE" ],
+            [ 37, "MOVE_PETAL_DANCE" ],
+            [ 40, "MOVE_TOXIC" ],
             [ 43, "MOVE_AROMATHERAPY" ],
             [ 46, "MOVE_SYNTHESIS" ]
         ],

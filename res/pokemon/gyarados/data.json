@@ -34,17 +34,21 @@
     "icon_palette": 0,
     "learnset": {
         "by_level": [
-            [ 1, "MOVE_THRASH" ],
+            [ 1, "MOVE_BITE" ],
+            [ 1, "MOVE_TACKLE" ],
             [ 20, "MOVE_BITE" ],
-            [ 23, "MOVE_DRAGON_RAGE" ],
-            [ 26, "MOVE_LEER" ],
-            [ 29, "MOVE_TWISTER" ],
-            [ 32, "MOVE_ICE_FANG" ],
-            [ 35, "MOVE_AQUA_TAIL" ],
-            [ 38, "MOVE_RAIN_DANCE" ],
-            [ 41, "MOVE_HYDRO_PUMP" ],
-            [ 44, "MOVE_DRAGON_DANCE" ],
-            [ 47, "MOVE_HYPER_BEAM" ]
+            [ 21, "MOVE_LEER" ],
+            [ 24, "MOVE_TWISTER" ],
+            [ 27, "MOVE_ICE_FANG" ],
+            [ 30, "MOVE_DRAGON_RAGE" ],
+            [ 33, "MOVE_SCARY_FACE" ],
+            [ 36, "MOVE_AQUA_TAIL" ],
+            [ 39, "MOVE_CRUNCH" ],
+            [ 42, "MOVE_HYDRO_PUMP" ],
+            [ 45, "MOVE_DRAGON_DANCE" ],
+            [ 48, "MOVE_RAIN_DANCE" ],
+            [ 51, "MOVE_THRASH" ],
+            [ 54, "MOVE_HYPER_BEAM" ]
         ],
         "by_tm": [
             "TM03",

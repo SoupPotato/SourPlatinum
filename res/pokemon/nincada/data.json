@@ -38,12 +38,13 @@
             [ 1, "MOVE_HARDEN" ],
             [ 5, "MOVE_LEECH_LIFE" ],
             [ 9, "MOVE_SAND_ATTACK" ],
-            [ 14, "MOVE_FURY_SWIPES" ],
-            [ 19, "MOVE_MIND_READER" ],
-            [ 25, "MOVE_FALSE_SWIPE" ],
-            [ 31, "MOVE_MUD_SLAP" ],
-            [ 38, "MOVE_METAL_CLAW" ],
-            [ 45, "MOVE_DIG" ]
+            [ 13, "MOVE_FURY_SWIPES" ],
+            [ 17, "MOVE_MUD_SLAP" ],
+            [ 21, "MOVE_METAL_CLAW" ],
+            [ 25, "MOVE_MIND_READER" ],
+            [ 29, "MOVE_BIDE" ],
+            [ 33, "MOVE_FALSE_SWIPE" ],
+            [ 37, "MOVE_DIG" ]
         ],
         "by_tm": [
             "TM06",

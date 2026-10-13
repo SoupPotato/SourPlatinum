@@ -36,8 +36,8 @@
         "by_level": [
             [ 1, "MOVE_HEADBUTT" ],
             [ 1, "MOVE_LEER" ],
-            [ 6, "MOVE_FOCUS_ENERGY" ],
-            [ 10, "MOVE_PURSUIT" ],
+            [ 1, "MOVE_FOCUS_ENERGY" ],
+            [ 1, "MOVE_PURSUIT" ],
             [ 15, "MOVE_TAKE_DOWN" ],
             [ 19, "MOVE_SCARY_FACE" ],
             [ 24, "MOVE_ASSURANCE" ],
@@ -165,12 +165,18 @@
         "it": {
             "name": "RAMPARDOS",
             "category": "Pokémon Cranioso",
-            "entry_text": [ "Tira testate talmente potenti da\n", "frantumare anche oggetti durissimi." ]
+            "entry_text": [
+                "Tira testate talmente potenti da\n",
+                "frantumare anche oggetti durissimi."
+            ]
         },
         "es": {
             "name": "RAMPARDOS",
             "category": "Pokémon Cabezazo",
-            "entry_text": [ "Su potente cabezazo puede\n", "hacer a\u00f1icos cualquier cosa." ]
+            "entry_text": [
+                "Su potente cabezazo puede\n",
+                "hacer añicos cualquier cosa."
+            ]
         },
         "jp": {
             "name": "ラムパルド",

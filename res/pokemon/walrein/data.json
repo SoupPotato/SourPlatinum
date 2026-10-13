@@ -35,21 +35,23 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_CRUNCH" ],
+            [ 1, "MOVE_DEFENSE_CURL" ],
             [ 1, "MOVE_POWDER_SNOW" ],
             [ 1, "MOVE_GROWL" ],
             [ 1, "MOVE_WATER_GUN" ],
-            [ 1, "MOVE_ENCORE" ],
-            [ 7, "MOVE_ENCORE" ],
+            [ 5, "MOVE_ROLLOUT" ],
+            [ 9, "MOVE_ENCORE" ],
             [ 13, "MOVE_ICE_BALL" ],
-            [ 19, "MOVE_BODY_SLAM" ],
-            [ 25, "MOVE_AURORA_BEAM" ],
-            [ 31, "MOVE_HAIL" ],
+            [ 17, "MOVE_BRINE" ],
+            [ 21, "MOVE_AURORA_BEAM" ],
+            [ 26, "MOVE_BODY_SLAM" ],
+            [ 31, "MOVE_REST" ],
+            [ 31, "MOVE_SNORE" ],
             [ 32, "MOVE_SWAGGER" ],
-            [ 39, "MOVE_REST" ],
-            [ 39, "MOVE_SNORE" ],
+            [ 38, "MOVE_HAIL" ],
             [ 44, "MOVE_ICE_FANG" ],
-            [ 52, "MOVE_BLIZZARD" ],
-            [ 65, "MOVE_SHEER_COLD" ]
+            [ 49, "MOVE_BLIZZARD" ],
+            [ 60, "MOVE_SHEER_COLD" ]
         ],
         "by_tm": [
             "TM03",

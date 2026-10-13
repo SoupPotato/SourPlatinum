@@ -19,8 +19,8 @@
         "special_defense": 1
     },
     "held_items": {
-        "common": "ITEM_ORAN_BERRY",
-        "rare": "ITEM_ORAN_BERRY"
+        "common": "ITEM_BERRY_JUICE",
+        "rare": "ITEM_BERRY_JUICE"
     },
     "gender_ratio": "GENDER_RATIO_FEMALE_50",
     "hatch_cycles": 20,
@@ -28,7 +28,7 @@
     "exp_rate": "EXP_RATE_MEDIUM_SLOW",
     "egg_groups": [ "EGG_GROUP_BUG", "EGG_GROUP_BUG" ],
     "abilities": [ "ABILITY_STURDY", "ABILITY_GLUTTONY" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 60,
     "body_color": "MON_COLOR_YELLOW",
     "flip_sprite": false,
     "icon_palette": 1,
@@ -37,13 +37,17 @@
             [ 1, "MOVE_WITHDRAW" ],
             [ 1, "MOVE_CONSTRICT" ],
             [ 1, "MOVE_BIDE" ],
-            [ 9, "MOVE_ENCORE" ],
-            [ 14, "MOVE_SAFEGUARD" ],
-            [ 22, "MOVE_WRAP" ],
-            [ 27, "MOVE_REST" ],
-            [ 35, "MOVE_GASTRO_ACID" ],
-            [ 40, "MOVE_BUG_BITE" ],
-            [ 48, "MOVE_POWER_TRICK" ]
+            [ 1, "MOVE_ROLLOUT" ],
+            [ 5, "MOVE_ENCORE" ],
+            [ 9, "MOVE_WRAP" ],
+            [ 15, "MOVE_SAFEGUARD" ],
+            [ 20, "MOVE_REST" ],
+            [ 23, "MOVE_ROCK_THROW" ],
+            [ 27, "MOVE_GASTRO_ACID" ],
+            [ 31, "MOVE_POWER_TRICK" ],
+            [ 36, "MOVE_ROCK_SLIDE" ],
+            [ 42, "MOVE_BUG_BITE" ],
+            [ 48, "MOVE_STONE_EDGE" ]
         ],
         "by_tm": [
             "TM06",

@@ -34,12 +34,16 @@
     "icon_palette": 1,
     "learnset": {
         "by_level": [
+            [ 1, "MOVE_RECYCLE" ],
+            [ 1, "MOVE_COVET" ],
+            [ 1, "MOVE_STOCKPILE" ],
+            [ 1, "MOVE_SWALLOW" ],
             [ 1, "MOVE_TACKLE" ],
-            [ 4, "MOVE_DEFENSE_CURL" ],
-            [ 9, "MOVE_AMNESIA" ],
-            [ 12, "MOVE_LICK" ],
-            [ 17, "MOVE_BELLY_DRUM" ],
-            [ 20, "MOVE_YAWN" ],
+            [ 1, "MOVE_DEFENSE_CURL" ],
+            [ 1, "MOVE_AMNESIA" ],
+            [ 1, "MOVE_LICK" ],
+            [ 16, "MOVE_YAWN" ],
+            [ 20, "MOVE_BITE" ],
             [ 25, "MOVE_REST" ],
             [ 28, "MOVE_SNORE" ],
             [ 28, "MOVE_SLEEP_TALK" ],
@@ -47,7 +51,9 @@
             [ 36, "MOVE_BLOCK" ],
             [ 41, "MOVE_ROLLOUT" ],
             [ 44, "MOVE_CRUNCH" ],
-            [ 49, "MOVE_GIGA_IMPACT" ]
+            [ 49, "MOVE_HAMMER_ARM" ],
+            [ 52, "MOVE_BELLY_DRUM" ],
+            [ 57, "MOVE_GIGA_IMPACT" ]
         ],
         "by_tm": [
             "TM01",

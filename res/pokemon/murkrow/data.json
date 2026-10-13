@@ -28,7 +28,7 @@
     "exp_rate": "EXP_RATE_MEDIUM_SLOW",
     "egg_groups": [ "EGG_GROUP_FLYING", "EGG_GROUP_FLYING" ],
     "abilities": [ "ABILITY_INSOMNIA", "ABILITY_SUPER_LUCK" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 120,
     "body_color": "MON_COLOR_BLACK",
     "flip_sprite": false,
     "icon_palette": 2,
@@ -44,7 +44,9 @@
             [ 31, "MOVE_TAUNT" ],
             [ 35, "MOVE_FAINT_ATTACK" ],
             [ 41, "MOVE_MEAN_LOOK" ],
-            [ 45, "MOVE_SUCKER_PUNCH" ]
+            [ 45, "MOVE_TAILWIND" ],
+            [ 51, "MOVE_SUCKER_PUNCH" ],
+            [ 55, "MOVE_TORMENT" ]
         ],
         "by_tm": [
             "TM04",
@@ -157,7 +159,10 @@
         "de": {
             "name": "KRAMURX",
             "category": "Finsternis",
-            "entry_text": [ "Sieht man dieses PKMN bei Nacht,\n", "sollen merkw\u00fcrdige Dinge passieren." ]
+            "entry_text": [
+                "Sieht man dieses PKMN bei Nacht,\n",
+                "sollen merkwürdige Dinge passieren."
+            ]
         },
         "it": {
             "name": "MURKROW",

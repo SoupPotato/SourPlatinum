@@ -36,8 +36,7 @@
         "by_level": [
             [ 1, "MOVE_TACKLE" ],
             [ 1, "MOVE_GROWL" ],
-            [ 4, "MOVE_GROWL" ],
-            [ 8, "MOVE_BUBBLE" ],
+            [ 1, "MOVE_BUBBLE" ],
             [ 11, "MOVE_WATER_SPORT" ],
             [ 15, "MOVE_PECK" ],
             [ 16, "MOVE_METAL_CLAW" ],
@@ -48,7 +47,7 @@
             [ 37, "MOVE_WHIRLPOOL" ],
             [ 42, "MOVE_MIST" ],
             [ 46, "MOVE_DRILL_PECK" ],
-            [ 51, "MOVE_HYDRO_PUMP" ]
+            [ 50, "MOVE_HYDRO_PUMP" ]
         ],
         "by_tm": [
             "TM03",

@@ -34,17 +34,23 @@
     "icon_palette": 2,
     "learnset": {
         "by_level": [
-            [ 1, "MOVE_TAIL_WHIP" ],
-            [ 1, "MOVE_TACKLE" ],
             [ 1, "MOVE_HELPING_HAND" ],
-            [ 8, "MOVE_SAND_ATTACK" ],
-            [ 15, "MOVE_GROWL" ],
-            [ 22, "MOVE_QUICK_ATTACK" ],
-            [ 29, "MOVE_BITE" ],
-            [ 36, "MOVE_BATON_PASS" ],
-            [ 43, "MOVE_TAKE_DOWN" ],
-            [ 50, "MOVE_LAST_RESORT" ],
-            [ 57, "MOVE_TRUMP_CARD" ]
+            [ 1, "MOVE_TACKLE" ],
+            [ 1, "MOVE_GROWL" ],
+            [ 1, "MOVE_TAIL_WHIP" ],
+            [ 5, "MOVE_SAND_ATTACK" ],
+            [ 9, "MOVE_QUICK_ATTACK" ],
+            [ 13, "MOVE_COVET" ],
+            [ 17, "MOVE_SWIFT" ],
+            [ 17, "MOVE_BITE" ],
+            [ 21, "MOVE_REFRESH" ],
+            [ 21, "MOVE_COPYCAT" ],
+            [ 25, "MOVE_TAKE_DOWN" ],
+            [ 29, "MOVE_CHARM" ],
+            [ 33, "MOVE_BATON_PASS" ],
+            [ 37, "MOVE_DOUBLE_EDGE" ],
+            [ 41, "MOVE_LAST_RESORT" ],
+            [ 45, "MOVE_TRUMP_CARD" ]
         ],
         "by_tm": [
             "TM06",

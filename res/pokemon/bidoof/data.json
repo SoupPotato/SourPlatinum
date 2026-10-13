@@ -35,17 +35,19 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_TACKLE" ],
-            [ 5, "MOVE_GROWL" ],
-            [ 9, "MOVE_DEFENSE_CURL" ],
-            [ 13, "MOVE_ROLLOUT" ],
-            [ 17, "MOVE_HEADBUTT" ],
-            [ 21, "MOVE_HYPER_FANG" ],
-            [ 25, "MOVE_YAWN" ],
-            [ 29, "MOVE_AMNESIA" ],
-            [ 33, "MOVE_TAKE_DOWN" ],
-            [ 37, "MOVE_SUPER_FANG" ],
-            [ 41, "MOVE_SUPERPOWER" ],
-            [ 45, "MOVE_CURSE" ]
+            [ 1, "MOVE_GROWL" ],
+            [ 5, "MOVE_DEFENSE_CURL" ],
+            [ 9, "MOVE_ROLLOUT" ],
+            [ 13, "MOVE_HEADBUTT" ],
+            [ 17, "MOVE_HYPER_FANG" ],
+            [ 21, "MOVE_YAWN" ],
+            [ 25, "MOVE_CRUNCH" ],
+            [ 29, "MOVE_TAKE_DOWN" ],
+            [ 33, "MOVE_SUPER_FANG" ],
+            [ 37, "MOVE_SWORDS_DANCE" ],
+            [ 41, "MOVE_AMNESIA" ],
+            [ 45, "MOVE_SUPERPOWER" ],
+            [ 49, "MOVE_CURSE" ]
         ],
         "by_tm": [
             "TM06",

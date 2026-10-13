@@ -35,19 +35,21 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_VICE_GRIP" ],
-            [ 1, "MOVE_FOCUS_ENERGY" ],
-            [ 4, "MOVE_BIND" ],
-            [ 8, "MOVE_SEISMIC_TOSS" ],
-            [ 13, "MOVE_HARDEN" ],
+            [ 1, "MOVE_HARDEN" ],
+            [ 4, "MOVE_FOCUS_ENERGY" ],
+            [ 8, "MOVE_BIND" ],
+            [ 11, "MOVE_SEISMIC_TOSS" ],
+            [ 15, "MOVE_BUG_BITE" ],
             [ 18, "MOVE_REVENGE" ],
-            [ 21, "MOVE_BRICK_BREAK" ],
-            [ 25, "MOVE_VITAL_THROW" ],
-            [ 30, "MOVE_X_SCISSOR" ],
-            [ 35, "MOVE_THRASH" ],
-            [ 38, "MOVE_SWORDS_DANCE" ],
-            [ 42, "MOVE_SUBMISSION" ],
-            [ 47, "MOVE_GUILLOTINE" ],
-            [ 52, "MOVE_SUPERPOWER" ]
+            [ 22, "MOVE_DOUBLE_HIT" ],
+            [ 26, "MOVE_VITAL_THROW" ],
+            [ 29, "MOVE_X_SCISSOR" ],
+            [ 33, "MOVE_BRICK_BREAK" ],
+            [ 36, "MOVE_SWORDS_DANCE" ],
+            [ 40, "MOVE_SUBMISSION" ],
+            [ 43, "MOVE_GUILLOTINE" ],
+            [ 47, "MOVE_SUPERPOWER" ],
+            [ 50, "MOVE_THRASH" ]
         ],
         "by_tm": [
             "TM01",

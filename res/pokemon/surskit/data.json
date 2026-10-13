@@ -28,21 +28,22 @@
     "exp_rate": "EXP_RATE_MEDIUM_FAST",
     "egg_groups": [ "EGG_GROUP_WATER_1", "EGG_GROUP_BUG" ],
     "abilities": [ "ABILITY_SWIFT_SWIM", "ABILITY_NONE" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 120,
     "body_color": "MON_COLOR_BLUE",
     "flip_sprite": false,
     "icon_palette": 2,
     "learnset": {
         "by_level": [
             [ 1, "MOVE_BUBBLE" ],
-            [ 7, "MOVE_QUICK_ATTACK" ],
-            [ 13, "MOVE_SWEET_SCENT" ],
-            [ 19, "MOVE_WATER_SPORT" ],
-            [ 25, "MOVE_BUBBLE_BEAM" ],
-            [ 31, "MOVE_AGILITY" ],
-            [ 37, "MOVE_MIST" ],
-            [ 37, "MOVE_HAZE" ],
-            [ 43, "MOVE_BATON_PASS" ]
+            [ 6, "MOVE_QUICK_ATTACK" ],
+            [ 9, "MOVE_SWEET_SCENT" ],
+            [ 14, "MOVE_WATER_SPORT" ],
+            [ 17, "MOVE_BUBBLE_BEAM" ],
+            [ 22, "MOVE_AGILITY" ],
+            [ 25, "MOVE_MIST" ],
+            [ 25, "MOVE_HAZE" ],
+            [ 30, "MOVE_AQUA_JET" ],
+            [ 35, "MOVE_BATON_PASS" ]
         ],
         "by_tm": [
             "TM03",

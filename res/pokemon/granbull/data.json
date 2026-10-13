@@ -48,7 +48,8 @@
             [ 35, "MOVE_RAGE" ],
             [ 43, "MOVE_TAKE_DOWN" ],
             [ 51, "MOVE_PAYBACK" ],
-            [ 59, "MOVE_CRUNCH" ]
+            [ 59, "MOVE_CRUNCH" ],
+            [ 67, "MOVE_OUTRAGE" ]
         ],
         "by_tm": [
             "TM01",

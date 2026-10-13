@@ -1,11 +1,11 @@
 {
     "base_stats": {
-        "hp": 55,
+        "hp": 65,
         "attack": 55,
-        "defense": 85,
+        "defense": 95,
         "speed": 35,
         "special_attack": 65,
-        "special_defense": 85
+        "special_defense": 95
     },
     "types": [ "TYPE_WATER", "TYPE_ROCK" ],
     "catch_rate": 60,
@@ -37,17 +37,21 @@
             [ 1, "MOVE_TACKLE" ],
             [ 4, "MOVE_HARDEN" ],
             [ 8, "MOVE_BUBBLE" ],
-            [ 13, "MOVE_RECOVER" ],
-            [ 16, "MOVE_REFRESH" ],
-            [ 20, "MOVE_ROCK_BLAST" ],
-            [ 25, "MOVE_BUBBLE_BEAM" ],
-            [ 28, "MOVE_LUCKY_CHANT" ],
-            [ 32, "MOVE_ANCIENT_POWER" ],
-            [ 37, "MOVE_AQUA_RING" ],
-            [ 40, "MOVE_SPIKE_CANNON" ],
-            [ 44, "MOVE_POWER_GEM" ],
-            [ 48, "MOVE_MIRROR_COAT" ],
-            [ 53, "MOVE_EARTH_POWER" ]
+            [ 10, "MOVE_AQUA_RING" ],
+            [ 13, "MOVE_ENDURE" ],
+            [ 17, "MOVE_BUBBLE_BEAM" ],
+            [ 20, "MOVE_ANCIENT_POWER" ],
+            [ 23, "MOVE_LUCKY_CHANT" ],
+            [ 27, "MOVE_SPIKE_CANNON" ],
+            [ 29, "MOVE_BRINE" ],
+            [ 31, "MOVE_RECOVER" ],
+            [ 35, "MOVE_ROCK_BLAST" ],
+            [ 38, "MOVE_IRON_DEFENSE" ],
+            [ 41, "MOVE_REFRESH" ],
+            [ 45, "MOVE_POWER_GEM" ],
+            [ 47, "MOVE_MIRROR_COAT" ],
+            [ 52, "MOVE_EARTH_POWER" ],
+            [ 54, "MOVE_FLAIL" ]
         ],
         "by_tm": [
             "TM03",

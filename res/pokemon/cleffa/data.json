@@ -34,13 +34,14 @@
     "icon_palette": 0,
     "learnset": {
         "by_level": [
+            [ 1, "MOVE_SPLASH" ],
             [ 1, "MOVE_POUND" ],
             [ 1, "MOVE_CHARM" ],
             [ 4, "MOVE_ENCORE" ],
             [ 7, "MOVE_SING" ],
-            [ 10, "MOVE_SWEET_KISS" ],
-            [ 13, "MOVE_COPYCAT" ],
-            [ 16, "MOVE_MAGICAL_LEAF" ]
+            [ 10, "MOVE_MAGICAL_LEAF" ],
+            [ 13, "MOVE_SWEET_KISS" ],
+            [ 16, "MOVE_COPYCAT" ]
         ],
         "by_tm": [
             "TM03",
@@ -79,7 +80,14 @@
             "TM85",
             "TM86",
             "TM87",
-            "TM90"
+            "TM90",
+            "HM01",
+            "HM03",
+            "HM04",
+            "HM05",
+            "HM06",
+            "HM07",
+            "HM08"
         ],
         "by_tutor": [
             "MOVE_MUD_SLAP",

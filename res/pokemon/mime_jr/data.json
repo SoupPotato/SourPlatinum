@@ -36,14 +36,15 @@
         "by_level": [
             [ 1, "MOVE_TICKLE" ],
             [ 1, "MOVE_BARRIER" ],
-            [ 1, "MOVE_CONFUSION" ],
-            [ 4, "MOVE_COPYCAT" ],
-            [ 8, "MOVE_MEDITATE" ],
-            [ 11, "MOVE_ENCORE" ],
+            [ 1, "MOVE_POUND" ],
+            [ 7, "MOVE_CONFUSION" ],
+            [ 11, "MOVE_COPYCAT" ],
             [ 15, "MOVE_DOUBLE_SLAP" ],
-            [ 18, "MOVE_MIMIC" ],
+            [ 15, "MOVE_ENCORE" ],
+            [ 18, "MOVE_PSYWAVE" ],
             [ 22, "MOVE_LIGHT_SCREEN" ],
             [ 22, "MOVE_REFLECT" ],
+            [ 22, "MOVE_SAFEGUARD" ],
             [ 25, "MOVE_PSYBEAM" ],
             [ 29, "MOVE_SUBSTITUTE" ],
             [ 32, "MOVE_RECYCLE" ],
@@ -51,7 +52,7 @@
             [ 39, "MOVE_PSYCHIC" ],
             [ 43, "MOVE_ROLE_PLAY" ],
             [ 46, "MOVE_BATON_PASS" ],
-            [ 50, "MOVE_SAFEGUARD" ]
+            [ 50, "MOVE_TEETER_DANCE" ]
         ],
         "by_tm": [
             "TM01",

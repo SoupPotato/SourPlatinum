@@ -20,7 +20,7 @@
     },
     "held_items": {
         "common": "ITEM_NONE",
-        "rare": "ITEM_MAGMARIZER"
+        "rare": "ITEM_NONE"
     },
     "gender_ratio": "GENDER_RATIO_FEMALE_25",
     "hatch_cycles": 25,
@@ -36,16 +36,18 @@
         "by_level": [
             [ 1, "MOVE_SMOG" ],
             [ 1, "MOVE_LEER" ],
-            [ 7, "MOVE_EMBER" ],
-            [ 10, "MOVE_SMOKE_SCREEN" ],
-            [ 16, "MOVE_FAINT_ATTACK" ],
-            [ 19, "MOVE_FIRE_SPIN" ],
+            [ 5, "MOVE_EMBER" ],
+            [ 9, "MOVE_SMOKE_SCREEN" ],
+            [ 13, "MOVE_FAINT_ATTACK" ],
+            [ 17, "MOVE_FIRE_SPIN" ],
+            [ 21, "MOVE_FLAME_WHEEL" ],
             [ 25, "MOVE_CONFUSE_RAY" ],
-            [ 28, "MOVE_FIRE_PUNCH" ],
-            [ 34, "MOVE_LAVA_PLUME" ],
-            [ 37, "MOVE_FLAMETHROWER" ],
-            [ 43, "MOVE_SUNNY_DAY" ],
-            [ 46, "MOVE_FIRE_BLAST" ]
+            [ 29, "MOVE_FIRE_PUNCH" ],
+            [ 33, "MOVE_LAVA_PLUME" ],
+            [ 37, "MOVE_LOW_KICK" ],
+            [ 41, "MOVE_FLAMETHROWER" ],
+            [ 45, "MOVE_SUNNY_DAY" ],
+            [ 49, "MOVE_FIRE_BLAST" ]
         ],
         "by_tm": [
             "TM01",

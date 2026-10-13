@@ -36,15 +36,17 @@
         "by_level": [
             [ 1, "MOVE_DRAGON_BREATH" ],
             [ 1, "MOVE_SCARY_FACE" ],
-            [ 10, "MOVE_OMINOUS_WIND" ],
-            [ 20, "MOVE_ANCIENT_POWER" ],
-            [ 30, "MOVE_DRAGON_CLAW" ],
-            [ 40, "MOVE_SHADOW_FORCE" ],
-            [ 50, "MOVE_HEAL_BLOCK" ],
-            [ 60, "MOVE_EARTH_POWER" ],
-            [ 70, "MOVE_SLASH" ],
-            [ 80, "MOVE_SHADOW_CLAW" ],
-            [ 90, "MOVE_AURA_SPHERE" ]
+            [ 6, "MOVE_OMINOUS_WIND" ],
+            [ 10, "MOVE_ANCIENT_POWER" ],
+            [ 15, "MOVE_SLASH" ],
+            [ 19, "MOVE_SHADOW_SNEAK" ],
+            [ 24, "MOVE_PAIN_SPLIT" ],
+            [ 28, "MOVE_SHADOW_CLAW" ],
+            [ 33, "MOVE_EARTH_POWER" ],
+            [ 37, "MOVE_AURA_SPHERE" ],
+            [ 42, "MOVE_DRAGON_CLAW" ],
+            [ 46, "MOVE_SHADOW_FORCE" ],
+            [ 50, "MOVE_DESTINY_BOND" ]
         ],
         "by_tm": [
             "TM02",
@@ -93,7 +95,6 @@
             "HM01",
             "HM02",
             "HM04",
-            "HM05",
             "HM06",
             "HM08"
         ],

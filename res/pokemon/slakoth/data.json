@@ -36,13 +36,14 @@
         "by_level": [
             [ 1, "MOVE_SCRATCH" ],
             [ 1, "MOVE_YAWN" ],
-            [ 7, "MOVE_ENCORE" ],
-            [ 13, "MOVE_SLACK_OFF" ],
-            [ 19, "MOVE_FAINT_ATTACK" ],
-            [ 25, "MOVE_AMNESIA" ],
-            [ 31, "MOVE_COVET" ],
-            [ 37, "MOVE_COUNTER" ],
-            [ 43, "MOVE_FLAIL" ]
+            [ 6, "MOVE_ENCORE" ],
+            [ 9, "MOVE_SLACK_OFF" ],
+            [ 14, "MOVE_FAINT_ATTACK" ],
+            [ 17, "MOVE_AMNESIA" ],
+            [ 22, "MOVE_COVET" ],
+            [ 25, "MOVE_HEADBUTT" ],
+            [ 30, "MOVE_COUNTER" ],
+            [ 33, "MOVE_FLAIL" ]
         ],
         "by_tm": [
             "TM01",

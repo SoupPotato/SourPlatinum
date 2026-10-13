@@ -34,22 +34,23 @@
     "icon_palette": 2,
     "learnset": {
         "by_level": [
-            [ 1, "MOVE_DARK_PULSE" ],
+            [ 1, "MOVE_VACUUM_WAVE" ],
+            [ 1, "MOVE_SCREECH" ],
             [ 1, "MOVE_QUICK_ATTACK" ],
             [ 1, "MOVE_FORESIGHT" ],
-            [ 1, "MOVE_DETECT" ],
             [ 1, "MOVE_METAL_CLAW" ],
             [ 6, "MOVE_COUNTER" ],
-            [ 11, "MOVE_FORCE_PALM" ],
-            [ 15, "MOVE_FEINT" ],
-            [ 19, "MOVE_BONE_RUSH" ],
+            [ 11, "MOVE_FEINT" ],
+            [ 15, "MOVE_FORCE_PALM" ],
+            [ 19, "MOVE_SWORDS_DANCE" ],
             [ 24, "MOVE_METAL_SOUND" ],
-            [ 29, "MOVE_ME_FIRST" ],
-            [ 33, "MOVE_SWORDS_DANCE" ],
+            [ 29, "MOVE_BONE_RUSH" ],
+            [ 33, "MOVE_ME_FIRST" ],
             [ 37, "MOVE_AURA_SPHERE" ],
-            [ 42, "MOVE_CLOSE_COMBAT" ],
-            [ 47, "MOVE_DRAGON_PULSE" ],
-            [ 51, "MOVE_EXTREME_SPEED" ]
+            [ 42, "MOVE_CALM_MIND" ],
+            [ 47, "MOVE_CLOSE_COMBAT" ],
+            [ 51, "MOVE_DRAGON_PULSE" ],
+            [ 55, "MOVE_EXTREME_SPEED" ]
         ],
         "by_tm": [
             "TM01",
@@ -145,7 +146,10 @@
         "fr": {
             "name": "LUCARIO",
             "category": "Pokémon Aura",
-            "entry_text": [ "Il ressent les auras de tout. Il \n", "comprend le langage humain." ]
+            "entry_text": [
+                "Il ressent les auras de tout. Il \n",
+                "comprend le langage humain."
+            ]
         },
         "de": {
             "name": "LUCARIO",

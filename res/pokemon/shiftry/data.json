@@ -34,11 +34,14 @@
     "icon_palette": 0,
     "learnset": {
         "by_level": [
+            [ 1, "MOVE_RAZOR_LEAF" ],
             [ 1, "MOVE_FAINT_ATTACK" ],
             [ 1, "MOVE_WHIRLWIND" ],
             [ 1, "MOVE_NASTY_PLOT" ],
-            [ 1, "MOVE_RAZOR_LEAF" ],
-            [ 49, "MOVE_LEAF_STORM" ]
+            [ 34, "MOVE_SWAGGER" ],
+            [ 50, "MOVE_SUCKER_PUNCH" ],
+            [ 54, "MOVE_LEAF_BLADE" ],
+            [ 58, "MOVE_LEAF_STORM" ]
         ],
         "by_tm": [
             "TM06",

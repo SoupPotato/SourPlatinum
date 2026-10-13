@@ -38,7 +38,8 @@
             [ 1, "MOVE_RAPID_SPIN" ],
             [ 1, "MOVE_RECOVER" ],
             [ 1, "MOVE_SWIFT" ],
-            [ 28, "MOVE_CONFUSE_RAY" ]
+            [ 37, "MOVE_CONFUSE_RAY" ],
+            [ 52, "MOVE_HYDRO_PUMP" ]
         ],
         "by_tm": [
             "TM03",

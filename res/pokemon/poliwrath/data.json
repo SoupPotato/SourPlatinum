@@ -1,7 +1,7 @@
 {
     "base_stats": {
         "hp": 90,
-        "attack": 85,
+        "attack": 95,
         "defense": 95,
         "speed": 70,
         "special_attack": 70,
@@ -38,8 +38,8 @@
             [ 1, "MOVE_HYPNOSIS" ],
             [ 1, "MOVE_DOUBLE_SLAP" ],
             [ 1, "MOVE_SUBMISSION" ],
-            [ 43, "MOVE_DYNAMIC_PUNCH" ],
-            [ 53, "MOVE_MIND_READER" ]
+            [ 41, "MOVE_DYNAMIC_PUNCH" ],
+            [ 54, "MOVE_MIND_READER" ]
         ],
         "by_tm": [
             "TM01",
@@ -78,6 +78,7 @@
             "TM84",
             "TM87",
             "TM90",
+            "HM01",
             "HM03",
             "HM04",
             "HM06",

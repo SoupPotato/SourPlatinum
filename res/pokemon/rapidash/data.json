@@ -34,14 +34,12 @@
     "icon_palette": 0,
     "learnset": {
         "by_level": [
-            [ 1, "MOVE_POISON_JAB" ],
             [ 1, "MOVE_MEGAHORN" ],
+            [ 1, "MOVE_POISON_JAB" ],
             [ 1, "MOVE_GROWL" ],
             [ 1, "MOVE_QUICK_ATTACK" ],
             [ 1, "MOVE_TAIL_WHIP" ],
             [ 1, "MOVE_EMBER" ],
-            [ 6, "MOVE_TAIL_WHIP" ],
-            [ 10, "MOVE_EMBER" ],
             [ 15, "MOVE_FLAME_WHEEL" ],
             [ 19, "MOVE_STOMP" ],
             [ 24, "MOVE_FIRE_SPIN" ],

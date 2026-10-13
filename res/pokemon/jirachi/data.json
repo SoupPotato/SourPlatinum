@@ -41,7 +41,7 @@
             [ 15, "MOVE_HELPING_HAND" ],
             [ 20, "MOVE_PSYCHIC" ],
             [ 25, "MOVE_REFRESH" ],
-            [ 30, "MOVE_REST" ],
+            [ 30, "MOVE_LUCKY_CHANT" ],
             [ 35, "MOVE_ZEN_HEADBUTT" ],
             [ 40, "MOVE_DOUBLE_EDGE" ],
             [ 45, "MOVE_GRAVITY" ],
@@ -96,7 +96,12 @@
             "TM89",
             "TM90",
             "TM91",
-            "TM92"
+            "TM92",
+            "HM01",
+            "HM03",
+            "HM04",
+            "HM06",
+            "HM08"
         ],
         "by_tutor": [
             "MOVE_MUD_SLAP",

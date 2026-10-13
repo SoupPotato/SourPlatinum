@@ -28,7 +28,7 @@
     "exp_rate": "EXP_RATE_MEDIUM_FAST",
     "egg_groups": [ "EGG_GROUP_FIELD", "EGG_GROUP_FIELD" ],
     "abilities": [ "ABILITY_RUN_AWAY", "ABILITY_FLASH_FIRE" ],
-    "safari_flee_rate": 0,
+    "safari_flee_rate": 120,
     "body_color": "MON_COLOR_YELLOW",
     "flip_sprite": false,
     "icon_palette": 0,

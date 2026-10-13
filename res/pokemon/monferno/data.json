@@ -37,7 +37,6 @@
             [ 1, "MOVE_SCRATCH" ],
             [ 1, "MOVE_LEER" ],
             [ 1, "MOVE_EMBER" ],
-            [ 7, "MOVE_EMBER" ],
             [ 9, "MOVE_TAUNT" ],
             [ 14, "MOVE_MACH_PUNCH" ],
             [ 16, "MOVE_FURY_SWIPES" ],

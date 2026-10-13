@@ -39,14 +39,15 @@
             [ 1, "MOVE_GROWL" ],
             [ 1, "MOVE_DEFENSE_CURL" ],
             [ 6, "MOVE_FLAIL" ],
-            [ 10, "MOVE_TAKE_DOWN" ],
-            [ 15, "MOVE_ROLLOUT" ],
-            [ 19, "MOVE_NATURAL_GIFT" ],
+            [ 10, "MOVE_ROLLOUT" ],
+            [ 15, "MOVE_ENDURE" ],
+            [ 19, "MOVE_MAGNITUDE" ],
             [ 24, "MOVE_SLAM" ],
-            [ 28, "MOVE_ENDURE" ],
+            [ 28, "MOVE_TAKE_DOWN" ],
             [ 33, "MOVE_CHARM" ],
             [ 37, "MOVE_LAST_RESORT" ],
-            [ 42, "MOVE_DOUBLE_EDGE" ]
+            [ 42, "MOVE_NATURAL_GIFT" ],
+            [ 46, "MOVE_DOUBLE_EDGE" ]
         ],
         "by_tm": [
             "TM05",
@@ -73,6 +74,7 @@
             "TM83",
             "TM87",
             "TM90",
+            "HM01",
             "HM04",
             "HM06"
         ],

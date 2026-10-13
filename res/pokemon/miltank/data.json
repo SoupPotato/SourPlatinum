@@ -35,18 +35,20 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_TACKLE" ],
-            [ 3, "MOVE_GROWL" ],
-            [ 5, "MOVE_DEFENSE_CURL" ],
-            [ 8, "MOVE_STOMP" ],
-            [ 11, "MOVE_MILK_DRINK" ],
-            [ 15, "MOVE_BIDE" ],
-            [ 19, "MOVE_ROLLOUT" ],
-            [ 24, "MOVE_BODY_SLAM" ],
-            [ 29, "MOVE_ZEN_HEADBUTT" ],
-            [ 35, "MOVE_CAPTIVATE" ],
-            [ 41, "MOVE_GYRO_BALL" ],
-            [ 48, "MOVE_HEAL_BELL" ],
-            [ 55, "MOVE_WAKE_UP_SLAP" ]
+            [ 4, "MOVE_GROWL" ],
+            [ 8, "MOVE_DEFENSE_CURL" ],
+            [ 11, "MOVE_ROLLOUT" ],
+            [ 14, "MOVE_STOMP" ],
+            [ 17, "MOVE_BIDE" ],
+            [ 20, "MOVE_MILK_DRINK" ],
+            [ 23, "MOVE_ZEN_HEADBUTT" ],
+            [ 27, "MOVE_HEADBUTT" ],
+            [ 31, "MOVE_WAKE_UP_SLAP" ],
+            [ 35, "MOVE_HEAL_BELL" ],
+            [ 39, "MOVE_CAPTIVATE" ],
+            [ 43, "MOVE_GYRO_BALL" ],
+            [ 47, "MOVE_BODY_SLAM" ],
+            [ 51, "MOVE_CHARM" ]
         ],
         "by_tm": [
             "TM01",

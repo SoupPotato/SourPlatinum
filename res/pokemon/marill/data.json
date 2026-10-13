@@ -35,16 +35,20 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_TACKLE" ],
-            [ 2, "MOVE_DEFENSE_CURL" ],
-            [ 7, "MOVE_TAIL_WHIP" ],
-            [ 10, "MOVE_WATER_GUN" ],
-            [ 15, "MOVE_ROLLOUT" ],
-            [ 18, "MOVE_BUBBLE_BEAM" ],
-            [ 23, "MOVE_AQUA_RING" ],
-            [ 27, "MOVE_DOUBLE_EDGE" ],
-            [ 32, "MOVE_RAIN_DANCE" ],
-            [ 37, "MOVE_AQUA_TAIL" ],
-            [ 42, "MOVE_HYDRO_PUMP" ]
+            [ 1, "MOVE_BUBBLE" ],
+            [ 2, "MOVE_TAIL_WHIP" ],
+            [ 5, "MOVE_WATER_SPORT" ],
+            [ 7, "MOVE_WATER_GUN" ],
+            [ 10, "MOVE_DEFENSE_CURL" ],
+            [ 10, "MOVE_ROLLOUT" ],
+            [ 13, "MOVE_BUBBLE_BEAM" ],
+            [ 16, "MOVE_HELPING_HAND" ],
+            [ 20, "MOVE_AQUA_TAIL" ],
+            [ 23, "MOVE_DOUBLE_EDGE" ],
+            [ 28, "MOVE_AQUA_RING" ],
+            [ 31, "MOVE_RAIN_DANCE" ],
+            [ 37, "MOVE_SUPERPOWER" ],
+            [ 40, "MOVE_HYDRO_PUMP" ]
         ],
         "by_tm": [
             "TM01",

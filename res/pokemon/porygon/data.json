@@ -34,20 +34,21 @@
     "icon_palette": 0,
     "learnset": {
         "by_level": [
-            [ 1, "MOVE_CONVERSION_2" ],
             [ 1, "MOVE_TACKLE" ],
-            [ 1, "MOVE_CONVERSION" ],
             [ 1, "MOVE_SHARPEN" ],
+            [ 1, "MOVE_CONVERSION" ],
+            [ 1, "MOVE_THUNDER_SHOCK" ],
             [ 7, "MOVE_PSYBEAM" ],
-            [ 12, "MOVE_AGILITY" ],
-            [ 18, "MOVE_RECOVER" ],
-            [ 23, "MOVE_MAGNET_RISE" ],
-            [ 29, "MOVE_SIGNAL_BEAM" ],
-            [ 34, "MOVE_RECYCLE" ],
-            [ 40, "MOVE_DISCHARGE" ],
-            [ 45, "MOVE_LOCK_ON" ],
-            [ 51, "MOVE_TRI_ATTACK" ],
-            [ 56, "MOVE_MAGIC_COAT" ],
+            [ 12, "MOVE_MAGNET_RISE" ],
+            [ 16, "MOVE_CONVERSION_2" ],
+            [ 22, "MOVE_AGILITY" ],
+            [ 27, "MOVE_SIGNAL_BEAM" ],
+            [ 31, "MOVE_RECOVER" ],
+            [ 37, "MOVE_RECYCLE" ],
+            [ 42, "MOVE_DISCHARGE" ],
+            [ 46, "MOVE_TRI_ATTACK" ],
+            [ 52, "MOVE_MAGIC_COAT" ],
+            [ 57, "MOVE_LOCK_ON" ],
             [ 62, "MOVE_ZAP_CANNON" ]
         ],
         "by_tm": [
@@ -100,7 +101,7 @@
     },
     "evolutions": [
         [
-            "EVO_TRADE_WITH_HELD_ITEM",
+            "EVO_USE_ITEM",
             "ITEM_UPGRADE",
             "SPECIES_PORYGON2"
         ]

@@ -35,17 +35,19 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_BUBBLE" ],
-            [ 4, "MOVE_SMOKE_SCREEN" ],
-            [ 8, "MOVE_LEER" ],
-            [ 11, "MOVE_WATER_GUN" ],
-            [ 14, "MOVE_FOCUS_ENERGY" ],
-            [ 18, "MOVE_BUBBLE_BEAM" ],
-            [ 23, "MOVE_AGILITY" ],
-            [ 26, "MOVE_TWISTER" ],
-            [ 30, "MOVE_BRINE" ],
-            [ 35, "MOVE_HYDRO_PUMP" ],
-            [ 38, "MOVE_DRAGON_DANCE" ],
-            [ 42, "MOVE_DRAGON_PULSE" ]
+            [ 1, "MOVE_LEER" ],
+            [ 5, "MOVE_SMOKE_SCREEN" ],
+            [ 10, "MOVE_WATER_GUN" ],
+            [ 14, "MOVE_TWISTER" ],
+            [ 19, "MOVE_FOCUS_ENERGY" ],
+            [ 23, "MOVE_BUBBLE_BEAM" ],
+            [ 28, "MOVE_DRAGON_BREATH" ],
+            [ 32, "MOVE_AGILITY" ],
+            [ 37, "MOVE_BRINE" ],
+            [ 41, "MOVE_DRAGON_PULSE" ],
+            [ 46, "MOVE_HYDRO_PUMP" ],
+            [ 50, "MOVE_DRAGON_DANCE" ],
+            [ 55, "MOVE_RAIN_DANCE" ]
         ],
         "by_tm": [
             "TM03",

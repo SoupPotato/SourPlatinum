@@ -4,7 +4,7 @@
         "attack": 50,
         "defense": 80,
         "speed": 50,
-        "special_attack": 50,
+        "special_attack": 60,
         "special_defense": 80
     },
     "types": [ "TYPE_WATER", "TYPE_WATER" ],
@@ -35,19 +35,20 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_TACKLE" ],
-            [ 1, "MOVE_DEFENSE_CURL" ],
+            [ 1, "MOVE_BUBBLE" ],
             [ 1, "MOVE_TAIL_WHIP" ],
-            [ 1, "MOVE_WATER_GUN" ],
-            [ 2, "MOVE_DEFENSE_CURL" ],
-            [ 7, "MOVE_TAIL_WHIP" ],
-            [ 10, "MOVE_WATER_GUN" ],
-            [ 15, "MOVE_ROLLOUT" ],
-            [ 20, "MOVE_BUBBLE_BEAM" ],
-            [ 27, "MOVE_AQUA_RING" ],
-            [ 33, "MOVE_DOUBLE_EDGE" ],
-            [ 40, "MOVE_RAIN_DANCE" ],
-            [ 47, "MOVE_AQUA_TAIL" ],
-            [ 54, "MOVE_HYDRO_PUMP" ]
+            [ 1, "MOVE_WATER_SPORT" ],
+            [ 7, "MOVE_WATER_GUN" ],
+            [ 10, "MOVE_DEFENSE_CURL" ],
+            [ 10, "MOVE_ROLLOUT" ],
+            [ 13, "MOVE_BUBBLE_BEAM" ],
+            [ 16, "MOVE_HELPING_HAND" ],
+            [ 21, "MOVE_AQUA_TAIL" ],
+            [ 25, "MOVE_DOUBLE_EDGE" ],
+            [ 31, "MOVE_AQUA_RING" ],
+            [ 35, "MOVE_RAIN_DANCE" ],
+            [ 42, "MOVE_SUPERPOWER" ],
+            [ 46, "MOVE_HYDRO_PUMP" ]
         ],
         "by_tm": [
             "TM01",

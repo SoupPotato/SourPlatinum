@@ -35,9 +35,9 @@
     "learnset": {
         "by_level": [
             [ 1, "MOVE_TACKLE" ],
-            [ 10, "MOVE_PROTECT" ],
-            [ 15, "MOVE_BUG_BITE" ],
-            [ 20, "MOVE_HIDDEN_POWER" ],
+            [ 1, "MOVE_PROTECT" ],
+            [ 1, "MOVE_BUG_BITE" ],
+            [ 1, "MOVE_HIDDEN_POWER" ],
             [ 23, "MOVE_CONFUSION" ],
             [ 26, "MOVE_GUST" ],
             [ 29, "MOVE_POISON_POWDER" ],
