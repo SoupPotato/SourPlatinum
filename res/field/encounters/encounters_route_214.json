@@ -26,8 +26,8 @@
             "species": "SPECIES_RHYHORN"
         },
         {
-            "level": 24,
-            "species": "SPECIES_GRAVELER"
+            "level": 23,
+            "species": "SPECIES_STUNKY"
         },
         {
             "level": 21,
@@ -39,7 +39,7 @@
         },
         {
             "level": 24,
-            "species": "SPECIES_RHYHORN"
+            "species": "SPECIES_STUNKY"
         },
         {
             "level": 24,
@@ -47,7 +47,7 @@
         },
         {
             "level": 24,
-            "species": "SPECIES_RHYHORN"
+            "species": "SPECIES_STUNKY"
         }
     ],
     "swarms": [

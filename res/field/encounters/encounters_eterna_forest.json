@@ -15,7 +15,7 @@
         },
         {
             "level": 12,
-            "species": "SPECIES_KRICKETOT"
+            "species": "SPECIES_BUDEW"
         },
         {
             "level": 11,
@@ -59,8 +59,8 @@
         "SPECIES_BUDEW"
     ],
     "night": [
-        "SPECIES_KRICKETOT",
-        "SPECIES_HOOTHOOT"
+        "SPECIES_MURKROW",
+        "SPECIES_MISDREAVUS"
     ],
     "radar": [
         "SPECIES_NINCADA",

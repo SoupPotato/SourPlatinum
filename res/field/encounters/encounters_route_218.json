@@ -30,8 +30,8 @@
             "species": "SPECIES_FLOATZEL"
         },
         {
-            "level": 31,
-            "species": "SPECIES_MR_MIME"
+            "level": 30,
+            "species": "SPECIES_GLAMEOW"
         },
         {
             "level": 31,
@@ -39,7 +39,7 @@
         },
         {
             "level": 30,
-            "species": "SPECIES_GASTRODON"
+            "species": "SPECIES_GLAMEOW"
         },
         {
             "level": 31,
@@ -47,7 +47,7 @@
         },
         {
             "level": 30,
-            "species": "SPECIES_GASTRODON"
+            "species": "SPECIES_GLAMEOW"
         }
     ],
     "swarms": [
