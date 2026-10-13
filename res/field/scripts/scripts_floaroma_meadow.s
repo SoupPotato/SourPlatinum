@@ -10,6 +10,7 @@
     ScriptEntry FloaromaMeadow_PokefanM
     ScriptEntry FloaromaMeadow_Dummy6
     ScriptEntry FloaromaMeadow_ItemWorksKey
+    ScriptEntry FloaromaMeadow_HoneyTree
     ScriptEntryEnd
 
 FloaromaMeadow_OnTransition:
@@ -229,7 +230,7 @@ FloaromaMeadow_NotEnoughMoney:
     End
 
 FloaromaMeadow_Dummy6:
-    ShowArrowSign FloaromaMeadow_Text_Dummy18
+    ShowArrowSign FloaromaMeadow_Text_HoneyTreeSlatherBark
     End
 
 FloaromaMeadow_ItemWorksKey:
@@ -244,3 +245,75 @@ FloaromaMeadow_ItemWorksKey:
     RemoveObject LOCALID_ITEM_WORKS_KEY
     ReleaseAll
     End
+
+FloaromaMeadow_HoneyTree:
+    PlaySE SE_CONFIRM_sseq_3
+    LockAll
+    CheckItem ITEM_HONEY, 1, VAR_RESULT
+    GoToIfEq VAR_RESULT, FALSE, FloaromaMeadow_HoneyTreeNoHoney
+    Message FloaromaMeadow_Text_HoneyTreeSlatherBark
+    ShowYesNoMenu VAR_RESULT
+    GoToIfEq VAR_RESULT, MENU_NO, FloaromaMeadow_HoneyTreeDeclined
+    RemoveItem ITEM_HONEY, 1, VAR_RESULT
+    Message FloaromaMeadow_Text_HoneyTreeBarkSlathered
+    WaitButton
+    CloseMessage
+    WaitTime 30, VAR_RESULT
+    Call FloaromaMeadow_HoneyTreePickSpecies
+    PlayCry VAR_0x8004
+    WaitCry
+    StartLegendaryBattle VAR_0x8004, 12
+    ClearFlag FLAG_MAP_LOCAL_REMOVE_OBJECT
+    CheckWonBattle VAR_RESULT
+    GoToIfEq VAR_RESULT, FALSE, FloaromaMeadow_HoneyTreeBlackOut
+    ReleaseAll
+    End
+
+FloaromaMeadow_HoneyTreeNoHoney:
+    Message FloaromaMeadow_Text_HoneyTreeSweetScent
+    WaitButton
+    CloseMessage
+    ReleaseAll
+    End
+
+FloaromaMeadow_HoneyTreeDeclined:
+    CloseMessage
+    ReleaseAll
+    End
+
+FloaromaMeadow_HoneyTreePickSpecies:
+    GetRandom VAR_RESULT, 13
+    SetVar VAR_0x8004, SPECIES_COMBEE
+    GoToIfEq VAR_RESULT, 0, FloaromaMeadow_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_COMBEE
+    GoToIfEq VAR_RESULT, 1, FloaromaMeadow_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_COMBEE
+    GoToIfEq VAR_RESULT, 2, FloaromaMeadow_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_WURMPLE
+    GoToIfEq VAR_RESULT, 3, FloaromaMeadow_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_WURMPLE
+    GoToIfEq VAR_RESULT, 4, FloaromaMeadow_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_BURMY
+    GoToIfEq VAR_RESULT, 5, FloaromaMeadow_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_BURMY
+    GoToIfEq VAR_RESULT, 6, FloaromaMeadow_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_CHERUBI
+    GoToIfEq VAR_RESULT, 7, FloaromaMeadow_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_CHERUBI
+    GoToIfEq VAR_RESULT, 8, FloaromaMeadow_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_AIPOM
+    GoToIfEq VAR_RESULT, 9, FloaromaMeadow_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_AIPOM
+    GoToIfEq VAR_RESULT, 10, FloaromaMeadow_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_HERACROSS
+    GoToIfEq VAR_RESULT, 11, FloaromaMeadow_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_MUNCHLAX
+    Return
+
+FloaromaMeadow_HoneyTreeBlackOut:
+    BlackOutFromBattle
+    ReleaseAll
+    End
+
+FloaromaMeadow_HoneyTreePickSpeciesEnd:
+    Return

@@ -10,6 +10,7 @@
     ScriptEntry Route222_SignboardPokemonSizeContest
     ScriptEntry Route222_PolicemanThomas
     ScriptEntry Route222_OnTransition
+    ScriptEntry Route222_HoneyTree
     ScriptEntryEnd
 
 Route222_OnTransition:
@@ -77,5 +78,77 @@ Route222_SignboardPokemonSizeContest:
 Route222_PolicemanThomas:
     NPCMessage Route222_Text_MoreAgitatedAtNight
     End
+
+Route222_HoneyTree:
+    PlaySE SE_CONFIRM_sseq_3
+    LockAll
+    CheckItem ITEM_HONEY, 1, VAR_RESULT
+    GoToIfEq VAR_RESULT, FALSE, Route222_HoneyTreeNoHoney
+    Message Route222_Text_HoneyTreeSlatherBark
+    ShowYesNoMenu VAR_RESULT
+    GoToIfEq VAR_RESULT, MENU_NO, Route222_HoneyTreeDeclined
+    RemoveItem ITEM_HONEY, 1, VAR_RESULT
+    Message Route222_Text_HoneyTreeBarkSlathered
+    WaitButton
+    CloseMessage
+    WaitTime 30, VAR_RESULT
+    Call Route222_HoneyTreePickSpecies
+    PlayCry VAR_0x8004
+    WaitCry
+    StartLegendaryBattle VAR_0x8004, 12
+    ClearFlag FLAG_MAP_LOCAL_REMOVE_OBJECT
+    CheckWonBattle VAR_RESULT
+    GoToIfEq VAR_RESULT, FALSE, Route222_HoneyTreeBlackOut
+    ReleaseAll
+    End
+
+Route222_HoneyTreeNoHoney:
+    Message Route222_Text_HoneyTreeSweetScent
+    WaitButton
+    CloseMessage
+    ReleaseAll
+    End
+
+Route222_HoneyTreeDeclined:
+    CloseMessage
+    ReleaseAll
+    End
+
+Route222_HoneyTreePickSpecies:
+    GetRandom VAR_RESULT, 13
+    SetVar VAR_0x8004, SPECIES_COMBEE
+    GoToIfEq VAR_RESULT, 0, Route222_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_COMBEE
+    GoToIfEq VAR_RESULT, 1, Route222_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_COMBEE
+    GoToIfEq VAR_RESULT, 2, Route222_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_WURMPLE
+    GoToIfEq VAR_RESULT, 3, Route222_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_WURMPLE
+    GoToIfEq VAR_RESULT, 4, Route222_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_BURMY
+    GoToIfEq VAR_RESULT, 5, Route222_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_BURMY
+    GoToIfEq VAR_RESULT, 6, Route222_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_CHERUBI
+    GoToIfEq VAR_RESULT, 7, Route222_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_CHERUBI
+    GoToIfEq VAR_RESULT, 8, Route222_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_AIPOM
+    GoToIfEq VAR_RESULT, 9, Route222_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_AIPOM
+    GoToIfEq VAR_RESULT, 10, Route222_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_HERACROSS
+    GoToIfEq VAR_RESULT, 11, Route222_HoneyTreePickSpeciesEnd
+    SetVar VAR_0x8004, SPECIES_MUNCHLAX
+    Return
+
+Route222_HoneyTreeBlackOut:
+    BlackOutFromBattle
+    ReleaseAll
+    End
+
+Route222_HoneyTreePickSpeciesEnd:
+    Return
 
     .balign 4, 0

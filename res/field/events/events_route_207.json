@@ -39,6 +39,22 @@
             "z": 718,
             "y": 0,
             "player_facing_dir": "BG_EVENT_DIR_ALL"
+        },
+        {
+            "script": 8,
+            "type": 0,
+            "x": 310,
+            "z": 709,
+            "y": 0,
+            "player_facing_dir": "BG_EVENT_DIR_NORTH"
+        },
+        {
+            "script": 8,
+            "type": 0,
+            "x": 311,
+            "z": 709,
+            "y": 0,
+            "player_facing_dir": "BG_EVENT_DIR_NORTH"
         }
     ],
     "object_events": [

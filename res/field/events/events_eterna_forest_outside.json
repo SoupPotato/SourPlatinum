@@ -1,5 +1,22 @@
 {
-    "bg_events": [],
+    "bg_events": [
+        {
+            "script": 5,
+            "type": 0,
+            "x": 221,
+            "z": 558,
+            "y": 0,
+            "player_facing_dir": "BG_EVENT_DIR_NORTH"
+        },
+        {
+            "script": 5,
+            "type": 0,
+            "x": 222,
+            "z": 558,
+            "y": 0,
+            "player_facing_dir": "BG_EVENT_DIR_NORTH"
+        }
+    ],
     "object_events": [
         {
             "id": "LOCALID_BERRY_SOIL_1",
@@ -178,4 +195,3 @@
     "warp_events": [],
     "coord_events": []
 }
-
