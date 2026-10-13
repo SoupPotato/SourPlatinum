@@ -1,30 +1,30 @@
 {
-  "name": "Loot Sack",
-  "plural": "Loot Sacks",
+  "name": "Linking Cord",
+  "plural": "Linking Cords",
   "article": "a",
   "description": [
-    "A sturdy, spacious bag that is used\n",
-    "to carry loot obtained in the coal\n",
-    "mine."
+    "A string exuding a mysterious energy of \n",
+    "connection. It causes certain species \n",
+    "of Pokemon to evolve."
   ],
   "icon": {
     "sprite": "loot_sack_NCGR",
     "palette": "loot_sack_NCLR"
   },
   "gbaID": "GBA_ITEM_NONE",
-  "price": 0,
+  "price": 2100,
   "effectParam": 0,
   "holdEffect": "HOLD_EFFECT_NONE",
   "pluckEffect": "PLUCK_EFFECT_NONE",
   "flingEffect": "FLING_EFFECT_NONE",
-  "flingPower": 0,
+  "flingPower": 30,
   "naturalGiftPower": 0,
   "naturalGiftType": null,
-  "preventToss": true,
+  "preventToss": false,
   "canRegister": false,
-  "fieldPocket": "POCKET_KEY_ITEMS",
+  "fieldPocket": "POCKET_ITEMS",
   "battlePocket": "BATTLE_POCKET_MASK_NONE",
-  "fieldUseFunc": "ITEM_USE_FUNC_NONE",
+  "fieldUseFunc": "ITEM_USE_FUNC_EVO_STONE",
   "battleUseCategory": "BATTLE_USE_CATEGORY_NONE",
-  "itemUseParams": null
+  "itemUseParams": {}
 }
