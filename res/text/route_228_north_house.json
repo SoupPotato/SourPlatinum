@@ -142,14 +142,14 @@
         "To the Pokémon listed here,\n",
         "the ultimate moves may be taught!\r",
         "The blazing fire Pokémon\n",
-        "{CURSOR_X 7}CHARIZARD TYPHLOSION\f",
-        "{CURSOR_X 7}BLAZIKEN INFERNAPE\r",
+        "{CURSOR_X 7}Charizard Typhlosion\f",
+        "{CURSOR_X 7}Blaziken Infernape\r",
         "The restless water Pokémon\n",
-        "{CURSOR_X 7}BLASTOISE FERALIGATR\f",
-        "{CURSOR_X 7}SWAMPERT EMPOLEON\r",
+        "{CURSOR_X 7}Blastoise Feraligatr\f",
+        "{CURSOR_X 7}Swampert Empoleon\r",
         "The quiet grass Pokémon\n",
-        "{CURSOR_X 7}VENUSAUR MEGANIUM\f",
-        "{CURSOR_X 7}SCEPTILE TORTERRA"
+        "{CURSOR_X 7}Venusaur Meganium\f",
+        "{CURSOR_X 7}Sceptile Torterra"
       ]
     }
   ]

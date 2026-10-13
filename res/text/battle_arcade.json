@@ -364,31 +364,31 @@
     },
     {
       "id": "BattleArcade_Text_SingleBattle",
-      "en_US": "SINGLE BATTLE"
+      "en_US": "Single Battle"
     },
     {
       "id": "BattleArcade_Text_DoubleBattle",
-      "en_US": "DOUBLE BATTLE"
+      "en_US": "Double Battle"
     },
     {
       "id": "BattleArcade_Text_TakeChallenge",
-      "en_US": "TAKE CHALLENGE"
+      "en_US": "Take Challenge"
     },
     {
       "id": "BattleArcade_Text_Info",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "BattleArcade_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleArcade_Text_BecomeLeaderOrJoinGroup",
       "en_US": [
         "One Trainer should select\n",
-        "“BECOME LEADER.”\r",
+        "“Become Leader.”\r",
         "The other Trainer must select\n",
-        "“JOIN GROUP.”"
+        "“Join Group.”"
       ]
     },
     {

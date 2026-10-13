@@ -143,11 +143,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 11,
         "en": {
-            "name": "MILTANK",
+            "name": "Miltank",
             "category": "Milk Cow Pokémon",
             "entry_text": [
                 "It is said that kids who drink\n",
-                "MILTANK’s milk grow up to become\n",
+                "Miltank’s milk grow up to become\n",
                 "hearty, healthy adults."
             ]
         },

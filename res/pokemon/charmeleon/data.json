@@ -118,11 +118,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 15,
         "en": {
-            "name": "CHARMELEON",
+            "name": "Charmeleon",
             "category": "Flame Pokémon",
             "entry_text": [
                 "In the rocky mountains where\n",
-                "CHARMELEON live, their fiery\n",
+                "Charmeleon live, their fiery\n",
                 "tails shine at night like stars."
             ]
         },

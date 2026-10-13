@@ -258,23 +258,23 @@
     },
     {
       "id": "RowanIntro_Text_ChoiceControlInfo",
-      "en_US": "CONTROL INFO"
+      "en_US": "Control Info"
     },
     {
       "id": "RowanIntro_Text_ChoiceAdventureInfo",
-      "en_US": "ADVENTURE INFO"
+      "en_US": "Adventure Info"
     },
     {
       "id": "RowanIntro_Text_ChoiceNoInfo",
-      "en_US": "NO INFO NEEDED"
+      "en_US": "No Info Needed"
     },
     {
       "id": "RowanIntro_Text_ChoiceYes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "RowanIntro_Text_ChoiceNo",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "RowanIntro_Text_RivalChoiceNew",

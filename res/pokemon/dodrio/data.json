@@ -112,10 +112,10 @@
         "trainer_pos_m": 12,
         "pokemon_pos_m": 2,
         "en": {
-            "name": "DODRIO",
+            "name": "Dodrio",
             "category": "Triple Bird Pokémon",
             "entry_text": [
-                "When DODUO evolves into this odd\n",
+                "When Doduo evolves into this odd\n",
                 "breed, one of its heads splits into\n",
                 "two. It runs at nearly 40 mph."
             ]

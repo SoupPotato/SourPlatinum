@@ -3,103 +3,103 @@
   "messages": [
     {
       "id": "pl_msg_00000457_00000",
-      "en_US": "DIGITAL WATCH"
+      "en_US": "Digital Watch"
     },
     {
       "id": "pl_msg_00000457_00001",
-      "en_US": "CALCULATOR"
+      "en_US": "Calculator"
     },
     {
       "id": "pl_msg_00000457_00002",
-      "en_US": "MEMO PAD"
+      "en_US": "Memo Pad"
     },
     {
       "id": "pl_msg_00000457_00003",
-      "en_US": "PEDOMETER"
+      "en_US": "Pedometer"
     },
     {
       "id": "pl_msg_00000457_00004",
-      "en_US": "POKéMON LIST"
+      "en_US": "Pokémon List"
     },
     {
       "id": "pl_msg_00000457_00005",
-      "en_US": "FRIENDSHIP CHECKER"
+      "en_US": "Friendship Checker"
     },
     {
       "id": "pl_msg_00000457_00006",
-      "en_US": "DOWSING MACHINE"
+      "en_US": "Dowsing Machine"
     },
     {
       "id": "pl_msg_00000457_00007",
-      "en_US": "BERRY SEARCHER"
+      "en_US": "Berry Searcher"
     },
     {
       "id": "pl_msg_00000457_00008",
-      "en_US": "DAY-CARE CHECKER"
+      "en_US": "Day-Care Checker"
     },
     {
       "id": "pl_msg_00000457_00009",
-      "en_US": "POKéMON HISTORY"
+      "en_US": "Pokémon History"
     },
     {
       "id": "pl_msg_00000457_00010",
-      "en_US": "COUNTER"
+      "en_US": "Counter"
     },
     {
       "id": "pl_msg_00000457_00011",
-      "en_US": "ANALOG WATCH"
+      "en_US": "Analog Watch"
     },
     {
       "id": "pl_msg_00000457_00012",
-      "en_US": "MARKING MAP"
+      "en_US": "Marking Map"
     },
     {
       "id": "pl_msg_00000457_00013",
-      "en_US": "LINK SEARCHER"
+      "en_US": "Link Searcher"
     },
     {
       "id": "pl_msg_00000457_00014",
-      "en_US": "COIN TOSS"
+      "en_US": "Coin Toss"
     },
     {
       "id": "pl_msg_00000457_00015",
-      "en_US": "MOVE TESTER"
+      "en_US": "Move Tester"
     },
     {
       "id": "pl_msg_00000457_00016",
-      "en_US": "CALENDAR"
+      "en_US": "Calendar"
     },
     {
       "id": "pl_msg_00000457_00017",
-      "en_US": "DOT ARTIST"
+      "en_US": "Dot Artist"
     },
     {
       "id": "pl_msg_00000457_00018",
-      "en_US": "ROULETTE"
+      "en_US": "Roulette"
     },
     {
       "id": "pl_msg_00000457_00019",
-      "en_US": "TRAINER COUNTER"
+      "en_US": "Trainer Counter"
     },
     {
       "id": "pl_msg_00000457_00020",
-      "en_US": "KITCHEN TIMER"
+      "en_US": "Kitchen Timer"
     },
     {
       "id": "pl_msg_00000457_00021",
-      "en_US": "COLOR CHANGER"
+      "en_US": "Color Changer"
     },
     {
       "id": "pl_msg_00000457_00022",
-      "en_US": "MATCHUP CHECKER"
+      "en_US": "Matchup Checker"
     },
     {
       "id": "pl_msg_00000457_00023",
-      "en_US": "STOPWATCH"
+      "en_US": "Stopwatch"
     },
     {
       "id": "pl_msg_00000457_00024",
-      "en_US": "ALARM CLOCK"
+      "en_US": "Alarm Clock"
     }
   ]
 }

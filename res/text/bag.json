@@ -3,31 +3,31 @@
   "messages": [
     {
       "id": "Bag_Text_Use",
-      "en_US": "USE"
+      "en_US": "Use"
     },
     {
       "id": "Bag_Text_Trash",
-      "en_US": "TRASH"
+      "en_US": "Trash"
     },
     {
       "id": "Bag_Text_Register",
-      "en_US": "REGISTER"
+      "en_US": "Register"
     },
     {
       "id": "Bag_Text_Give",
-      "en_US": "GIVE"
+      "en_US": "Give"
     },
     {
       "id": "Bag_Text_CheckTag",
-      "en_US": "CHECK TAG"
+      "en_US": "Check Tag"
     },
     {
       "id": "Bag_Text_Confirm",
-      "en_US": "CONFIRM"
+      "en_US": "Confirm"
     },
     {
       "id": "Bag_Text_Walk",
-      "en_US": "WALK"
+      "en_US": "Walk"
     },
     {
       "id": "Bag_Text_Dummy1",
@@ -35,7 +35,7 @@
     },
     {
       "id": "Bag_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "Bag_Text_Dummy2",
@@ -67,7 +67,7 @@
     },
     {
       "id": "Bag_Text_Check",
-      "en_US": "CHECK"
+      "en_US": "Check"
     },
     {
       "id": "Bag_Text_Dummy9",
@@ -75,7 +75,7 @@
     },
     {
       "id": "Bag_Text_Deselect",
-      "en_US": "DESELECT"
+      "en_US": "Deselect"
     },
     {
       "id": "Bag_Text_Dummy10",
@@ -167,7 +167,7 @@
     },
     {
       "id": "Bag_Text_CloseBag",
-      "en_US": "CLOSE BAG"
+      "en_US": "Close Bag"
     },
     {
       "id": "Bag_Text_ItemIsSelected",
@@ -355,7 +355,7 @@
     },
     {
       "id": "Bag_Text_MoneyLabel",
-      "en_US": "MONEY"
+      "en_US": "Money"
     },
     {
       "id": "Bag_Text_MoneyNum",
@@ -391,15 +391,15 @@
     },
     {
       "id": "Bag_Text_Power",
-      "en_US": "POWER"
+      "en_US": "Power"
     },
     {
       "id": "Bag_Text_Accuracy",
-      "en_US": "ACCURACY"
+      "en_US": "Accuracy"
     },
     {
       "id": "Bag_Text_Category",
-      "en_US": "CATEGORY"
+      "en_US": "Category"
     },
     {
       "id": "Bag_Text_MaxPPNum",
@@ -426,11 +426,11 @@
     },
     {
       "id": "Bag_Text_Plant",
-      "en_US": "PLANT"
+      "en_US": "Plant"
     },
     {
       "id": "Bag_Text_Open",
-      "en_US": "OPEN"
+      "en_US": "Open"
     },
     {
       "id": "Bag_Text_PointCardMessage",
@@ -441,7 +441,7 @@
     },
     {
       "id": "Bag_Text_Type",
-      "en_US": "TYPE"
+      "en_US": "Type"
     },
     {
       "id": "Bag_Text_KeyItemInfo",

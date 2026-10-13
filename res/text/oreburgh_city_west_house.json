@@ -6,9 +6,9 @@
       "en_US": [
         "Have you ever seen or heard about\n",
         "differently colored Pokémon?\r",
-        "For instance, a regular PIKACHU has\n",
+        "For instance, a regular Pikachu has\n",
         "a yellow body, correct?\r",
-        "Well, the different-colored PIKACHU\n",
+        "Well, the different-colored Pikachu\n",
         "has a sort of orange body."
       ]
     },
@@ -23,7 +23,7 @@
     },
     {
       "id": "OreburghCityWestHouse_Text_PikachuCry",
-      "en_US": "PIKACHU: Pikaaah!"
+      "en_US": "Pikachu: Pikaaah!"
     }
   ]
 }

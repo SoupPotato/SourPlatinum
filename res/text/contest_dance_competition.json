@@ -3,23 +3,23 @@
   "messages": [
     {
       "id": "DanceCompetition_Text_Jump",
-      "en_US": "JUMP"
+      "en_US": "Jump"
     },
     {
       "id": "DanceCompetition_Text_Up",
-      "en_US": "UP"
+      "en_US": "Up"
     },
     {
       "id": "DanceCompetition_Text_Front",
-      "en_US": "FRONT"
+      "en_US": "Front"
     },
     {
       "id": "DanceCompetition_Text_Left",
-      "en_US": "LEFT"
+      "en_US": "Left"
     },
     {
       "id": "DanceCompetition_Text_Right",
-      "en_US": "RIGHT"
+      "en_US": "Right"
     },
     {
       "id": "DanceCompetition_Text_Excellent",

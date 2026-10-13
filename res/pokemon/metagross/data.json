@@ -129,10 +129,10 @@
         "trainer_pos_m": 14,
         "pokemon_pos_m": 9,
         "en": {
-            "name": "METAGROSS",
+            "name": "Metagross",
             "category": "Iron Leg Pokémon",
             "entry_text": [
-                "METANG combined to form it.\n",
+                "Metang combined to form it.\n",
                 "With four brains, it has the\n",
                 "intelligence of a supercomputer."
             ]

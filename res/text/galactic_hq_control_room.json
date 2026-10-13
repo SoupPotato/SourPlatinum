@@ -132,21 +132,21 @@
     {
       "id": "GalacticHQControlRoom_Text_UxieIsSealedInside",
       "en_US": [
-        "UXIE is sealed inside! It appears to\n",
+        "Uxie is sealed inside! It appears to\n",
         "be suffering, with eyes squeezed shut."
       ]
     },
     {
       "id": "GalacticHQControlRoom_Text_MespritIsSealedInside",
       "en_US": [
-        "MESPRIT is sealed inside! It seems to\n",
+        "Mesprit is sealed inside! It seems to\n",
         "be suffering, with its tail twitching."
       ]
     },
     {
       "id": "GalacticHQControlRoom_Text_AzelfIsSealedInside",
       "en_US": [
-        "AZELF is sealed inside! It appears to\n",
+        "Azelf is sealed inside! It appears to\n",
         "be suffering, with wracking shudders."
       ]
     },
@@ -154,21 +154,21 @@
       "id": "GalacticHQControlRoom_Text_UxieWasSealedInside",
       "en_US": [
         "It’s Team Galactic’s sinister machine.\n",
-        "UXIE had been sealed inside it."
+        "Uxie had been sealed inside it."
       ]
     },
     {
       "id": "GalacticHQControlRoom_Text_MespritWasSealedInside",
       "en_US": [
         "It’s Team Galactic’s sinister machine.\n",
-        "MESPRIT had been sealed inside it."
+        "Mesprit had been sealed inside it."
       ]
     },
     {
       "id": "GalacticHQControlRoom_Text_AzelfWasSealedInside",
       "en_US": [
         "It’s Team Galactic’s sinister machine.\n",
-        "AZELF had been sealed inside it."
+        "Azelf had been sealed inside it."
       ]
     }
   ]

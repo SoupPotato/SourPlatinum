@@ -3,7 +3,7 @@
   "messages": [
     {
       "id": "PCHallOfFame_Text_Title",
-      "en_US": "HALL OF FAME No. {STRVAR_1 53, 0, 0} {STRVAR_1 74, 2, 0} {STRVAR_1 51, 3, 0}, {STRVAR_1 53, 1, 0}"
+      "en_US": "Hall of Fame No. {STRVAR_1 53, 0, 0} {STRVAR_1 74, 2, 0} {STRVAR_1 51, 3, 0}, {STRVAR_1 53, 1, 0}"
     },
     {
       "id": "PCHallOfFame_Text_Level",

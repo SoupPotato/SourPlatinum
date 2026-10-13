@@ -133,12 +133,12 @@
         "trainer_pos_m": 26,
         "pokemon_pos_m": 2,
         "en": {
-            "name": "DIALGA",
+            "name": "Dialga",
             "category": "Temporal Pokémon",
             "entry_text": [
                 "A legendary Pokémon of Sinnoh.\n",
                 "It is said that time flows when\n",
-                "DIALGA’s heart beats."
+                "Dialga’s heart beats."
             ]
         },
         "fr": {

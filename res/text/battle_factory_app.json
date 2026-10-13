@@ -21,27 +21,27 @@
     },
     {
       "id": "BattleFactoryApp_Text_Yes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "BattleFactoryApp_Text_No",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "BattleFactoryApp_Text_Summary",
-      "en_US": "SUMMARY"
+      "en_US": "Summary"
     },
     {
       "id": "BattleFactoryApp_Text_Rent",
-      "en_US": "RENT"
+      "en_US": "Rent"
     },
     {
       "id": "BattleFactoryApp_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleFactoryApp_Text_Remove",
-      "en_US": "REMOVE"
+      "en_US": "Remove"
     },
     {
       "id": "BattleFactoryApp_Text_ChooseExchange",
@@ -101,7 +101,7 @@
     },
     {
       "id": "BattleFactoryApp_Text_Cancel2",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleFactoryApp_Text_Dummy5",
@@ -109,7 +109,7 @@
     },
     {
       "id": "BattleFactoryApp_Text_Exchange",
-      "en_US": "EXCHANGE"
+      "en_US": "Exchange"
     },
     {
       "id": "BattleFactoryApp_Text_Dummy6",
@@ -117,11 +117,11 @@
     },
     {
       "id": "BattleFactoryApp_Text_Back",
-      "en_US": "BACK"
+      "en_US": "Back"
     },
     {
       "id": "BattleFactoryApp_Text_Cancel3",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleFactoryApp_Text_MaleSymbol",

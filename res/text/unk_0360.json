@@ -11,21 +11,21 @@
     {
       "id": "pl_msg_00000360_00001",
       "en_US": [
-        "{COLOR 3}Tiny Leaf Pokémon TURTWIG{COLOR 0}!\n",
+        "{COLOR 3}Tiny Leaf Pokémon Turtwig{COLOR 0}!\n",
         "Will you take this Pokémon?"
       ]
     },
     {
       "id": "pl_msg_00000360_00002",
       "en_US": [
-        "{COLOR 1}Chimp Pokémon CHIMCHAR{COLOR 0}!\n",
+        "{COLOR 1}Chimp Pokémon Chimchar{COLOR 0}!\n",
         "Do you choose this Pokémon?"
       ]
     },
     {
       "id": "pl_msg_00000360_00003",
       "en_US": [
-        "{COLOR 2}Penguin Pokémon{COLOR 0} {COLOR 2}PIPLUP{COLOR 0}!\n",
+        "{COLOR 2}Penguin Pokémon{COLOR 0} {COLOR 2}Piplup{COLOR 0}!\n",
         "Is this Pokémon the one for you?"
       ]
     },

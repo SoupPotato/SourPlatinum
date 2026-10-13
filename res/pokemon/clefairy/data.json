@@ -149,12 +149,12 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 23,
         "en": {
-            "name": "CLEFAIRY",
+            "name": "Clefairy",
             "category": "Fairy Pokémon",
             "entry_text": [
                 "It is said that happiness will come\n",
                 "to those who see a gathering of\n",
-                "CLEFAIRY dancing under a full moon."
+                "Clefairy dancing under a full moon."
             ]
         },
         "fr": {

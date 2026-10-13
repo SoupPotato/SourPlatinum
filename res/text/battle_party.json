@@ -63,7 +63,7 @@
     },
     {
       "id": "BattleParty_Text_ShiftButton",
-      "en_US": "SHIFT"
+      "en_US": "Shift"
     },
     {
       "id": "BattleParty_Text_MaleIcon",
@@ -75,11 +75,11 @@
     },
     {
       "id": "BattleParty_Text_SummaryButton",
-      "en_US": "SUMMARY"
+      "en_US": "Summary"
     },
     {
       "id": "BattleParty_Text_CheckMovesButton",
-      "en_US": "CHECK MOVES"
+      "en_US": "Check Moves"
     },
     {
       "id": "BattleParty_Text_PokemonNoItemHeld",
@@ -103,7 +103,7 @@
     },
     {
       "id": "BattleParty_Text_PokemonExpToNextLevelLabel",
-      "en_US": "NEXT LV"
+      "en_US": "Next Lv."
     },
     {
       "id": "BattleParty_Text_PokemonExpToNextLevelValue",
@@ -131,7 +131,7 @@
     },
     {
       "id": "BattleParty_Text_PokemonAttackStatLabel",
-      "en_US": "ATTACK"
+      "en_US": "Attack"
     },
     {
       "id": "BattleParty_Text_PokemonAttackStatValue",
@@ -139,7 +139,7 @@
     },
     {
       "id": "BattleParty_Text_PokemonDefenseStatLabel",
-      "en_US": "DEFENSE"
+      "en_US": "Defense"
     },
     {
       "id": "BattleParty_Text_PokemonDefenseStatValue",
@@ -147,7 +147,7 @@
     },
     {
       "id": "BattleParty_Text_PokemonSpAtkStatLabel",
-      "en_US": "SP. ATK"
+      "en_US": "Sp. Atk"
     },
     {
       "id": "BattleParty_Text_PokemonSpAtkStatValue",
@@ -155,7 +155,7 @@
     },
     {
       "id": "BattleParty_Text_PokemonSpDefStatLabel",
-      "en_US": "SP. DEF"
+      "en_US": "Sp. Def"
     },
     {
       "id": "BattleParty_Text_PokemonSpDefStatValue",
@@ -163,7 +163,7 @@
     },
     {
       "id": "BattleParty_Text_PokemonSpeedStatLabel",
-      "en_US": "SPEED"
+      "en_US": "Speed"
     },
     {
       "id": "BattleParty_Text_PokemonSpeedStatValue",
@@ -195,7 +195,7 @@
     },
     {
       "id": "BattleParty_Text_MovePowerLabel",
-      "en_US": "POWER"
+      "en_US": "Power"
     },
     {
       "id": "BattleParty_Text_MovePowerValue",
@@ -207,7 +207,7 @@
     },
     {
       "id": "BattleParty_Text_MoveAccuracyLabel",
-      "en_US": "ACCURACY"
+      "en_US": "Accuracy"
     },
     {
       "id": "BattleParty_Text_MoveAccuracyValue",
@@ -215,31 +215,31 @@
     },
     {
       "id": "BattleParty_Text_MoveCategoryLabel",
-      "en_US": "CATEGORY"
+      "en_US": "Category"
     },
     {
       "id": "BattleParty_Text_MoveCategoryPhysical",
-      "en_US": "PHYSICAL"
+      "en_US": "Physical"
     },
     {
       "id": "BattleParty_Text_MoveCategoryStatus",
-      "en_US": "STATUS"
+      "en_US": "Status"
     },
     {
       "id": "BattleParty_Text_MoveCategorySpecial",
-      "en_US": "SPECIAL"
+      "en_US": "Special"
     },
     {
       "id": "BattleParty_Text_AppealPtsLabel",
-      "en_US": "APPEAL PTS"
+      "en_US": "Appeal Pts"
     },
     {
       "id": "BattleParty_Text_ForgetMoveButton",
-      "en_US": "FORGET"
+      "en_US": "Forget"
     },
     {
       "id": "BattleParty_Text_CancelMoveButton",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleParty_Text_HMMovesCantBeForgotten",

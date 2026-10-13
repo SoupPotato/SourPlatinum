@@ -16,23 +16,23 @@
         "You know the PC Pokémon Boxes?\n",
         "I’m the system administrator!\r",
         "I know this is out of the blue, but do\n",
-        "you want a Pokémon named EEVEE?"
+        "you want a Pokémon named Eevee?"
       ]
     },
     {
       "id": "HearthomeCityNorthwestHouse_Text_SoDoYouWantEevee",
       "en_US": [
         "Bebe: So, how about it?\n",
-        "Do you want that Pokémon EEVEE?"
+        "Do you want that Pokémon Eevee?"
       ]
     },
     {
       "id": "HearthomeCityNorthwestHouse_Text_PleaseBeGoodToIt",
       "en_US": [
         "Bebe: Here you go!\r",
-        "That EEVEE, I got it from a good friend\n",
+        "That Eevee, I got it from a good friend\n",
         "in Johto who has a whole lot of them.\r",
-        "Who knows how many EEVEE he’s raised\n",
+        "Who knows how many Eevee he’s raised\n",
         "over the years.\r",
         "Sorry, that doesn’t mean anything to\n",
         "you.\r",
@@ -41,13 +41,13 @@
     },
     {
       "id": "HearthomeCityNorthwestHouse_Text_PlayerAcceptedTheEevee",
-      "en_US": "{STRVAR_1 3, 0, 0} accepted the EEVEE!\r"
+      "en_US": "{STRVAR_1 3, 0, 0} accepted the Eevee!\r"
     },
     {
       "id": "HearthomeCityNorthwestHouse_Text_WouldYouLikeToNicknameEevee",
       "en_US": [
         "Would you like to give a nickname\n",
-        "to the EEVEE that Bebe gave you?"
+        "to the Eevee that Bebe gave you?"
       ]
     },
     {

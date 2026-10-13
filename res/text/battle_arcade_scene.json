@@ -495,19 +495,19 @@
     },
     {
       "id": "BattleArcadeScene_Text_ContinueOption",
-      "en_US": "CONTINUE"
+      "en_US": "Continue"
     },
     {
       "id": "BattleArcadeScene_Text_RecordOption",
-      "en_US": "RECORD"
+      "en_US": "Record"
     },
     {
       "id": "BattleArcadeScene_Text_RestOption",
-      "en_US": "REST"
+      "en_US": "Rest"
     },
     {
       "id": "BattleArcadeScene_Text_RetireOption",
-      "en_US": "RETIRE"
+      "en_US": "Retire"
     },
     {
       "id": "BattleArcadeScene_Text_ArcadeStarApproaching",

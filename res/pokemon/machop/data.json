@@ -138,12 +138,12 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 19,
         "en": {
-            "name": "MACHOP",
+            "name": "Machop",
             "category": "Superpower Pokémon",
             "entry_text": [
                 "Though small in stature, it is\n",
                 "powerful enough to easily heft and\n",
-                "throw a number of GEODUDE at once."
+                "throw a number of Geodude at once."
             ]
         },
         "fr": {

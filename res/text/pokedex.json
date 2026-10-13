@@ -3,11 +3,11 @@
   "messages": [
     {
       "id": "pl_msg_pokedex_seen",
-      "en_US": "SEEN"
+      "en_US": "Seen"
     },
     {
       "id": "pl_msg_pokedex_obtained",
-      "en_US": "OBTAINED"
+      "en_US": "Obtained"
     },
     {
       "id": "pl_msg_pokedex_garbage1",
@@ -24,8 +24,8 @@
     {
       "id": "pl_msg_pokedex_switch",
       "en_US": [
-        "SWITCH\n",
-        "POKéDEX"
+        "Switch\n",
+        "Pokédex"
       ]
     },
     {
@@ -35,8 +35,8 @@
     {
       "id": "pl_msg_pokedex_search",
       "en_US": [
-        "SEARCH\n",
-        "POKéMON"
+        "Search\n",
+        "Pokémon"
       ]
     },
     {
@@ -126,8 +126,8 @@
     {
       "id": "pl_msg_pokedex_check",
       "en_US": [
-        "CHECK\n",
-        "POKéDEX"
+        "Check\n",
+        "Pokédex"
       ]
     },
     {
@@ -144,11 +144,11 @@
     },
     {
       "id": "pl_msg_pokedex_next",
-      "en_US": "NEXT"
+      "en_US": "Next"
     },
     {
       "id": "pl_msg_pokedex_back",
-      "en_US": "BACK"
+      "en_US": "Back"
     },
     {
       "id": "pl_msg_pokedex_areaunknown",
@@ -176,11 +176,11 @@
     },
     {
       "id": "pl_msg_pokedex_chorus",
-      "en_US": "CHORUS"
+      "en_US": "Chorus"
     },
     {
       "id": "pl_msg_pokedex_pan",
-      "en_US": "PAN"
+      "en_US": "Pan"
     },
     {
       "id": "pl_msg_pokedex_heightcheck_topscreen",
@@ -200,19 +200,19 @@
     },
     {
       "id": "pl_msg_pokedex_name",
-      "en_US": "NAME"
+      "en_US": "Name"
     },
     {
       "id": "pl_msg_pokedex_type",
-      "en_US": "TYPE"
+      "en_US": "Type"
     },
     {
       "id": "pl_msg_pokedex_form",
-      "en_US": "FORM"
+      "en_US": "Form"
     },
     {
       "id": "pl_msg_pokedex_order",
-      "en_US": "ORDER"
+      "en_US": "Order"
     },
     {
       "id": "pl_msg_pokedex_ok",
@@ -423,35 +423,35 @@
     },
     {
       "id": "pl_msg_pokedex_info",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "pl_msg_pokedex_area",
-      "en_US": "AREA"
+      "en_US": "Area"
     },
     {
       "id": "pl_msg_pokedex_cry",
-      "en_US": "CRY"
+      "en_US": "Cry"
     },
     {
       "id": "pl_msg_pokedex_size",
-      "en_US": "SIZE"
+      "en_US": "Size"
     },
     {
       "id": "pl_msg_pokedex_forms",
-      "en_US": "FORMS"
+      "en_US": "Forms"
     },
     {
       "id": "pl_msg_pokedex_quit",
-      "en_US": "QUIT"
+      "en_US": "Quit"
     },
     {
       "id": "pl_msg_pokedex_cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "pl_msg_pokedex_results",
-      "en_US": "RESULTS"
+      "en_US": "Results"
     },
     {
       "id": "pl_msg_pokedex_registered",
@@ -491,27 +491,27 @@
     },
     {
       "id": "pl_msg_pokedex_rotom",
-      "en_US": "ROTOM"
+      "en_US": "Rotom"
     },
     {
       "id": "pl_msg_pokedex_rotomheat",
-      "en_US": "HEAT ROTOM"
+      "en_US": "Heat Rotom"
     },
     {
       "id": "pl_msg_pokedex_rotomwash",
-      "en_US": "WASH ROTOM"
+      "en_US": "Wash Rotom"
     },
     {
       "id": "pl_msg_pokedex_rotomfrost",
-      "en_US": "FROST ROTOM"
+      "en_US": "Frost Rotom"
     },
     {
       "id": "pl_msg_pokedex_rotomfan",
-      "en_US": "FAN ROTOM"
+      "en_US": "Fan Rotom"
     },
     {
       "id": "pl_msg_pokedex_rotommow",
-      "en_US": "MOW ROTOM"
+      "en_US": "Mow Rotom"
     },
     {
       "id": "pl_msg_pokedex_japanese",

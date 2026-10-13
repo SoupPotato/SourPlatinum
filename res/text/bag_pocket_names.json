@@ -3,15 +3,15 @@
   "messages": [
     {
       "id": "pl_msg_00000395_00000",
-      "en_US": "ITEMS"
+      "en_US": "Items"
     },
     {
       "id": "pl_msg_00000395_00001",
-      "en_US": "MEDICINE"
+      "en_US": "Medicine"
     },
     {
       "id": "pl_msg_00000395_00002",
-      "en_US": "POKé BALLS"
+      "en_US": "Poké Balls"
     },
     {
       "id": "pl_msg_00000395_00003",
@@ -19,19 +19,19 @@
     },
     {
       "id": "pl_msg_00000395_00004",
-      "en_US": "BERRIES"
+      "en_US": "Berries"
     },
     {
       "id": "pl_msg_00000395_00005",
-      "en_US": "MAIL"
+      "en_US": "Mail"
     },
     {
       "id": "pl_msg_00000395_00006",
-      "en_US": "BATTLE ITEMS"
+      "en_US": "Battle Items"
     },
     {
       "id": "pl_msg_00000395_00007",
-      "en_US": "KEY ITEMS"
+      "en_US": "Key Items"
     }
   ]
 }

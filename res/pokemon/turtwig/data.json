@@ -129,11 +129,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 28,
         "en": {
-            "name": "TURTWIG",
+            "name": "Turtwig",
             "category": "Tiny Leaf Pokémon",
             "entry_text": [
                 "The shell on its back is made of\n",
-                "soil. On a very healthy TURTWIG,\n",
+                "soil. On a very healthy Turtwig,\n",
                 "the shell should feel moist."
             ]
         },

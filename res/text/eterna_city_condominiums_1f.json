@@ -79,16 +79,16 @@
       "id": "EternaCityCondominiums1F_Text_AskTradeBuizelForChatot",
       "en_US": [
         "Excuse me, but do you got that\n",
-        "Pokémon named BUIZEL?\r",
-        "Wanna trade it for my CHATOT?"
+        "Pokémon named Buizel?\r",
+        "Wanna trade it for my Chatot?"
       ]
     },
     {
       "id": "EternaCityCondominiums1F_Text_YesSoAwesomeABuizel",
       "en_US": [
-        "Yes! So awesome! A BUIZEL!\n",
+        "Yes! So awesome! A Buizel!\n",
         "I so promise I’ll be good to it!\r",
-        "Oh yeah, CHATOT can learn some human\n",
+        "Oh yeah, Chatot can learn some human\n",
         "speech pretty quickly.\r",
         "Try out its move Chatter.\n",
         "You’ll totally see what I mean."
@@ -96,7 +96,7 @@
     },
     {
       "id": "EternaCityCondominiums1F_Text_IWantBuizel",
-      "en_US": "What I totally want is a BUIZEL..."
+      "en_US": "What I totally want is a Buizel..."
     },
     {
       "id": "EternaCityCondominiums1F_Text_OhOKTotallyGotIt",
@@ -110,7 +110,7 @@
     {
       "id": "EternaCityCondominiums1F_Text_DidChatotLearnChatter",
       "en_US": [
-        "Did that CHATOT I traded you totally\n",
+        "Did that Chatot I traded you totally\n",
         "learn that Chatter move?\r",
         "It will mimic your speech if you use\n",
         "that move outside of battle.\r",

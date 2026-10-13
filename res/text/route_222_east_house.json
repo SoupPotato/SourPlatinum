@@ -7,7 +7,7 @@
         "I had a dream!\n",
         "It was a wonderful dream!\r",
         "I dreamt that a Trainer would bring\n",
-        "me a giant REMORAID!"
+        "me a giant Remoraid!"
       ]
     },
     {
@@ -16,10 +16,10 @@
         "I had a dream!\n",
         "It was a wonderful dream!\r",
         "I dreamt that a Trainer would bring\n",
-        "me a giant REMORAID!\r",
+        "me a giant Remoraid!\r",
         "Oh, my gosh!\n",
         "That dream was no dream!\r",
-        "H-how big of a REMORAID did you\n",
+        "H-how big of a Remoraid did you\n",
         "bring me?!\r"
       ]
     },
@@ -27,7 +27,7 @@
       "id": "Route222EastHouse_Text_BetterThanInMyDream",
       "en_US": [
         "{STRVAR_1 52, 0, 0}.{STRVAR_1 50, 1, 0} inches...\n",
-        "This REMORAID is {STRVAR_1 52, 0, 0}.{STRVAR_1 50, 1, 0} inches...\r",
+        "This Remoraid is {STRVAR_1 52, 0, 0}.{STRVAR_1 50, 1, 0} inches...\r",
         "...I think you did better than in\n",
         "my dream!\r",
         "I’d like you to have this.\r"
@@ -39,7 +39,7 @@
         "Thank you!\n",
         "I really enjoyed this.\r",
         "I think I’ll dream of an even bigger\n",
-        "REMORAID tonight."
+        "Remoraid tonight."
       ]
     },
     {
@@ -53,9 +53,9 @@
     {
       "id": "Route222EastHouse_Text_KnowAGenius",
       "en_US": [
-        "This REMORAID was {STRVAR_1 52, 0, 0}.{STRVAR_1 50, 1, 0} inches.\r",
+        "This Remoraid was {STRVAR_1 52, 0, 0}.{STRVAR_1 50, 1, 0} inches.\r",
         "I know a genius who brought me\n",
-        "a REMORAID that was {STRVAR_1 52, 2, 0}.{STRVAR_1 50, 3, 0} inches..."
+        "a Remoraid that was {STRVAR_1 52, 2, 0}.{STRVAR_1 50, 3, 0} inches..."
       ]
     },
     {
@@ -78,7 +78,7 @@
       "id": "Route222EastHouse_Text_DenyMeasureRemoraid",
       "en_US": [
         "Oh, what? Why would you deny me\n",
-        "the chance to measure your REMORAID?"
+        "the chance to measure your Remoraid?"
       ]
     }
   ]

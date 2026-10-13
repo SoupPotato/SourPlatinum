@@ -23,20 +23,20 @@
     },
     {
       "id": "OreburghMineB2F_Text_MachopCryMaaacho",
-      "en_US": "MACHOP: Maaacho!"
+      "en_US": "Machop: Maaacho!"
     },
     {
       "id": "OreburghMineB2F_Text_MachopCryChopChop",
-      "en_US": "MACHOP: Chopchop!"
+      "en_US": "Machop: Chopchop!"
     },
     {
       "id": "OreburghMineB2F_Text_MachopCryChopmacho",
-      "en_US": "MACHOP: Chopmacho!"
+      "en_US": "Machop: Chopmacho!"
     },
     {
       "id": "OreburghMineB2F_Text_IMetMachopOnRoute207",
       "en_US": [
-        "I met these MACHOP on Route 207.\r",
+        "I met these Machop on Route 207.\r",
         "They’ve now become my most trusted\n",
         "partners!"
       ]

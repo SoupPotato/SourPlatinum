@@ -56,7 +56,7 @@
     },
     {
       "id": "RotomsRoom_Text_ChooseWhichRotom",
-      "en_US": "Which ROTOM are you choosing?\r"
+      "en_US": "Which Rotom are you choosing?\r"
     },
     {
       "id": "RotomsRoom_Text_EggCantEnter",
@@ -81,7 +81,7 @@
     {
       "id": "RotomsRoom_Text_RevertRotomToOriginalForm",
       "en_US": [
-        "Oh? ROTOM appears as if it wants to\n",
+        "Oh? Rotom appears as if it wants to\n",
         "revert to its original form.\r",
         "Would you like to recall it from\n",
         "the motor?"
@@ -89,19 +89,19 @@
     },
     {
       "id": "RotomsRoom_Text_Recall",
-      "en_US": "RECALL"
+      "en_US": "Recall"
     },
     {
       "id": "RotomsRoom_Text_Yes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "RotomsRoom_Text_No",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "RotomsRoom_Text_RotomHasntEnteredMotor",
-      "en_US": "That ROTOM hasn’t entered a motor."
+      "en_US": "That Rotom hasn’t entered a motor."
     },
     {
       "id": "RotomsRoom_Text_ThereWasAnApplianceHere",
@@ -122,7 +122,7 @@
       "en_US": [
         "It’s a microwave oven.\n",
         "It has an odd-shaped motor on it.\r",
-        "Oh? ROTOM appears as if it wants\n",
+        "Oh? Rotom appears as if it wants\n",
         "to go into the motor.\r",
         "Allow it to enter the motor?"
       ]
@@ -130,7 +130,7 @@
     {
       "id": "RotomsRoom_Text_RotomGaveUpEnteringMicrowave",
       "en_US": [
-        "ROTOM reluctantly gave up on entering\n",
+        "Rotom reluctantly gave up on entering\n",
         "the microwave oven’s motor..."
       ]
     },
@@ -146,7 +146,7 @@
       "en_US": [
         "It’s a refrigerator.\n",
         "It has an odd-shaped motor on it.\r",
-        "Oh? ROTOM appears as if it wants\n",
+        "Oh? Rotom appears as if it wants\n",
         "to go into the motor.\r",
         "Allow it to enter the motor?"
       ]
@@ -154,7 +154,7 @@
     {
       "id": "RotomsRoom_Text_RotomGaveUpEnteringRefrigerator",
       "en_US": [
-        "ROTOM reluctantly gave up on entering\n",
+        "Rotom reluctantly gave up on entering\n",
         "the refrigerator’s motor..."
       ]
     },
@@ -170,7 +170,7 @@
       "en_US": [
         "It’s a washing machine.\n",
         "It has an odd-shaped motor on it.\r",
-        "Oh? ROTOM appears as if it wants\n",
+        "Oh? Rotom appears as if it wants\n",
         "to go into the motor.\r",
         "Allow it to enter the motor?"
       ]
@@ -178,7 +178,7 @@
     {
       "id": "RotomsRoom_Text_RotomGaveUpEnteringWashingMachine",
       "en_US": [
-        "ROTOM reluctantly gave up on entering\n",
+        "Rotom reluctantly gave up on entering\n",
         "the washing machine’s motor..."
       ]
     },
@@ -194,7 +194,7 @@
       "en_US": [
         "It’s a rotary fan.\n",
         "It has an odd-shaped motor on it.\r",
-        "Oh? ROTOM appears as if it wants\n",
+        "Oh? Rotom appears as if it wants\n",
         "to go into the motor.\r",
         "Allow it to enter the motor?"
       ]
@@ -202,7 +202,7 @@
     {
       "id": "RotomsRoom_Text_RotomGaveUpEnteringFan",
       "en_US": [
-        "ROTOM reluctantly gave up on entering\n",
+        "Rotom reluctantly gave up on entering\n",
         "the rotary fan’s motor..."
       ]
     },
@@ -218,7 +218,7 @@
       "en_US": [
         "It’s a lawn mower.\n",
         "It has an odd-shaped motor on it.\r",
-        "Oh? ROTOM appears as if it wants\n",
+        "Oh? Rotom appears as if it wants\n",
         "to go into the motor.\r",
         "Allow it to enter the motor?"
       ]
@@ -226,7 +226,7 @@
     {
       "id": "RotomsRoom_Text_RotomGaveUpEnteringLawnMower",
       "en_US": [
-        "ROTOM reluctantly gave up on entering\n",
+        "Rotom reluctantly gave up on entering\n",
         "the lawn mower’s motor..."
       ]
     },
@@ -236,21 +236,21 @@
         "There is a mysterious notebook here.\n",
         "Its age is impossible to tell.\r",
         "“It was by pure chance that I obtained\n",
-        "information about the Pokémon ROTOM.\r",
-        "“Remarkably, ROTOM has the ability to\n",
+        "information about the Pokémon Rotom.\r",
+        "“Remarkably, Rotom has the ability to\n",
         "enter and merge with special motors.\r",
-        "“It’s now known that ROTOM can stay\n",
+        "“It’s now known that Rotom can stay\n",
         "inside a motor almost indefinitely.\r",
         "“However, it will emerge if it enters a\n",
         "Union Room or a Wi-Fi Club.\r",
-        "“ROTOM will also emerge from the motor\n",
+        "“Rotom will also emerge from the motor\n",
         "if it is left at the Day Care.\r",
-        "“ROTOM may also forget certain moves\n",
+        "“Rotom may also forget certain moves\n",
         "when it leaves a motor.\r",
         "“This Pokémon requires exhaustive\n",
         "observation and analysis.\r",
         "“To ensure I get all the credit, my\n",
-        "ROTOM research must be kept secret.\r",
+        "Rotom research must be kept secret.\r",
         "“They will come to recognize me as the\n",
         "scientific genius Char...”\r",
         "The rest of the notebook is blank."
@@ -292,7 +292,7 @@
     {
       "id": "RotomsRoom_Text_RotomInterestingPokemon",
       "en_US": [
-        "Anyway, this ROTOM...\n",
+        "Anyway, this Rotom...\n",
         "What an interesting Pokémon.\r",
         "So, you say it enters an appliance and\n",
         "essentially merges with the device.\r",
@@ -354,10 +354,10 @@
         "“Finally, I came to realize that the\n",
         "Pokémon only wished to be friends.\r",
         "“I have decided to name this most\n",
-        "wondrous Pokémon ’ROTOM.’\r",
-        "“Simple though it may be, ROTOM emerged\n",
+        "wondrous Pokémon ’Rotom.’\r",
+        "“Simple though it may be, Rotom emerged\n",
         "to me from the motor of a lawn mower.\r",
-        "“Motor and ROTOM...\n",
+        "“Motor and Rotom...\n",
         "Surely the link is obvious?”\r",
         "...Would you like to keep reading?"
       ]
@@ -365,11 +365,11 @@
     {
       "id": "RotomsRoom_Text_AbilityToEnterMachinery",
       "en_US": [
-        "“ROTOM is a Pokémon that is simply\n",
+        "“Rotom is a Pokémon that is simply\n",
         "sensational.\r",
         "“The fact that it can turn invisible is\n",
         "simply the beginning.\r",
-        "“What makes ROTOM unique is its ability\n",
+        "“What makes Rotom unique is its ability\n",
         "to enter and operate machinery!”\r",
         "...This is about halfway through.\n",
         "Would you like to keep reading?"
@@ -378,7 +378,7 @@
     {
       "id": "RotomsRoom_Text_RotomAndIBecameFriends",
       "en_US": [
-        "“ROTOM and I became fast friends.\n",
+        "“Rotom and I became fast friends.\n",
         "We were perpetual companions.\r",
         "“The electricity from its body forbade\n",
         "contact, however.\r",
@@ -394,9 +394,9 @@
       "en_US": [
         "“A feeling of mischief got the better\n",
         "of me one day.\r",
-        "“Seeing ROTOM hovering, I decided to\n",
+        "“Seeing Rotom hovering, I decided to\n",
         "startle it--normally I would not.\r",
-        "“Perhaps frightened, ROTOM discharged\n",
+        "“Perhaps frightened, Rotom discharged\n",
         "power beyond its usual range.\r",
         "“I fell, stunned, into the arms of\n",
         "unconsciousness...”\r",
@@ -407,7 +407,7 @@
       "id": "RotomsRoom_Text_RotomDisappeared",
       "en_US": [
         "“When I came to, to my horror I\n",
-        "realized that ROTOM had disappeared.\r",
+        "realized that Rotom had disappeared.\r",
         "“I searched high and low for my friend\n",
         "in dismay and desperation.\r",
         "“’Don’t chastise yourself.’\r",
@@ -421,7 +421,7 @@
     {
       "id": "RotomsRoom_Text_SearchForRotom",
       "en_US": [
-        "“My search for ROTOM carried me far\n",
+        "“My search for Rotom carried me far\n",
         "from home.\r",
         "“It was in the town’s rubbish heap that\n",
         "I again found my old toy robot.\r",
@@ -429,7 +429,7 @@
         "robot waved a hand as if in greeting.\r",
         "“I knew then that I had found my lost\n",
         "friend.\r",
-        "“I ran to it and hugged ROTOM tight,\n",
+        "“I ran to it and hugged Rotom tight,\n",
         "talking on and on.”\r",
         "...Would you like to keep reading?"
       ]
@@ -439,10 +439,10 @@
       "en_US": [
         "“The robot’s eyes lit up happily as\n",
         "I held it.\r",
-        "“I’m certain that, within it, ROTOM was \n",
+        "“I’m certain that, within it, Rotom was \n",
         "emitting lots of electricity.\r",
         "“Somehow, I felt I could understand\n",
-        "ROTOM’s thoughts better than before.\r",
+        "Rotom’s thoughts better than before.\r",
         "“Also, I realized that we would remain\n",
         "friends throughout our lives...”\r",
         "...The notebook ends with this page..."

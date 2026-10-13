@@ -3,7 +3,7 @@
   "messages": [
     {
       "id": "UndergroundTraps_Text_Close2",
-      "en_US": "CLOSE"
+      "en_US": "Close"
     },
     {
       "id": "UndergroundTraps_Text_MoveTrapUp",
@@ -139,7 +139,7 @@
     },
     {
       "id": "UndergroundTraps_Text_Close",
-      "en_US": "CLOSE"
+      "en_US": "Close"
     },
     {
       "id": "UndergroundTraps_Text_MoveTrapUpDescription",

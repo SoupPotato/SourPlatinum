@@ -3,39 +3,39 @@
   "messages": [
     {
       "id": "pl_msg_00000010_00000",
-      "en_US": "BATTLE VIDEOS"
+      "en_US": "Battle Videos"
     },
     {
       "id": "pl_msg_00000010_00001",
-      "en_US": "FRONTIER RECORD"
+      "en_US": "Frontier Record"
     },
     {
       "id": "pl_msg_00000010_00002",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "pl_msg_00000010_00003",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "pl_msg_00000010_00004",
-      "en_US": "MY VIDEO"
+      "en_US": "My Video"
     },
     {
       "id": "pl_msg_00000010_00005",
-      "en_US": "OTHER VIDEOS"
+      "en_US": "Other Videos"
     },
     {
       "id": "pl_msg_00000010_00006",
-      "en_US": "DELETE VIDEOS"
+      "en_US": "Delete Videos"
     },
     {
       "id": "pl_msg_00000010_00007",
-      "en_US": "{STRVAR_1 3, 0, 0}’S VIDEO"
+      "en_US": "{STRVAR_1 3, 0, 0}’S Video"
     },
     {
       "id": "pl_msg_00000010_00008",
-      "en_US": "EMPTY"
+      "en_US": "Empty"
     },
     {
       "id": "pl_msg_00000010_00009",
@@ -55,7 +55,7 @@
     },
     {
       "id": "pl_msg_00000010_00013",
-      "en_US": "{STRVAR_1 3, 0, 0}’S PROFILE"
+      "en_US": "{STRVAR_1 3, 0, 0}’S Profile"
     },
     {
       "id": "pl_msg_00000010_00014",

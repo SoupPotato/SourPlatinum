@@ -156,11 +156,11 @@
         "trainer_pos_m": 16,
         "pokemon_pos_m": 6,
         "en": {
-            "name": "MEWTWO",
+            "name": "Mewtwo",
             "category": "Genetic Pokémon",
             "entry_text": [
                 "A Pokémon created by recombining\n",
-                "MEW’s genes. It’s said to have the\n",
+                "Mew’s genes. It’s said to have the\n",
                 "most savage heart among Pokémon."
             ]
         },

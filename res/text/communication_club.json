@@ -76,11 +76,11 @@
     },
     {
       "id": "CommunicationClub_Text_Yes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "CommunicationClub_Text_No",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "CommunicationClub_Text_EndingCommunication",
@@ -138,11 +138,11 @@
     },
     {
       "id": "CommunicationClub_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "CommunicationClub_Text_Summary",
-      "en_US": "SUMMARY"
+      "en_US": "Summary"
     },
     {
       "id": "CommunicationClub_Text_OK",
@@ -150,7 +150,7 @@
     },
     {
       "id": "CommunicationClub_Text_Cancel2",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     }
   ]
 }

@@ -114,11 +114,11 @@
     },
     {
       "id": "WFCFacilitySelector_Text_Yes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "WFCFacilitySelector_Text_No",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "WFCFacilitySelector_Text_RemakeSelection",
@@ -163,35 +163,35 @@
     },
     {
       "id": "WFCFacilitySelector_Text_BattleTower",
-      "en_US": "BATTLE TOWER"
+      "en_US": "Battle Tower"
     },
     {
       "id": "WFCFacilitySelector_Text_BattleFactory",
-      "en_US": "BATTLE FACTORY"
+      "en_US": "Battle Factory"
     },
     {
       "id": "WFCFacilitySelector_Text_BattleCastle",
-      "en_US": "BATTLE CASTLE"
+      "en_US": "Battle Castle"
     },
     {
       "id": "WFCFacilitySelector_Text_BattleHall",
-      "en_US": "BATTLE HALL"
+      "en_US": "Battle Hall"
     },
     {
       "id": "WFCFacilitySelector_Text_BattleArcade",
-      "en_US": "BATTLE ARCADE"
+      "en_US": "Battle Arcade"
     },
     {
       "id": "WFCFacilitySelector_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "WFCFacilitySelector_Text_Level50",
-      "en_US": "LEVEL 50"
+      "en_US": "Level 50"
     },
     {
       "id": "WFCFacilitySelector_Text_OpenLevel",
-      "en_US": "OPEN LEVEL"
+      "en_US": "Open Level"
     }
   ]
 }

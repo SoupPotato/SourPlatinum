@@ -113,11 +113,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 18,
         "en": {
-            "name": "PARASECT",
+            "name": "Parasect",
             "category": "Mushroom Pokémon",
             "entry_text": [
                 "A mushroom grown larger than the\n",
-                "host’s body controls PARASECT.\n",
+                "host’s body controls Parasect.\n",
                 "It scatters poisonous spores."
             ]
         },

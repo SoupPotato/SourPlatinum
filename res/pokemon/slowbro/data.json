@@ -140,12 +140,12 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 8,
         "en": {
-            "name": "SLOWBRO",
+            "name": "Slowbro",
             "category": "Hermit Crab Pokémon",
             "entry_text": [
                 "Though usually dim witted, it\n",
                 "seems to become inspired if the\n",
-                "SHELLDER on its tail bites down."
+                "Shellder on its tail bites down."
             ]
         },
         "fr": {

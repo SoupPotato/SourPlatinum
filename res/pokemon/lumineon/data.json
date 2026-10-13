@@ -119,12 +119,12 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 65531,
         "en": {
-            "name": "LUMINEON",
+            "name": "Lumineon",
             "category": "Neon Pokémon",
             "entry_text": [
                 "It crawls along the seafloor using\n",
                 "its long front fins like legs. It\n",
-                "competes for food with LANTURN."
+                "competes for food with Lanturn."
             ]
         },
         "fr": {

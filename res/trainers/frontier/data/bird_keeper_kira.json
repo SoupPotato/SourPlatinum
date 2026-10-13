@@ -82,20 +82,20 @@
             "type": "TRMSG_PRE_BATTLE",
             "en_US": [
                 "The loser has to pretend to be a\n",
-                "STUNKY, OK?"
+                "Stunky, OK?"
             ]
         },
         {
             "type": "TRMSG_WIN",
             "en_US": [
                 "Giggle, you lose.\n",
-                "I want to see your STUNKY impression!\r"
+                "I want to see your Stunky impression!\r"
             ]
         },
         {
             "type": "TRMSG_DEFEAT",
             "en_US": [
-                "OK, here’s my STUNKY impression!\n",
+                "OK, here’s my Stunky impression!\n",
                 "Three, two, one...\r"
             ]
         }

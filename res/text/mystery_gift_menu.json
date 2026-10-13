@@ -75,44 +75,44 @@
       "id": "MysteryGiftMenu_Text_PokemonRangerManaphyEggTransfer",
       "en_US": [
         "Pokémon Ranger\n",
-        "MANAPHY Egg Transfer"
+        "Manaphy Egg Transfer"
       ]
     },
     {
       "id": "MysteryGiftMenu_Text_ReceiveGift",
-      "en_US": "RECEIVE GIFT"
+      "en_US": "Receive Gift"
     },
     {
       "id": "MysteryGiftMenu_Text_CheckCard",
-      "en_US": "CHECK CARD"
+      "en_US": "Check Card"
     },
     {
       "id": "MysteryGiftMenu_Text_Exit_MysteryGift",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "MysteryGiftMenu_Text_GetFromFriend",
-      "en_US": "GET FROM A FRIEND"
+      "en_US": "Get from a Friend"
     },
     {
       "id": "MysteryGiftMenu_Text_GetViaWFC",
-      "en_US": "GET VIA NINTENDO WFC"
+      "en_US": "Get via Nintendo WFC"
     },
     {
       "id": "MysteryGiftMenu_Text_Cancel_MysteryGift",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "MysteryGiftMenu_Text_Yes_MysteryGift",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "MysteryGiftMenu_Text_No_MysteryGift",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "MysteryGiftMenu_Text_GetViaWireless",
-      "en_US": "GET VIA WIRELESS"
+      "en_US": "Get via Wireless"
     },
     {
       "id": "MysteryGiftMenu_Text_DeliveryManOverloaded",
@@ -237,19 +237,19 @@
     },
     {
       "id": "MysteryGiftMenu_Text_Info",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "MysteryGiftMenu_Text_Share",
-      "en_US": "SHARE"
+      "en_US": "Share"
     },
     {
       "id": "MysteryGiftMenu_Text_Trash",
-      "en_US": "TRASH"
+      "en_US": "Trash"
     },
     {
       "id": "MysteryGiftMenu_Text_Exit_WonderCards",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "MysteryGiftMenu_Text_WouldYouLikeToShareThisGift",
@@ -257,7 +257,7 @@
     },
     {
       "id": "MysteryGiftMenu_Text_Yes_MysteryGift2",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "MysteryGiftMenu_Text_No_MysteryGift2",
@@ -303,11 +303,11 @@
     },
     {
       "id": "MysteryGiftMenu_Text_Send",
-      "en_US": "SEND"
+      "en_US": "Send"
     },
     {
       "id": "MysteryGiftMenu_Text_Cancel_WonderCards",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "MysteryGiftMenu_Text_GiftDistributionUnderWay",
@@ -343,11 +343,11 @@
     },
     {
       "id": "MysteryGiftMenu_Text_Yes_WonderCards",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "MysteryGiftMenu_Text_No_WonderCards",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "MysteryGiftMenu_Text_TrainerNameAndIdTemplate",
@@ -382,7 +382,7 @@
     {
       "id": "MysteryGiftMenu_Text_ReceivingManaphyEgg",
       "en_US": [
-        "Receiving the MANAPHY Egg...\n",
+        "Receiving the Manaphy Egg...\n",
         "Don’t turn off the power."
       ]
     },

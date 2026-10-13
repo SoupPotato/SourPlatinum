@@ -116,12 +116,12 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 65525,
         "en": {
-            "name": "MOTHIM",
+            "name": "Mothim",
             "category": "Moth Pokémon",
             "entry_text": [
                 "While it loves floral honey, it won’t\n",
                 "gather any itself. Instead, it\n",
-                "plots to steal some from COMBEE."
+                "plots to steal some from Combee."
             ]
         },
         "fr": {

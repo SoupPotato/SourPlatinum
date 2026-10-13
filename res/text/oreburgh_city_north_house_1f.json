@@ -5,22 +5,22 @@
       "id": "OreburghCityNorthHouse1F_Text_AskTradeMachopForAbra",
       "en_US": [
         "Listen, listen. Do you have a Pokémon\n",
-        "called MACHOP?\r",
+        "called Machop?\r",
         "Would you be willing to trade your\n",
-        "MACHOP for my ABRA?"
+        "Machop for my Abra?"
       ]
     },
     {
       "id": "OreburghCityNorthHouse1F_Text_BeNiceToMyAbra",
       "en_US": [
-        "Be nice to my ABRA!\r",
-        "I’ll be sure to look after your MACHOP\n",
+        "Be nice to my Abra!\r",
+        "I’ll be sure to look after your Machop\n",
         "in return!"
       ]
     },
     {
       "id": "OreburghCityNorthHouse1F_Text_AskedForMachop",
-      "en_US": "What I asked for was a MACHOP..."
+      "en_US": "What I asked for was a Machop..."
     },
     {
       "id": "OreburghCityNorthHouse1F_Text_IllBeWaiting",

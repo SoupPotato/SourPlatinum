@@ -134,11 +134,11 @@
         "trainer_pos_m": 16,
         "pokemon_pos_m": 65535,
         "en": {
-            "name": "MANTINE",
+            "name": "Mantine",
             "category": "Kite Pokémon",
             "entry_text": [
                 "While elegantly swimming in the sea,\n",
-                "it ignores REMORAID that cling to\n",
+                "it ignores Remoraid that cling to\n",
                 "its fins seeking food scraps."
             ]
         },

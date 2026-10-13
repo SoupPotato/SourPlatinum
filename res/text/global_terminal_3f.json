@@ -31,7 +31,7 @@
       "id": "GlobalTerminal3F_Text_BattleVideosOfClefairy",
       "en_US": [
         "I have Battle Videos of only cute little\n",
-        "CLEFAIRY as my favorites."
+        "Clefairy as my favorites."
       ]
     },
     {
@@ -125,15 +125,15 @@
     },
     {
       "id": "GlobalTerminal3F_Text_Use",
-      "en_US": "USE"
+      "en_US": "Use"
     },
     {
       "id": "GlobalTerminal3F_Text_Info",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "GlobalTerminal3F_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     }
   ]
 }

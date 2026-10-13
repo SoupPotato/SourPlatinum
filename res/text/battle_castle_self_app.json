@@ -27,7 +27,7 @@
     },
     {
       "id": "BattleCastleSelfApp_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "BattleCastleSelfApp_Text_Dummy1",
@@ -39,23 +39,23 @@
     },
     {
       "id": "BattleCastleSelfApp_Text_Heal",
-      "en_US": "HEAL"
+      "en_US": "Heal"
     },
     {
       "id": "BattleCastleSelfApp_Text_Rental",
-      "en_US": "RENTAL"
+      "en_US": "Rental"
     },
     {
       "id": "BattleCastleSelfApp_Text_Summary",
-      "en_US": "SUMMARY"
+      "en_US": "Summary"
     },
     {
       "id": "BattleCastleSelfApp_Text_Moves",
-      "en_US": "MOVES"
+      "en_US": "Moves"
     },
     {
       "id": "BattleCastleSelfApp_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleCastleSelfApp_Text_RestoreHPOrPP",
@@ -91,23 +91,23 @@
     },
     {
       "id": "BattleCastleSelfApp_Text_RestoreHP",
-      "en_US": "RESTORE HP"
+      "en_US": "Restore HP"
     },
     {
       "id": "BattleCastleSelfApp_Text_RestorePP",
-      "en_US": "RESTORE PP"
+      "en_US": "Restore PP"
     },
     {
       "id": "BattleCastleSelfApp_Text_RestoreAll",
-      "en_US": "RESTORE ALL"
+      "en_US": "Restore All"
     },
     {
       "id": "BattleCastleSelfApp_Text_RankUp",
-      "en_US": "RANK UP"
+      "en_US": "Rank Up"
     },
     {
       "id": "BattleCastleSelfApp_Text_Cancel2",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleCastleSelfApp_Text_WhichToUse",
@@ -141,11 +141,11 @@
     },
     {
       "id": "BattleCastleSelfApp_Text_Yes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "BattleCastleSelfApp_Text_No",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "BattleCastleSelfApp_Text_NotEnoughCP",
@@ -215,19 +215,19 @@
     },
     {
       "id": "BattleCastleSelfApp_Text_Berries",
-      "en_US": "BERRIES"
+      "en_US": "Berries"
     },
     {
       "id": "BattleCastleSelfApp_Text_Items",
-      "en_US": "ITEMS"
+      "en_US": "Items"
     },
     {
       "id": "BattleCastleSelfApp_Text_RankUp2",
-      "en_US": "RANK UP"
+      "en_US": "Rank Up"
     },
     {
       "id": "BattleCastleSelfApp_Text_Cancel3",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleCastleSelfApp_Text_MayRentBerry",

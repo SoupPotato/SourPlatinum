@@ -111,12 +111,12 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 24,
         "en": {
-            "name": "STARAVIA",
+            "name": "Staravia",
             "category": "Starling Pokémon",
             "entry_text": [
                 "Recognizing their own weakness,\n",
                 "they always live in a group. When\n",
-                "alone, a STARAVIA cries noisily."
+                "alone, a Staravia cries noisily."
             ]
         },
         "fr": {

@@ -3,23 +3,23 @@
   "messages": [
     {
       "id": "pl_msg_00000608_00000",
-      "en_US": "MORNING"
+      "en_US": "Morning"
     },
     {
       "id": "pl_msg_00000608_00001",
-      "en_US": "DAY"
+      "en_US": "Day"
     },
     {
       "id": "pl_msg_00000608_00002",
-      "en_US": "EVENING"
+      "en_US": "Evening"
     },
     {
       "id": "pl_msg_00000608_00003",
-      "en_US": "NIGHT"
+      "en_US": "Night"
     },
     {
       "id": "pl_msg_00000608_00004",
-      "en_US": "LATE NIGHT"
+      "en_US": "Late Night"
     }
   ]
 }

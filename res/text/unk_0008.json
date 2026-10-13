@@ -3,31 +3,31 @@
   "messages": [
     {
       "id": "pl_msg_00000008_00000",
-      "en_US": "EDIT"
+      "en_US": "Edit"
     },
     {
       "id": "pl_msg_00000008_00001",
-      "en_US": "QUIT"
+      "en_US": "Quit"
     },
     {
       "id": "pl_msg_00000008_00002",
-      "en_US": "SET"
+      "en_US": "Set"
     },
     {
       "id": "pl_msg_00000008_00003",
-      "en_US": "REMOVE"
+      "en_US": "Remove"
     },
     {
       "id": "pl_msg_00000008_00004",
-      "en_US": "SHIFT"
+      "en_US": "Shift"
     },
     {
       "id": "pl_msg_00000008_00005",
-      "en_US": "CONFIRM"
+      "en_US": "Confirm"
     },
     {
       "id": "pl_msg_00000008_00006",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "pl_msg_00000008_00007",

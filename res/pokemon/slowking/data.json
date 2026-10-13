@@ -141,10 +141,10 @@
         "trainer_pos_m": 15,
         "pokemon_pos_m": 4,
         "en": {
-            "name": "SLOWKING",
+            "name": "Slowking",
             "category": "Royal Pokémon",
             "entry_text": [
-                "Being bitten by SHELLDER gave it\n",
+                "Being bitten by Shellder gave it\n",
                 "intelligence comparable to that of\n",
                 "award-winning scientists."
             ]

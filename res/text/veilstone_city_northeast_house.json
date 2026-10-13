@@ -7,7 +7,7 @@
         "You’re a Trainer, aren’t you?\r",
         "You see, there’s this Pokémon I’d like\n",
         "someone to look after.\r",
-        "It’s a Pokémon called PORYGON.\n",
+        "It’s a Pokémon called Porygon.\n",
         "I found it near Team Galactic’s building.\r",
         "I’m no Trainer, so can you take it off\n",
         "my hands?"
@@ -19,7 +19,7 @@
         "You’re a Trainer, aren’t you?\r",
         "You see, there’s this Pokémon I’d like\n",
         "someone to look after.\r",
-        "It’s a Pokémon called PORYGON.\n",
+        "It’s a Pokémon called Porygon.\n",
         "Can you take it off my hands?"
       ]
     },
@@ -27,20 +27,20 @@
       "id": "VeilstoneCityNortheastHouse_Text_Excellent",
       "en_US": [
         "Excellent! Thanks!\n",
-        "That’ll make the PORYGON happy, too.\r",
+        "That’ll make the Porygon happy, too.\r",
         "I suspect it ran away from those Team\n",
         "Galactic goons.\r"
       ]
     },
     {
       "id": "VeilstoneCityNortheastHouse_Text_PlayerAcceptedThePorygon",
-      "en_US": "{STRVAR_1 3, 0, 0} accepted the PORYGON!\r"
+      "en_US": "{STRVAR_1 3, 0, 0} accepted the Porygon!\r"
     },
     {
       "id": "VeilstoneCityNortheastHouse_Text_AskNicknamePorygon",
       "en_US": [
         "Would you like to give a nickname\n",
-        "to the PORYGON you received?"
+        "to the Porygon you received?"
       ]
     },
     {
@@ -49,7 +49,7 @@
         "Thanks!\r",
         "...But, oops, you already have a whole\n",
         "team of Pokémon with you.\r",
-        "If you want this PORYGON, you’d better\n",
+        "If you want this Porygon, you’d better\n",
         "put one in a PC Box first."
       ]
     },

@@ -3,23 +3,23 @@
   "messages": [
     {
       "id": "pl_msg_00000408_00000",
-      "en_US": "MAILBOX"
+      "en_US": "Mailbox"
     },
     {
       "id": "pl_msg_00000408_00001",
-      "en_US": "READ"
+      "en_US": "Read"
     },
     {
       "id": "pl_msg_00000408_00002",
-      "en_US": "ERASE"
+      "en_US": "Erase"
     },
     {
       "id": "pl_msg_00000408_00003",
-      "en_US": "GIVE"
+      "en_US": "Give"
     },
     {
       "id": "pl_msg_00000408_00004",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "pl_msg_00000408_00005",

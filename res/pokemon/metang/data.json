@@ -135,10 +135,10 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 65534,
         "en": {
-            "name": "METANG",
+            "name": "Metang",
             "category": "Iron Claw Pokémon",
             "entry_text": [
-                "It is formed by two BELDUM joining\n",
+                "It is formed by two Beldum joining\n",
                 "together. Its steel body won’t be\n",
                 "scratched if it collides with a jet."
             ]

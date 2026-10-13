@@ -4,14 +4,14 @@
     {
       "id": "Route210South_Text_PsyduckAreStandingFirm",
       "en_US": [
-        "The PSYDUCK are standing firm.\n",
+        "The Psyduck are standing firm.\n",
         "They aren’t inclined to move at all."
       ]
     },
     {
       "id": "Route210South_Text_AskUseSecretPotion",
       "en_US": [
-        "The PSYDUCK are standing firm.\n",
+        "The Psyduck are standing firm.\n",
         "They aren’t inclined to move.\r",
         "Would you like to use the SecretPotion?"
       ]
@@ -21,7 +21,7 @@
       "en_US": [
         "{STRVAR_1 3, 0, 0} used the\n",
         "SecretPotion!\r",
-        "The PSYDUCK appear to be cured\n",
+        "The Psyduck appear to be cured\n",
         "of their chronic headache!\r"
       ]
     },
@@ -30,7 +30,7 @@
       "en_US": [
         "Cynthia: Oh, good. You used the\n",
         "SecretPotion I gave you.\r",
-        "PSYDUCK are known to suffer from\n",
+        "Psyduck are known to suffer from\n",
         "chronic headaches.\r",
         "But no one’s been able to figure out\n",
         "what triggers the headaches.\r",
@@ -105,6 +105,21 @@
         "Rt. 210\n",
         "Solaceon Town"
       ]
+    },
+    {
+      "id": "Route210South_Text_HoneyTreeSlatherBark",
+      "en_US": [
+        "There is a sweet scent in the air...\r",
+        "Slather the bark with Honey?"
+      ]
+    },
+    {
+      "id": "Route210South_Text_HoneyTreeBarkSlathered",
+      "en_US": "The bark was slathered with Honey."
+    },
+    {
+      "id": "Route210South_Text_HoneyTreeSweetScent",
+      "en_US": "There is a sweet scent in the air..."
     }
   ]
 }

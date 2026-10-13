@@ -143,7 +143,7 @@
     },
     {
       "id": "BoxText_Nature",
-      "en_US": "NATURE"
+      "en_US": "Nature"
     },
     {
       "id": "BoxText_Level",
@@ -155,27 +155,27 @@
     },
     {
       "id": "BoxText_Attack",
-      "en_US": "ATTACK"
+      "en_US": "Attack"
     },
     {
       "id": "BoxText_Defense",
-      "en_US": "DEFENSE"
+      "en_US": "Defense"
     },
     {
       "id": "BoxText_SpecialAttack",
-      "en_US": "SP. ATK"
+      "en_US": "Sp. Atk"
     },
     {
       "id": "BoxText_SpecialDefense",
-      "en_US": "SP. DEF"
+      "en_US": "Sp. Def"
     },
     {
       "id": "BoxText_Speed",
-      "en_US": "SPEED"
+      "en_US": "Speed"
     },
     {
       "id": "BoxText_Move",
-      "en_US": "MOVE"
+      "en_US": "Move"
     },
     {
       "id": "BoxText_QuestionMarks",

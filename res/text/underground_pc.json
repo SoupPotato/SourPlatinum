@@ -3,27 +3,27 @@
   "messages": [
     {
       "id": "UndergroundPC_Text_Decorate",
-      "en_US": "DECORATE"
+      "en_US": "Decorate"
     },
     {
       "id": "UndergroundPC_Text_StoreGoods",
-      "en_US": "STORE GOODS"
+      "en_US": "Store Goods"
     },
     {
       "id": "UndergroundPC_Text_ReceiveGoods",
-      "en_US": "RECEIVE GOODS"
+      "en_US": "Receive Goods"
     },
     {
       "id": "UndergroundPC_Text_CheckFlags",
-      "en_US": "CHECK FLAGS"
+      "en_US": "Check Flags"
     },
     {
       "id": "UndergroundPC_Text_UseRadar",
-      "en_US": "USE RADAR"
+      "en_US": "Use Radar"
     },
     {
       "id": "UndergroundPC_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "UndergroundPC_Text_DecorateDescription",
@@ -205,19 +205,19 @@
     },
     {
       "id": "UndergroundPC_Text_TreasureSearch",
-      "en_US": "TREASURE SEARCH"
+      "en_US": "Treasure Search"
     },
     {
       "id": "UndergroundPC_Text_SphereSearch",
-      "en_US": "SPHERE SEARCH"
+      "en_US": "Sphere Search"
     },
     {
       "id": "UndergroundPC_Text_TrapSearch",
-      "en_US": "TRAP SEARCH"
+      "en_US": "Trap Search"
     },
     {
       "id": "UndergroundPC_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "UndergroundPC_Text_TreasureSearchDescription",

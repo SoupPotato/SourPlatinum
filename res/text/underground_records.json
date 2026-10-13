@@ -3,11 +3,11 @@
   "messages": [
     {
       "id": "UndergroundRecords_Text_Name",
-      "en_US": "NAME"
+      "en_US": "Name"
     },
     {
       "id": "UndergroundRecords_Text_BaseFlag",
-      "en_US": "BASE FLAG"
+      "en_US": "Base Flag"
     },
     {
       "id": "UndergroundRecords_Text_ID",

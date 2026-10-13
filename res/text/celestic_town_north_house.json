@@ -8,21 +8,21 @@
         "...\r",
         "Hm, Twinleaf Town, you say.\n",
         "Isn’t that close to Lake Verity?\r",
-        "That lake is said to be home to MESPRIT,\n",
+        "That lake is said to be home to Mesprit,\n",
         "“The Being of Emotion.”\r",
         "That Pokémon may well be watching\n",
         "over you.\r",
         "Would you like to know more about\n",
-        "MESPRIT?"
+        "Mesprit?"
       ]
     },
     {
       "id": "CelesticTownNorthHouse_Text_MespritInfo",
       "en_US": [
-        "MESPRIT is the legendary Pokémon\n",
+        "Mesprit is the legendary Pokémon\n",
         "that symbolizes the emotions.\r",
-        "Beside it are also UXIE, “The Being of\n",
-        "Knowledge,” and AZELF, “The Being of\f",
+        "Beside it are also Uxie, “The Being of\n",
+        "Knowledge,” and Azelf, “The Being of\f",
         "Willpower.”\r",
         "These three Pokémon are said to have\n",
         "strong and compassionate spirits.\r",
@@ -70,29 +70,29 @@
         "It’s a book, and it’s quite old.\n",
         "Let me read a bit for you.\r",
         "“The bearer of the shining Adamant Orb\n",
-        "summons DIALGA to the Spear Pillar.\r",
+        "summons Dialga to the Spear Pillar.\r",
         "“The guardian Pokémon of time will\n",
         "answer the call.\r",
         "“The bearer of the shining Lustrous\n",
-        "Orb summons PALKIA to the Spear Pillar.\r",
+        "Orb summons Palkia to the Spear Pillar.\r",
         "“The Pokémon that binds the spatial\n",
         "dimensions will answer the call.”\r",
         "It seems the people of long ago met\n",
-        "both DIALGA and PALKIA, the Pokémon\f",
+        "both Dialga and Palkia, the Pokémon\f",
         "of time and space."
       ]
     },
     {
       "id": "CelesticTownNorthHouse_Text_PalkiaIsWritten",
       "en_US": [
-        "“PALKIA, the Pokémon that binds the\n",
+        "“Palkia, the Pokémon that binds the\n",
         "spatial dimensions,” it is written...\r"
       ]
     },
     {
       "id": "CelesticTownNorthHouse_Text_DialgaIsWritten",
       "en_US": [
-        "“DIALGA, the guardian Pokémon of\n",
+        "“Dialga, the guardian Pokémon of\n",
         "time,” it is written...\r"
       ]
     },

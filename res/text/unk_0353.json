@@ -443,23 +443,23 @@
     },
     {
       "id": "Unk0353_Text_StandardCup",
-      "en_US": "STANDARD"
+      "en_US": "Standard"
     },
     {
       "id": "Unk0353_Text_FancyCup",
-      "en_US": "FANCY"
+      "en_US": "Fancy"
     },
     {
       "id": "Unk0353_Text_LittleCup",
-      "en_US": "LITTLE"
+      "en_US": "Little"
     },
     {
       "id": "Unk0353_Text_LightCup",
-      "en_US": "LIGHT"
+      "en_US": "Light"
     },
     {
       "id": "Unk0353_Text_DoubleCup",
-      "en_US": "DOUBLE"
+      "en_US": "Double"
     },
     {
       "id": "Unk0353_Text_RuleNoOfPokemon",
@@ -547,7 +547,7 @@
     },
     {
       "id": "Unk0353_Text_NoRestrictions",
-      "en_US": "NO RESTRICTIONS"
+      "en_US": "No Restrictions"
     },
     {
       "id": "pl_msg_00000353_00097",

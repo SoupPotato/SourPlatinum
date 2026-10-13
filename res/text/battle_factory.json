@@ -147,43 +147,43 @@
     },
     {
       "id": "BattleFactory_Text_SingleBattle",
-      "en_US": "SINGLE BATTLE"
+      "en_US": "Single Battle"
     },
     {
       "id": "BattleFactory_Text_DoubleBattle",
-      "en_US": "DOUBLE BATTLE"
+      "en_US": "Double Battle"
     },
     {
       "id": "BattleFactory_Text_TakeChallenge",
-      "en_US": "TAKE CHALLENGE"
+      "en_US": "Take Challenge"
     },
     {
       "id": "BattleFactory_Text_Info",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "BattleFactory_Text_CancelChallenge",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleFactory_Text_Level50",
-      "en_US": "LEVEL 50"
+      "en_US": "Level 50"
     },
     {
       "id": "BattleFactory_Text_OpenLevel",
-      "en_US": "OPEN LEVEL"
+      "en_US": "Open Level"
     },
     {
       "id": "BattleFactory_Text_CancelLevel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "BattleFactory_Text_BecomeLeaderOrJoinGroup",
       "en_US": [
         "One Trainer should select\n",
-        "“BECOME LEADER.”\r",
+        "“Become Leader.”\r",
         "The other Trainer must select\n",
-        "“JOIN GROUP.”"
+        "“Join Group.”"
       ]
     },
     {

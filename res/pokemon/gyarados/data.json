@@ -128,11 +128,11 @@
         "trainer_pos_m": 22,
         "pokemon_pos_m": 0,
         "en": {
-            "name": "GYARADOS",
+            "name": "Gyarados",
             "category": "Atrocious Pokémon",
             "entry_text": [
                 "Once it begins to rampage, a\n",
-                "GYARADOS will burn everything\n",
+                "Gyarados will burn everything\n",
                 "down, even in a harsh storm."
             ]
         },

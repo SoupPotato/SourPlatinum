@@ -3,15 +3,15 @@
   "messages": [
     {
       "id": "pl_msg_00000396_00000",
-      "en_US": "{COLOR 2}♈{COLOR 0}ITEMS"
+      "en_US": "{COLOR 2}♈{COLOR 0}Items"
     },
     {
       "id": "pl_msg_00000396_00001",
-      "en_US": "{COLOR 2}♌{COLOR 0}MEDICINE"
+      "en_US": "{COLOR 2}♌{COLOR 0}Medicine"
     },
     {
       "id": "pl_msg_00000396_00002",
-      "en_US": "{COLOR 2}♎{COLOR 0}POKé BALLS"
+      "en_US": "{COLOR 2}♎{COLOR 0}Poké Balls"
     },
     {
       "id": "pl_msg_00000396_00003",
@@ -19,19 +19,19 @@
     },
     {
       "id": "pl_msg_00000396_00004",
-      "en_US": "{COLOR 2}♍{COLOR 0}BERRIES"
+      "en_US": "{COLOR 2}♍{COLOR 0}Berries"
     },
     {
       "id": "pl_msg_00000396_00005",
-      "en_US": "{COLOR 2}♋{COLOR 0}MAIL"
+      "en_US": "{COLOR 2}♋{COLOR 0}Mail"
     },
     {
       "id": "pl_msg_00000396_00006",
-      "en_US": "{COLOR 2}♏{COLOR 0}BATTLE ITEMS"
+      "en_US": "{COLOR 2}♏{COLOR 0}Battle Items"
     },
     {
       "id": "pl_msg_00000396_00007",
-      "en_US": "{COLOR 2}♉{COLOR 0}KEY ITEMS"
+      "en_US": "{COLOR 2}♉{COLOR 0}Key Items"
     }
   ]
 }

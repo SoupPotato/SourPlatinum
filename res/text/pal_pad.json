@@ -3,27 +3,27 @@
   "messages": [
     {
       "id": "pl_msg_00000675_00000",
-      "en_US": "PAL PAD"
+      "en_US": "Pal Pad"
     },
     {
       "id": "pl_msg_00000675_00001",
-      "en_US": "CHECK FRIEND ROSTER"
+      "en_US": "Check Friend Roster"
     },
     {
       "id": "pl_msg_00000675_00002",
-      "en_US": "REGISTER FRIEND CODE"
+      "en_US": "Register Friend Code"
     },
     {
       "id": "pl_msg_00000675_00003",
-      "en_US": "{STRVAR_1 3, 0, 0}’s FRIEND CODE"
+      "en_US": "{STRVAR_1 3, 0, 0}’s Friend Code"
     },
     {
       "id": "pl_msg_00000675_00004",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "pl_msg_00000675_00005",
-      "en_US": "FRIEND ROSTER"
+      "en_US": "Friend Roster"
     },
     {
       "id": "pl_msg_00000675_00006",
@@ -31,23 +31,23 @@
     },
     {
       "id": "pl_msg_00000675_00007",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "pl_msg_00000675_00008",
-      "en_US": "DETAILS"
+      "en_US": "Details"
     },
     {
       "id": "pl_msg_00000675_00009",
-      "en_US": "REWRITE NAME"
+      "en_US": "Rewrite Name"
     },
     {
       "id": "pl_msg_00000675_00010",
-      "en_US": "DELETE"
+      "en_US": "Delete"
     },
     {
       "id": "PalPad_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "pl_msg_00000675_00012",
@@ -58,23 +58,23 @@
     },
     {
       "id": "pl_msg_00000675_00013",
-      "en_US": "RECORD WITH {STRVAR_1 3, 0, 0}"
+      "en_US": "Record With {STRVAR_1 3, 0, 0}"
     },
     {
       "id": "pl_msg_00000675_00014",
-      "en_US": "GROUP"
+      "en_US": "Group"
     },
     {
       "id": "pl_msg_00000675_00015",
-      "en_US": "BATTLE RECORD"
+      "en_US": "Battle Record"
     },
     {
       "id": "pl_msg_00000675_00016",
-      "en_US": "WIN: "
+      "en_US": "Win: "
     },
     {
       "id": "pl_msg_00000675_00017",
-      "en_US": "LOSE: "
+      "en_US": "Lose: "
     },
     {
       "id": "pl_msg_00000675_00018",
@@ -82,7 +82,7 @@
     },
     {
       "id": "pl_msg_00000675_00019",
-      "en_US": "POKéMON TRADES"
+      "en_US": "Pokémon Trades"
     },
     {
       "id": "pl_msg_00000675_00020",
@@ -90,7 +90,7 @@
     },
     {
       "id": "pl_msg_00000675_00021",
-      "en_US": "POFFIN SESSIONS"
+      "en_US": "Poffin Sessions"
     },
     {
       "id": "pl_msg_00000675_00022",
@@ -98,7 +98,7 @@
     },
     {
       "id": "pl_msg_00000675_00023",
-      "en_US": "DATE LAST PLAYED"
+      "en_US": "Date Last Played"
     },
     {
       "id": "pl_msg_00000675_00024",
@@ -106,59 +106,59 @@
     },
     {
       "id": "pl_msg_00000675_00025",
-      "en_US": "BATTLE TOWER"
+      "en_US": "Battle Tower"
     },
     {
       "id": "pl_msg_00000675_00026",
-      "en_US": "BATTLE FACTORY"
+      "en_US": "Battle Factory"
     },
     {
       "id": "pl_msg_00000675_00027",
-      "en_US": "BATTLE CASTLE"
+      "en_US": "Battle Castle"
     },
     {
       "id": "pl_msg_00000675_00028",
-      "en_US": "BATTLE HALL"
+      "en_US": "Battle Hall"
     },
     {
       "id": "pl_msg_00000675_00029",
-      "en_US": "BATTLE ARCADE"
+      "en_US": "Battle Arcade"
     },
     {
       "id": "pl_msg_00000675_00030",
-      "en_US": "PREV"
+      "en_US": "Prev"
     },
     {
       "id": "pl_msg_00000675_00031",
-      "en_US": "CURRENT"
+      "en_US": "Current"
     },
     {
       "id": "pl_msg_00000675_00032",
-      "en_US": "RECORD"
+      "en_US": "Record"
     },
     {
       "id": "pl_msg_00000675_00033",
-      "en_US": "LEVEL 50"
+      "en_US": "Level 50"
     },
     {
       "id": "pl_msg_00000675_00034",
-      "en_US": "OPEN LEVEL"
+      "en_US": "Open Level"
     },
     {
       "id": "pl_msg_00000675_00035",
-      "en_US": "RENTAL/TRADE"
+      "en_US": "Rental/Trade"
     },
     {
       "id": "pl_msg_00000675_00036",
-      "en_US": "CASTLE POINTS"
+      "en_US": "Castle Points"
     },
     {
       "id": "pl_msg_00000675_00037",
-      "en_US": "{STRVAR_1 0, 0, 0}’S RECORD"
+      "en_US": "{STRVAR_1 0, 0, 0}’S Record"
     },
     {
       "id": "pl_msg_00000675_00038",
-      "en_US": "WIN STREAK: {STRVAR_1 53, 0, 0}"
+      "en_US": "Win Streak: {STRVAR_1 53, 0, 0}"
     },
     {
       "id": "pl_msg_00000675_00039",
@@ -170,15 +170,15 @@
     },
     {
       "id": "pl_msg_00000675_00041",
-      "en_US": "WIN STREAK: {STRVAR_1 53, 0, 0}"
+      "en_US": "Win Streak: {STRVAR_1 53, 0, 0}"
     },
     {
       "id": "pl_msg_00000675_00042",
-      "en_US": "GAMES CLEARED: {STRVAR_1 53, 0, 0}"
+      "en_US": "Games Cleared: {STRVAR_1 53, 0, 0}"
     },
     {
       "id": "pl_msg_00000675_00043",
-      "en_US": "PLAZA GAMES PLAYED"
+      "en_US": "Plaza Games Played"
     },
     {
       "id": "pl_msg_00000675_00044",
@@ -190,7 +190,7 @@
     },
     {
       "id": "pl_msg_00000675_00046",
-      "en_US": "{STRVAR_1 3, 0, 0}’s CODE"
+      "en_US": "{STRVAR_1 3, 0, 0}’s Code"
     },
     {
       "id": "pl_msg_00000675_00047",
@@ -253,7 +253,7 @@
     },
     {
       "id": "pl_msg_00000675_00056",
-      "en_US": "CHECK FRIEND CODE"
+      "en_US": "Check Friend Code"
     },
     {
       "id": "PalPad_Text_RegisterFriend",

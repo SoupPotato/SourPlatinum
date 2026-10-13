@@ -126,11 +126,11 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 23,
         "en": {
-            "name": "ILLUMISE",
+            "name": "Illumise",
             "category": "Firefly Pokémon",
             "entry_text": [
                 "With its sweet aroma, it guides\n",
-                "VOLBEAT to draw signs with light in\n",
+                "Volbeat to draw signs with light in\n",
                 "the night sky."
             ]
         },

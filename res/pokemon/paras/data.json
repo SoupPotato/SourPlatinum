@@ -129,12 +129,12 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 30,
         "en": {
-            "name": "PARAS",
+            "name": "Paras",
             "category": "Mushroom Pokémon",
             "entry_text": [
                 "Mushrooms named tochukaso grow\n",
                 "on its back. They grow along\n",
-                "with the host PARAS."
+                "with the host Paras."
             ]
         },
         "fr": {

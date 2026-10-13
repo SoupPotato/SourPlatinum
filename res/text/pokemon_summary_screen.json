@@ -31,7 +31,7 @@
     },
     {
       "id": "PokemonSummary_Text_PageTitleInfo",
-      "en_US": "POKéMON INFO"
+      "en_US": "Pokémon Info"
     },
     {
       "id": "PokemonSummary_Text_LabelDexNum",
@@ -95,7 +95,7 @@
     },
     {
       "id": "PokemonSummary_Text_PageTitleMemo",
-      "en_US": "TRAINER MEMO"
+      "en_US": "Trainer Memo"
     },
     {
       "id": "pl_msg_00000455_00024",
@@ -583,7 +583,7 @@
     },
     {
       "id": "PokemonSummary_Text_PageTitleSkills",
-      "en_US": "POKéMON SKILLS"
+      "en_US": "Pokémon Skills"
     },
     {
       "id": "PokemonSummary_Text_LabelHp",
@@ -651,19 +651,19 @@
     },
     {
       "id": "PokemonSummary_Text_PageTitleCondition",
-      "en_US": "CONDITION"
+      "en_US": "Condition"
     },
     {
       "id": "PokemonSummary_Text_LabelSheen",
-      "en_US": "SHEEN"
+      "en_US": "Sheen"
     },
     {
       "id": "PokemonSummary_Text_PageTitleBattleMoves",
-      "en_US": "BATTLE MOVES"
+      "en_US": "Battle Moves"
     },
     {
       "id": "PokemonSummary_Text_SelectBattleMoveInfo",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "pl_msg_00000455_00130",
@@ -731,19 +731,19 @@
     },
     {
       "id": "PokemonSummary_Text_MoveCancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "PokemonSummary_Text_LabelMovePower",
-      "en_US": "POWER"
+      "en_US": "Power"
     },
     {
       "id": "PokemonSummary_Text_LabelMoveAccuracy",
-      "en_US": "ACCURACY"
+      "en_US": "Accuracy"
     },
     {
       "id": "PokemonSummary_Text_LabelMoveCategory",
-      "en_US": "CATEGORY"
+      "en_US": "Category"
     },
     {
       "id": "PokemonSummary_Text_MovePowerTemplate",
@@ -755,7 +755,7 @@
     },
     {
       "id": "PokemonSummary_Text_MoveSwitch",
-      "en_US": "SWITCH"
+      "en_US": "Switch"
     },
     {
       "id": "PokemonSummary_Text_TwoDashes",
@@ -778,11 +778,11 @@
     },
     {
       "id": "PokemonSummary_Text_PageTitleContestMoves",
-      "en_US": "CONTEST MOVES"
+      "en_US": "Contest Moves"
     },
     {
       "id": "PokemonSummary_Text_SelectContestMoveInfo",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "PokemonSummary_Text_SelectContestMoveOk",
@@ -790,11 +790,11 @@
     },
     {
       "id": "PokemonSummary_Text_LabelAppealPoints",
-      "en_US": "APPEAL POINTS"
+      "en_US": "Appeal Points"
     },
     {
       "id": "PokemonSummary_Text_PromptExit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "PokemonSummary_Text_CloseWindow",
@@ -810,7 +810,7 @@
     },
     {
       "id": "PokemonSummary_Text_FavoriteFood",
-      "en_US": "FAVORITE FOOD"
+      "en_US": "Favorite Food"
     },
     {
       "id": "PokemonSummary_Text_LikesItSpicy",
@@ -866,15 +866,15 @@
     },
     {
       "id": "PokemonSummary_Text_PageTitleRibbons",
-      "en_US": "RIBBONS"
+      "en_US": "Ribbons"
     },
     {
       "id": "PokemonSummary_Text_RibbonSelectInfo",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "PokemonSummary_Text_RibbonSelectCancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "PokemonSummary_Text_LabelRibbonCount",

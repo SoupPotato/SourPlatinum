@@ -11,15 +11,15 @@
     },
     {
       "id": "BerryTrees_Text_Fertilize",
-      "en_US": "FERTILIZE"
+      "en_US": "Fertilize"
     },
     {
       "id": "BerryTrees_Text_PlantBerry",
-      "en_US": "PLANT BERRY"
+      "en_US": "Plant Berry"
     },
     {
       "id": "BerryTrees_Text_Exit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "BerryTrees_Text_PutDownSomeFertilizer",
@@ -27,11 +27,11 @@
     },
     {
       "id": "BerryTrees_Text_Yes",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "BerryTrees_Text_No",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "BerryTrees_Text_WantToPlantBerry",
@@ -39,11 +39,11 @@
     },
     {
       "id": "BerryTrees_Text_YesPlantBerry",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "BerryTrees_Text_NoPlantBerry",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "BerryTrees_Text_MulchWasScatteredOnSoil",
@@ -93,11 +93,11 @@
     },
     {
       "id": "BerryTrees_Text_YesWater",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "BerryTrees_Text_NoWater",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "BerryTrees_Text_ThereAllHappy",
@@ -112,11 +112,11 @@
     },
     {
       "id": "BerryTrees_Text_YesPickBerries",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "BerryTrees_Text_NoPickBerries",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "BerryTrees_Text_PlayerLeftBerries",

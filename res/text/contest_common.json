@@ -49,15 +49,15 @@
     },
     {
       "id": "ContestCommon_Text_ContestEnter",
-      "en_US": "ENTER"
+      "en_US": "Enter"
     },
     {
       "id": "ContestCommon_Text_ContestInfo",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "ContestCommon_Text_ContestExit",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "ContestCommon_Text_LookForwardToParticipation",
@@ -206,15 +206,15 @@
     },
     {
       "id": "ContestCommon_Text_00024",
-      "en_US": "ENTER"
+      "en_US": "Enter"
     },
     {
       "id": "ContestCommon_Text_00025",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "ContestCommon_Text_00026",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "ContestCommon_Text_SelectRank",
@@ -236,91 +236,91 @@
     },
     {
       "id": "ContestCommon_Text_00030",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "ContestCommon_Text_00031",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "ContestCommon_Text_00032",
-      "en_US": "CONTEST BASICS"
+      "en_US": "Contest Basics"
     },
     {
       "id": "ContestCommon_Text_00033",
-      "en_US": "TYPES OF CONTESTS"
+      "en_US": "Types of Contests"
     },
     {
       "id": "ContestCommon_Text_00034",
-      "en_US": "CONTEST RANKS"
+      "en_US": "Contest Ranks"
     },
     {
       "id": "ContestCommon_Text_00035",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "ContestCommon_Text_WhatsAContest",
-      "en_US": "WHAT’S A CONTEST?"
+      "en_US": "What’s a Contest?"
     },
     {
       "id": "ContestCommon_Text_VisualCompetition",
-      "en_US": "VISUAL COMPETITION"
+      "en_US": "Visual Competition"
     },
     {
       "id": "ContestCommon_Text_DanceCompetition",
-      "en_US": "DANCE COMPETITION"
+      "en_US": "Dance Competition"
     },
     {
       "id": "ContestCommon_Text_ActingCompetition",
-      "en_US": "ACTING COMPETITION"
+      "en_US": "Acting Competition"
     },
     {
       "id": "ContestCommon_Text_CancelCompetition",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "ContestCommon_Text_00041",
-      "en_US": "NORMAL RANK"
+      "en_US": "Normal Rank"
     },
     {
       "id": "ContestCommon_Text_00042",
-      "en_US": "GREAT RANK"
+      "en_US": "Great Rank"
     },
     {
       "id": "ContestCommon_Text_00043",
-      "en_US": "ULTRA RANK"
+      "en_US": "Ultra Rank"
     },
     {
       "id": "ContestCommon_Text_00044",
-      "en_US": "MASTER RANK"
+      "en_US": "Master Rank"
     },
     {
       "id": "ContestCommon_Text_00045",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "ContestCommon_Text_00046",
-      "en_US": "COOL CONTEST"
+      "en_US": "Cool Contest"
     },
     {
       "id": "ContestCommon_Text_00047",
-      "en_US": "BEAUTY CONTEST"
+      "en_US": "Beauty Contest"
     },
     {
       "id": "ContestCommon_Text_00048",
-      "en_US": "CUTE CONTEST"
+      "en_US": "Cute Contest"
     },
     {
       "id": "ContestCommon_Text_00049",
-      "en_US": "SMART CONTEST"
+      "en_US": "Smart Contest"
     },
     {
       "id": "ContestCommon_Text_00050",
-      "en_US": "TOUGH CONTEST"
+      "en_US": "Tough Contest"
     },
     {
       "id": "ContestCommon_Text_00051",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "ContestCommon_Text_Dummy52",
@@ -626,15 +626,15 @@
     },
     {
       "id": "ContestCommon_Text_Practice",
-      "en_US": "PRACTICE"
+      "en_US": "Practice"
     },
     {
       "id": "ContestCommon_Text_Info2",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "ContestCommon_Text_Exit2",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "ContestCommon_Text_LookForwardToNextVisit1",
@@ -646,23 +646,23 @@
     },
     {
       "id": "ContestCommon_Text_Visual",
-      "en_US": "VISUAL"
+      "en_US": "Visual"
     },
     {
       "id": "ContestCommon_Text_Dance",
-      "en_US": "DANCE"
+      "en_US": "Dance"
     },
     {
       "id": "ContestCommon_Text_Acting",
-      "en_US": "ACTING"
+      "en_US": "Acting"
     },
     {
       "id": "ContestCommon_Text_Practice1",
-      "en_US": "PRACTICE"
+      "en_US": "Practice"
     },
     {
       "id": "ContestCommon_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "ContestCommon_Text_LookForwardToNextVisit2",
@@ -684,15 +684,15 @@
     },
     {
       "id": "ContestCommon_Text_OverallFlowVisual",
-      "en_US": "OVERALL FLOW"
+      "en_US": "Overall Flow"
     },
     {
       "id": "ContestCommon_Text_ConditionPoints",
-      "en_US": "CONDITION POINTS"
+      "en_US": "Condition Points"
     },
     {
       "id": "ContestCommon_Text_DressUpPoints",
-      "en_US": "DRESS-UP POINTS"
+      "en_US": "Dress-Up Points"
     },
     {
       "id": "ContestCommon_Text_Dummy128",
@@ -700,7 +700,7 @@
     },
     {
       "id": "ContestCommon_Text_CancelVisual",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "ContestCommon_Text_ExplainVisualOverallFlow",
@@ -763,23 +763,23 @@
     },
     {
       "id": "ContestCommon_Text_OverallFlowDance",
-      "en_US": "OVERALL FLOW"
+      "en_US": "Overall Flow"
     },
     {
       "id": "ContestCommon_Text_BackupDancer",
-      "en_US": "BACKUP DANCER"
+      "en_US": "Backup Dancer"
     },
     {
       "id": "ContestCommon_Text_MainDancer",
-      "en_US": "MAIN DANCER"
+      "en_US": "Main Dancer"
     },
     {
       "id": "ContestCommon_Text_Panel",
-      "en_US": "PANEL"
+      "en_US": "Panel"
     },
     {
       "id": "ContestCommon_Text_CancelDance",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "ContestCommon_Text_ExplainDanceOverallFlow",
@@ -840,23 +840,23 @@
     },
     {
       "id": "ContestCommon_Text_OverallFlowActing",
-      "en_US": "OVERALL FLOW"
+      "en_US": "Overall Flow"
     },
     {
       "id": "ContestCommon_Text_ContestMoves",
-      "en_US": "CONTEST MOVES"
+      "en_US": "Contest Moves"
     },
     {
       "id": "ContestCommon_Text_Judges",
-      "en_US": "JUDGES"
+      "en_US": "Judges"
     },
     {
       "id": "ContestCommon_Text_Voltage",
-      "en_US": "VOLTAGE"
+      "en_US": "Voltage"
     },
     {
       "id": "ContestCommon_Text_CancelActing",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "ContestCommon_Text_ExplainActingOverallFlow",
@@ -920,19 +920,19 @@
     },
     {
       "id": "ContestCommon_Text_VisualPractice",
-      "en_US": "VISUAL PRACTICE"
+      "en_US": "Visual Practice"
     },
     {
       "id": "ContestCommon_Text_DancePractice",
-      "en_US": "DANCE PRACTICE"
+      "en_US": "Dance Practice"
     },
     {
       "id": "ContestCommon_Text_ActingPractice",
-      "en_US": "ACTING PRACTICE"
+      "en_US": "Acting Practice"
     },
     {
       "id": "ContestCommon_Text_CancelPractice",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "ContestCommon_Text_LookForwardToNextVisit3",
@@ -947,27 +947,27 @@
     },
     {
       "id": "ContestCommon_Text_Cool",
-      "en_US": "COOL"
+      "en_US": "Cool"
     },
     {
       "id": "ContestCommon_Text_Beauty",
-      "en_US": "BEAUTY"
+      "en_US": "Beauty"
     },
     {
       "id": "ContestCommon_Text_Cute",
-      "en_US": "CUTE"
+      "en_US": "Cute"
     },
     {
       "id": "ContestCommon_Text_Smart",
-      "en_US": "SMART"
+      "en_US": "Smart"
     },
     {
       "id": "ContestCommon_Text_Tough",
-      "en_US": "TOUGH"
+      "en_US": "Tough"
     },
     {
       "id": "ContestCommon_Text_Exit3",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "ContestCommon_Text_LookForwardToNextVisit4",
@@ -1043,11 +1043,11 @@
     },
     {
       "id": "ContestCommon_Text_00180",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "ContestCommon_Text_00181",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "ContestCommon_Text_00182",
@@ -1084,11 +1084,11 @@
     },
     {
       "id": "ContestCommon_Text_00186",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "ContestCommon_Text_00187",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "ContestCommon_Text_00188",
@@ -1138,11 +1138,11 @@
     },
     {
       "id": "ContestCommon_Text_00196",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "ContestCommon_Text_00197",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "ContestCommon_Text_00198",
@@ -1236,11 +1236,11 @@
     },
     {
       "id": "ContestCommon_Text_00213",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "ContestCommon_Text_00214",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "ContestCommon_Text_CancelEntry",
@@ -1248,11 +1248,11 @@
     },
     {
       "id": "ContestCommon_Text_00216",
-      "en_US": "YES"
+      "en_US": "Yes"
     },
     {
       "id": "ContestCommon_Text_00217",
-      "en_US": "NO"
+      "en_US": "No"
     },
     {
       "id": "ContestCommon_Text_00218",
@@ -1262,9 +1262,9 @@
       "id": "ContestCommon_Text_OnePersonMustBeLeader",
       "en_US": [
         "One person in the group needs to\n",
-        "choose “BECOME LEADER.”\r",
+        "choose “Become Leader.”\r",
         "Everyone else must choose\n",
-        "“JOIN GROUP.”"
+        "“Join Group.”"
       ]
     }
   ]

@@ -295,35 +295,35 @@
     },
     {
       "id": "BattleCastleScene_Text_ContinueOption",
-      "en_US": "CONTINUE"
+      "en_US": "Continue"
     },
     {
       "id": "BattleCastleScene_Text_RecordOption",
-      "en_US": "RECORD"
+      "en_US": "Record"
     },
     {
       "id": "BattleCastleScene_Text_RestOption",
-      "en_US": "REST"
+      "en_US": "Rest"
     },
     {
       "id": "BattleCastleScene_Text_RetireOption",
-      "en_US": "RETIRE"
+      "en_US": "Retire"
     },
     {
       "id": "BattleCastleScene_Text_SelfOption",
-      "en_US": "SELF"
+      "en_US": "Self"
     },
     {
       "id": "BattleCastleScene_Text_OpponentOption",
-      "en_US": "OPPONENT"
+      "en_US": "Opponent"
     },
     {
       "id": "BattleCastleScene_Text_BattleOption",
-      "en_US": "BATTLE"
+      "en_US": "Battle"
     },
     {
       "id": "BattleCastleScene_Text_PassOption",
-      "en_US": "PASS"
+      "en_US": "Pass"
     },
     {
       "id": "BattleCastleScene_Text_CastleValetApproaching",

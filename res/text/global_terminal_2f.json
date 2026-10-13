@@ -136,15 +136,15 @@
     },
     {
       "id": "GlobalTerminal2F_Text_Use",
-      "en_US": "USE"
+      "en_US": "Use"
     },
     {
       "id": "GlobalTerminal2F_Text_Info",
-      "en_US": "INFO"
+      "en_US": "Info"
     },
     {
       "id": "GlobalTerminal2F_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     }
   ]
 }

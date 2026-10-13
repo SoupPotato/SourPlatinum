@@ -85,27 +85,27 @@
     },
     {
       "id": "UndergroundNPCs_Text_GetTrap",
-      "en_US": "GET TRAP"
+      "en_US": "Get Trap"
     },
     {
       "id": "UndergroundNPCs_Text_GiveTrap",
-      "en_US": "GIVE TRAP"
+      "en_US": "Give Trap"
     },
     {
       "id": "UndergroundNPCs_Text_Exit_Trap",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "UndergroundNPCs_Text_GetGoods",
-      "en_US": "GET GOODS"
+      "en_US": "Get Goods"
     },
     {
       "id": "UndergroundNPCs_Text_GiveGoods",
-      "en_US": "GIVE GOODS"
+      "en_US": "Give Goods"
     },
     {
       "id": "UndergroundNPCs_Text_Exit_Goods",
-      "en_US": "EXIT"
+      "en_US": "Exit"
     },
     {
       "id": "UndergroundNPCs_Text_SpheresOnHand",
@@ -130,7 +130,7 @@
     },
     {
       "id": "UndergroundNPCs_Text_Cancel",
-      "en_US": "CANCEL"
+      "en_US": "Cancel"
     },
     {
       "id": "UndergroundNPCs_Text_RequiredSphere",
@@ -146,7 +146,7 @@
     },
     {
       "id": "UndergroundNPCs_Text_NotForSale",
-      "en_US": "NOT FOR SALE"
+      "en_US": "Not for Sale"
     },
     {
       "id": "UndergroundNPCs_Text_IllTradeSpheresForTreasures",
@@ -157,7 +157,7 @@
     },
     {
       "id": "UndergroundNPCs_Text_GiveTreasures",
-      "en_US": "GIVE TREASURES"
+      "en_US": "Give Treasures"
     },
     {
       "id": "UndergroundNPCs_Text_TreasuresOnHand",

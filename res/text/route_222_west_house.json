@@ -3,29 +3,29 @@
   "messages": [
     {
       "id": "Route222WestHouse_Text_PikachuCryPikachuu",
-      "en_US": "PIKACHU: Pikachuu!"
+      "en_US": "Pikachu: Pikachuu!"
     },
     {
       "id": "Route222WestHouse_Text_PikachuCryPikaah",
-      "en_US": "PIKACHU: Pikaah!"
+      "en_US": "Pikachu: Pikaah!"
     },
     {
       "id": "Route222WestHouse_Text_PikachuCryPikaPika",
-      "en_US": "PIKACHU: Pika pika?"
+      "en_US": "Pikachu: Pika pika?"
     },
     {
       "id": "Route222WestHouse_Text_PikachuCryPiPikachu",
-      "en_US": "PIKACHU: Pi! Pikachu!"
+      "en_US": "Pikachu: Pi! Pikachu!"
     },
     {
       "id": "Route222WestHouse_Text_PikachuCryPiiKaahchu",
-      "en_US": "PIKACHU: Pii! Kaahchu!"
+      "en_US": "Pikachu: Pii! Kaahchu!"
     },
     {
       "id": "Route222WestHouse_Text_OnlyPikachu",
       "en_US": [
         "Eehehe! I’m going for the Pokémon\n",
-        "Championship with only PIKACHU!"
+        "Championship with only Pikachu!"
       ]
     }
   ]

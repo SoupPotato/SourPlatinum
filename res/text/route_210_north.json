@@ -21,6 +21,21 @@
     {
       "id": "Route210North_Text_SignGrandmaWilmasHouse",
       "en_US": "Grandma Wilma’s House"
+    },
+    {
+      "id": "Route210North_Text_HoneyTreeSlatherBark",
+      "en_US": [
+        "There is a sweet scent in the air...\r",
+        "Slather the bark with Honey?"
+      ]
+    },
+    {
+      "id": "Route210North_Text_HoneyTreeBarkSlathered",
+      "en_US": "The bark was slathered with Honey."
+    },
+    {
+      "id": "Route210North_Text_HoneyTreeSweetScent",
+      "en_US": "There is a sweet scent in the air..."
     }
   ]
 }

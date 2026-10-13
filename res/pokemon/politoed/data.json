@@ -109,12 +109,12 @@
         "trainer_pos_m": 9,
         "pokemon_pos_m": 14,
         "en": {
-            "name": "POLITOED",
+            "name": "Politoed",
             "category": "Frog Pokémon",
             "entry_text": [
                 "It gathers groups of others as\n",
                 "their leader. Its cries make\n",
-                "POLIWAG obey."
+                "Poliwag obey."
             ]
         },
         "fr": {
