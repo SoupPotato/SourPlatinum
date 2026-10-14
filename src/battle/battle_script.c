@@ -5691,7 +5691,8 @@ static BOOL BtlCmd_CalcRolloutPower(BattleSystem *battleSys, BattleContext *batt
 /**
  * @brief Calculate the base power for Fury Cutter.
  *
- * Compute the following: furyCutterBasePower * 2^(min(pastFuryCutterTurns, 5))
+ * Compute the following: furyCutterBasePower * 2^(min(pastFuryCutterTurns, 3))
+ * With a base power of 20, this caps at 160.
  *
  * @param battleSys
  * @param battleCtx
@@ -5701,7 +5702,7 @@ static BOOL BtlCmd_CalcFuryCutterPower(BattleSystem *battleSys, BattleContext *b
 {
     BattleScript_Iter(battleCtx, 1);
 
-    if (ATTACKING_MON.moveEffectsData.furyCutterCount < 5) {
+    if (ATTACKING_MON.moveEffectsData.furyCutterCount < 4) {
         ATTACKING_MON.moveEffectsData.furyCutterCount++;
     }
 
