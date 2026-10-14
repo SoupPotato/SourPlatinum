@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "heap.h"
+#include "sourplatinum_config.h"
 #include "system.h"
 
 typedef void (*SpriteDrawFunc)(const SpriteList *, Sprite *);
@@ -27,11 +28,29 @@ static void SpriteList_DrawSprite(const SpriteList *list, Sprite *sprite);
 static void SpriteList_DrawSprite_Stub(const SpriteList *list, Sprite *sprite);
 static void Sprite_UpdateAnimInternal(Sprite *list);
 static void Sprite_UpdateAnimInternal_Stub(Sprite *list);
+static void SpriteList_ForgetLogged(const SpriteList *list);
 static void SpriteList_Insert(SpriteList *list, Sprite *sprite);
 static void SpriteList_Remove(Sprite *sprite);
 static void SpriteList_InitSprites(SpriteList *list);
 static Sprite *SpriteList_AllocSprite(SpriteList *list);
 static BOOL SpriteList_FreeSprite(SpriteList *list, Sprite *sprite);
+
+enum SpriteDrawMode {
+    SPRITE_DRAW_NORMAL = 0,
+    SPRITE_DRAW_BLEND, // 60 fps mode, original-rate tick: draw halfway between the last shown state and the current one
+    SPRITE_DRAW_FINAL, // 60 fps mode, in-between tick: draw the current state and remember it
+};
+
+static enum SpriteDrawMode sDrawMode = SPRITE_DRAW_NORMAL;
+
+#define SPRITE_BLEND_MAX_MOVE  FX32_CONST(48)
+#define SPRITE_BLEND_MAX_SCALE FX32_CONST(1)
+#define SPRITE_BLEND_MAX_ROT   0x4000
+
+static fx32 SpriteBlend_Abs(fx32 value)
+{
+    return value < 0 ? -value : value;
+}
 
 SpriteList *SpriteList_New(const SpriteListParams *params)
 {
@@ -75,6 +94,7 @@ BOOL SpriteList_Delete(SpriteList *list)
     }
 
     SpriteList_DeleteAll(list);
+    SpriteList_ForgetLogged(list);
 
     Heap_Free(list->rawAnimData);
     Heap_Free(list->freeSprites);
@@ -142,10 +162,70 @@ void SpriteList_Update(const SpriteList *list)
 
     Sprite *sprite = list->sentinelData.next;
 
+    sDrawMode = (SP_DEBUG_BLEND_OAM && gSystem.fps60 && gSystem.logicTick) ? SPRITE_DRAW_BLEND : SPRITE_DRAW_NORMAL;
+
     while (sprite != &list->sentinelData) {
         sDrawFuncs[sprite->draw](list, sprite);
         sAnimUpdateFuncs[sprite->animate](sprite);
         sprite = sprite->next;
+    }
+
+    sDrawMode = SPRITE_DRAW_NORMAL;
+}
+
+#define DRAW_LOG_MAX 48
+
+static const SpriteList *sDrawLog[DRAW_LOG_MAX];
+static int sDrawLogCount = 0;
+
+void SpriteList_DrawOnly(const SpriteList *list)
+{
+    GF_ASSERT(list);
+
+    if (list->active == FALSE) {
+        return;
+    }
+
+    sDrawMode = SPRITE_DRAW_FINAL;
+
+    for (Sprite *sprite = list->sentinelData.next; sprite != &list->sentinelData; sprite = sprite->next) {
+        if (sprite->draw) {
+            SpriteList_DrawSprite(list, sprite);
+        } else {
+            sprite->lastFinalValid = FALSE;
+        }
+    }
+
+    sDrawMode = SPRITE_DRAW_NORMAL;
+}
+
+void SpriteList_LogDraw(const SpriteList *list)
+{
+    if (sDrawLogCount < DRAW_LOG_MAX) {
+        sDrawLog[sDrawLogCount++] = list;
+    }
+}
+
+void SpriteList_ResetDrawLog(void)
+{
+    sDrawLogCount = 0;
+}
+
+void SpriteList_ReplayDrawLog(void)
+{
+    for (int i = 0; i < sDrawLogCount; i++) {
+        if (sDrawLog[i] != NULL) {
+            SpriteList_DrawOnly(sDrawLog[i]);
+        }
+    }
+}
+
+static void SpriteList_ForgetLogged(const SpriteList *list)
+{
+    for (int i = 0; i < sDrawLogCount; i++) {
+        if (sDrawLog[i] == list) {
+            sDrawLog[i] = NULL;
+        }
     }
 }
 
@@ -784,6 +864,28 @@ static u32 GetPaletteIndexForProxy(const NNSG2dImagePaletteProxy *paletteProxy, 
 static void SpriteList_DrawSprite(const SpriteList *list, Sprite *sprite)
 {
     VecFx32 pos = sprite->position;
+    VecFx32 affineScale = sprite->affineScale;
+    u16 affineRotation = sprite->affineZRotation;
+
+    if (sDrawMode == SPRITE_DRAW_BLEND) {
+        if (sprite->lastFinalValid
+            && SpriteBlend_Abs(pos.x - sprite->lastFinalPos.x) <= SPRITE_BLEND_MAX_MOVE
+            && SpriteBlend_Abs(pos.y - sprite->lastFinalPos.y) <= SPRITE_BLEND_MAX_MOVE
+            && SpriteBlend_Abs(affineScale.x - sprite->lastFinalScale.x) <= SPRITE_BLEND_MAX_SCALE
+            && SpriteBlend_Abs(affineScale.y - sprite->lastFinalScale.y) <= SPRITE_BLEND_MAX_SCALE
+            && SpriteBlend_Abs((s16)(affineRotation - sprite->lastFinalRotation)) <= SPRITE_BLEND_MAX_ROT) {
+            pos.x = sprite->lastFinalPos.x + (pos.x - sprite->lastFinalPos.x) / 2;
+            pos.y = sprite->lastFinalPos.y + (pos.y - sprite->lastFinalPos.y) / 2;
+            affineScale.x = sprite->lastFinalScale.x + (affineScale.x - sprite->lastFinalScale.x) / 2;
+            affineScale.y = sprite->lastFinalScale.y + (affineScale.y - sprite->lastFinalScale.y) / 2;
+            affineRotation = sprite->lastFinalRotation + (s16)(affineRotation - sprite->lastFinalRotation) / 2;
+        }
+    } else if (sDrawMode == SPRITE_DRAW_FINAL) {
+        sprite->lastFinalPos = pos;
+        sprite->lastFinalScale = affineScale;
+        sprite->lastFinalRotation = affineRotation;
+        sprite->lastFinalValid = TRUE;
+    }
 
     NNS_G2dSetRendererImageProxy(list->renderer, &sprite->imageProxy, &sprite->paletteProxy);
     NNS_G2dBeginRendering(list->renderer);
@@ -804,8 +906,8 @@ static void SpriteList_DrawSprite(const SpriteList *list, Sprite *sprite)
 
     if (sprite->affineOverwriteMode != NNS_G2D_RND_AFFINE_OVERWRITE_NONE) {
         NNS_G2dTranslate(sprite->affineTranslation.x, sprite->affineTranslation.y, sprite->affineTranslation.z);
-        NNS_G2dScale(sprite->affineScale.x, sprite->affineScale.y, sprite->affineScale.z);
-        NNS_G2dRotZ(FX_SinIdx(sprite->affineZRotation), FX_CosIdx(sprite->affineZRotation));
+        NNS_G2dScale(affineScale.x, affineScale.y, affineScale.z);
+        NNS_G2dRotZ(FX_SinIdx(affineRotation), FX_CosIdx(affineRotation));
 
         // affineTranslation only serves as a pivot point for rotation and scaling
         // so we undo this translation after applying these transformations.

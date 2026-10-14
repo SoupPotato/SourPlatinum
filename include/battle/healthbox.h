@@ -86,6 +86,7 @@ typedef struct HealthBox {
     u8 padding : 4;
     SysTask *bobbingAnimTask;
     u16 degrees;
+    u16 gaugeAccum; // Sour Platinum 60 fps mode: pace accumulator for the HP/EXP gauge tasks
 } HealthBox;
 
 /**

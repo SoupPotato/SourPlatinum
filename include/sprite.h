@@ -75,6 +75,13 @@ typedef struct Sprite {
     enum NNS_G2D_VRAM_TYPE vramType;
     struct Sprite *prev;
     struct Sprite *next;
+
+    // Sour Platinum 60 fps mode: what was drawn on the last in-between tick. On the original-rate tick the
+    // sprite is drawn halfway between this and its current state.
+    VecFx32 lastFinalPos;
+    VecFx32 lastFinalScale;
+    u16 lastFinalRotation;
+    u8 lastFinalValid;
 } Sprite;
 
 struct SpriteList {
@@ -145,6 +152,12 @@ BOOL SpriteList_Delete(SpriteList *collection);
 BOOL SpriteList_SetActive(SpriteList *collection, u8 active);
 BOOL SpriteList_DeleteAll(SpriteList *collection);
 void SpriteList_Update(const SpriteList *collection);
+// Sour Platinum 60 fps mode: draw a list into the OAM buffer without advancing its animations.
+// Lists updated on a logic tick are logged so that they can be drawn again on the ticks in between.
+void SpriteList_DrawOnly(const SpriteList *collection);
+void SpriteList_LogDraw(const SpriteList *collection);
+void SpriteList_ResetDrawLog(void);
+void SpriteList_ReplayDrawLog(void);
 void Sprite_Reset(Sprite *sprite);
 Sprite *SpriteList_AddAffine(const AffineSpriteListTemplate *template);
 Sprite *SpriteList_Add(const SpriteListTemplate *template);

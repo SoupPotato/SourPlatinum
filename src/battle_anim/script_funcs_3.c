@@ -10,6 +10,7 @@
 #include "battle_anim/battle_anim_helpers.h"
 #include "battle_anim/battle_anim_system.h"
 #include "battle_anim/battle_anim_util.h"
+#include "battle_time.h"
 #include "global/utility.h"
 
 #include "battle_script_battlers.h"
@@ -2207,6 +2208,7 @@ static void BattleAnimTask_MoveBattlerX(SysTask *task, void *param)
         PokemonSprite_SetAttribute(ctx->spriteInfo.monSprite, MON_SPRITE_X_CENTER, ctx->pos.x);
         break;
     default:
+        PokemonSprite_SetNoBlend(ctx->spriteInfo.monSprite, FALSE);
         BattleAnimSystem_EndAnimTask(ctx->battleAnimSys, task);
         Heap_Free(ctx);
         break;
@@ -2262,7 +2264,8 @@ void BattleAnimScriptFunc_MoveBattlerX(BattleAnimSystem *system)
         ctx->offset *= -1;
     }
 
-    BattleAnimSystem_StartAnimTask(ctx->battleAnimSys, BattleAnimTask_MoveBattlerX, ctx);
+    PokemonSprite_SetNoBlend(ctx->spriteInfo.monSprite, TRUE);
+    BattleAnimSystem_StartNativeAnimTask(ctx->battleAnimSys, BattleAnimTask_MoveBattlerX, ctx);
 }
 
 static void BattleAnimTask_MoveBattlerX2(SysTask *task, void *param)
@@ -2292,6 +2295,7 @@ static void BattleAnimTask_MoveBattlerX2(SysTask *task, void *param)
         PokemonSprite_SetAttribute(ctx->spriteInfo.monSprite, MON_SPRITE_X_CENTER, ctx->pos.x);
         break;
     default:
+        PokemonSprite_SetNoBlend(ctx->spriteInfo.monSprite, FALSE);
         BattleAnimSystem_EndAnimTask(ctx->battleAnimSys, task);
         Heap_Free(ctx);
         break;
@@ -2352,7 +2356,8 @@ void BattleAnimScriptFunc_MoveBattlerX2(BattleAnimSystem *system)
         UNUSED(FALSE);
     }
 
-    SysTask *task = BattleAnimSystem_StartAnimTask(ctx->battleAnimSys, BattleAnimTask_MoveBattlerX2, ctx);
+    PokemonSprite_SetNoBlend(ctx->spriteInfo.monSprite, TRUE);
+    SysTask *task = BattleAnimSystem_StartNativeAnimTask(ctx->battleAnimSys, BattleAnimTask_MoveBattlerX2, ctx);
     BattleAnimTask_MoveBattlerX2(task, ctx);
 }
 
@@ -2608,6 +2613,7 @@ static void BattleAnimTask_MoveBattler(SysTask *task, void *param)
         PokemonSprite_SetAttribute(ctx->spriteInfo.monSprite, MON_SPRITE_Y_CENTER, ctx->pos.y);
         break;
     default:
+        PokemonSprite_SetNoBlend(ctx->spriteInfo.monSprite, FALSE);
         BattleAnimSystem_EndAnimTask(ctx->battleAnimSys, task);
         Heap_Free(ctx);
         break;
@@ -2675,7 +2681,8 @@ void BattleAnimScriptFunc_MoveBattler(BattleAnimSystem *system)
         ctx->offsetY *= -1;
     }
 
-    SysTask *task = BattleAnimSystem_StartAnimTask(ctx->battleAnimSys, BattleAnimTask_MoveBattler, ctx);
+    PokemonSprite_SetNoBlend(ctx->spriteInfo.monSprite, TRUE);
+    SysTask *task = BattleAnimSystem_StartNativeAnimTask(ctx->battleAnimSys, BattleAnimTask_MoveBattler, ctx);
     BattleAnimTask_MoveBattler(task, ctx);
 }
 
@@ -2687,6 +2694,7 @@ static void BattleAnimTask_RevolveBattler(SysTask *task, void *param)
     if (ative == FALSE) {
         PokemonSprite_SetAttribute(ctx->spriteInfo.monSprite, MON_SPRITE_X_CENTER, ctx->spriteInfo.pos.x);
         PokemonSprite_SetAttribute(ctx->spriteInfo.monSprite, MON_SPRITE_Y_CENTER, ctx->spriteInfo.pos.y + REVOLUTION_CONTEXT_OVAL_RADIUS_Y_INT);
+        PokemonSprite_SetNoBlend(ctx->spriteInfo.monSprite, FALSE);
         BattleAnimSystem_EndAnimTask(ctx->common.battleAnimSys, task);
         Heap_Free(ctx);
     }
@@ -2710,7 +2718,8 @@ void BattleAnimScriptFunc_RevolveBattler(BattleAnimSystem *system)
     ctx->revs.data[XY_PARAM_REV_RADIUS_X] /= 2;
     ctx->revs.data[XY_PARAM_REV_RADIUS_Y] /= 2;
 
-    BattleAnimSystem_StartAnimTask(ctx->common.battleAnimSys, BattleAnimTask_RevolveBattler, ctx);
+    PokemonSprite_SetNoBlend(ctx->spriteInfo.monSprite, TRUE);
+    BattleAnimSystem_StartNativeAnimTask(ctx->common.battleAnimSys, BattleAnimTask_RevolveBattler, ctx);
 }
 
 static void BattleAnimTask_MoveBattlerOffScreen(SysTask *task, void *param)
@@ -2727,6 +2736,7 @@ static void BattleAnimTask_MoveBattlerOffScreen(SysTask *task, void *param)
         PokemonSprite_SetAttribute(ctx->spriteInfo.monSprite, MON_SPRITE_Y_CENTER, ctx->pos.y);
         break;
     default:
+        PokemonSprite_SetNoBlend(ctx->spriteInfo.monSprite, FALSE);
         BattleAnimSystem_EndAnimTask(ctx->common.battleAnimSys, task);
         Heap_Free(ctx);
         break;
@@ -2777,7 +2787,8 @@ void BattleAnimScriptFunc_MoveBattlerOffScreen(BattleAnimSystem *system)
     }
 
     PosLerpContext_Init(&ctx->pos, ctx->spriteInfo.pos.x, ctx->destPos.x, ctx->spriteInfo.pos.y, ctx->spriteInfo.pos.y, frames);
-    BattleAnimSystem_StartAnimTask(ctx->common.battleAnimSys, BattleAnimTask_MoveBattlerOffScreen, ctx);
+    PokemonSprite_SetNoBlend(ctx->spriteInfo.monSprite, TRUE);
+    BattleAnimSystem_StartNativeAnimTask(ctx->common.battleAnimSys, BattleAnimTask_MoveBattlerOffScreen, ctx);
 }
 
 void BattleAnimScriptFunc_MoveBattlerOnOrOffScreen(BattleAnimSystem *system)
@@ -2828,7 +2839,8 @@ void BattleAnimScriptFunc_MoveBattlerOnOrOffScreen(BattleAnimSystem *system)
         PosLerpContext_Init(&ctx->pos, ctx->destPos.x, battlerX, ctx->spriteInfo.pos.y, ctx->spriteInfo.pos.y, frames);
     }
 
-    BattleAnimSystem_StartAnimTask(ctx->common.battleAnimSys, BattleAnimTask_MoveBattlerOffScreen, ctx);
+    PokemonSprite_SetNoBlend(ctx->spriteInfo.monSprite, TRUE);
+    BattleAnimSystem_StartNativeAnimTask(ctx->common.battleAnimSys, BattleAnimTask_MoveBattlerOffScreen, ctx);
 }
 
 #define MOVE_BATTLER_TO_DEFAULT_POS_VAR_TARGET 0
@@ -3309,7 +3321,7 @@ static void EmitterAnimationContext_Init(BattleAnimSystem *system, EmitterAnimat
     ctx->emitterID = BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_EMITTER_ID);
     ctx->offset.x = BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_OFFSET_X);
     ctx->offset.y = BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_OFFSET_Y);
-    ctx->startDelay = BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_START_DELAY);
+    ctx->startDelay = BattleTime_Frames(BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_START_DELAY), SP_PACE_ANIM_PERCENT);
     ctx->frames = BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_FRAMES);
     ctx->radius = BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_RADIUS);
     ctx->mode = BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_MODE);
@@ -3393,7 +3405,7 @@ static void BattleAnimTask_MoveEmitterA2BLinear(SysTask *task, void *param)
         SPLEmitter_SetPosY(ctx->emitter, BATTLE_PARTICLE_SCREEN_TO_WORLD(ctx->transforms[0].y));
 
         if (ctx->curve) {
-            ctx->angle += 360 / (ctx->frames);
+            ctx->angle += 360 / BattleTime_Frames(ctx->frames, SP_PACE_ANIM_PERCENT);
             SPLEmitter_SetPosY(ctx->emitter, BATTLE_PARTICLE_SCREEN_TO_WORLD(ctx->transforms[0].y) + CalcSineDegrees_Wraparound(ctx->angle));
         }
     }
@@ -3437,7 +3449,7 @@ void BattleAnimScriptFunc_MoveEmitterA2BLinear(BattleAnimSystem *system)
     SPLEmitter_SetPosX(ctx->emitter, BATTLE_PARTICLE_SCREEN_TO_WORLD(ctx->transforms[0].x));
     SPLEmitter_SetPosY(ctx->emitter, BATTLE_PARTICLE_SCREEN_TO_WORLD(ctx->transforms[0].y));
 
-    BattleAnimSystem_StartAnimTask(ctx->common.battleAnimSys, BattleAnimTask_MoveEmitterA2BLinear, ctx);
+    BattleAnimSystem_StartNativeAnimTask(ctx->common.battleAnimSys, BattleAnimTask_MoveEmitterA2BLinear, ctx);
 }
 
 void BattleAnimScriptFunc_MoveEmitterViewportTop(BattleAnimSystem *system)
@@ -3451,7 +3463,7 @@ void BattleAnimScriptFunc_MoveEmitterViewportTop(BattleAnimSystem *system)
     int type = BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_TYPE_ALT);
 
     ctx->frames = BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_FRAMES_ALT);
-    ctx->startDelay = BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_START_DELAY_ALT);
+    ctx->startDelay = BattleTime_Frames(BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_START_DELAY_ALT), SP_PACE_ANIM_PERCENT);
     ctx->timer = 0;
 
     int params = BattleAnimSystem_GetScriptVar(system, EMITTER_ANIMATION_VAR_PARAMS_ALT);
@@ -3514,7 +3526,7 @@ void BattleAnimScriptFunc_MoveEmitterViewportTop(BattleAnimSystem *system)
     SPLEmitter_SetPosX(ctx->emitter, BATTLE_PARTICLE_SCREEN_TO_WORLD(ctx->transforms[0].x));
     SPLEmitter_SetPosY(ctx->emitter, BATTLE_PARTICLE_SCREEN_TO_WORLD(ctx->transforms[0].y));
 
-    BattleAnimSystem_StartAnimTask(ctx->common.battleAnimSys, BattleAnimTask_MoveEmitterA2BLinear, ctx);
+    BattleAnimSystem_StartNativeAnimTask(ctx->common.battleAnimSys, BattleAnimTask_MoveEmitterA2BLinear, ctx);
 }
 
 static void BattleAnimTask_MoveEmitterA2BParabolic(SysTask *task, void *param)
@@ -3573,7 +3585,7 @@ void BattleAnimScriptFunc_MoveEmitterA2BParabolic(BattleAnimSystem *system)
     SPLEmitter_SetPosX(ctx->emitter, BATTLE_PARTICLE_SCREEN_TO_WORLD(ctx->transforms[0].x));
     SPLEmitter_SetPosY(ctx->emitter, BATTLE_PARTICLE_SCREEN_TO_WORLD(ctx->transforms[0].y));
 
-    BattleAnimSystem_StartAnimTask(ctx->common.battleAnimSys, BattleAnimTask_MoveEmitterA2BParabolic, ctx);
+    BattleAnimSystem_StartNativeAnimTask(ctx->common.battleAnimSys, BattleAnimTask_MoveEmitterA2BParabolic, ctx);
 }
 
 static void BattleAnimTask_RevolveEmitter(SysTask *task, void *param)
@@ -3640,7 +3652,7 @@ void BattleAnimScriptFunc_RevolveEmitter(BattleAnimSystem *system)
     SPLEmitter_SetPosX(ctx->emitter, startPos.x);
     SPLEmitter_SetPosY(ctx->emitter, startPos.y);
 
-    BattleAnimSystem_StartAnimTask(ctx->common.battleAnimSys, BattleAnimTask_RevolveEmitter, ctx);
+    BattleAnimSystem_StartNativeAnimTask(ctx->common.battleAnimSys, BattleAnimTask_RevolveEmitter, ctx);
 }
 
 static void BattleAnimTask_OffsetAndAnimateSprite(SysTask *task, void *param)

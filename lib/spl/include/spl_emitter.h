@@ -39,6 +39,10 @@ typedef struct SPLEmitter {
     VecFx32 velocity;
     VecFx32 particleInitVelocity;
     u16 age;
+    // Sour Platinum: number of update calls that make up one original (30 Hz) frame.
+    // 1 = original behavior. 2 = the emitter is updated at 60 Hz and everything that is measured in
+    // frames (lifetimes, intervals) or per frame (velocity, acceleration, rotation) is scaled to match.
+    u8 timeScale;
     fx16 emissionCountFractional; // fractional part of the number of particles to emit (doesn't seem to be used)
     VecFx16 axis;
     u16 initAngle;
@@ -79,6 +83,9 @@ typedef struct SPLEmitterList {
     int count;
     SPLEmitter *last;
 } SPLEmitterList;
+
+// Emitters created from now on use this time scale (see SPLEmitter::timeScale).
+void SPL_SetDefaultTimeScale(int timeScale);
 
 static inline void SPLEmitter_SetPos(SPLEmitter *emtr, const VecFx32 *position)
 {

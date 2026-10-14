@@ -8,6 +8,7 @@
 #include "gx_layers.h"
 #include "heap.h"
 #include "math_util.h"
+#include "system.h"
 
 static u8 ConvertToGxBgScreenSize(u8 bgScreenSize, u8 bgType);
 static void GetBgScreenTileDimensions(u8 bgScreenSize, u8 *outXTiles, u8 *outYTiles);
@@ -628,6 +629,38 @@ void Bg_ToggleLayer(u8 bgLayer, u8 enable)
     }
 }
 
+#define BG_BLEND_MAX_MOVE 64
+#define BG_BLEND_MAX_CONFIGS 8
+
+// BgConfigs that had an offset set on the current original-rate tick.
+static BgConfig *sTouchedConfigs[BG_BLEND_MAX_CONFIGS];
+static int sTouchedConfigCount = 0;
+
+static void BgBlend_Touch(BgConfig *bgConfig)
+{
+    for (int i = 0; i < sTouchedConfigCount; i++) {
+        if (sTouchedConfigs[i] == bgConfig) {
+            return;
+        }
+    }
+
+    if (sTouchedConfigCount < BG_BLEND_MAX_CONFIGS) {
+        sTouchedConfigs[sTouchedConfigCount++] = bgConfig;
+    }
+}
+
+void Bg_ClearBlendRegistry(void)
+{
+    sTouchedConfigCount = 0;
+}
+
+static int BgBlend_Abs(int value)
+{
+    return value < 0 ? -value : value;
+}
+
+static void WriteBgOffsetRegisters(BgConfig *bgConfig, u8 bgLayer, int hOffset, int vOffset);
+
 void Bg_SetOffset(BgConfig *bgConfig, u8 bgLayer, u8 bgUpdateOffsetOp, int val)
 {
     UpdateBgOffsetWithVal(&bgConfig->bgs[bgLayer], bgUpdateOffsetOp, val);
@@ -635,6 +668,51 @@ void Bg_SetOffset(BgConfig *bgConfig, u8 bgLayer, u8 bgUpdateOffsetOp, int val)
     int hOffset = bgConfig->bgs[bgLayer].xOffset;
     int vOffset = bgConfig->bgs[bgLayer].yOffset;
 
+    // Tasks that run on every tick (including the VBlank interrupt tasks, which run at 60 Hz in the original game)
+    // already move things smoothly, so only code that runs at the original rate is blended.
+    if (gSystem.fps60 && gSystem.logicTick && gSystem.execTickDiv != 1) {
+        // Sour Platinum 60 fps mode: show the point halfway between what was shown last and the new offset now,
+        // and the real offset on the next tick (see Bg_ApplyFinalOffsets).
+        Background *bg = &bgConfig->bgs[bgLayer];
+
+        BgBlend_Touch(bgConfig);
+
+        if (bg->lastFinalValid
+            && BgBlend_Abs(hOffset - bg->lastFinalX) <= BG_BLEND_MAX_MOVE
+            && BgBlend_Abs(vOffset - bg->lastFinalY) <= BG_BLEND_MAX_MOVE) {
+            bg->blendPending = TRUE;
+            hOffset = bg->lastFinalX + (hOffset - bg->lastFinalX) / 2;
+            vOffset = bg->lastFinalY + (vOffset - bg->lastFinalY) / 2;
+        }
+    }
+
+    WriteBgOffsetRegisters(bgConfig, bgLayer, hOffset, vOffset);
+}
+
+void Bg_ApplyFinalOffsets(void)
+{
+    for (int i = 0; i < sTouchedConfigCount; i++) {
+        BgConfig *bgConfig = sTouchedConfigs[i];
+
+        for (int layer = 0; layer < 8; layer++) {
+            Background *bg = &bgConfig->bgs[layer];
+
+            if (bg->blendPending) {
+                WriteBgOffsetRegisters(bgConfig, layer, bg->xOffset, bg->yOffset);
+                bg->blendPending = FALSE;
+            }
+
+            bg->lastFinalX = bg->xOffset;
+            bg->lastFinalY = bg->yOffset;
+            bg->lastFinalValid = TRUE;
+        }
+    }
+
+    sTouchedConfigCount = 0;
+}
+
+static void WriteBgOffsetRegisters(BgConfig *bgConfig, u8 bgLayer, int hOffset, int vOffset)
+{
     switch (bgLayer) {
     case BG_LAYER_MAIN_0:
         G2_SetBG0Offset(hOffset, vOffset);

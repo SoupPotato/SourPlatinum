@@ -17,7 +17,7 @@ void SPLBehavior_ApplyGravity(const void *obj, SPLParticle *ptcl, VecFx32 *acc, 
 void SPLBehavior_ApplyRandom(const void *obj, SPLParticle *ptcl, VecFx32 *acc, SPLEmitter *emtr)
 {
     SPLRandomBehavior *rng = (SPLRandomBehavior *)obj;
-    if ((ptcl->age % rng->applyInterval) == 0) {
+    if ((ptcl->age % (rng->applyInterval * emtr->timeScale)) == 0) {
         acc->x += SPLRandom_RangeFX32(rng->magnitude.x);
         acc->y += SPLRandom_RangeFX32(rng->magnitude.y);
         acc->z += SPLRandom_RangeFX32(rng->magnitude.z);
@@ -36,15 +36,19 @@ void SPLBehavior_ApplySpin(const void *obj, SPLParticle *ptcl, VecFx32 *acc, SPL
 {
     SPLSpinBehavior *spin = (SPLSpinBehavior *)obj;
     MtxFx33 rot;
+
+    // Sour Platinum: this runs on every update, so each update turns by its share of the original angle
+    u16 angle = (s16)spin->angle / emtr->timeScale;
+
     switch (spin->axis) {
     case SPL_SPIN_BEHAVIOR_AXIS_X:
-        MTX_RotX33(&rot, FX_SinIdx(spin->angle), FX_CosIdx(spin->angle));
+        MTX_RotX33(&rot, FX_SinIdx(angle), FX_CosIdx(angle));
         break;
     case SPL_SPIN_BEHAVIOR_AXIS_Y:
-        MTX_RotY33(&rot, FX_SinIdx(spin->angle), FX_CosIdx(spin->angle));
+        MTX_RotY33(&rot, FX_SinIdx(angle), FX_CosIdx(angle));
         break;
     case SPL_SPIN_BEHAVIOR_AXIS_Z:
-        MTX_RotZ33(&rot, FX_SinIdx(spin->angle), FX_CosIdx(spin->angle));
+        MTX_RotZ33(&rot, FX_SinIdx(angle), FX_CosIdx(angle));
         break;
     }
 
@@ -88,7 +92,9 @@ void SPLBehavior_ApplyCollisionPlane(const void *obj, SPLParticle *ptcl, VecFx32
 void SPLBehavior_ApplyConvergence(const void *obj, SPLParticle *ptcl, VecFx32 *acc, SPLEmitter *emtr)
 {
     SPLConvergenceBehavior *conv = (SPLConvergenceBehavior *)obj;
-    ptcl->position.x += FX32_CAST(FX_MUL(conv->force, (conv->target.x - ptcl->position.x)));
-    ptcl->position.y += FX32_CAST(FX_MUL(conv->force, (conv->target.y - ptcl->position.y)));
-    ptcl->position.z += FX32_CAST(FX_MUL(conv->force, (conv->target.z - ptcl->position.z)));
+
+    // Sour Platinum: this runs on every update, so each update moves by its share of the original step
+    ptcl->position.x += FX32_CAST(FX_MUL(conv->force, (conv->target.x - ptcl->position.x))) / emtr->timeScale;
+    ptcl->position.y += FX32_CAST(FX_MUL(conv->force, (conv->target.y - ptcl->position.y))) / emtr->timeScale;
+    ptcl->position.z += FX32_CAST(FX_MUL(conv->force, (conv->target.z - ptcl->position.z))) / emtr->timeScale;
 }

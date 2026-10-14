@@ -7,6 +7,7 @@
 #include "constants/versions.h"
 
 #include "assert.h"
+#include "bg_window.h"
 #include "brightness_controller.h"
 #include "chatot_cry.h"
 #include "comm_manager.h"
@@ -22,7 +23,9 @@
 #include "save_player.h"
 #include "savedata.h"
 #include "screen_fade.h"
+#include "pokemon_sprite.h"
 #include "sound_system.h"
+#include "sprite.h"
 #include "sys_task_manager.h"
 #include "system.h"
 #include "timer.h"
@@ -121,42 +124,85 @@ void NitroMain(void)
     while (TRUE) {
         CheckHeapCanary();
         HandleConsoleFold();
-        ReadKeypadAndTouchpad();
 
-        if ((gSystem.heldKeysRaw & RESET_COMBO) == RESET_COMBO && !gSystem.inhibitReset) {
-            SoftReset(RESET_CLEAN);
+        // In 60 fps mode the loop runs once per VBlank. Everything written for the original
+        // 30 Hz loop only runs on "logic ticks" (every other VBlank), so it keeps its pace.
+        // Tasks that have been made native (tickDiv 1) also run on the ticks in between.
+        gSystem.logicTick = !gSystem.fps60 || (gSystem.vblankIsrCounter & 1) == 0;
+
+        if (gSystem.logicTick) {
+            ReadKeypadAndTouchpad();
+
+            if ((gSystem.heldKeysRaw & RESET_COMBO) == RESET_COMBO && !gSystem.inhibitReset) {
+                SoftReset(RESET_CLEAN);
+            }
+
+            if (gSystem.fps60) {
+                SpriteList_ResetDrawLog();
+                PokemonSpriteManager_ResetDrawLog();
+            }
         }
 
-        if (CommSys_Update()) {
+        if (!gSystem.logicTick || CommSys_Update()) {
             CheckHeapCanary();
-            RunApplication();
-            SysTaskManager_ExecuteTasks(gSystem.mainTaskMgr);
-            SysTaskManager_ExecuteTasks(gSystem.printTaskMgr);
 
-            if (!gSystem.frameCounter) {
+            if (gSystem.logicTick) {
+                RunApplication();
+            }
+
+            SysTaskManager_ExecuteTasks(gSystem.mainTaskMgr);
+
+            if (gSystem.logicTick) {
+                SysTaskManager_ExecuteTasks(gSystem.printTaskMgr);
+            }
+
+            if (!gSystem.fps60 && !gSystem.frameCounter) {
                 OS_WaitIrq(TRUE, OS_IE_V_BLANK);
                 gSystem.vblankCounter++;
             }
         }
 
-        UpdateRTC();
-        PlayTime_IncrementTimer();
-        sub_020241CC();
-        SysTaskManager_ExecuteTasks(gSystem.printTaskMgr);
+        if (gSystem.logicTick) {
+            UpdateRTC();
+            PlayTime_IncrementTimer();
+            sub_020241CC();
+
+            // The original loop runs the print queue (text) twice per iteration, once on each side of the
+            // VBlank wait. In 60 fps mode the second run happens on the next tick instead.
+            if (!gSystem.fps60) {
+                SysTaskManager_ExecuteTasks(gSystem.printTaskMgr);
+            }
+        } else {
+            // Executes the pending 3D buffer swap (G3_RequestSwapBuffers only sets a flag).
+            // Without this the 3D scene submitted on the in-between ticks piles up with the next one.
+            sub_020241CC();
+            SysTaskManager_ExecuteTasks(gSystem.printTaskMgr);
+            Bg_ApplyFinalOffsets();
+        }
+
+        if (!gSystem.logicTick && gSystem.vblankCallbackEveryTick) {
+            // Sprites that weren't redrawn by the original-rate logic still need to be sent to OAM.
+            SpriteList_ReplayDrawLog();
+        }
 
         OS_WaitIrq(TRUE, OS_IE_V_BLANK);
 
         gSystem.vblankCounter++;
         gSystem.frameCounter = 0;
 
-        BrightnessController_Update();
-        ExecScreenFade();
+        if (gSystem.logicTick) {
+            BrightnessController_Update();
+            ExecScreenFade();
+        }
 
-        if (gSystem.vblankCallback != NULL) {
+        if (gSystem.vblankCallback != NULL && (gSystem.logicTick || gSystem.vblankCallbackEveryTick)) {
             gSystem.vblankCallback(gSystem.vblankCallbackData);
         }
 
-        SoundSystem_Tick();
+        if (gSystem.logicTick) {
+            SoundSystem_Tick();
+        }
+
         SysTaskManager_ExecuteTasks(gSystem.postVBlankTaskMgr);
     }
 }

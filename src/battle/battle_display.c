@@ -72,6 +72,8 @@
 #include "sprite_system.h"
 #include "sys_task.h"
 #include "sys_task_manager.h"
+#include "battle_time.h"
+#include "sourplatinum_config.h"
 #include "system.h"
 #include "text.h"
 #include "trainer_info.h"
@@ -1089,7 +1091,9 @@ void BattleDisplay_InitTaskUpdateHPGauge(BattleSystem *battleSys, BattlerData *b
         healthbox->damage = 0;
     }
 
+    healthbox->gaugeAccum = 0;
     healthbox->task_10 = SysTask_Start(Task_UpdateHPGauge, healthbox, 1000);
+    SysTask_SetTickDiv(healthbox->task_10, 1);
 }
 
 void BattleDisplay_InitTaskUpdateExpGauge(BattleSystem *battleSys, BattlerData *battlerData, ExpGaugeUpdateMessage *message)
@@ -1110,7 +1114,9 @@ void BattleDisplay_InitTaskUpdateExpGauge(BattleSystem *battleSys, BattlerData *
     healthbox->expReward = message->gainedExp - healthbox->curExp;
 
     if (battlerData->battlerType == BATTLER_TYPE_SOLO_PLAYER) {
+        healthbox->gaugeAccum = 0;
         healthbox->task_10 = SysTask_Start(Task_UpdateExpGauge, healthbox, 1000);
+        SysTask_SetTickDiv(healthbox->task_10, 1);
         return;
     } else {
         BattleController_EmitClearCommand(healthbox->battleSys, healthbox->battler, healthbox->command);
@@ -4893,9 +4899,42 @@ static void Task_FlickerBattler(SysTask *task, void *data)
     }
 }
 
+// Sour Platinum 60 fps mode: the gauge tasks run on every tick. The gauges move at a constant number of
+// pixels per second (see SP_BAR_*_PIXELS_PER_SECOND), so one step per call is all that is needed.
+static int Healthbox_GaugeSteps(HealthBox *healthbox)
+{
+    return 1;
+}
+
+// The EXP sound plays for 8 original frames after the gauge starts moving.
+static u8 Healthbox_ExpSoundFrames(void)
+{
+    return 8 * BattleTime_TicksPerFrame();
+}
+
+static void Task_UpdateHPGaugeStep(SysTask *task, HealthBox *healthbox);
+static void Task_UpdateExpGaugeStep(SysTask *task, HealthBox *healthbox);
+
 static void Task_UpdateHPGauge(SysTask *task, void *data)
 {
     HealthBox *healthbox = data;
+
+    for (int steps = Healthbox_GaugeSteps(healthbox); steps > 0 && healthbox->task_10 != NULL; steps--) {
+        Task_UpdateHPGaugeStep(task, healthbox);
+    }
+}
+
+static void Task_UpdateExpGauge(SysTask *task, void *data)
+{
+    HealthBox *healthbox = data;
+
+    for (int steps = Healthbox_GaugeSteps(healthbox); steps > 0 && healthbox->task_10 != NULL; steps--) {
+        Task_UpdateExpGaugeStep(task, healthbox);
+    }
+}
+
+static void Task_UpdateHPGaugeStep(SysTask *task, HealthBox *healthbox)
+{
     int result;
 
     switch (healthbox->state) {
@@ -4917,9 +4956,8 @@ static void Task_UpdateHPGauge(SysTask *task, void *data)
     }
 }
 
-static void Task_UpdateExpGauge(SysTask *task, void *data)
+static void Task_UpdateExpGaugeStep(SysTask *task, HealthBox *healthbox)
 {
-    HealthBox *healthbox = data;
     int result;
 
     switch (healthbox->state) {
@@ -4929,14 +4967,14 @@ static void Task_UpdateExpGauge(SysTask *task, void *data)
         HealthBox_CalcExp(healthbox, healthbox->expReward);
         healthbox->state++;
     case 1:
-        if (healthbox->expSoundTimer < 8) {
+        if (healthbox->expSoundTimer < Healthbox_ExpSoundFrames()) {
             healthbox->expSoundTimer++;
         }
 
         result = Healthbox_DrawExpBar(healthbox);
 
         if (result == -1) {
-            if (healthbox->expSoundTimer >= 8) {
+            if (healthbox->expSoundTimer >= Healthbox_ExpSoundFrames()) {
                 Sound_StopEffect(SEQ_SE_DP_EXP_sseq, 0);
                 healthbox->state = 100;
             } else {
@@ -4947,7 +4985,7 @@ static void Task_UpdateExpGauge(SysTask *task, void *data)
     case 2:
         healthbox->expSoundTimer++;
 
-        if (healthbox->expSoundTimer >= 8) {
+        if (healthbox->expSoundTimer >= Healthbox_ExpSoundFrames()) {
             Sound_StopEffect(SEQ_SE_DP_EXP_sseq, 0);
             healthbox->state = 100;
         }

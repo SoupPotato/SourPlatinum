@@ -124,6 +124,16 @@ void Sprite_Delete2(Sprite *sprite)
 void SpriteSystem_DrawSprites(SpriteManager *spriteMan)
 {
     GF_ASSERT(spriteMan != NULL);
+
+    if (gSystem.fps60) {
+        if (!gSystem.logicTick) {
+            // The ticks in between are covered by SpriteList_ReplayDrawLog.
+            return;
+        }
+
+        SpriteList_LogDraw(spriteMan->sprites);
+    }
+
     SpriteList_Update(spriteMan->sprites);
 }
 

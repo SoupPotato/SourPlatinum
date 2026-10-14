@@ -259,7 +259,7 @@ void SPLEmitter_EmitParticles(SPLEmitter *emtr, SPLParticleList *list)
             ptcl->angularVelocity = 0;
         }
 
-        ptcl->lifeTime = SPLRandom_ScaledRangeFX32(emtr->particleLifeTime, header->randomAttenuation.lifeTime) + 1; // Life is always at least 1 frame
+        ptcl->lifeTime = (SPLRandom_ScaledRangeFX32(emtr->particleLifeTime, header->randomAttenuation.lifeTime) + 1) * emtr->timeScale; // Life is always at least 1 frame
         ptcl->age = 0;
 
         if (header->flags.hasTexAnim && res->texAnim->param.randomizeInit) {
@@ -270,7 +270,7 @@ void SPLEmitter_EmitParticles(SPLEmitter *emtr, SPLParticleList *list)
             ptcl->texture = header->misc.textureIndex;
         }
 
-        ptcl->loopTimeFactor = 0xFFFF / res->header->misc.loopFrames;
+        ptcl->loopTimeFactor = 0xFFFF / (res->header->misc.loopFrames * emtr->timeScale);
         ptcl->lifeTimeFactor = 0xFFFF / ptcl->lifeTime;
 
         ptcl->lifeRateOffset = 0;
@@ -340,7 +340,7 @@ void SPLEmitter_EmitChildren(SPLParticle *ptcl, SPLEmitter *emtr, SPLParticleLis
             break;
         }
 
-        child->lifeTime = childRes->lifeTime;
+        child->lifeTime = childRes->lifeTime * emtr->timeScale;
         child->age = 0;
         child->texture = childRes->misc.texture;
 

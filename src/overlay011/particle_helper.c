@@ -63,6 +63,22 @@ void ParticleHelper_DrawParticleSystems(void)
     ParticleSystem_UpdateAll();
 }
 
+// Sour Platinum: draw without advancing the particle simulation.
+void ParticleHelper_DrawParticleSystemsNoUpdate(void)
+{
+    G3_ResetG3X();
+
+    if (ParticleSystem_GetActiveAmount() == 0) {
+        return;
+    }
+
+    int drawn = ParticleSystem_DrawAll();
+    if (drawn > 0) {
+        G3_ResetG3X();
+        NNS_G2dSetupSoftwareSpriteCamera();
+    }
+}
+
 static u32 ParticleHelper_AllocTexVram(u32 size, BOOL is4x4comp)
 {
     NNSGfdTexKey texKey = NNS_GfdAllocTexVram(size, is4x4comp, 0);

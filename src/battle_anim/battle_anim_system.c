@@ -1,5 +1,7 @@
 #include "battle_anim/battle_anim_system.h"
 
+#include "sourplatinum_config.h"
+
 #include <nitro.h>
 #include <stdlib.h>
 #include <string.h>
@@ -573,6 +575,16 @@ SysTask *BattleAnimSystem_StartAnimTaskEx(BattleAnimSystem *system, SysTaskFunc 
 SysTask *BattleAnimSystem_StartAnimTask(BattleAnimSystem *system, SysTaskFunc func, void *param)
 {
     return BattleAnimSystem_StartTask(BATTLE_ANIM_TASK_KIND_EFFECT, system, func, param, 1100);
+}
+
+SysTask *BattleAnimSystem_StartNativeAnimTask(BattleAnimSystem *system, SysTaskFunc func, void *param)
+{
+    SysTask *task = BattleAnimSystem_StartAnimTask(system, func, param);
+#if SP_DEBUG_NATIVE_TASKS
+    SysTask_SetTickDiv(task, 1);
+#endif
+
+    return task;
 }
 
 SysTask *BattleAnimSystem_StartSoundTask(BattleAnimSystem *system, SysTaskFunc func, void *param, u32 priority)

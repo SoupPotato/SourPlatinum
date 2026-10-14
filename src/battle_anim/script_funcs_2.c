@@ -12,6 +12,7 @@
 #include "battle_anim/battle_anim_helpers.h"
 #include "battle_anim/battle_anim_system.h"
 #include "battle_anim/battle_anim_util.h"
+#include "battle_time.h"
 #include "pch/global_pch.h"
 
 #include "battle_script_battlers.h"
@@ -1490,7 +1491,7 @@ static BOOL KinesisSpoon_Update(KinesisSpoon *spoon)
                     DEG_TO_IDX(0),
                     DEG_TO_IDX(360),
                     -FX32_ONE,
-                    spoon->revs.data[XY_PARAM_REV_STEPS]);
+                    BattleTime_ToFrames(spoon->revs.data[XY_PARAM_REV_STEPS], SP_PACE_ANIM_PERCENT));
             }
 
             spoon->state++;
