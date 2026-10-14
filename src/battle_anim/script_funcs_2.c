@@ -818,7 +818,7 @@ enum VitalThrowState {
 };
 
 #define VITAL_THROW_REVOLUTION_COUNT  1
-#define VITAL_THROW_REVOLUTION_FRAMES 64
+#define VITAL_THROW_REVOLUTION_FRAMES 44 // 64 in the original game, Sour Platinum spins about 45% faster
 #define VITAL_THROW_MOVE_OFFSET_X     32
 #define VITAL_THROW_MOVE_FRAMES       2
 #define VITAL_THROW_MOVE_BACK_FRAMES  8
@@ -3001,7 +3001,7 @@ static void BattleAnimTask_ForesightSprite(SysTask *task, void *param)
     case FORESIGHT_SPRITE_STATE_DELAY:
         ctx->delay++;
 
-        if (ctx->delay > FORESIGHT_SPRITE_START_DELAY) {
+        if (ctx->delay > BattleTime_ScaleBySpeed(FORESIGHT_SPRITE_START_DELAY + 1) - 1) {
             ForesightSprite_InitMoveSegment(ctx);
             ctx->state++;
             ctx->delay = 0;

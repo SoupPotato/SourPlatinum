@@ -280,7 +280,11 @@ void SPLEmitter_Update(SPLManager *mgr, SPLEmitter *emtr)
             // The >> 8 here is a division by 256 because emissionDelay is a fraction of the particle's lifetime represented as a u8
             fx32 diff = ((fx32)ptcl->age * FX32_ONE) - (emissionDelay >> 8);
 
-            if (diff >= 0 && ((diff >> FX32_SHIFT) % (child->misc.emissionInterval * timeScale) == 0)) {
+            // Sour Platinum: a child that lives one original frame (the glow in the middle of an orb) is emitted on
+            // every update and lives one update, so it is always exactly where its parent is drawn.
+            BOOL lockstepChild = timeScale > 1 && child->lifeTime == 1 && child->misc.emissionInterval == 1;
+
+            if (diff >= 0 && (lockstepChild || ((diff >> FX32_SHIFT) % (child->misc.emissionInterval * timeScale) == 0))) {
                 SPLEmitter_EmitChildren(ptcl, emtr, &mgr->inactiveParticles);
             }
         }

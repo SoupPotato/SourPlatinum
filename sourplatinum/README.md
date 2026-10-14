@@ -77,3 +77,24 @@ per two VBlanks. Link battles stay at the original 30 Hz. Set `SP_BATTLE_60FPS` 
   uninitialised, which could hide every Pokémon shadow.
 - `SP_DEBUG_*` switches in the same header turn individual parts off when tracking down visual
   problems.
+
+## Move animation speed commands
+
+Move animation scripts (`res/moves/*/anim.s`) have three commands for adjusting how fast an
+animation plays. They work in both 30 and 60 fps mode.
+
+- `SetAnimSpeed percent` speeds up (above 100) or slows down (below 100) what follows in the
+  script: particles, `Delay`, looped and delayed sounds, and helper tasks. Set it back to `100` to
+  restore normal speed. It is reset at the start and end of every move.
+- `SetParticleSpeed particleSystem, percent` changes the speed of one particle system only, so one
+  set of particles (the draining orbs) can play faster while another (the healing sparkles) keeps
+  its pace. The speed of a system is reset when it is created.
+- `StopEmitters particleSystem` stops a system's emitters from emitting new particles. The
+  particles already out finish their lives, so the effect ends sooner without moving faster
+  (used by Absorb and Leech Seed).
+
+Moves tuned with these so far: Absorb, Leech Seed drain, Mega Drain, Quick Attack, Dream Eater,
+Drain Punch, Leech Life, Vital Throw and Foresight.
+
+Particle children that live one original frame (the white centre of the drain orbs) are emitted
+on every update and live one update in 60 fps mode, so they stay exactly under their parent.

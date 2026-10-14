@@ -9,7 +9,9 @@ L_0:
     CreateEmitter 0, 0, EMITTER_CB_GENERIC
     SetExtraParams 0, 2, 2, 1, 16, 0
     SetExtraParams 2, 0, 0, 0, 0
-    PlayLoopedSoundEffect SEQ_SE_DP_W152_sseq, 0, 2, 16
+    PlayLoopedSoundEffect SEQ_SE_DP_W152_sseq, 0, 2, 13
+    Delay 38
+    StopEmitters 0
     WaitForAllEmitters
     CreateEmitter 0, 1, EMITTER_CB_GENERIC
     SetExtraParams 0, 2, 1, 0, 0, 0

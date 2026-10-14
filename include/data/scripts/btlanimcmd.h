@@ -90,6 +90,9 @@ ScriptCommand(BTLANIMCMD_SETPOKEMONSPRITEVISIBLE,           BattleAnimScriptCmd_
 ScriptCommand(BTLANIMCMD_STARTPOKEMONSPRITEDRAWTASK,        BattleAnimScriptCmd_StartPokemonSpriteDrawTask)
 ScriptCommand(BTLANIMCMD_STOPPOKEMONSPRITEDRAWTASK,         BattleAnimScriptCmd_StopPokemonSpriteDrawTask)
 ScriptCommand(BTLANIMCMD_WAITFORLRX,                        BattleAnimScriptCmd_WaitForLRX)
+ScriptCommand(BTLANIMCMD_SETANIMSPEED,                      BattleAnimScriptCmd_SetAnimSpeed)
+ScriptCommand(BTLANIMCMD_STOPEMITTERS,                      BattleAnimScriptCmd_StopEmitters)
+ScriptCommand(BTLANIMCMD_SETPARTICLESPEED,                  BattleAnimScriptCmd_SetParticleSpeed)
 
 // clang-format on
 

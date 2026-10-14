@@ -340,7 +340,11 @@ void SPLEmitter_EmitChildren(SPLParticle *ptcl, SPLEmitter *emtr, SPLParticleLis
             break;
         }
 
-        child->lifeTime = childRes->lifeTime * emtr->timeScale;
+        if (emtr->timeScale > 1 && childRes->lifeTime == 1 && childRes->misc.emissionInterval == 1) {
+            child->lifeTime = 1;
+        } else {
+            child->lifeTime = childRes->lifeTime * emtr->timeScale;
+        }
         child->age = 0;
         child->texture = childRes->misc.texture;
 

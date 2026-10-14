@@ -11,8 +11,10 @@ L_0:
     LoadPokemonSpriteDummyResources 4
     AddPokemonSprite BATTLER_ROLE_ATTACKER_PARTNER, FALSE, BATTLE_ANIM_MON_SPRITE_4, 4
     BtlAnimCmd_082 2, 0, 4
+    SetAnimSpeed 120
     Func_QuickAttack
-    Delay 15
+    SetAnimSpeed 100
+    Delay 12
     PlaySoundEffectR SEQ_SE_DP_030_sseq
     RemovePokemonSprite BATTLE_ANIM_MON_SPRITE_0
     RemovePokemonSprite BATTLE_ANIM_MON_SPRITE_1

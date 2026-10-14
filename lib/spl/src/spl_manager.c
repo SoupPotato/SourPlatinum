@@ -414,6 +414,13 @@ void SPLManager_DeleteAllEmitters(SPLManager *mgr)
     }
 }
 
+void SPLManager_StopAllEmission(SPLManager *mgr)
+{
+    for (SPLEmitter *emtr = mgr->activeEmitters.first; emtr != NULL; emtr = emtr->next) {
+        emtr->state.terminate = TRUE;
+    }
+}
+
 void SPLManager_Emit(SPLManager *mgr, SPLEmitter *emtr)
 {
     SPLEmitter_Emit(emtr, &mgr->inactiveParticles);
