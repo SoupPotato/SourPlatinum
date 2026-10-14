@@ -145,6 +145,9 @@ static BOOL BattleAnimSoundFunc_Pan3(BattleAnimSoundContext *ctx);
 static BOOL BattleAnimSoundFunc_Repeat(BattleAnimSoundContext *ctx);
 static BOOL BattleAnimSoundFunc_Delay(BattleAnimSoundContext *ctx);
 static void BattleAnimScriptCmd_Delay(BattleAnimSystem *system);
+static void BattleAnimScriptCmd_SetAnimSpeed(BattleAnimSystem *system);
+static void BattleAnimScriptCmd_StopEmitters(BattleAnimSystem *system);
+static void BattleAnimScriptCmd_SetParticleSpeed(BattleAnimSystem *system);
 static void BattleAnimScriptCmd_WaitForAnimTasks(BattleAnimSystem *system);
 static void BattleAnimScriptCmd_BeginLoop(BattleAnimSystem *system);
 static void BattleAnimScriptCmd_EndLoop(BattleAnimSystem *system);
@@ -411,6 +414,8 @@ BOOL BattleAnimSystem_StartMove(BattleAnimSystem *system, MoveAnimation *moveAni
     if (BattleAnimSystem_IsActive(system) == FALSE) {
         return FALSE;
     }
+
+    gBattleAnimSpeedPercent = 100;
 
     for (i = 0; i < MAX_PARTICLE_SYSTEMS; i++) {
         system->cameraProjections[i] = CAMERA_PROJECTION_ORTHOGRAPHIC;
@@ -841,11 +846,72 @@ static void BattleAnimScriptCmd_WaitForLRX(BattleAnimSystem *system)
     }
 }
 
+// Scales a length in frames by the speed of the current animation (see SetAnimSpeed).
+static u32 BattleAnimSystem_ScaleFramesBySpeed(u32 frames)
+{
+    u32 scaled = (frames * 100 + gBattleAnimSpeedPercent - 1) / gBattleAnimSpeedPercent;
+
+    if (scaled == 0 && frames != 0) {
+        scaled = 1;
+    }
+
+    return scaled;
+}
+
+static void BattleAnimScriptCmd_SetAnimSpeed(BattleAnimSystem *system)
+{
+    BattleAnimScript_Next(system);
+
+    u32 percent = BattleAnimScript_ReadWord(system->scriptPtr);
+    BattleAnimScript_Next(system);
+
+    if (percent < 25) {
+        percent = 25;
+    } else if (percent > 400) {
+        percent = 400;
+    }
+
+    gBattleAnimSpeedPercent = percent;
+}
+
+static void BattleAnimScriptCmd_SetParticleSpeed(BattleAnimSystem *system)
+{
+    BattleAnimScript_Next(system);
+
+    u32 index = BattleAnimScript_ReadWord(system->scriptPtr);
+    BattleAnimScript_Next(system);
+
+    u32 percent = BattleAnimScript_ReadWord(system->scriptPtr);
+    BattleAnimScript_Next(system);
+
+    if (percent < 25) {
+        percent = 25;
+    } else if (percent > 400) {
+        percent = 400;
+    }
+
+    if (index < MAX_PARTICLE_SYSTEMS && system->context->particleSystems[index] != NULL) {
+        ParticleSystem_SetSpeedPercent(system->context->particleSystems[index], percent);
+    }
+}
+
+static void BattleAnimScriptCmd_StopEmitters(BattleAnimSystem *system)
+{
+    BattleAnimScript_Next(system);
+
+    u32 index = BattleAnimScript_ReadWord(system->scriptPtr);
+    BattleAnimScript_Next(system);
+
+    if (index < MAX_PARTICLE_SYSTEMS && system->context->particleSystems[index] != NULL) {
+        ParticleSystem_StopAllEmission(system->context->particleSystems[index]);
+    }
+}
+
 static void BattleAnimScriptCmd_Delay(BattleAnimSystem *system)
 {
     BattleAnimScript_Next(system);
 
-    system->scriptDelay = (u8)BattleAnimScript_ReadWord(system->scriptPtr);
+    system->scriptDelay = (u8)BattleAnimSystem_ScaleFramesBySpeed(BattleAnimScript_ReadWord(system->scriptPtr));
     BattleAnimScript_Next(system);
 
     system->executeAnimScriptFunc = BattleAnimScript_WaitForDelay;
@@ -1052,6 +1118,7 @@ static void BattleAnimScriptCmd_End(BattleAnimSystem *system)
 
     system->soundEffectWaitTimer = 0;
     system->endDelayFrames = 0;
+    gBattleAnimSpeedPercent = 100;
 
     for (i = 0; i < BATTLE_ANIM_SCRIPT_MAX_CALL_STACK_DEPTH; i++) {
         system->callStack[i] = NULL;
@@ -3178,7 +3245,7 @@ static void BattleAnimScriptCmd_PlayLoopedSoundEffect(BattleAnimSystem *system)
     ctx->applyInterval = (u8)BattleAnimScript_ReadWord(system->scriptPtr);
     BattleAnimScript_Next(system);
 
-    ctx->repeatCount = (u8)BattleAnimScript_ReadWord(system->scriptPtr);
+    ctx->repeatCount = (u8)BattleAnimSystem_ScaleFramesBySpeed(BattleAnimScript_ReadWord(system->scriptPtr));
     BattleAnimScript_Next(system);
 
     ctx->tickCount = ctx->applyInterval;
@@ -3202,7 +3269,7 @@ static void BattleAnimScriptCmd_PlayDelayedSoundEffect(BattleAnimSystem *system)
     ctx->curPan = (s8)BattleAnimScript_ReadWord(system->scriptPtr);
     BattleAnimScript_Next(system);
 
-    ctx->applyInterval = (u8)BattleAnimScript_ReadWord(system->scriptPtr);
+    ctx->applyInterval = (u8)BattleAnimSystem_ScaleFramesBySpeed(BattleAnimScript_ReadWord(system->scriptPtr));
     BattleAnimScript_Next(system);
 
     ctx->curPan = BattleAnimSound_CorrectPanDirection(system, ctx->curPan);

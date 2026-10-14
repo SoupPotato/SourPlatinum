@@ -52,6 +52,9 @@ typedef struct ParticleSystem {
     u8 unused2;
     u8 id;
     u8 cameraProjection;
+    // Sour Platinum: speed of this particle system in percent (0 is treated as 100), see SetParticleSpeed
+    u16 speedPercent;
+    u16 speedAccumulator;
 } ParticleSystem;
 
 void ParticleSystem_ZeroAll(void);
@@ -75,6 +78,8 @@ SPLEmitter *ParticleSystem_CreateEmitter(ParticleSystem *particleSystem, int res
 SPLEmitter *ParticleSystem_CreateEmitterWithCallback(ParticleSystem *particleSystem, int resourceID, SPLEmitterCallback callback, void *param);
 s32 ParticleSystem_GetActiveEmitterCount(ParticleSystem *particleSystem);
 void ParticleSystem_DeleteAllEmitters(ParticleSystem *particleSystem);
+void ParticleSystem_StopAllEmission(ParticleSystem *particleSystem);
+void ParticleSystem_SetSpeedPercent(ParticleSystem *particleSystem, u16 percent);
 void ParticleSystem_DeleteEmitter(ParticleSystem *particleSystem, SPLEmitter *emitter);
 void *ParticleSystem_GetHeapStart(ParticleSystem *particleSystem);
 void ParticleSystem_GetCameraUp(ParticleSystem *particleSystem, VecFx32 *up);

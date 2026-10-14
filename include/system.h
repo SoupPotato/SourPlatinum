@@ -77,6 +77,10 @@ typedef struct System {
 
 extern System gSystem;
 
+// Sour Platinum: speed of the move animation that is playing, in percent (100 = normal). Set by the
+// SetAnimSpeed animation script command and reset when the animation starts and ends.
+extern u16 gBattleAnimSpeedPercent;
+
 void SetDummyVBlankIntr(void);
 void SetVBlankCallback(Callback cb, void *data);
 void SetFps60Mode(BOOL enabled);

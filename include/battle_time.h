@@ -32,8 +32,20 @@ static inline u32 BattleTime_Frames(u32 originalFrames, int pacePercent)
         return originalFrames;
     }
 
+    // SetAnimSpeed in a move animation script speeds up whatever is started while it is active
+    pacePercent = pacePercent * gBattleAnimSpeedPercent / 100;
+
     u32 ticks = (originalFrames * 2 * 100) / pacePercent;
     return (ticks == 0 && originalFrames != 0) ? 1 : ticks;
+}
+
+// Scales a length in original logic frames by the speed of the current move animation (SetAnimSpeed). For counters
+// in code that runs at the original rate, which is not measured in ticks.
+static inline u32 BattleTime_ScaleBySpeed(u32 frames)
+{
+    u32 scaled = (frames * 100 + gBattleAnimSpeedPercent / 2) / gBattleAnimSpeedPercent;
+
+    return (scaled == 0 && frames != 0) ? 1 : scaled;
 }
 
 // The opposite of BattleTime_Frames(): turns a tick count (for example the remaining steps of a lerp

@@ -1,5 +1,7 @@
 #include "particle_system.h"
 
+#include "system.h"
+
 #include <nitro.h>
 #include <nitro/fx/fx_trig.h>
 #include <string.h>
@@ -458,12 +460,29 @@ int ParticleSystem_DrawAll(void)
     return count;
 }
 
+void ParticleSystem_SetSpeedPercent(ParticleSystem *particleSystem, u16 percent)
+{
+    particleSystem->speedPercent = percent;
+}
+
 int ParticleSystem_UpdateAll(void)
 {
     int count = 0;
     for (int i = 0; i < MAX_PARTICLE_SYSTEMS; i++) {
-        if (sParticleSystems[i] != NULL) {
-            ParticleSystem_Update(sParticleSystems[i]);
+        ParticleSystem *particleSystem = sParticleSystems[i];
+
+        if (particleSystem != NULL) {
+            // Sour Platinum: a system is updated more or less than once per call to change how fast its
+            // effects play. The speed is the speed of the system times the speed of the whole animation.
+            u32 percent = particleSystem->speedPercent != 0 ? particleSystem->speedPercent : 100;
+            percent = percent * gBattleAnimSpeedPercent / 100;
+
+            particleSystem->speedAccumulator += percent;
+
+            for (; particleSystem->speedAccumulator >= 100; particleSystem->speedAccumulator -= 100) {
+                ParticleSystem_Update(particleSystem);
+            }
+
             count++;
         }
     }
@@ -492,6 +511,11 @@ SPLEmitter *ParticleSystem_CreateEmitterWithCallback(ParticleSystem *particleSys
 s32 ParticleSystem_GetActiveEmitterCount(ParticleSystem *particleSystem)
 {
     return particleSystem->manager->activeEmitters.count;
+}
+
+void ParticleSystem_StopAllEmission(ParticleSystem *particleSystem)
+{
+    SPLManager_StopAllEmission(particleSystem->manager);
 }
 
 void ParticleSystem_DeleteAllEmitters(ParticleSystem *particleSystem)

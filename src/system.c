@@ -32,6 +32,7 @@ static void InitHeapSystem(void);
 static void ApplyButtonModeToInput(void);
 
 System gSystem;
+u16 gBattleAnimSpeedPercent = 100;
 
 static void VBlankIntr(void)
 {

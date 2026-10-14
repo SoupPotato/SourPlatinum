@@ -1,6 +1,7 @@
 #include "macros/btlanimcmd.inc"
 
 L_0:
+    SetAnimSpeed 145
     InitSpriteManager 0, 1, 1, 1, 1, 1, 0, 0
     LoadCharResObj 0, foresight_NCGR_lz
     LoadPlttRes 0, foresight_NCLR, 1
@@ -8,7 +9,7 @@ L_0:
     LoadAnimResObj 0, foresight_anim_NANR_lz
     AddSpriteWithFunc 0, SPRITE_FUNC_FORESIGHT, foresight_NCGR_lz, foresight_NCLR, foresight_cell_NCER_lz, foresight_anim_NANR_lz, 0, 0
     BeginLoop 6
-    Delay 2
+    Delay 1
     PlaySoundEffectR SEQ_SE_DP_100_sseq
     Delay 10
     EndLoop
