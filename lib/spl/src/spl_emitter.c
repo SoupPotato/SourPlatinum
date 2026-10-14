@@ -5,6 +5,7 @@
 #include <nitro/gx/g3.h>
 #include <nitro/gx/g3imm.h>
 
+#include "spl_behavior.h"
 #include "spl_internal.h"
 #include "spl_manager.h"
 #include "spl_particle.h"
@@ -26,6 +27,13 @@ typedef struct FieldFunc8 {
     void (*func)(SPLParticle *, SPLResource *, u8);
     BOOL loop;
 } FieldFunc8;
+
+static int sDefaultTimeScale = 1;
+
+void SPL_SetDefaultTimeScale(int timeScale)
+{
+    sDefaultTimeScale = timeScale < 1 ? 1 : timeScale;
+}
 
 static void SPLUtil_SetTexture(SPLTexture *tex);
 static void SPLUtil_SetTexture_Stub(SPLTexture *tex);
@@ -72,6 +80,7 @@ void SPLEmitter_Init(SPLEmitter *emtr, SPLResource *res, const VecFx32 *pos)
     emtr->velocity.x = emtr->velocity.y = emtr->velocity.z = 0;
 
     emtr->age = 0;
+    emtr->timeScale = sDefaultTimeScale;
     emtr->emissionCountFractional = 0;
 
     emtr->axis = emtr->resource->header->axis;
@@ -85,7 +94,12 @@ void SPLEmitter_Init(SPLEmitter *emtr, SPLResource *res, const VecFx32 *pos)
     emtr->particleLifeTime = emtr->resource->header->particleLifeTime;
 
     emtr->color = GX_RGB(31, 31, 31);
-    emtr->misc.emissionInterval = emtr->resource->header->misc.emissionInterval;
+    emtr->misc.emissionInterval = emtr->resource->header->misc.emissionInterval * emtr->timeScale;
+
+    if (emtr->resource->header->misc.emissionInterval * emtr->timeScale > 255) {
+        emtr->misc.emissionInterval = 255;
+    }
+
     emtr->misc.baseAlpha = emtr->resource->header->misc.baseAlpha;
     emtr->misc.updateCycle = 0;
     emtr->misc.reserved = 0;
@@ -122,6 +136,31 @@ void SPLEmitter_Init(SPLEmitter *emtr, SPLResource *res, const VecFx32 *pos)
     emtr->userData.u32 = 0;
 }
 
+static BOOL SPLEmitter_IsPositionBehavior(void (*applyFunc)(const void *, struct SPLParticle *, VecFx32 *, struct SPLEmitter *))
+{
+    return applyFunc == SPLBehavior_ApplySpin
+        || applyFunc == SPLBehavior_ApplyConvergence
+        || applyFunc == SPLBehavior_ApplyCollisionPlane;
+}
+
+// The part of a frame's movement that is covered on one update of a frame that is made up of timeScale
+// updates. The parts add up to exactly the full movement.
+static fx32 SPLEmitter_FramePart(fx32 movement, int timeScale, u16 age)
+{
+    if (timeScale == 1) {
+        return movement;
+    }
+
+    int phase = age % timeScale;
+    fx32 part = movement / timeScale;
+
+    if (phase == timeScale - 1) {
+        return movement - part * (timeScale - 1);
+    }
+
+    return part;
+}
+
 void SPLEmitter_Update(SPLManager *mgr, SPLEmitter *emtr)
 {
     SPLParticle *ptcl;
@@ -136,6 +175,7 @@ void SPLEmitter_Update(SPLManager *mgr, SPLEmitter *emtr)
     int airResistance;
     u8 lifeRates[2];
     VecFx32 acc;
+    int timeScale = emtr->timeScale;
 
     res = emtr->resource;
     child = res->childResource;
@@ -145,11 +185,12 @@ void SPLEmitter_Update(SPLManager *mgr, SPLEmitter *emtr)
     behaviorCount = res->behaviorCount;
     airResistance = header->misc.airResistance + FX32_CONST(0.09375);
 
+
     if (emtr->updateCallback) {
         emtr->updateCallback(emtr, SPL_CALLBACK_PRE_UPDATE);
     }
 
-    if (header->emitterLifeTime == 0 || emtr->age < header->emitterLifeTime) {
+    if (header->emitterLifeTime == 0 || emtr->age < header->emitterLifeTime * timeScale) {
         if (emtr->age % emtr->misc.emissionInterval == 0) {
             if (!emtr->state.terminate && !emtr->state.emissionPaused && emtr->state.started) {
                 SPLEmitter_EmitParticles(emtr, &mgr->inactiveParticles);
@@ -191,29 +232,47 @@ void SPLEmitter_Update(SPLManager *mgr, SPLEmitter *emtr)
             animFuncs[i].func(ptcl, res, lifeRates[animFuncs[i].loop]);
         }
 
-        acc.x = acc.y = acc.z = 0;
+        // Sour Platinum: with a time scale above 1 every particle is updated several times per original frame.
+        // The behaviors, the damping and the acceleration still run exactly once per original frame, on the
+        // first update of each frame, so the velocities evolve exactly like they did originally (the small
+        // integer rounding in the damping step is part of how the effects look). The particle then covers
+        // its movement for the frame in equal parts on every update of the frame.
+        BOOL frameStart = (timeScale == 1) || (ptcl->age % timeScale) == 0;
 
         if (resFlags.followEmitter) {
             ptcl->emitterPos = emtr->position;
         }
 
+        acc.x = acc.y = acc.z = 0;
+
         for (i = 0; i < behaviorCount; i++) {
-            res->behaviors[i].applyFunc(res->behaviors[i].object, ptcl, &acc, emtr);
+            // Behaviors that move the particle's position directly (spin, convergence, collision) run on every
+            // update so that curved movement stays smooth. The ones that change the velocity run once per frame.
+            if (timeScale > 1 && SPLEmitter_IsPositionBehavior(res->behaviors[i].applyFunc)) {
+                VecFx32 unusedAcc = { 0, 0, 0 };
+                res->behaviors[i].applyFunc(res->behaviors[i].object, ptcl, &unusedAcc, emtr);
+            } else if (frameStart) {
+                res->behaviors[i].applyFunc(res->behaviors[i].object, ptcl, &acc, emtr);
+            }
         }
 
-        ptcl->rotation += ptcl->angularVelocity;
+        if (frameStart) {
+            ptcl->velocity.x = ptcl->velocity.x * airResistance >> 9;
+            ptcl->velocity.y = ptcl->velocity.y * airResistance >> 9;
+            ptcl->velocity.z = ptcl->velocity.z * airResistance >> 9;
 
-        ptcl->velocity.x = ptcl->velocity.x * airResistance >> 9;
-        ptcl->velocity.y = ptcl->velocity.y * airResistance >> 9;
-        ptcl->velocity.z = ptcl->velocity.z * airResistance >> 9;
+            ptcl->velocity.x += acc.x;
+            ptcl->velocity.y += acc.y;
+            ptcl->velocity.z += acc.z;
+        }
 
-        ptcl->velocity.x += acc.x;
-        ptcl->velocity.y += acc.y;
-        ptcl->velocity.z += acc.z;
+        // The rotation speed is shared out over the updates of a frame. Alternating between rounding down
+        // and up keeps odd values exact on average.
+        ptcl->rotation += (ptcl->angularVelocity + (timeScale > 1 ? (ptcl->age % timeScale) : 0)) / timeScale;
 
-        ptcl->position.x += ptcl->velocity.x + emtr->velocity.x;
-        ptcl->position.y += ptcl->velocity.y + emtr->velocity.y;
-        ptcl->position.z += ptcl->velocity.z + emtr->velocity.z;
+        ptcl->position.x += SPLEmitter_FramePart(ptcl->velocity.x + emtr->velocity.x, timeScale, ptcl->age);
+        ptcl->position.y += SPLEmitter_FramePart(ptcl->velocity.y + emtr->velocity.y, timeScale, ptcl->age);
+        ptcl->position.z += SPLEmitter_FramePart(ptcl->velocity.z + emtr->velocity.z, timeScale, ptcl->age);
 
         if (resFlags.hasChildResource) {
             fx32 emissionDelay = FX_MUL((fx32)ptcl->lifeTime << FX32_SHIFT, (fx32)child->misc.emissionDelay << FX32_SHIFT);
@@ -221,7 +280,7 @@ void SPLEmitter_Update(SPLManager *mgr, SPLEmitter *emtr)
             // The >> 8 here is a division by 256 because emissionDelay is a fraction of the particle's lifetime represented as a u8
             fx32 diff = ((fx32)ptcl->age * FX32_ONE) - (emissionDelay >> 8);
 
-            if (diff >= 0 && ((diff >> FX32_SHIFT) % child->misc.emissionInterval == 0)) {
+            if (diff >= 0 && ((diff >> FX32_SHIFT) % (child->misc.emissionInterval * timeScale) == 0)) {
                 SPLEmitter_EmitChildren(ptcl, emtr, &mgr->inactiveParticles);
             }
         }
@@ -271,29 +330,38 @@ void SPLEmitter_Update(SPLManager *mgr, SPLEmitter *emtr)
                 childAnimFuncs[i].func(ptcl, res, lifeRates[0]);
             }
 
-            acc.x = acc.y = acc.z = 0;
+            BOOL childFrameStart = (timeScale == 1) || (ptcl->age % timeScale) == 0;
 
             if (child->flags.followEmitter) {
                 ptcl->emitterPos = emtr->position;
             }
 
+            acc.x = acc.y = acc.z = 0;
+
             for (i = 0; i < behaviorCount; i++) {
-                res->behaviors[i].applyFunc(res->behaviors[i].object, ptcl, &acc, emtr);
+                if (timeScale > 1 && SPLEmitter_IsPositionBehavior(res->behaviors[i].applyFunc)) {
+                    VecFx32 unusedAcc = { 0, 0, 0 };
+                    res->behaviors[i].applyFunc(res->behaviors[i].object, ptcl, &unusedAcc, emtr);
+                } else if (childFrameStart) {
+                    res->behaviors[i].applyFunc(res->behaviors[i].object, ptcl, &acc, emtr);
+                }
             }
 
-            ptcl->rotation += ptcl->angularVelocity;
+            if (childFrameStart) {
+                ptcl->velocity.x = ptcl->velocity.x * airResistance >> 9;
+                ptcl->velocity.y = ptcl->velocity.y * airResistance >> 9;
+                ptcl->velocity.z = ptcl->velocity.z * airResistance >> 9;
 
-            ptcl->velocity.x = ptcl->velocity.x * airResistance >> 9;
-            ptcl->velocity.y = ptcl->velocity.y * airResistance >> 9;
-            ptcl->velocity.z = ptcl->velocity.z * airResistance >> 9;
+                ptcl->velocity.x += acc.x;
+                ptcl->velocity.y += acc.y;
+                ptcl->velocity.z += acc.z;
+            }
 
-            ptcl->velocity.x += acc.x;
-            ptcl->velocity.y += acc.y;
-            ptcl->velocity.z += acc.z;
+            ptcl->rotation += (ptcl->angularVelocity + (timeScale > 1 ? (ptcl->age % timeScale) : 0)) / timeScale;
 
-            ptcl->position.x += ptcl->velocity.x + emtr->velocity.x;
-            ptcl->position.y += ptcl->velocity.y + emtr->velocity.y;
-            ptcl->position.z += ptcl->velocity.z + emtr->velocity.z;
+            ptcl->position.x += SPLEmitter_FramePart(ptcl->velocity.x + emtr->velocity.x, timeScale, ptcl->age);
+            ptcl->position.y += SPLEmitter_FramePart(ptcl->velocity.y + emtr->velocity.y, timeScale, ptcl->age);
+            ptcl->position.z += SPLEmitter_FramePart(ptcl->velocity.z + emtr->velocity.z, timeScale, ptcl->age);
 
             if (emtr->resource->header->flags.childHasFixedPolygonID) {
                 ptcl->visibility.currentPolygonID = mgr->polygonID.fix;

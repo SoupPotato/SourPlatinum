@@ -18,7 +18,10 @@ against retail Platinum is turned off by default. The output is `build/pokeplati
 | Trade evolutions replaced: King's Rock, Metal Coat, Dragon Scale, Up-Grade, Protector, Electirizer, Magmarizer, Dubious Disc, Reaper Cloth and the DeepSea items can be used from the bag like evolution stones | `res/items/data/*.json`, `res/pokemon/*/data.json` |
 | New **Linking Cord** item (it replaces the Loot Sack, `ITEM_LINKING_CORD`), with its own icon, sold at the Veilstone Game Corner for 3000 coins in place of TM27 | `res/items/data/linking_cord.json`, `src/scrcmd_game_corner_prize.c`, `res/field/scripts/scripts_veilstone_city_prize_exchange.s` |
 | Reusable TMs: teaching a TM no longer consumes it, and the bag hides TM quantities | `src/applications/party_menu/callbacks.c`, `src/applications/bag/windows.c` |
-| Hidden Power always has 60 base power; its type still depends on IVs | `src/battle/battle_script.c`, `res/moves/hidden_power/data.json` |
+| Hidden Power always has 60 base power; its type still depends on IVs. The trainer AI's damage estimate uses the same fixed power | `src/battle/battle_script.c`, `src/battle/trainer_ai/trainer_ai.c`, `res/moves/hidden_power/data.json` |
+| Fury Cutter starts at 20 base power instead of 40 and stops doubling at 160 (20, 40, 80, 160) | `res/moves/fury_cutter/data.json`, `src/battle/battle_script.c` (`BtlCmd_CalcFuryCutterPower`) |
+| Battles run at 60 fps without changing their pace (details below) | `include/sourplatinum_config.h`, `src/main.c`, `src/battle/battle_main.c` and others |
+| HP and EXP bars move at a constant speed no matter how much HP or EXP is involved (like Gen 5) | `src/battle/healthbox.c`, `src/battle/battle_display.c` |
 | Honey trees: each honey tree route has a tree you can slather. It starts an immediate level 12 battle with Combee, Wurmple, Burmy, Cherubi, Aipom, Heracross or Munchlax | `res/field/events/*.json`, `res/field/scripts/*.s` (`*_HoneyTree`), `res/text/*.json` |
 | Wild encounter changes on Eterna Forest, the Lost Tower and Routes 206, 214, 218, 221 and 222 | `res/field/encounters/*.json` |
 | Text decapitalized throughout (BULBASAUR → Bulbasaur, NORMAL → Normal, OPTIONS → Options, …), plus dialogue and description edits | `res/text/*.json`, species/item/move/trainer JSON |
@@ -46,3 +49,31 @@ with these intended exceptions:
   showed vanilla locations.
 - **Four extra icons** sat at the end of the icon archive and the game never loads them. They
   are kept in `sourplatinum/unused_icons/` and are not built.
+
+## 60 fps battles
+
+Single-player battles run the main loop once per VBlank (60 ticks per second) instead of once
+per two VBlanks. Link battles stay at the original 30 Hz. Set `SP_BATTLE_60FPS` to `0` in
+`include/sourplatinum_config.h` to turn it all off.
+
+- Code written for the original 30 Hz loop (battle logic, scripts, input, sound, most move
+  animation tasks) runs on every other tick, so the game keeps its original pace. The text printer
+  already ran twice per original frame, so it simply runs once per tick.
+- Particles are updated at 60 Hz (`lib/spl`, `SPL_SetDefaultTimeScale`). Lifetimes and emission
+  intervals are doubled, rotation is split between the two updates, and velocity, damping,
+  gravity and the other behaviors still run once per original frame, so particles follow exactly
+  the same paths as before; their movement for each frame is simply covered in two steps. The lerp helpers in
+  `src/battle_anim/battle_anim_helpers.c` scale themselves, which lets individual tasks opt in to
+  running on every tick (`SysTask_SetTickDiv`, `BattleAnimSystem_StartNativeAnimTask`). The
+  projectile and beam emitter movement and the battler lunge/slide moves do this.
+- Everything else that moves (Pokémon sprites, 2D sprites, background scroll offsets) is drawn
+  halfway between its last shown and its current position on the original-rate tick and at its real
+  position on the next tick. Sprites drawn by other tasks are redrawn on the in-between ticks
+  (`SpriteList_ReplayDrawLog`, `PokemonSpriteManager_ReplayDrawLog`), and the 3D buffer swap runs
+  on every tick.
+- HP and EXP bars use `SP_BAR_HP_PIXELS_PER_SECOND` and `SP_BAR_EXP_PIXELS_PER_SECOND`, with
+  `SP_PACE_BARS_PERCENT` as a speed multiplier. `SP_PACE_TEXT_PERCENT` does the same for text.
+- Fixed a bug in the decomp that this build exposed: `PokemonSpriteManager_New` left `hideShadows`
+  uninitialised, which could hide every Pokémon shadow.
+- `SP_DEBUG_*` switches in the same header turn individual parts off when tracking down visual
+  problems.

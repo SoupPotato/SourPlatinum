@@ -4,6 +4,8 @@
 #include <nitro.h>
 #include <string.h>
 
+#include "system.h"
+
 static void SysTaskManager_InitTask(SysTaskManager *sysTaskMgr, SysTask *task);
 static void SysTaskManager_InitTasks(SysTaskManager *sysTaskMgr);
 static SysTask *SysTaskManager_AllocTask(SysTaskManager *sysTaskMgr);
@@ -103,9 +105,14 @@ void SysTaskManager_ExecuteTasks(SysTaskManager *sysTaskMgr)
     while (sysTaskMgr->currentTask != &sysTaskMgr->sentinelTask) {
         sysTaskMgr->nextTask = sysTaskMgr->currentTask->nextTask;
 
-        if (sysTaskMgr->currentTask->state == TASK_STATE_ACTIVE) {
+        if (sysTaskMgr->currentTask->tickDiv > 1 && !gSystem.logicTick) {
+            // Sour Platinum 60 fps mode: this task keeps its original 30 Hz pace.
+        } else if (sysTaskMgr->currentTask->state == TASK_STATE_ACTIVE) {
             if (sysTaskMgr->currentTask->callback != NULL) {
+                u8 savedTickDiv = gSystem.execTickDiv;
+                gSystem.execTickDiv = sysTaskMgr->currentTask->tickDiv;
                 sysTaskMgr->currentTask->callback(sysTaskMgr->currentTask, sysTaskMgr->currentTask->param);
+                gSystem.execTickDiv = savedTickDiv;
             }
         } else {
             sysTaskMgr->currentTask->state = TASK_STATE_ACTIVE;
@@ -136,6 +143,8 @@ static SysTask *SysTaskManager_InternalAddTask(SysTaskManager *sysTaskMgr, SysTa
     task->priority = priority;
     task->param = param;
     task->callback = callback;
+    // The VBlank interrupt tasks and the print queue (text printers) already ran twice per original frame.
+    task->tickDiv = (sysTaskMgr == gSystem.vBlankTaskMgr || sysTaskMgr == gSystem.printTaskMgr) ? 1 : 2;
 
     if (sysTaskMgr->currentTask->callback != NULL) {
         // The task being added should only run starting from the next frame.
@@ -205,4 +214,11 @@ void *SysTask_GetParam(SysTask *task)
 u32 SysTask_GetPriority(SysTask *task)
 {
     return task->priority;
+}
+
+void SysTask_SetTickDiv(SysTask *task, u8 tickDiv)
+{
+    if (task != NULL) {
+        task->tickDiv = tickDiv;
+    }
 }

@@ -63,12 +63,23 @@ typedef struct System {
     u8 padding_69[3];
     BOOL showTitleScreenIntro;
     u32 *heapCanary;
+    // Sour Platinum 60 fps mode (used in battle, see sourplatinum_config.h).
+    // When fps60 is set the main loop runs once per VBlank instead of once per two VBlanks.
+    // Everything that was written for the original 30 Hz loop still runs on "logic ticks"
+    // (every other VBlank) so it keeps its original pace; tasks marked as native (tickDiv 1)
+    // run on every tick.
+    BOOL fps60;
+    BOOL logicTick; // TRUE if this loop iteration runs original-rate logic (always TRUE when fps60 is off)
+    BOOL vblankCallbackEveryTick; // call vblankCallback on every tick, not just logic ticks
+    u32 vblankIsrCounter; // counts every VBlank, incremented in the VBlank interrupt
+    u8 execTickDiv; // tickDiv of the task that is currently running; 2 outside of tasks
 } System;
 
 extern System gSystem;
 
 void SetDummyVBlankIntr(void);
 void SetVBlankCallback(Callback cb, void *data);
+void SetFps60Mode(BOOL enabled);
 void DisableHBlank(void);
 BOOL SetHBlankCallback(Callback cb, void *data);
 void InitSystem(void);

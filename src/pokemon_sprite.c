@@ -10,6 +10,8 @@
 #include "narc.h"
 #include "palette.h"
 #include "pokemon_sprite.h"
+#include "sourplatinum_config.h"
+#include "system.h"
 
 #include "res/pokemon/pl_otherpoke.naix"
 
@@ -403,6 +405,8 @@ void *PokemonSpriteManager_New(enum HeapID heapID)
 
     monSpriteMan->heapID = heapID;
     monSpriteMan->dummy330 = 0;
+    // Sour Platinum: this was never initialised, and Heap_Alloc does not clear memory. Leftover data with bit 0 set hid every shadow.
+    monSpriteMan->hideShadows = 0;
     monSpriteMan->charBaseAddr = 0;
     monSpriteMan->charSize = MON_SPRITE_CHAR_BUF_SIZE;
     monSpriteMan->plttBaseAddr = 0;
@@ -450,13 +454,117 @@ void *PokemonSpriteManager_New(enum HeapID heapID)
     return monSpriteMan;
 }
 
+// Sour Platinum 60 fps mode
+// Largest per-logic-frame jump (in pixels) that is still treated as continuous motion.
+// Anything bigger is a teleport and is not blended.
+#define MON_BLEND_MAX_MOVE  48
+#define MON_BLEND_MAX_SCALE 0x100
+#define MON_BLEND_MAX_ROT   0x4000
+
+#define DRAW_LOG_MAX 8
+
+static PokemonSpriteManager *sDrawLog[DRAW_LOG_MAX];
+static int sDrawLogCount = 0;
+
+static int BlendAbs(int value)
+{
+    return value < 0 ? -value : value;
+}
+
+static int BlendMid(int last, int cur)
+{
+    return last + (cur - last) / 2;
+}
+
+// Replaces the sprite's transforms with the halfway point between what was shown on the last in-between tick
+// and the current transforms. The caller restores the real transforms afterwards.
+static void PokemonSprite_BlendTransforms(PokemonSprite *sprite)
+{
+    PokemonSpriteTransforms *cur = &sprite->transforms;
+    const PokemonSpriteTransforms *last = &sprite->lastFinal;
+
+    if (!sprite->lastFinalValid || sprite->noBlend || cur->partialDraw || last->partialDraw) {
+        return;
+    }
+
+    int dx = (cur->xCenter + cur->xOffset + cur->xPivot) - (last->xCenter + last->xOffset + last->xPivot);
+    int dy = (cur->yCenter + cur->yOffset + cur->yPivot) - (last->yCenter + last->yOffset + last->yPivot);
+
+    if (BlendAbs(dx) > MON_BLEND_MAX_MOVE || BlendAbs(dy) > MON_BLEND_MAX_MOVE) {
+        return;
+    }
+
+    if ((cur->scaleX < 0) != (last->scaleX < 0) || (cur->scaleY < 0) != (last->scaleY < 0)
+        || BlendAbs(cur->scaleX - last->scaleX) > MON_BLEND_MAX_SCALE
+        || BlendAbs(cur->scaleY - last->scaleY) > MON_BLEND_MAX_SCALE) {
+        return;
+    }
+
+    s16 deltaRotX = (s16)(cur->rotationX - last->rotationX);
+    s16 deltaRotY = (s16)(cur->rotationY - last->rotationY);
+    s16 deltaRotZ = (s16)(cur->rotationZ - last->rotationZ);
+
+    if (BlendAbs(deltaRotX) > MON_BLEND_MAX_ROT || BlendAbs(deltaRotY) > MON_BLEND_MAX_ROT || BlendAbs(deltaRotZ) > MON_BLEND_MAX_ROT) {
+        return;
+    }
+
+    cur->xCenter = BlendMid(last->xCenter, cur->xCenter);
+    cur->yCenter = BlendMid(last->yCenter, cur->yCenter);
+    cur->zCenter = BlendMid(last->zCenter, cur->zCenter);
+    cur->xOffset = BlendMid(last->xOffset, cur->xOffset);
+    cur->yOffset = BlendMid(last->yOffset, cur->yOffset);
+    cur->zOffset = BlendMid(last->zOffset, cur->zOffset);
+    cur->xPivot = BlendMid(last->xPivot, cur->xPivot);
+    cur->yPivot = BlendMid(last->yPivot, cur->yPivot);
+    cur->scaleX = BlendMid(last->scaleX, cur->scaleX);
+    cur->scaleY = BlendMid(last->scaleY, cur->scaleY);
+    cur->rotationX = last->rotationX + deltaRotX / 2;
+    cur->rotationY = last->rotationY + deltaRotY / 2;
+    cur->rotationZ = last->rotationZ + deltaRotZ / 2;
+}
+
+void PokemonSprite_SetNoBlend(PokemonSprite *monSprite, BOOL noBlend)
+{
+    if (monSprite != NULL) {
+        monSprite->noBlend = noBlend;
+    }
+}
+
+void PokemonSpriteManager_ResetDrawLog(void)
+{
+    sDrawLogCount = 0;
+}
+
+void PokemonSpriteManager_ReplayDrawLog(void)
+{
+    for (int i = 0; i < sDrawLogCount; i++) {
+        if (sDrawLog[i] != NULL) {
+            PokemonSpriteManager_DrawSpritesPass(sDrawLog[i], MON_SPRITE_DRAW_REDRAW);
+        }
+    }
+}
+
 void PokemonSpriteManager_DrawSprites(PokemonSpriteManager *monSpriteMan)
+{
+    if (gSystem.fps60 && gSystem.logicTick && sDrawLogCount < DRAW_LOG_MAX) {
+        // Remember this manager so that it is drawn again on the in-between ticks.
+        sDrawLog[sDrawLogCount++] = monSpriteMan;
+    }
+
+    PokemonSpriteManager_DrawSpritesPass(monSpriteMan, MON_SPRITE_DRAW_NORMAL);
+}
+
+void PokemonSpriteManager_DrawSpritesPass(PokemonSpriteManager *monSpriteMan, enum PokemonSpriteDrawPass pass)
 {
     int width, height;
     int u0, v0, u1, v1;
+    PokemonSpriteTransforms realTransforms;
+    BOOL blend = (SP_DEBUG_BLEND_3D && pass == MON_SPRITE_DRAW_NORMAL && gSystem.fps60 && gSystem.logicTick);
 
-    BufferPokemonSpriteCharData(monSpriteMan);
-    BufferPokemonSpritePlttData(monSpriteMan);
+    if (pass != MON_SPRITE_DRAW_REDRAW) {
+        BufferPokemonSpriteCharData(monSpriteMan);
+        BufferPokemonSpritePlttData(monSpriteMan);
+    }
 
     NNS_G3dGeFlushBuffer();
 
@@ -467,7 +575,7 @@ void PokemonSpriteManager_DrawSprites(PokemonSpriteManager *monSpriteMan)
         if (monSpriteMan->sprites[i].active
             && monSpriteMan->sprites[i].transforms.hide == FALSE
             && monSpriteMan->sprites[i].transforms.hide2 == FALSE) {
-            if (monSpriteMan->sprites[i].callback != NULL) {
+            if (pass != MON_SPRITE_DRAW_REDRAW && monSpriteMan->sprites[i].callback != NULL) {
                 monSpriteMan->sprites[i].callback(&monSpriteMan->sprites[i], &monSpriteMan->sprites[i].transforms);
             }
 
@@ -477,7 +585,14 @@ void PokemonSpriteManager_DrawSprites(PokemonSpriteManager *monSpriteMan)
                 G3_Identity();
             }
 
-            PokemonSprite_TickAnim(&monSpriteMan->sprites[i]);
+            if (pass != MON_SPRITE_DRAW_REDRAW) {
+                PokemonSprite_TickAnim(&monSpriteMan->sprites[i]);
+            }
+
+            if (blend) {
+                realTransforms = monSpriteMan->sprites[i].transforms;
+                PokemonSprite_BlendTransforms(&monSpriteMan->sprites[i]);
+            }
 
             G3_TexPlttBase(monSpriteMan->plttBaseAddr + PLTT_OFFSET_CAST(i), monSpriteMan->imageProxy.attr.fmt);
             G3_Translate((monSpriteMan->sprites[i].transforms.xCenter + monSpriteMan->sprites[i].transforms.xPivot) << FX32_SHIFT, (monSpriteMan->sprites[i].transforms.yCenter + monSpriteMan->sprites[i].transforms.yPivot) << FX32_SHIFT, monSpriteMan->sprites[i].transforms.zCenter << FX32_SHIFT);
@@ -559,6 +674,15 @@ void PokemonSpriteManager_DrawSprites(PokemonSpriteManager *monSpriteMan)
 
                 NNS_G2dDrawSpriteFast(monSpriteMan->sprites[i].shadow.x - width / 2, monSpriteMan->sprites[i].shadow.y - height / 2, -1000, width, height, u0, v0, u1, v1);
             }
+
+            if (blend) {
+                monSpriteMan->sprites[i].transforms = realTransforms;
+            } else if (pass == MON_SPRITE_DRAW_REDRAW) {
+                monSpriteMan->sprites[i].lastFinal = monSpriteMan->sprites[i].transforms;
+                monSpriteMan->sprites[i].lastFinalValid = TRUE;
+            }
+        } else if (pass == MON_SPRITE_DRAW_REDRAW) {
+            monSpriteMan->sprites[i].lastFinalValid = FALSE;
         }
     }
 
@@ -567,6 +691,12 @@ void PokemonSpriteManager_DrawSprites(PokemonSpriteManager *monSpriteMan)
 
 void PokemonSpriteManager_Free(PokemonSpriteManager *monSpriteMan)
 {
+    for (int i = 0; i < sDrawLogCount; i++) {
+        if (sDrawLog[i] == monSpriteMan) {
+            sDrawLog[i] = NULL;
+        }
+    }
+
     Heap_Free(monSpriteMan->charRawData);
     Heap_Free(monSpriteMan->plttRawData);
     Heap_Free(monSpriteMan->plttRawDataUnfaded);

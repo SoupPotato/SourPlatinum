@@ -14,6 +14,9 @@
 #include "string_gf.h"
 #include "sys_task.h"
 #include "sys_task_manager.h"
+#include "system.h"
+
+#include "sourplatinum_config.h"
 
 #include "res/fonts/pl_font.naix"
 
@@ -225,7 +228,30 @@ u8 Text_AddPrinter(const TextPrinterTemplate *template, u32 renderDelay, TextPri
     return MAX_TEXT_PRINTERS;
 }
 
+static void SysTask_RunTextPrinterOnce(SysTask *task, void *data);
+
 static void SysTask_RunTextPrinter(SysTask *task, void *data)
+{
+    TextPrinter *printer = (TextPrinter *)data;
+    int steps = 1;
+
+    if (gSystem.fps60) {
+        // The print queue runs once per tick in 60 fps mode, which is the original rate. 100% = one step per run.
+        static u16 sTextPaceAccum = 0;
+
+        sTextPaceAccum += SP_PACE_TEXT_PERCENT;
+        steps = sTextPaceAccum / 100;
+        sTextPaceAccum %= 100;
+    }
+
+    u8 id = printer->id;
+
+    for (; steps > 0 && id < MAX_TEXT_PRINTERS && sTextPrinterTasks[id] == task; steps--) {
+        SysTask_RunTextPrinterOnce(task, data);
+    }
+}
+
+static void SysTask_RunTextPrinterOnce(SysTask *task, void *data)
 {
     if (sPausePrinter) {
         return;

@@ -17,6 +17,10 @@
 #include "struct_defs/battler_data.h"
 #include "struct_defs/link_battle_comm_state.h"
 
+#include "sourplatinum_config.h"
+
+#include "spl_emitter.h"
+
 #include "battle/battle_context.h"
 #include "battle/battle_controller.h"
 #include "battle/battle_controller_player.h"
@@ -120,6 +124,7 @@ static void BattleMain_InitParticleSystem(void);
 static void BattleMain_VBlankCallback(void *inBattleSys);
 static void BattleMain_LinkCommVBlankCallback(void *inBattleSys);
 static void SysTask_DrawSprites(SysTask *task, void *inBattleSys);
+static void BattleMain_SetVBlankCallback(BattleSystem *battleSys);
 static void SysTask_UpdateRedHPSound(SysTask *task, void *inBattleSys);
 static G3DPipelineBuffers *InitG3DPipelineBuffers(void);
 static void FreeG3DPipelineBuffers(G3DPipelineBuffers *pipelineBuffers);
@@ -458,7 +463,7 @@ void BattleSystem_SetupBattleScreen(BattleSystem *battleSys)
 
     GXLayers_EngineAToggleLayers(GX_PLANEMASK_OBJ, TRUE);
     GXLayers_EngineBToggleLayers(GX_PLANEMASK_OBJ, TRUE);
-    SetVBlankCallback(BattleMain_VBlankCallback, battleSys);
+    BattleMain_SetVBlankCallback(battleSys);
 
     battleSys->pendingBattleVRAMSetup = 1;
 
@@ -618,6 +623,14 @@ static void BattleMain_InitGraphics(ApplicationManager *appMan)
     sub_02015738(battleSys->paletteAnimator, 1);
 
     battleSys->taskDrawSprites = SysTask_Start(SysTask_DrawSprites, battleSys, 60000);
+#if SP_BATTLE_60FPS
+    if (!(BattleSystem_GetBattleType(battleSys) & BATTLE_TYPE_LINK)) {
+        SetFps60Mode(TRUE);
+        SPL_SetDefaultTimeScale(SP_DEBUG_PARTICLES_60 ? 2 : 1);
+        gSystem.vblankCallbackEveryTick = TRUE;
+        SysTask_SetTickDiv(battleSys->taskDrawSprites, 1);
+    }
+#endif
     battleSys->taskUpdateRedHPSound = SysTask_Start(SysTask_UpdateRedHPSound, battleSys, 50000);
     battleSys->taskFlyInMessageBox = SysTask_ExecuteOnVBlank(SysTask_FlyInMessageBox, battleSys, 1200);
     battleSys->yOffset = -51;
@@ -765,6 +778,10 @@ static void BattleMain_CopyBattleSysToDTOAndFree(ApplicationManager *appMan)
     Heap_Free(battleSys->bgPaletteSnapshot);
     FontSpecialChars_Free(battleSys->specialCharsHP);
     Font_Free(FONT_SUBSCREEN);
+#if SP_BATTLE_60FPS
+    SetFps60Mode(FALSE);
+    SPL_SetDefaultTimeScale(1);
+#endif
     SysTask_Done(battleSys->taskDrawSprites);
     SysTask_Done(battleSys->taskUpdateRedHPSound);
     DisableTouchPad();
@@ -907,7 +924,7 @@ static void BattleMain_InitBattleGraphics(BattleSystem *battleSys, BgConfig *bgC
     GXLayers_TurnBothDispOn();
     GXLayers_EngineAToggleLayers(GX_PLANEMASK_OBJ, TRUE);
     GXLayers_EngineBToggleLayers(GX_PLANEMASK_OBJ, TRUE);
-    SetVBlankCallback(BattleMain_VBlankCallback, battleSys);
+    BattleMain_SetVBlankCallback(battleSys);
 }
 
 static void BattleMain_InitTerrains(BattleSystem *battleSys)
@@ -1504,6 +1521,14 @@ static void BattleMain_LinkCommVBlankCallback(void *commState)
     OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
+static void BattleMain_SetVBlankCallback(BattleSystem *battleSys)
+{
+    SetVBlankCallback(BattleMain_VBlankCallback, battleSys);
+#if SP_BATTLE_60FPS
+    gSystem.vblankCallbackEveryTick = gSystem.fps60;
+#endif
+}
+
 static void SysTask_DrawSprites(SysTask *task, void *inBattleSys)
 {
     BattleSystem *battleSys = inBattleSys;
@@ -1511,11 +1536,39 @@ static void SysTask_DrawSprites(SysTask *task, void *inBattleSys)
     CommManager_Dummy_02038A1C(HEAP_ID_BATTLE, battleSys->bgConfig);
 
     if (battleSys->renderMode == 0 || battleSys->renderMode == 3) {
+#if SP_BATTLE_60FPS
+        if (gSystem.fps60 && !gSystem.logicTick) {
+            // 60 fps tick in between two logic ticks: the original-rate logic does not advance, but the
+            // 3D scene has to be submitted again. Particles are simulated at 60 Hz (see
+            // SPL_SetDefaultTimeScale), so they are drawn and updated on every tick.
+            // The 2D sprites are covered by SpriteList_ReplayDrawLog.
+#if !SP_DEBUG_REDRAW_3D
+            return;
+#endif
+
+            // 3D drawn by other tasks (move animation Pokemon sprites) comes first, like on the logic tick.
+            PokemonSpriteManager_ReplayDrawLog();
+
+            if (battleSys->renderMode == 0) {
+#if SP_DEBUG_PARTICLES_60
+                ParticleHelper_DrawParticleSystems();
+#else
+                ParticleHelper_DrawParticleSystemsNoUpdate();
+#endif
+            }
+
+            PokemonSpriteManager_DrawSpritesPass(battleSys->monSpriteMan, MON_SPRITE_DRAW_REDRAW);
+            G3_RequestSwapBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);
+            return;
+        }
+#endif
+
         if (battleSys->renderMode == 0) {
             ParticleHelper_DrawParticleSystems();
         }
 
-        PokemonSpriteManager_DrawSprites(battleSys->monSpriteMan);
+        // Not PokemonSpriteManager_DrawSprites: this manager is redrawn explicitly on the in-between ticks.
+        PokemonSpriteManager_DrawSpritesPass(battleSys->monSpriteMan, MON_SPRITE_DRAW_NORMAL);
         SpriteSystem_DrawSprites(battleSys->spriteMan);
         SpriteSystem_UpdateTransfer();
         G3_RequestSwapBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);

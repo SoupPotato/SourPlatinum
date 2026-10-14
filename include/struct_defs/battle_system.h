@@ -47,8 +47,7 @@ struct BattleSystem {
     MessageLoader *attackMsgLoader;
     StringTemplate *strFormatter;
     String *msgBuffer;
-    SysTask *taskDrawSprites;
-    SysTask *taskUpdateRedHPSound;
+    SysTask *taskDrawSprites;    SysTask *taskUpdateRedHPSound;
     SysTask *taskFlyInMessageBox;
     PaletteData *paletteData;
     u32 battleType;

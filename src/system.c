@@ -6,6 +6,7 @@
 #include "constants/graphics.h"
 #include "constants/heap.h"
 
+#include "bg_window.h"
 #include "boot.h"
 #include "heap.h"
 #include "math_util.h"
@@ -38,6 +39,7 @@ static void VBlankIntr(void)
     MI_WaitDma(GX_DEFAULT_DMAID);
     SysTaskManager_ExecuteTasks(gSystem.vBlankTaskMgr);
     gSystem.frameCounter++;
+    gSystem.vblankIsrCounter++;
 }
 
 static void DummyVBlankIntr(void)
@@ -57,6 +59,18 @@ void SetVBlankCallback(Callback cb, void *data)
 {
     gSystem.vblankCallback = cb;
     gSystem.vblankCallbackData = data;
+    gSystem.vblankCallbackEveryTick = FALSE;
+}
+
+void SetFps60Mode(BOOL enabled)
+{
+    gSystem.fps60 = enabled;
+    gSystem.logicTick = TRUE;
+
+    if (!enabled) {
+        gSystem.vblankCallbackEveryTick = FALSE;
+        Bg_ClearBlendRegistry();
+    }
 }
 
 void DisableHBlank(void)

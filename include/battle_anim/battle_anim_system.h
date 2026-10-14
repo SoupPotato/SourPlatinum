@@ -237,6 +237,10 @@ BOOL BattleAnimSystem_FreeScriptData(BattleAnimSystem *system);
 BOOL BattleAnimSystem_IsActive(BattleAnimSystem *system);
 SysTask *BattleAnimSystem_StartAnimTaskEx(BattleAnimSystem *system, SysTaskFunc func, void *param, u32 priority);
 SysTask *BattleAnimSystem_StartAnimTask(BattleAnimSystem *system, SysTaskFunc func, void *param);
+// Sour Platinum: like StartAnimTask, but in 60 fps mode the task runs on every tick instead of only on
+// original-rate logic ticks. Only use it for tasks whose timing comes entirely from the lerp/revolution
+// contexts in battle_anim_helpers (they scale themselves), see battle_time.h.
+SysTask *BattleAnimSystem_StartNativeAnimTask(BattleAnimSystem *system, SysTaskFunc func, void *param);
 SysTask *BattleAnimSystem_StartSoundTask(BattleAnimSystem *system, SysTaskFunc func, void *param, u32 priority);
 void BattleAnimSystem_EndAnimTask(BattleAnimSystem *system, SysTask *task);
 void BattleAnimSystem_EndSoundTask(BattleAnimSystem *system, SysTask *task);

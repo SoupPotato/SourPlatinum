@@ -1,5 +1,7 @@
 #include "battle/healthbox.h"
 
+#include "sourplatinum_config.h"
+
 #include <nitro.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,6 +14,7 @@
 #include "battle/battle_system.h"
 
 #include "assert.h"
+#include "battle_time.h"
 #include "bg_window.h"
 #include "font_special_chars.h"
 #include "heap.h"
@@ -161,9 +164,8 @@ enum HealthBoxPart {
 };
 
 static s32 HealthBox_DrawGauge(HealthBox *healthbox, enum HealthBoxGaugeType gaugeType);
-static s32 UpdateGauge(s32 max, s32 cur, s32 diff, s32 *temp, u8 size, u16 fillOffset);
+static s32 UpdateGauge(s32 max, s32 cur, s32 diff, s32 *temp, u8 size, u16 pixelsPerSecond);
 static u8 FillCells(s32 max, s32 cur, s32 diff, s32 *temp, u8 *cells, u8 cellNum);
-static u32 CalcGaugeFill(s32 curVal, s32 diff, s32 maxVal, u8 gaugeSize);
 static const u8 *GetHealthBoxPartsTile(enum HealthBoxPart part);
 static void DrawGauge(HealthBox *healthbox, u8 gaugeType);
 static void HealthBox_DrawBattlerName(HealthBox *healthbox);
@@ -1373,19 +1375,11 @@ static void HealthBox_DrawBallsLeftMessage(HealthBox *healthbox, u32 flags)
 static s32 HealthBox_DrawGauge(HealthBox *healthbox, enum HealthBoxGaugeType gaugeType)
 {
     s32 result;
-    s32 fillOffset;
 
     if (gaugeType == HEALTHBOX_GAUGE_HP) {
-        result = UpdateGauge(healthbox->maxHP, healthbox->curHP, healthbox->damage, &healthbox->hpTemp, HEALTHBOX_HP_CELL_COUNT, 1);
+        result = UpdateGauge(healthbox->maxHP, healthbox->curHP, healthbox->damage, &healthbox->hpTemp, HEALTHBOX_HP_CELL_COUNT, SP_BAR_HP_PIXELS_PER_SECOND);
     } else {
-        fillOffset = CalcGaugeFill(healthbox->curExp, healthbox->expReward, healthbox->maxExp, HEALTHBOX_EXP_CELL_COUNT);
-
-        if (fillOffset == 0) {
-            fillOffset = 1;
-        }
-
-        fillOffset = abs(healthbox->expReward / fillOffset);
-        result = UpdateGauge(healthbox->maxExp, healthbox->curExp, healthbox->expReward, &healthbox->expTemp, HEALTHBOX_EXP_CELL_COUNT, fillOffset);
+        result = UpdateGauge(healthbox->maxExp, healthbox->curExp, healthbox->expReward, &healthbox->expTemp, HEALTHBOX_EXP_CELL_COUNT, SP_BAR_EXP_PIXELS_PER_SECOND);
     }
 
     if (gaugeType != HEALTHBOX_GAUGE_HP || healthbox->numberMode != TRUE) {
@@ -1469,28 +1463,28 @@ static void DrawGauge(HealthBox *healthbox, u8 gaugeType)
 }
 
 /**
- * @brief Update the pixels of a gauge based on the calculated
- * change in the current value of a gauge.
+ * @brief Move a gauge towards its target value.
  *
- * @param cur       Current value of the gauge
- * @param diff      Change to be applied to the current value
- * @param max       Max value of the gauge
- * @param size      Size of the gauge, in squares of fill
- * @param temp      Temporary value stored in the gauge
- * @return          Number of pixels to be filled
+ * Sour Platinum: the gauge always moves at the same visual speed, in pixels per second, however
+ * large the value it represents is. Internally the displayed value is kept as a fixed-point number
+ * with 8 fractional bits, so the gauge can move by a fraction of a point per call.
+ *
+ * @param max               Max value of the gauge
+ * @param cur               Current value of the gauge
+ * @param diff              Change to be applied to the current value
+ * @param temp              Displayed value (8.8 fixed point)
+ * @param size              Size of the gauge, in squares of fill
+ * @param pixelsPerSecond   Speed of the gauge
+ * @return                  The displayed value, or -1 once the gauge has arrived
  */
-static s32 UpdateGauge(s32 max, s32 cur, s32 diff, s32 *temp, u8 size, u16 fillOffset)
+static s32 UpdateGauge(s32 max, s32 cur, s32 diff, s32 *temp, u8 size, u16 pixelsPerSecond)
 {
-    s32 updated, final, ratio;
+    s32 updated, final;
 
-    u8 corrected = size * HEALTHBOX_NAME_BLOCK_COUNT_X;
+    u8 pixels = size * HEALTHBOX_NAME_BLOCK_COUNT_X;
 
     if (*temp == S32_MIN) {
-        if (max < corrected) {
-            *temp = cur << 8;
-        } else {
-            *temp = cur;
-        }
+        *temp = cur << 8;
     }
 
     updated = cur - diff;
@@ -1501,56 +1495,39 @@ static s32 UpdateGauge(s32 max, s32 cur, s32 diff, s32 *temp, u8 size, u16 fillO
         updated = max;
     }
 
-    if (max < corrected) {
-        if (updated == (*temp >> 8) && (*temp & 0xff) == 0) {
-            return -1;
-        }
-    } else {
-        if (updated == *temp) {
-            return -1;
-        }
+    if (updated == (*temp >> 8) && (*temp & 0xff) == 0) {
+        return -1;
     }
 
-    if (max < corrected) {
-        ratio = max * 0x100 / corrected;
+    // How many gauge points one pixel is worth (8.8 fixed point), and how many pixels to move per call.
+    s32 pointsPerPixel = (max << 8) / pixels;
+    s32 pixelsPerCall = (pixelsPerSecond * SP_PACE_BARS_PERCENT / 100) * 256 / (BattleTime_IsNativeContext() ? 60 : 30);
+    s32 step = (pointsPerPixel / 256) * pixelsPerCall + ((pointsPerPixel % 256) * pixelsPerCall) / 256;
 
-        if (diff < 0) {
-            *temp += ratio;
-            final = *temp >> 8;
+    if (step < 1) {
+        step = 1;
+    }
 
-            if (final >= updated) {
-                *temp = updated << 8;
-                final = updated;
-            }
-        } else {
-            *temp -= ratio;
-            final = *temp >> 8;
+    if (diff < 0) {
+        *temp += step;
+        final = *temp >> 8;
 
-            if ((*temp & 0xff) > 0) {
-                final++;
-            }
-
-            if (final <= updated) {
-                *temp = updated << 8;
-                final = updated;
-            }
+        if (final >= updated) {
+            *temp = updated << 8;
+            final = updated;
         }
     } else {
-        if (diff < 0) {
-            *temp += fillOffset;
+        *temp -= step;
+        final = *temp >> 8;
 
-            if (*temp > updated) {
-                *temp = updated;
-            }
-        } else {
-            *temp -= fillOffset;
-
-            if (*temp < updated) {
-                *temp = updated;
-            }
+        if ((*temp & 0xff) > 0) {
+            final++;
         }
 
-        final = *temp;
+        if (final <= updated) {
+            *temp = updated << 8;
+            final = updated;
+        }
     }
 
     return final;
@@ -1574,10 +1551,16 @@ static u8 FillCells(s32 max, s32 cur, s32 diff, s32 *temp, u8 *cells, u8 cellNum
         cells[cell] = 0;
     }
 
-    if (max < offset) {
-        pixels = (*temp * offset / max) >> 8;
+    s32 pointsPerPixel = (max << 8) / (s32)offset;
+
+    if (max <= 0 || pointsPerPixel <= 0) {
+        pixels = 0;
     } else {
-        pixels = *temp * offset / max;
+        pixels = *temp / pointsPerPixel;
+
+        if (pixels > offset) {
+            pixels = offset;
+        }
     }
 
     final = pixels;
@@ -1598,33 +1581,6 @@ static u8 FillCells(s32 max, s32 cur, s32 diff, s32 *temp, u8 *cells, u8 cellNum
     }
 
     return final;
-}
-
-/**
- * @brief Calculate the number of pixels that will need to be filled to account
- * for a change in the current value of a gauge.
- *
- * @param curVal    Current value of the gauge
- * @param diff      Change to be applied to the current value
- * @param maxVal    Max value of the gauge
- * @param gaugeSize Size of the gauge, in squares of fill
- * @return          Number of pixels to be filled
- */
-static u32 CalcGaugeFill(s32 curVal, s32 diff, s32 maxVal, u8 gaugeSize)
-{
-    u8 gaugeSizePixels = gaugeSize * 8; // gauges have 8 pixels per "square" of fill
-    s32 newVal = curVal - diff;
-
-    if (newVal < 0) {
-        newVal = 0;
-    } else if (newVal > maxVal) {
-        newVal = maxVal;
-    }
-
-    s8 curPixels = curVal * gaugeSizePixels / maxVal;
-    s8 newPixels = newVal * gaugeSizePixels / maxVal;
-
-    return abs(curPixels - newPixels);
 }
 
 static const u8 *GetHealthBoxPartsTile(enum HealthBoxPart part)

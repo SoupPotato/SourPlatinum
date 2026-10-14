@@ -13,6 +13,7 @@
 #include "battle_anim/battle_anim_util.h"
 
 #include "battle_script_battlers.h"
+#include "battle_time.h"
 #include "buffer_manager.h"
 #include "heap.h"
 #include "inlines.h"
@@ -186,6 +187,7 @@ void ScaleLerpContext_ApplyToMon(XYTransformContext *ctx, PokemonSprite *sprite)
 
 void RevolutionContext_Init(XYTransformContext *ctx, u16 sx, u16 ex, u16 sy, u16 ey, fx32 rx, fx32 ry, int steps)
 {
+    steps = BattleTime_Frames(steps, SP_PACE_ANIM_PERCENT);
     ctx->data[XY_PARAM_REV_STEPS] = steps;
     ctx->data[XY_PARAM_REV_CUR_X] = sx;
     ctx->data[XY_PARAM_REV_RADIUS_X] = rx;
@@ -207,7 +209,15 @@ void RevolutionContext_InitWithStepSize(XYTransformContext *ctx, u16 sx, u16 ex,
 
     stepSizeSigned = stepSizeX;
 
-    ctx->data[XY_PARAM_REV_STEPS] = BattleAnimUtil_GetRequiredSteps(sx * FX32_ONE, ex * FX32_ONE, stepSizeSigned * FX32_ONE);
+    int originalSteps = BattleAnimUtil_GetRequiredSteps(sx * FX32_ONE, ex * FX32_ONE, stepSizeSigned * FX32_ONE);
+    int steps = BattleTime_Frames(originalSteps, SP_PACE_ANIM_PERCENT);
+
+    if (steps != originalSteps && steps != 0) {
+        // Same distance, but spread over the (usually doubled) number of ticks.
+        stepSizeSigned = (stepSizeSigned * originalSteps) / steps;
+    }
+
+    ctx->data[XY_PARAM_REV_STEPS] = steps;
     ctx->data[XY_PARAM_REV_CUR_X] = sx;
     ctx->data[XY_PARAM_REV_RADIUS_X] = rx;
     ctx->data[XY_PARAM_REV_CUR_Y] = sy;
@@ -216,7 +226,7 @@ void RevolutionContext_InitWithStepSize(XYTransformContext *ctx, u16 sx, u16 ex,
     ctx->data[XY_PARAM_REV_STEP_SIZE_Y] = (ey - sy) / ctx->data[XY_PARAM_REV_STEPS];
 }
 
-BOOL RevolutionContext_Update(XYTransformContext *ctx)
+static BOOL RevolutionContext_Step(XYTransformContext *ctx)
 {
     GF_ASSERT(ctx);
 
@@ -236,6 +246,17 @@ BOOL RevolutionContext_Update(XYTransformContext *ctx)
     }
 
     return FALSE;
+}
+
+BOOL RevolutionContext_Update(XYTransformContext *ctx)
+{
+    BOOL updated = FALSE;
+
+    for (int i = BattleTime_UpdateSubsteps(); i > 0; i--) {
+        updated |= RevolutionContext_Step(ctx);
+    }
+
+    return updated;
 }
 
 BOOL RevolutionContext_UpdateAndApplyToSprite(XYTransformContext *ctx, s16 cx, s16 cy, ManagedSprite *sprite)
@@ -262,6 +283,8 @@ void PosLerpContext_Init(XYTransformContext *ctx, s16 sx, s16 ex, s16 sy, s16 ey
 {
     GF_ASSERT(ctx);
 
+    steps = BattleTime_Frames(steps, SP_PACE_ANIM_PERCENT);
+
     ctx->x = sx;
     ctx->y = sy;
     ctx->data[XY_PARAM_STEPS] = steps;
@@ -271,7 +294,7 @@ void PosLerpContext_Init(XYTransformContext *ctx, s16 sx, s16 ex, s16 sy, s16 ey
     ctx->data[XY_PARAM_CUR_Y] = sy * FX32_ONE;
 }
 
-BOOL PosLerpContext_Update(XYTransformContext *ctx)
+static BOOL PosLerpContext_Step(XYTransformContext *ctx)
 {
     GF_ASSERT(ctx);
 
@@ -286,6 +309,17 @@ BOOL PosLerpContext_Update(XYTransformContext *ctx)
     }
 
     return FALSE;
+}
+
+BOOL PosLerpContext_Update(XYTransformContext *ctx)
+{
+    BOOL updated = FALSE;
+
+    for (int i = BattleTime_UpdateSubsteps(); i > 0; i--) {
+        updated |= PosLerpContext_Step(ctx);
+    }
+
+    return updated;
 }
 
 BOOL PosLerpContext_UpdateAndApplyToSprite(XYTransformContext *ctx, ManagedSprite *sprite)
@@ -321,8 +355,13 @@ BOOL XYTransformContext_UpdateParabolic(XYTransformContext *linear, XYTransformC
     GF_ASSERT(linear);
     GF_ASSERT(revs);
 
-    BOOL linearActive = PosLerpContext_Update(linear);
-    BOOL revsActive = RevolutionContext_Update(revs);
+    BOOL linearActive = FALSE;
+    BOOL revsActive = FALSE;
+
+    for (int i = BattleTime_UpdateSubsteps(); i > 0; i--) {
+        linearActive |= PosLerpContext_Step(linear);
+        revsActive |= RevolutionContext_Step(revs);
+    }
 
     linear->x += revs->x;
     linear->y += revs->y;
@@ -357,6 +396,8 @@ void ValueLerpContext_InitFX32(ValueLerpContext *ctx, s16 start, s16 end, u32 st
 {
     GF_ASSERT(ctx);
 
+    steps = BattleTime_Frames(steps, SP_PACE_ANIM_PERCENT);
+
     ctx->value = start;
     ctx->data[VALUE_PARAM_FX32_STEPS] = steps;
     ctx->data[VALUE_PARAM_FX32_STEP_SIZE] = BattleAnimMath_GetStepSize(start * FX32_ONE, end * FX32_ONE, steps);
@@ -377,7 +418,7 @@ BOOL ValueLerpContext_Update(ValueLerpContext *ctx)
     return FALSE;
 }
 
-BOOL ValueLerpContext_UpdateFX32(ValueLerpContext *ctx)
+static BOOL ValueLerpContext_StepFX32(ValueLerpContext *ctx)
 {
     GF_ASSERT(ctx);
 
@@ -392,15 +433,27 @@ BOOL ValueLerpContext_UpdateFX32(ValueLerpContext *ctx)
     return FALSE;
 }
 
+BOOL ValueLerpContext_UpdateFX32(ValueLerpContext *ctx)
+{
+    BOOL updated = FALSE;
+
+    for (int i = BattleTime_UpdateSubsteps(); i > 0; i--) {
+        updated |= ValueLerpContext_StepFX32(ctx);
+    }
+
+    return updated;
+}
+
 void ValueLerpContext_InitSinusoidal(ValueLerpContext *ctx, u16 start, u16 end, fx32 amplitude, u32 steps)
 {
+    steps = BattleTime_Frames(steps, SP_PACE_ANIM_PERCENT);
     ctx->data[VALUE_PARAM_COS_STEPS] = steps;
     ctx->data[VALUE_PARAM_COS_CUR_ANGLE] = start;
     ctx->data[VALUE_PARAM_COS_AMPLITUDE] = amplitude;
     ctx->data[VALUE_PARAM_COS_STEP_SIZE] = (end - start) / steps;
 }
 
-BOOL ValueLerpContext_UpdateSinusoidal(ValueLerpContext *ctx)
+static BOOL ValueLerpContext_StepSinusoidal(ValueLerpContext *ctx)
 {
     GF_ASSERT(ctx);
 
@@ -416,12 +469,25 @@ BOOL ValueLerpContext_UpdateSinusoidal(ValueLerpContext *ctx)
     return FALSE;
 }
 
+BOOL ValueLerpContext_UpdateSinusoidal(ValueLerpContext *ctx)
+{
+    BOOL updated = FALSE;
+
+    for (int i = BattleTime_UpdateSubsteps(); i > 0; i--) {
+        updated |= ValueLerpContext_StepSinusoidal(ctx);
+    }
+
+    return updated;
+}
+
 // SCALE and REFERENCE are percentages, e.g. 100 for "normal" scale
 #define RELATIVE_SCALE(SCALE, REFERENCE) ((SCALE * MON_AFFINE_SCALE(1)) / REFERENCE)
 
 void ScaleLerpContext_Init(XYTransformContext *ctx, s16 startScale, s16 refScale, s16 endScale, u32 steps)
 {
     GF_ASSERT(ctx);
+
+    steps = BattleTime_Frames(steps, SP_PACE_ANIM_PERCENT);
 
     ctx->data[XY_PARAM_STEPS] = steps;
     ctx->data[XY_PARAM_STEP_SIZE] = BattleAnimMath_GetStepSize(
@@ -435,7 +501,7 @@ void ScaleLerpContext_Init(XYTransformContext *ctx, s16 startScale, s16 refScale
     ctx->data[XY_PARAM_CUR_Y] = ctx->y * FX32_ONE;
 }
 
-BOOL ScaleLerpContext_Update(XYTransformContext *ctx)
+static BOOL ScaleLerpContext_Step(XYTransformContext *ctx)
 {
     GF_ASSERT(ctx);
 
@@ -452,9 +518,22 @@ BOOL ScaleLerpContext_Update(XYTransformContext *ctx)
     return FALSE;
 }
 
+BOOL ScaleLerpContext_Update(XYTransformContext *ctx)
+{
+    BOOL updated = FALSE;
+
+    for (int i = BattleTime_UpdateSubsteps(); i > 0; i--) {
+        updated |= ScaleLerpContext_Step(ctx);
+    }
+
+    return updated;
+}
+
 void ScaleLerpContext_InitXY(XYTransformContext *ctx, s16 sx, s16 ex, s16 sy, s16 ey, s16 ref, u32 steps)
 {
     GF_ASSERT(ctx);
+
+    steps = BattleTime_Frames(steps, SP_PACE_ANIM_PERCENT);
 
     ctx->data[XY_PARAM_STEPS] = steps;
     ctx->data[XY_PARAM_STEP_SIZE_X] = BattleAnimMath_GetStepSize(
@@ -472,7 +551,7 @@ void ScaleLerpContext_InitXY(XYTransformContext *ctx, s16 sx, s16 ex, s16 sy, s1
     ctx->data[XY_PARAM_CUR_Y] = ctx->y * FX32_ONE;
 }
 
-BOOL ScaleLerpContext_UpdateXY(XYTransformContext *ctx)
+static BOOL ScaleLerpContext_StepXY(XYTransformContext *ctx)
 {
     GF_ASSERT(ctx);
 
@@ -487,6 +566,17 @@ BOOL ScaleLerpContext_UpdateXY(XYTransformContext *ctx)
     }
 
     return FALSE;
+}
+
+BOOL ScaleLerpContext_UpdateXY(XYTransformContext *ctx)
+{
+    BOOL updated = FALSE;
+
+    for (int i = BattleTime_UpdateSubsteps(); i > 0; i--) {
+        updated |= ScaleLerpContext_StepXY(ctx);
+    }
+
+    return updated;
 }
 
 void ScaleLerpContext_GetAffineScale(XYTransformContext *ctx, f32 *px, f32 *py)
