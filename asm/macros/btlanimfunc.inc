@@ -78,8 +78,13 @@
     CallFunc 7, \unused
     .endm
 
-    .macro Func_QuickAttack
+    // Sour Platinum: the optional argument is the number of spins (default 1)
+    .macro Func_QuickAttack revolutions
+    .ifb \revolutions
     CallFunc 8
+    .else
+    CallFunc 8, \revolutions
+    .endif
     .endm
 
     .macro Func_DrillPeck

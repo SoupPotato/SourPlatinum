@@ -93,8 +93,16 @@ animation plays. They work in both 30 and 60 fps mode.
   particles already out finish their lives, so the effect ends sooner without moving faster
   (used by Absorb and Leech Seed).
 
-Moves tuned with these so far: Absorb, Leech Seed drain, Mega Drain, Quick Attack, Dream Eater,
-Drain Punch, Leech Life, Vital Throw and Foresight.
+Moves tuned with these so far: Absorb, Leech Seed drain, Mega Drain, Quick Attack, Agility, Dream Eater,
+Drain Punch, Leech Life, Vital Throw, Foresight, Double Slap and Poison Sting. `Func_QuickAttack` takes an
+optional number of spins (Agility uses 2).
 
 Particle children that live one original frame (the white centre of the drain orbs) are emitted
 on every update and live one update in 60 fps mode, so they stay exactly under their parent.
+
+## Wild Pokemon modifier (debug builds)
+
+Set `SP_DEBUG_WILD_MODIFIER` to `1` in `include/sourplatinum_config.h` (it is `0` in the normal ROM). Type a number
+into the Pokétch calculator and press L (species, National Dex number), R (level, 1-100) or Select (nature,
+0-24). Every wild Pokémon created afterwards uses the values. 0 (or 25+ for the nature) turns a setting off, and
+all settings reset when you load a different map.

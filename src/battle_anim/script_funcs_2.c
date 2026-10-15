@@ -571,7 +571,11 @@ enum ForesightSpriteState {
 
 #define FORESIGHT_SPRITE_MOVE_EXTENT       80
 #define FORESIGHT_SPRITE_MOVE_FRAMES       8
-#define FORESIGHT_SPRITE_SEGMENT_COUNT     6
+#define FORESIGHT_SPRITE_SEGMENT_COUNT     4
+#define FORESIGHT_SPRITE_PATH_HALF_WIDTH   32
+#define FORESIGHT_SPRITE_PATH_DROP         27 // 64 * tan(22.5 degrees), so 3 passes span the original 80 pixels of height
+#define FORESIGHT_SPRITE_START_X           (-FORESIGHT_SPRITE_PATH_HALF_WIDTH)
+#define FORESIGHT_SPRITE_START_Y           (-40)
 #define FORESIGHT_SPRITE_START_DELAY       4
 #define FORESIGHT_SPRITE_FADE_EV1_START    16
 #define FORESIGHT_SPRITE_FADE_EV1_END      0
@@ -1276,6 +1280,13 @@ static void BattleAnimTask_QuickAttack(SysTask *task, void *param)
     transformsActive[1] = Afterimage_Update(&ctx->afterImageCtx);
     transformsActive[2] = FALSE;
 
+    if (transformsActive[0] == FALSE) {
+        // Sour Platinum: the oval does not always end exactly on its start (the step size is rounded), which left
+        // the sprite 1 pixel off while the afterimages finished. Rest at the exact original position.
+        PokemonSprite_SetAttribute(ctx->attackerSprite, MON_SPRITE_X_CENTER, ctx->attackerX);
+        PokemonSprite_SetAttribute(ctx->attackerSprite, MON_SPRITE_Y_CENTER, ctx->attackerY + (REVOLUTION_CONTEXT_OVAL_RADIUS_Y >> FX32_SHIFT));
+    }
+
     SpriteSystem_DrawSprites(ctx->pokemonSpriteManager);
 
     for (int i = 0; i < SNELEMS(transformsActive); i++) {
@@ -1302,10 +1313,16 @@ void BattleAnimScriptFunc_QuickAttack(BattleAnimSystem *system)
     ctx->attackerShadowHeight = PokemonSprite_GetAttribute(ctx->attackerSprite, MON_SPRITE_SHADOW_HEIGHT);
     ctx->attackerY -= REVOLUTION_CONTEXT_OVAL_RADIUS_Y >> FX32_SHIFT;
 
-    RevolutionContext_InitOvalRevolutions(&ctx->rev, 1, QUICK_ATTACK_REVOLUTION_FRAMES);
+    int revolutions = BattleAnimSystem_GetScriptVar(system, 0); // number of spins, 0 = 1
+
+    if (revolutions < 1) {
+        revolutions = 1;
+    }
+
+    RevolutionContext_InitOvalRevolutions(&ctx->rev, revolutions, QUICK_ATTACK_REVOLUTION_FRAMES);
 
     XYTransformContext afterImageRev;
-    RevolutionContext_InitOvalRevolutions(&afterImageRev, 1, QUICK_ATTACK_AFTERIMAGE_REVOLUTION_FRAMES);
+    RevolutionContext_InitOvalRevolutions(&afterImageRev, revolutions, QUICK_ATTACK_AFTERIMAGE_REVOLUTION_FRAMES);
 
     // Adjust rotation direction based on if the attacker is on the player's side or not
     int dir = BattleAnimUtil_GetTransformDirectionX(ctx->battleAnimSys, BattleAnimSystem_GetAttacker(ctx->battleAnimSys));
@@ -2965,27 +2982,23 @@ void BattleAnimSpriteFunc_ScaryFace(BattleAnimSystem *system, SpriteSystem *spri
     BattleAnimSystem_StartAnimTask(ctx->battleAnimSys, BattleAnimTask_ScaryFaceSprite, ctx);
 }
 
-// Sets up the offset lerp for the current path segment, doing a zig-zag over the defender.
+// Sets up the offset lerp for the current path segment. Sour Platinum: the reticle starts at the top left, zig-zags
+// down over the defender at a shallow angle (22.5 degrees from horizontal, 67.5 from vertical) and finishes in the
+// center. The start point is the top left corner of the path, see FORESIGHT_SPRITE_START_X/Y.
 static void ForesightSprite_InitMoveSegment(ForesightSpriteContext *ctx)
 {
     switch (ctx->segment) {
     case 0:
-        PosLerpContext_Init(&ctx->pos, 0, FORESIGHT_SPRITE_MOVE_EXTENT / 2, 0, FORESIGHT_SPRITE_MOVE_EXTENT / 2, FORESIGHT_SPRITE_MOVE_FRAMES);
+        PosLerpContext_Init(&ctx->pos, 0, 2 * FORESIGHT_SPRITE_PATH_HALF_WIDTH, 0, FORESIGHT_SPRITE_PATH_DROP, FORESIGHT_SPRITE_MOVE_FRAMES);
         break;
     case 1:
-        PosLerpContext_Init(&ctx->pos, 0, 0, 0, -FORESIGHT_SPRITE_MOVE_EXTENT, FORESIGHT_SPRITE_MOVE_FRAMES);
+        PosLerpContext_Init(&ctx->pos, 0, -2 * FORESIGHT_SPRITE_PATH_HALF_WIDTH, 0, FORESIGHT_SPRITE_PATH_DROP - 1, FORESIGHT_SPRITE_MOVE_FRAMES);
         break;
     case 2:
-        PosLerpContext_Init(&ctx->pos, 0, -FORESIGHT_SPRITE_MOVE_EXTENT, 0, FORESIGHT_SPRITE_MOVE_EXTENT, FORESIGHT_SPRITE_MOVE_FRAMES);
+        PosLerpContext_Init(&ctx->pos, 0, 2 * FORESIGHT_SPRITE_PATH_HALF_WIDTH, 0, FORESIGHT_SPRITE_PATH_DROP, FORESIGHT_SPRITE_MOVE_FRAMES);
         break;
     case 3:
-        PosLerpContext_Init(&ctx->pos, 0, 0, 0, -FORESIGHT_SPRITE_MOVE_EXTENT, FORESIGHT_SPRITE_MOVE_FRAMES);
-        break;
-    case 4:
-        PosLerpContext_Init(&ctx->pos, 0, FORESIGHT_SPRITE_MOVE_EXTENT, 0, FORESIGHT_SPRITE_MOVE_EXTENT, FORESIGHT_SPRITE_MOVE_FRAMES);
-        break;
-    case 5:
-        PosLerpContext_Init(&ctx->pos, 0, -FORESIGHT_SPRITE_MOVE_EXTENT / 2, 0, -FORESIGHT_SPRITE_MOVE_EXTENT / 2, FORESIGHT_SPRITE_MOVE_FRAMES);
+        PosLerpContext_Init(&ctx->pos, 0, -FORESIGHT_SPRITE_PATH_HALF_WIDTH, 0, -FORESIGHT_SPRITE_START_Y - (3 * FORESIGHT_SPRITE_PATH_DROP - 1), FORESIGHT_SPRITE_MOVE_FRAMES);
         break;
     default:
         GF_ASSERT(FALSE);
@@ -3081,6 +3094,9 @@ void BattleAnimSpriteFunc_Foresight(BattleAnimSystem *system, SpriteSystem *spri
     ManagedSprite_SetPriority(ctx->sprite, 100);
     ManagedSprite_SetExplicitPriority(ctx->sprite, 1);
     ManagedSprite_GetPositionXY(ctx->sprite, &ctx->baseX, &ctx->baseY);
+    ctx->baseX += FORESIGHT_SPRITE_START_X;
+    ctx->baseY += FORESIGHT_SPRITE_START_Y;
+    ManagedSprite_SetPositionXY(ctx->sprite, ctx->baseX, ctx->baseY);
 
     BattleAnimSystem_StartAnimTask(ctx->battleAnimSys, BattleAnimTask_ForesightSprite, ctx);
 }
