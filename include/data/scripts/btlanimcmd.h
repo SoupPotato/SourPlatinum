@@ -93,6 +93,7 @@ ScriptCommand(BTLANIMCMD_WAITFORLRX,                        BattleAnimScriptCmd_
 ScriptCommand(BTLANIMCMD_SETANIMSPEED,                      BattleAnimScriptCmd_SetAnimSpeed)
 ScriptCommand(BTLANIMCMD_STOPEMITTERS,                      BattleAnimScriptCmd_StopEmitters)
 ScriptCommand(BTLANIMCMD_SETPARTICLESPEED,                  BattleAnimScriptCmd_SetParticleSpeed)
+ScriptCommand(BTLANIMCMD_SETSMOOTHCHILDREN,                 BattleAnimScriptCmd_SetSmoothChildren)
 
 // clang-format on
 

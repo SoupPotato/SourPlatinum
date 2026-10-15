@@ -762,6 +762,16 @@
     .long \percent
     .endm
 
+    // Sour Platinum: in 60 fps mode, particles that are made of child particles that are created every frame (trails, rings
+    // that hop from place to place) are created on every 60 Hz update instead, so that they move smoothly. Applies to the
+    // emitters created after it; it is reset when the animation starts and ends. It makes the trail denser, so only some
+    // moves use it.
+    // enabled: 1 to turn it on, 0 to turn it off.
+    .macro SetSmoothChildren enabled:req
+    .long BTLANIMCMD_SETSMOOTHCHILDREN
+    .long \enabled
+    .endm
+
     // Convenience Macros
 
     // Loads a particle system from battle_particles.narc

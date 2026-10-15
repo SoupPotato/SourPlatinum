@@ -97,6 +97,8 @@ The hiker in Oreburgh Gate 1F (`res/field/scripts/scripts_oreburgh_gate_1f.s`) g
 Smash HM, or when you talk to him later if you don't have it yet. `SP_DEBUG_REGISTER_FIELD_MOVES_APP` registers the
 app from the start for testing.
 
+Planned follow-ups for the app are in `sourplatinum/TODO.md`.
+
 ## Move animation speed commands
 
 Move animation scripts (`res/moves/*/anim.s`) have three commands for adjusting how fast an
@@ -111,6 +113,9 @@ animation plays. They work in both 30 and 60 fps mode.
 - `StopEmitters particleSystem` stops a system's emitters from emitting new particles. The
   particles already out finish their lives, so the effect ends sooner without moving faster
   (used by Absorb and Leech Seed).
+- `SetSmoothChildren enabled` makes child particles that are created every frame (trails, or rings made of child
+  copies, like Supersonic's) appear on every 60 Hz update, so they move smoothly. It only applies to the emitters created
+  after it and is reset when the animation starts and ends. It makes the trail denser.
 
 Moves tuned with these so far: Absorb, Leech Seed drain, Mega Drain, Quick Attack, Agility, Dream Eater,
 Drain Punch, Leech Life, Vital Throw, Foresight, Double Slap and Poison Sting. `Func_QuickAttack` takes an
