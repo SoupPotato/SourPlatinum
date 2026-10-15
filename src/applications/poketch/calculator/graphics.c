@@ -10,6 +10,8 @@
 #include "bg_window.h"
 #include "graphics.h"
 #include "heap.h"
+#include "sourplatinum_config.h"
+#include "system.h"
 #include "sys_task_manager.h"
 
 #include "res/graphics/poketch/poketch.naix"
@@ -250,6 +252,27 @@ static const PoketchTask sCalculatorTasks[] = {
 
 void PoketchCalculatorGraphics_StartTask(CalculatorGraphics *graphics, enum CalculatorGraphicsTask taskID)
 {
+#if SP_DEBUG_WILD_MODIFIER
+    // Sour Platinum: remember the number that is shown, for the wild Pokemon modifier
+    switch (taskID) {
+    case CALCULATOR_GRAPHICS_OPERAND_1:
+        gDebugCalcValue = CalculatorValue_GetSignedInt(graphics->calcData->operand1);
+        break;
+    case CALCULATOR_GRAPHICS_OPERAND_2:
+        gDebugCalcValue = CalculatorValue_GetSignedInt(graphics->calcData->operand2);
+        break;
+    case CALCULATOR_GRAPHICS_RESULT:
+    case CALCULATOR_GRAPHICS_RESULT_AND_OP:
+        gDebugCalcValue = CalculatorValue_GetSignedInt(graphics->calcData->result);
+        break;
+    case CALCULATOR_GRAPHICS_CLEAR_OUTPUT:
+        gDebugCalcValue = 0;
+        break;
+    default:
+        break;
+    }
+#endif
+
     PoketchTask_Start(sCalculatorTasks, taskID, graphics, graphics->calcData, graphics->activeTasks, 2, HEAP_ID_POKETCH_APP);
 }
 

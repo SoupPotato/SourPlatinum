@@ -70,6 +70,8 @@
 #include "unk_020559DC.h"
 #include "unk_0205B33C.h"
 #include "unk_0205C22C.h"
+#include "sourplatinum_config.h"
+#include "system.h"
 #include "vars_flags.h"
 
 #include "res/text/bank/pokemon_center_2f_common.h"
@@ -249,6 +251,17 @@ void FieldMapChange_UpdateGameData(FieldSystem *fieldSystem, BOOL noWarp)
 {
     enum MapHeaderID mapHeaderID = fieldSystem->location->mapHeaderID;
     FieldOverworldState *fieldState = SaveData_GetFieldOverworldState(fieldSystem->saveData);
+
+#if SP_DEBUG_WILD_MODIFIER
+    // Sour Platinum: the wild Pokemon modifier only lasts for the map it was set on
+    gDebugCurMap = mapHeaderID;
+
+    if (gDebugWildMap != mapHeaderID) {
+        gDebugWildSpecies = 0;
+        gDebugWildLevel = 0;
+        gDebugWildNature = -1;
+    }
+#endif
 
     FieldBGM_ClearOverride(fieldSystem);
     FieldSystem_ClearLocalFlags(fieldSystem);

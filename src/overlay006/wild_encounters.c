@@ -43,6 +43,8 @@
 #include "pokedex.h"
 #include "pokemon.h"
 #include "pokeradar.h"
+#include "sourplatinum_config.h"
+#include "system.h"
 #include "roaming_pokemon.h"
 #include "rtc.h"
 #include "save_player.h"
@@ -941,6 +943,12 @@ static void ModifyEncounterRateWithFlute(FieldSystem *fieldSystem, u8 *encounter
 // checks Synchronize, returns a random nature otherwise.
 static u8 GetNatureForWildMon(Pokemon *firstMon, const WildEncounters_FieldParams *encounterFieldParams)
 {
+#if SP_DEBUG_WILD_MODIFIER
+    if (gDebugWildNature >= 0) {
+        return gDebugWildNature;
+    }
+#endif
+
     if (!encounterFieldParams->isFirstMonEgg && encounterFieldParams->firstMonAbility == ABILITY_SYNCHRONIZE && LCRNG_RandMod(2) == 0) {
         u32 leadPersonality = Pokemon_GetValue(firstMon, MON_DATA_PERSONALITY, NULL);
         return (u8)(leadPersonality % 25);
@@ -980,10 +988,15 @@ static u8 GetWildMonLevel(const EncounterSlot *slot, const WildEncounters_FieldP
 
 // Creates a mon with a personality that will make it shiny, and complies with Cute Charm/Synchronize.
 // It only has to check one or the other, not both, because only one ability can be in effect at a time.
-static void CreateWildMonShinyWithGenderOrNature(const u16 species, const u8 level, const int partySlot, const u32 param3, const WildEncounters_FieldParams *encounterFieldParams, Pokemon *firstPartyMon, FieldBattleDTO *battleParams)
+static void CreateWildMonShinyWithGenderOrNature(u16 species, u8 level, const int partySlot, const u32 param3, const WildEncounters_FieldParams *encounterFieldParams, Pokemon *firstPartyMon, FieldBattleDTO *battleParams)
 {
     u8 firstMonGender;
     u8 firstMonNature;
+
+#if SP_DEBUG_WILD_MODIFIER
+    species = gDebugWildSpecies ? gDebugWildSpecies : species;
+    level = gDebugWildLevel ? gDebugWildLevel : level;
+#endif
 
     Pokemon *newEncounter = Pokemon_New(HEAP_ID_FIELD2);
     Pokemon_Init(newEncounter);
@@ -1046,6 +1059,11 @@ static void CreateWildMonShinyWithGenderOrNature(const u16 species, const u8 lev
 
 static void CreateWildMon(u16 species, u8 level, const int partyDest, const WildEncounters_FieldParams *encounterFieldParams, Pokemon *firstPartyMon, FieldBattleDTO *battleParams)
 {
+#if SP_DEBUG_WILD_MODIFIER
+    species = gDebugWildSpecies ? gDebugWildSpecies : species;
+    level = gDebugWildLevel ? gDebugWildLevel : level;
+#endif
+
     Pokemon *newEncounter = Pokemon_New(HEAP_ID_FIELD2);
     Pokemon_Init(newEncounter);
     BOOL hasRandomGender = TRUE;

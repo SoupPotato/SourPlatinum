@@ -10,6 +10,9 @@
 #include "boot.h"
 #include "heap.h"
 #include "math_util.h"
+#include "sound.h"
+#include "sound_playback.h"
+#include "sourplatinum_config.h"
 #include "sys_task_manager.h"
 
 #define MAIN_TASK_MAX        160
@@ -33,6 +36,13 @@ static void ApplyButtonModeToInput(void);
 
 System gSystem;
 u16 gBattleAnimSpeedPercent = 100;
+
+s32 gDebugCalcValue = 0;
+u16 gDebugWildSpecies = 0;
+u8 gDebugWildLevel = 0;
+s8 gDebugWildNature = -1;
+u16 gDebugCurMap = 0;
+u16 gDebugWildMap = 0;
 
 static void VBlankIntr(void)
 {
@@ -342,6 +352,28 @@ void ReadKeypadAndTouchpad(void)
     gSystem.pressedKeys = gSystem.pressedKeysRaw;
     gSystem.heldKeys = gSystem.heldKeysRaw;
     gSystem.pressedKeysRepeatable = gSystem.pressedKeysRepeatableRaw;
+
+#if SP_DEBUG_WILD_MODIFIER
+    // Sour Platinum wild Pokemon modifier: L = species, R = level, Select = nature, taken from the calculator.
+    if (gSystem.pressedKeysRaw & (PAD_BUTTON_L | PAD_BUTTON_R | PAD_BUTTON_SELECT)) {
+        s32 value = gDebugCalcValue;
+
+        if (gSystem.pressedKeysRaw & PAD_BUTTON_L) {
+            gDebugWildSpecies = (value >= 1 && value <= 493) ? value : 0;
+        }
+
+        if (gSystem.pressedKeysRaw & PAD_BUTTON_R) {
+            gDebugWildLevel = (value >= 1 && value <= 100) ? value : 0;
+        }
+
+        if (gSystem.pressedKeysRaw & PAD_BUTTON_SELECT) {
+            gDebugWildNature = (value >= 0 && value <= 24) ? value : -1;
+        }
+
+        gDebugWildMap = gDebugCurMap;
+        Sound_PlayEffect(SEQ_SE_DP_DECIDE_sseq);
+    }
+#endif
 
     ApplyButtonModeToInput();
 
