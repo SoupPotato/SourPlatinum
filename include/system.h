@@ -81,6 +81,15 @@ extern System gSystem;
 // SetAnimSpeed animation script command and reset when the animation starts and ends.
 extern u16 gBattleAnimSpeedPercent;
 
+// Sour Platinum: wild Pokemon modifier (see SP_DEBUG_WILD_MODIFIER). gDebugCalcValue is the number that is
+// currently shown on the Poketch calculator; 0 / 0 / -1 mean "no override".
+extern s32 gDebugCalcValue;
+extern u16 gDebugWildSpecies;
+extern u8 gDebugWildLevel;
+extern s8 gDebugWildNature;
+extern u16 gDebugCurMap; // map the player is on
+extern u16 gDebugWildMap; // map the modifier was set on, it is cleared when the player changes map
+
 void SetDummyVBlankIntr(void);
 void SetVBlankCallback(Callback cb, void *data);
 void SetFps60Mode(BOOL enabled);

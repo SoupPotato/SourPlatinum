@@ -8,6 +8,12 @@
 // Set to 0 for the original 30 fps behavior.
 #define SP_BATTLE_60FPS 1
 
+// Wild Pokemon modifier for testing (replaces the Action Replay code). Type a number into the Poketch calculator and
+// press L to set the species (National Dex number, 0 turns it off), R for the level (1-100, 0 turns it off) or
+// Select for the nature (0-24, a bigger number turns it off). Every wild Pokemon created after that uses these
+// values. A sound confirms each press. Keep this at 0 for the normal ROM.
+#define SP_DEBUG_WILD_MODIFIER 0
+
 // Debug switches for tracking down visual problems (1 = on, the normal setting).
 #define SP_DEBUG_NATIVE_TASKS 1 // move animation tasks that run on every tick
 #define SP_DEBUG_PARTICLES_60 1 // simulate particles at 60 Hz
