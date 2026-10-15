@@ -72,5 +72,6 @@ FlyContext *FlyContext_New(enum HeapID heapID, FieldSystem *fieldSystem, Pokemon
 BOOL FieldMoves_FlyTask(FieldTask *fieldTask);
 void *FieldMove_GetTaskOrError(u16 taskOrError, u16 fieldMove);
 void FieldMoves_SetUsableMoves(FieldSystem *fieldSystem, FieldMoveContext *fieldMoveContext);
+BOOL FieldMoves_HasBadgeForMove(FieldSystem *fieldSystem, enum FieldMoveList fieldMove);
 
 #endif // POKEPLATINUM_FIELD_MOVE_TASKS_H

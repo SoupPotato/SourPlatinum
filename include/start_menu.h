@@ -32,6 +32,7 @@ typedef struct StartMenu {
     FieldMoveContext fieldMoveContext;
     void *taskData;
     void *additionalTaskContext;
+    BOOL fromPoketch; // Sour Platinum: the field move was started from the Poketch field moves app
 } StartMenu;
 
 enum StartMenuState {
@@ -51,6 +52,12 @@ enum StartMenuState {
     START_MENU_STATE_END,
     START_MENU_STATE_REINIT_WAIT_FOR_FADE,
     START_MENU_STATE_SAVED,
+    START_MENU_STATE_POKETCH_INIT, // Sour Platinum: states of the Poketch field moves task
+    START_MENU_STATE_POKETCH_WAIT_FLY_FADE,
+    START_MENU_STATE_POKETCH_FLY_MAP,
+    START_MENU_STATE_POKETCH_JUMP,
+    START_MENU_STATE_POKETCH_RESTORE,
+    START_MENU_STATE_POKETCH_RESTORE_FADE,
 };
 
 enum MailUsageType {
@@ -67,6 +74,10 @@ void StartMenu_Open(FieldSystem *fieldSystem);
 void StartMenu_OpenUnionRoom(FieldSystem *fieldSystem);
 void StartMenu_OpenColosseum(FieldSystem *fieldSystem);
 void StartMenu_OpenFromScript(FieldSystem *fieldSystem);
+
+// Sour Platinum: uses a field move (FIELD_MOVE_*) without a Pokemon that knows it. Used by the Poketch field moves app.
+// Returns FALSE if it can't be started right now.
+BOOL StartMenu_StartPoketchFieldMove(FieldSystem *fieldSystem, enum FieldMoveList fieldMove);
 void StartMenu_SetCallback(StartMenu *menu, void *callback);
 BOOL StartMenu_ExitPartyMenu(FieldTask *fieldTask);
 BOOL StartMenu_ExitTownMap(FieldTask *fieldTask);

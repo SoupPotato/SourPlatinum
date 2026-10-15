@@ -1075,11 +1075,11 @@ Overlay poketch_pokemon_history
 	Object main.nef.p/src_applications_poketch_pokemon_history_graphics.c.o
 }
 
-Overlay poketch_unused_4
+Overlay poketch_field_moves
 {
 	After poketch
-	Object main.nef.p/src_applications_poketch_unused_4_main.c.o
-	Object main.nef.p/src_applications_poketch_unused_4_graphics.c.o
+	Object main.nef.p/src_applications_poketch_field_moves_main.c.o
+	Object main.nef.p/src_applications_poketch_field_moves_graphics.c.o
 }
 
 Overlay overlay56

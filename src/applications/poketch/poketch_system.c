@@ -17,7 +17,9 @@
 #include "game_overlay.h"
 #include "heap.h"
 #include "inlines.h"
+#include "poketch.h"
 #include "poketch_memory.h"
+#include "sourplatinum_config.h"
 #include "save_player.h"
 #include "savedata.h"
 #include "sound_playback.h"
@@ -54,7 +56,7 @@ FS_EXTERN_OVERLAY(poketch_calendar);
 FS_EXTERN_OVERLAY(poketch_link_searcher);
 FS_EXTERN_OVERLAY(poketch_trainer_counter);
 FS_EXTERN_OVERLAY(poketch_pokemon_history);
-FS_EXTERN_OVERLAY(poketch_unused_4);
+FS_EXTERN_OVERLAY(poketch_field_moves);
 
 static PoketchSystem *PoketchSystem_GetFromFieldSystem(void);
 static BOOL PoketchSystem_InitInternal(PoketchSystem *poketchSys);
@@ -108,7 +110,8 @@ static const struct {
     { POKETCH_APPID_CALENDAR, FS_OVERLAY_ID(poketch_calendar) },
     { POKETCH_APPID_LINKSEARCHER, FS_OVERLAY_ID(poketch_link_searcher) },
     { POKETCH_APPID_TRAINERCOUNTER, FS_OVERLAY_ID(poketch_trainer_counter) },
-    { POKETCH_APPID_POKEMONHISTORY, FS_OVERLAY_ID(poketch_pokemon_history) }
+    { POKETCH_APPID_POKEMONHISTORY, FS_OVERLAY_ID(poketch_pokemon_history) },
+    { POKETCH_APPID_FIELDMOVES, FS_OVERLAY_ID(poketch_field_moves) }
 };
 
 static PoketchSystem *PoketchSystem_GetFromFieldSystem(void)
@@ -129,6 +132,11 @@ void PoketchSystem_Create(FieldSystem *fieldSystem, PoketchSystem **poketchSys, 
         new_system->fieldSystem = fieldSystem;
         new_system->saveData = saveData;
         new_system->poketch = SaveData_GetPoketch(saveData);
+
+#if SP_DEBUG_REGISTER_FIELD_MOVES_APP
+        Poketch_RegisterApp(new_system->poketch, POKETCH_APPID_FIELDMOVES);
+#endif
+
         new_system->bgl = bgl;
         new_system->oamManager = oamManager;
 

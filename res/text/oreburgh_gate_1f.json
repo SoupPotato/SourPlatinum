@@ -36,6 +36,26 @@
         "All right! Now you can use the hidden\n",
         "move Rock Smash on small boulders!"
       ]
+    },
+    {
+      "id": "OreburghGate1F_Text_HiddenMovesAppIntro",
+      "en_US": [
+        "I’ve also added a new feature to your\n",
+        "Pokétch, rookie Trainer!\r"
+      ]
+    },
+    {
+      "id": "OreburghGate1F_Text_HiddenMovesAppExplain",
+      "en_US": [
+        "Use Rock Smash from your Pokétch, and\n",
+        "a wild Pokémon will get rid of\f",
+        "boulders on your path!\r",
+        "But to use this hidden move in the\n",
+        "field, you’ll first need the Gym Badge\f",
+        "from Oreburgh City.\r",
+        "I’m looking forward to seeing your\n",
+        "growth!"
+      ]
     }
   ]
 }

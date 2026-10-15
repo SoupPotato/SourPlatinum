@@ -129,6 +129,34 @@ static const FieldMoveTaskOrError fieldMoveTaskOrError[] = {
     { FieldMoves_SetChatterTask, FieldMoves_CheckChatter },
 };
 
+// Sour Platinum: field moves used from the Poketch app start while the field map is already running
+static inline void FieldMoves_ResumeFieldMap(FieldSystem *fieldSystem)
+{
+    if (!FieldSystem_IsRunningFieldMap(fieldSystem)) {
+        FieldSystem_StartFieldMap(fieldSystem);
+    }
+}
+
+BOOL FieldMoves_HasBadgeForMove(FieldSystem *fieldSystem, enum FieldMoveList fieldMove)
+{
+    static const u8 sBadges[] = {
+        [FIELD_MOVE_CUT] = BADGE_ID_FOREST,
+        [FIELD_MOVE_FLY] = BADGE_ID_COBBLE,
+        [FIELD_MOVE_SURF] = BADGE_ID_FEN,
+        [FIELD_MOVE_STRENGTH] = BADGE_ID_MINE,
+        [FIELD_MOVE_DEFOG] = BADGE_ID_RELIC,
+        [FIELD_MOVE_ROCK_SMASH] = BADGE_ID_COAL,
+        [FIELD_MOVE_WATERFALL] = BADGE_ID_BEACON,
+        [FIELD_MOVE_ROCK_CLIMB] = BADGE_ID_ICICLE,
+    };
+
+    if (fieldMove >= NELEMS(sBadges)) {
+        return FALSE;
+    }
+
+    return TrainerInfo_HasBadge(SaveData_GetTrainerInfo(fieldSystem->saveData), sBadges[fieldMove]);
+}
+
 static inline BOOL FieldMoves_IsMoveUsable(const FieldMoveContext *fieldMoveContext, enum FieldMoveList fieldMove)
 {
     if ((fieldMoveContext->usableMoves & FIELD_MOVE_FLAG(fieldMove)) != 0) {
@@ -345,7 +373,7 @@ static void FieldMoves_SetCutTask(FieldMovePokemon *fieldMoveMon, const FieldMov
     StartMenu *menu = FieldTask_GetEnv(fieldMoveMon->fieldTask);
     FieldMoveTaskData *taskData = FieldMoves_AllocateTaskData(fieldMoveMon, fieldMoveContext);
 
-    FieldSystem_StartFieldMap(fieldMoveContext->fieldSystem);
+    FieldMoves_ResumeFieldMap(fieldMoveContext->fieldSystem);
 
     menu->callback = FieldMoves_CutTask;
     menu->taskData = taskData;
@@ -435,7 +463,7 @@ static void FieldMoves_SetSurfTask(FieldMovePokemon *fieldMoveMon, const FieldMo
     StartMenu *menu = FieldTask_GetEnv(fieldMoveMon->fieldTask);
     FieldMoveTaskData *taskData = FieldMoves_AllocateTaskData(fieldMoveMon, fieldMoveContext);
 
-    FieldSystem_StartFieldMap(fieldMoveContext->fieldSystem);
+    FieldMoves_ResumeFieldMap(fieldMoveContext->fieldSystem);
 
     menu->callback = FieldMoves_SurfTask;
     menu->taskData = taskData;
@@ -476,7 +504,7 @@ static void FieldMoves_SetStrengthTask(FieldMovePokemon *fieldMoveMon, const Fie
     StartMenu *menu = FieldTask_GetEnv(fieldMoveMon->fieldTask);
     FieldMoveTaskData *taskData = FieldMoves_AllocateTaskData(fieldMoveMon, fieldMoveContext);
 
-    FieldSystem_StartFieldMap(fieldMoveContext->fieldSystem);
+    FieldMoves_ResumeFieldMap(fieldMoveContext->fieldSystem);
 
     menu->callback = FieldMoves_StrengthTask;
     menu->taskData = taskData;
@@ -517,7 +545,7 @@ static void FieldMoves_SetDefogTask(FieldMovePokemon *fieldMoveMon, const FieldM
     StartMenu *menu = FieldTask_GetEnv(fieldMoveMon->fieldTask);
     FieldMoveTaskData *taskData = FieldMoves_AllocateTaskData(fieldMoveMon, fieldMoveContext);
 
-    FieldSystem_StartFieldMap(fieldMoveContext->fieldSystem);
+    FieldMoves_ResumeFieldMap(fieldMoveContext->fieldSystem);
 
     menu->callback = FieldMoves_DefogTask;
     menu->taskData = taskData;
@@ -562,7 +590,7 @@ static void FieldMoves_SetRockSmashTask(FieldMovePokemon *fieldMoveMon, const Fi
     StartMenu *menu = FieldTask_GetEnv(fieldMoveMon->fieldTask);
     FieldMoveTaskData *taskData = FieldMoves_AllocateTaskData(fieldMoveMon, fieldMoveContext);
 
-    FieldSystem_StartFieldMap(fieldMoveContext->fieldSystem);
+    FieldMoves_ResumeFieldMap(fieldMoveContext->fieldSystem);
 
     menu->callback = FieldMoves_RockSmashTask;
     menu->taskData = taskData;
@@ -603,7 +631,7 @@ static void FieldMoves_SetWaterfallTask(FieldMovePokemon *fieldMoveMon, const Fi
     StartMenu *menu = FieldTask_GetEnv(fieldMoveMon->fieldTask);
     FieldMoveTaskData *taskData = FieldMoves_AllocateTaskData(fieldMoveMon, fieldMoveContext);
 
-    FieldSystem_StartFieldMap(fieldMoveContext->fieldSystem);
+    FieldMoves_ResumeFieldMap(fieldMoveContext->fieldSystem);
 
     menu->callback = FieldMoves_WaterfallTask;
     menu->taskData = taskData;
@@ -648,7 +676,7 @@ static void FieldMoves_SetRockClimbTask(FieldMovePokemon *fieldMoveMon, const Fi
     StartMenu *menu = FieldTask_GetEnv(fieldMoveMon->fieldTask);
     FieldMoveTaskData *taskData = FieldMoves_AllocateTaskData(fieldMoveMon, fieldMoveContext);
 
-    FieldSystem_StartFieldMap(fieldMoveContext->fieldSystem);
+    FieldMoves_ResumeFieldMap(fieldMoveContext->fieldSystem);
 
     menu->callback = FieldMoves_RockClimbTask;
     menu->taskData = taskData;
@@ -685,7 +713,7 @@ static void FieldMoves_SetFlashTask(FieldMovePokemon *fieldMoveMon, const FieldM
     StartMenu *menu = FieldTask_GetEnv(fieldMoveMon->fieldTask);
     FieldMoveTaskData *taskData = FieldMoves_AllocateTaskData(fieldMoveMon, fieldMoveContext);
 
-    FieldSystem_StartFieldMap(fieldMoveContext->fieldSystem);
+    FieldMoves_ResumeFieldMap(fieldMoveContext->fieldSystem);
 
     menu->callback = FieldMoves_FlashTask;
     menu->taskData = taskData;
