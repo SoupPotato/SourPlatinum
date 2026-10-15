@@ -82,6 +82,8 @@
 #include "unk_0203D1B8.h"
 #include "unk_020559DC.h"
 #include "unk_0205B33C.h"
+
+#include "res/sound/pl_sound_data.naix"
 #include "unk_0205C22C.h"
 #include "unk_0206B9D8.h"
 #include "vars_flags.h"
@@ -356,6 +358,7 @@ static StartMenu *StartMenu_New(void)
     menu->state = START_MENU_STATE_INIT;
     menu->cursorPos = 0;
     menu->taskData = NULL;
+    menu->fromPoketch = FALSE;
 
     return menu;
 }
@@ -1581,8 +1584,15 @@ BOOL StartMenu_FlyDestinationSelected(FieldTask *fieldTask)
 
     if (!mapCtx->flyLocationSelected) {
         Heap_FreeExplicit(HEAP_ID_FIELD2, menu->taskData);
-        menu->taskData = FieldSystem_OpenPartyMenu(fieldSystem, &menu->fieldMoveContext, slot);
-        StartMenu_SetCallback(menu, StartMenu_ExitPartyMenu);
+
+        if (menu->fromPoketch) {
+            // Sour Platinum: back to the overworld instead of the party menu
+            FieldSystem_StartFieldMap(fieldSystem);
+            menu->state = START_MENU_STATE_POKETCH_RESTORE;
+        } else {
+            menu->taskData = FieldSystem_OpenPartyMenu(fieldSystem, &menu->fieldMoveContext, slot);
+            StartMenu_SetCallback(menu, StartMenu_ExitPartyMenu);
+        }
     } else {
         Pokemon *mon = Party_GetPokemonBySlotIndex(SaveData_GetParty(fieldSystem->saveData), slot);
         FlyContext *flyCtx = FlyContext_New(HEAP_ID_FIELD2, fieldSystem, mon, mapCtx->flyLocationMapHeader, mapCtx->flyLocationX * MAP_TILES_COUNT_X + MAP_TILES_COUNT_X / 2, mapCtx->flyLocationZ * MAP_TILES_COUNT_Z + MAP_TILES_COUNT_Z / 2);
@@ -1774,4 +1784,138 @@ static void StartMenu_Evolve(FieldTask *fieldTask)
 
         StartMenu_SetCallback(menu, StartMenu_ExitBag);
     }
+}
+
+// Sour Platinum: the Poketch field moves app. It uses the same tasks as the party menu, with the first Pokemon in the
+// party (that isn't an Egg) as the user of the move. The move is stored in menu->cursorPos.
+static int StartMenu_GetPoketchFieldMoveUser(FieldSystem *fieldSystem)
+{
+    Party *party = SaveData_GetParty(fieldSystem->saveData);
+    int count = Party_GetCurrentCount(party);
+
+    for (int slot = 0; slot < count; slot++) {
+        Pokemon *mon = Party_GetPokemonBySlotIndex(party, slot);
+
+        if (Pokemon_GetValue(mon, MON_DATA_IS_EGG, NULL) == FALSE) {
+            return slot;
+        }
+    }
+
+    return 0;
+}
+
+static BOOL StartMenu_PoketchFieldMove(FieldTask *fieldTask)
+{
+    FieldSystem *fieldSystem = FieldTask_GetFieldSystem(fieldTask);
+    StartMenu *menu = FieldTask_GetEnv(fieldTask);
+
+    switch (menu->state) {
+    case START_MENU_STATE_POKETCH_INIT: {
+        enum FieldMoveList fieldMove = menu->cursorPos;
+
+        FieldMoves_SetUsableMoves(fieldSystem, &menu->fieldMoveContext);
+
+        FieldMoveErrContext check = (FieldMoveErrContext)FieldMove_GetTaskOrError(FIELD_MOVE_ERROR, fieldMove);
+
+        enum FieldMoveError error = check(&menu->fieldMoveContext);
+
+        if (error != FIELD_MOVE_ERROR_NONE) {
+            // Shows the same message as the party menu does for this problem
+            ScriptManager_Change(fieldTask, SCRIPT_ID(FIELD_MOVES, 16), NULL);
+            FieldSystem_SetScriptParameters(fieldSystem, error, 0, 0, 0);
+            Heap_Free(menu);
+            return FALSE;
+        }
+
+        MapObjectMan_PauseAllMovement(fieldSystem->mapObjMan);
+
+        if (fieldMove == FIELD_MOVE_FLY) {
+            // The town map is a separate application, so the overworld is closed first like in the start menu.
+            FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_OUT);
+            menu->state = START_MENU_STATE_POKETCH_WAIT_FLY_FADE;
+        } else {
+            FieldMovePokemon fieldMoveMon;
+
+            fieldMoveMon.fieldMove = fieldMove;
+            fieldMoveMon.fieldMonId = StartMenu_GetPoketchFieldMoveUser(fieldSystem);
+            fieldMoveMon.fieldTask = fieldTask;
+
+            FieldMoveTask task = (FieldMoveTask)FieldMove_GetTaskOrError(FIELD_MOVE_TASK, fieldMove);
+            task(&fieldMoveMon, &menu->fieldMoveContext);
+
+            // The field map is already running, so the move can start at once
+            menu->state = START_MENU_STATE_POKETCH_JUMP;
+        }
+        break;
+    }
+    case START_MENU_STATE_POKETCH_WAIT_FLY_FADE:
+        if (IsScreenFadeDone()) {
+            FieldMovePokemon fieldMoveMon;
+
+            fieldMoveMon.fieldMove = FIELD_MOVE_FLY;
+            fieldMoveMon.fieldMonId = StartMenu_GetPoketchFieldMoveUser(fieldSystem);
+            fieldMoveMon.fieldTask = fieldTask;
+
+            FieldMoveTask task = (FieldMoveTask)FieldMove_GetTaskOrError(FIELD_MOVE_TASK, FIELD_MOVE_FLY);
+            task(&fieldMoveMon, &menu->fieldMoveContext);
+
+            menu->state = START_MENU_STATE_POKETCH_FLY_MAP;
+        }
+        break;
+    case START_MENU_STATE_POKETCH_FLY_MAP:
+        if (!FieldSystem_IsRunningApplication(fieldSystem)) {
+            // Sets START_MENU_STATE_NEW_TASK when a destination was picked, START_MENU_STATE_POKETCH_RESTORE if not
+            StartMenu_FlyDestinationSelected(fieldTask);
+        }
+        break;
+    case START_MENU_STATE_NEW_TASK:
+        if (FieldSystem_IsRunningFieldMap(fieldSystem)) {
+            MapObjectMan_PauseAllMovement(fieldSystem->mapObjMan);
+            FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
+            menu->state = START_MENU_STATE_EXIT_WITH_NEW_TASK;
+        }
+        break;
+    case START_MENU_STATE_EXIT_WITH_NEW_TASK:
+        if (IsScreenFadeDone()) {
+            FieldTask_InitJump(fieldTask, menu->callback, menu->taskData);
+            Heap_Free(menu);
+        }
+        break;
+    case START_MENU_STATE_POKETCH_JUMP:
+        FieldTask_InitJump(fieldTask, menu->callback, menu->taskData);
+        Heap_Free(menu);
+        break;
+    case START_MENU_STATE_POKETCH_RESTORE:
+        if (FieldSystem_IsRunningFieldMap(fieldSystem)) {
+            FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
+            menu->state = START_MENU_STATE_POKETCH_RESTORE_FADE;
+        }
+        break;
+    case START_MENU_STATE_POKETCH_RESTORE_FADE:
+        if (IsScreenFadeDone()) {
+            MapObjectMan_UnpauseAllMovement(fieldSystem->mapObjMan);
+            Heap_Free(menu);
+            return TRUE;
+        }
+        break;
+    }
+
+    return FALSE;
+}
+
+BOOL StartMenu_StartPoketchFieldMove(FieldSystem *fieldSystem, enum FieldMoveList fieldMove)
+{
+    if (FieldSystem_IsRunningTask(fieldSystem)) {
+        return FALSE;
+    }
+
+    StartMenu *menu = StartMenu_New();
+
+    menu->fromPoketch = TRUE;
+    menu->cursorPos = fieldMove;
+    menu->state = START_MENU_STATE_POKETCH_INIT;
+
+    FieldSystem_CreateTask(fieldSystem, StartMenu_PoketchFieldMove, menu);
+
+    return TRUE;
 }

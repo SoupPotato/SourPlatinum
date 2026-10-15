@@ -20,6 +20,7 @@ OreburghGate1F_Hiker:
     GoToIfEq VAR_RESULT, FALSE, OreburghGate1F_HikerGiveHM
     Message OreburghGate1F_Text_NowYouCanUseRockSmash
     WaitButton
+    Call OreburghGate1F_GiveHiddenMovesApp
     CloseMessage
     ReleaseAll
     End
@@ -36,9 +37,24 @@ OreburghGate1F_HikerGiveHM:
 OreburghGate1F_ThatHMContainsRockSmash:
     Message OreburghGate1F_Text_ThatHMContainsRockSmash
     WaitButton
+    Call OreburghGate1F_GiveHiddenMovesApp
     CloseMessage
     ReleaseAll
     End
+
+OreburghGate1F_GiveHiddenMovesApp:
+    CheckPoketchAppRegistered POKETCH_APPID_FIELDMOVES, VAR_RESULT
+    GoToIfEq VAR_RESULT, TRUE, OreburghGate1F_HiddenMovesAppAlreadyGiven
+    PlaySE SE_CONFIRM_sseq_3
+    Message OreburghGate1F_Text_HiddenMovesAppIntro
+    SetVar VAR_0x8004, POKETCH_APPID_FIELDMOVES
+    Common_GivePoketchApp
+    Message OreburghGate1F_Text_HiddenMovesAppExplain
+    WaitButton
+    Return
+
+OreburghGate1F_HiddenMovesAppAlreadyGiven:
+    Return
 
 OreburghGate1F_SetFlagReceivedHM06:
     SetFlag FLAG_RECEIVED_HM06
@@ -57,6 +73,7 @@ OreburghGate1F_CoordEvent_Hiker:
     Call OreburghGate1F_SetFlagReceivedHM06
     Message OreburghGate1F_Text_ThatHMContainsRockSmash
     WaitButton
+    Call OreburghGate1F_GiveHiddenMovesApp
     CloseMessage
     ReleaseAll
     End

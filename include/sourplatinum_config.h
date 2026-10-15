@@ -18,6 +18,9 @@
 // values. A sound confirms each press. Keep this at 0 for the normal ROM.
 #define SP_DEBUG_WILD_MODIFIER 0
 
+// Registers the Poketch field moves app (HM app) as soon as the Poketch is created, for testing without the NPC.
+#define SP_DEBUG_REGISTER_FIELD_MOVES_APP 0
+
 // Debug switches for tracking down visual problems (1 = on, the normal setting).
 #define SP_DEBUG_NATIVE_TASKS 1 // move animation tasks that run on every tick
 #define SP_DEBUG_PARTICLES_60 1 // simulate particles at 60 Hz

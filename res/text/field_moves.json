@@ -160,6 +160,28 @@
     {
       "id": "FieldMoves_Text_PokemonUsedFlash",
       "en_US": "{STRVAR_1 0, 0, 0} used Flash!\r"
+    },
+    {
+      "id": "FieldMoves_Text_CantUseThatHere",
+      "en_US": "You can’t use that here."
+    },
+    {
+      "id": "FieldMoves_Text_CantBeUsedUntilBadgeIsObtained",
+      "en_US": [
+        "This can’t be used until a new\n",
+        "Badge is obtained."
+      ]
+    },
+    {
+      "id": "FieldMoves_Text_CantUseWhenYouHaveSomeoneWithYou",
+      "en_US": [
+        "You can’t use that when you have\n",
+        "someone with you."
+      ]
+    },
+    {
+      "id": "FieldMoves_Text_YoureAlreadySurfing",
+      "en_US": "You’re already surfing."
     }
   ]
 }

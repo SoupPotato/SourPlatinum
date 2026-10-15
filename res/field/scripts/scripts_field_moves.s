@@ -18,6 +18,7 @@
     ScriptEntry FieldMoves_UseWaterfallFromMenu
     ScriptEntry FieldMoves_UseDefogFromMenu
     ScriptEntry FieldMoves_UseFlashFromMenu
+    ScriptEntry FieldMoves_PoketchError
     ScriptEntryEnd
 
 FieldMoves_CutTree:
@@ -403,6 +404,32 @@ FieldMoves_UseFlashFromMenu:
     GoTo FieldMoves_End3
 
 FieldMoves_End:
+    ReleaseAll
+    End
+
+FieldMoves_PoketchError:
+    LockAll
+    GoToIfEq VAR_0x8000, 2, FieldMoves_PoketchErrorBadge
+    GoToIfEq VAR_0x8000, 3, FieldMoves_PoketchErrorPartner
+    GoToIfEq VAR_0x8000, 4, FieldMoves_PoketchErrorSurfing
+    Message FieldMoves_Text_CantUseThatHere
+    GoTo FieldMoves_PoketchErrorEnd
+
+FieldMoves_PoketchErrorBadge:
+    Message FieldMoves_Text_CantBeUsedUntilBadgeIsObtained
+    GoTo FieldMoves_PoketchErrorEnd
+
+FieldMoves_PoketchErrorPartner:
+    Message FieldMoves_Text_CantUseWhenYouHaveSomeoneWithYou
+    GoTo FieldMoves_PoketchErrorEnd
+
+FieldMoves_PoketchErrorSurfing:
+    Message FieldMoves_Text_YoureAlreadySurfing
+    GoTo FieldMoves_PoketchErrorEnd
+
+FieldMoves_PoketchErrorEnd:
+    WaitButton
+    CloseMessage
     ReleaseAll
     End
 

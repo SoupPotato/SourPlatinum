@@ -85,6 +85,18 @@ per two VBlanks. Link battles stay at the original 30 Hz. Set `SP_BATTLE_60FPS` 
 far: the Party screen and the Pokémon Summary screen (whose 3D Pokémon sprite and Condition graph are redrawn on the
 in-between ticks). The Party screen's switch slide runs natively at one tile per tick, twice as fast as the original.
 
+## Hidden Moves Pokétch app
+
+A new Pokétch app (`POKETCH_APPID_FIELDMOVES`, in `src/applications/poketch/field_moves/`, which uses the old unused
+fourth app overlay) that uses the HM moves without a Pokémon that knows them. It shows Rock Smash, Cut, Strength, Fly,
+Defog, Surf, Rock Climb and Waterfall as framed buttons, but only for the HMs the player has in the Bag. Touching a
+button runs the same checks as the party menu (`StartMenu_StartPoketchFieldMove` in `src/start_menu.c`): the badge,
+the location and so on, and if it can't be used the field shows the same message as the party menu. Fly opens the Town
+Map and returns to the overworld if cancelled. The first Pokémon in the party that isn't an Egg is shown as the user.
+The hiker in Oreburgh Gate 1F (`res/field/scripts/scripts_oreburgh_gate_1f.s`) gives the app together with the Rock
+Smash HM, or when you talk to him later if you don't have it yet. `SP_DEBUG_REGISTER_FIELD_MOVES_APP` registers the
+app from the start for testing.
+
 ## Move animation speed commands
 
 Move animation scripts (`res/moves/*/anim.s`) have three commands for adjusting how fast an
