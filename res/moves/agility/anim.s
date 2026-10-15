@@ -20,9 +20,11 @@ L_1:
     PlaySoundEffectC SEQ_SE_PL_W097_sseq
     CreateEmitter 0, 0, EMITTER_CB_NONE
     WaitForBgSwitch
-    Delay 19
+    Delay 11
     Delay 1
-    Func_QuickAttack
+    SetAnimSpeed 110
+    Func_QuickAttack 2
+    SetAnimSpeed 100
     WaitForAnimTasks
     RemovePokemonSprite BATTLE_ANIM_MON_SPRITE_0
     RemovePokemonSprite BATTLE_ANIM_MON_SPRITE_1
@@ -52,9 +54,11 @@ L_2:
     PlaySoundEffectC SEQ_SE_PL_W097_sseq
     CreateEmitter 0, 1, EMITTER_CB_NONE
     WaitForBgSwitch
-    Delay 19
+    Delay 11
     Delay 1
-    Func_QuickAttack
+    SetAnimSpeed 110
+    Func_QuickAttack 2
+    SetAnimSpeed 100
     WaitForAnimTasks
     RemovePokemonSprite BATTLE_ANIM_MON_SPRITE_0
     RemovePokemonSprite BATTLE_ANIM_MON_SPRITE_1

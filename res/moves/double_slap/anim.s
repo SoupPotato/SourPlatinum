@@ -1,6 +1,7 @@
 #include "macros/btlanimcmd.inc"
 
 L_0:
+    SetAnimSpeed 120
     LoadParticleResource 0, double_slap_spa
     CreateEmitter 0, 3, EMITTER_CB_SET_POS_TO_DEFENDER
     CreateEmitter 0, 2, EMITTER_CB_SET_POS_TO_DEFENDER
