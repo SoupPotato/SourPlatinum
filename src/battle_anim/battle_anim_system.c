@@ -148,6 +148,7 @@ static void BattleAnimScriptCmd_Delay(BattleAnimSystem *system);
 static void BattleAnimScriptCmd_SetAnimSpeed(BattleAnimSystem *system);
 static void BattleAnimScriptCmd_StopEmitters(BattleAnimSystem *system);
 static void BattleAnimScriptCmd_SetParticleSpeed(BattleAnimSystem *system);
+static void BattleAnimScriptCmd_SetSmoothChildren(BattleAnimSystem *system);
 static void BattleAnimScriptCmd_WaitForAnimTasks(BattleAnimSystem *system);
 static void BattleAnimScriptCmd_BeginLoop(BattleAnimSystem *system);
 static void BattleAnimScriptCmd_EndLoop(BattleAnimSystem *system);
@@ -416,6 +417,7 @@ BOOL BattleAnimSystem_StartMove(BattleAnimSystem *system, MoveAnimation *moveAni
     }
 
     gBattleAnimSpeedPercent = 100;
+    SPL_SetDefaultSmoothChildren(FALSE);
 
     for (i = 0; i < MAX_PARTICLE_SYSTEMS; i++) {
         system->cameraProjections[i] = CAMERA_PROJECTION_ORTHOGRAPHIC;
@@ -874,6 +876,16 @@ static void BattleAnimScriptCmd_SetAnimSpeed(BattleAnimSystem *system)
     gBattleAnimSpeedPercent = percent;
 }
 
+static void BattleAnimScriptCmd_SetSmoothChildren(BattleAnimSystem *system)
+{
+    BattleAnimScript_Next(system);
+
+    u32 enabled = BattleAnimScript_ReadWord(system->scriptPtr);
+    BattleAnimScript_Next(system);
+
+    SPL_SetDefaultSmoothChildren(enabled != 0);
+}
+
 static void BattleAnimScriptCmd_SetParticleSpeed(BattleAnimSystem *system)
 {
     BattleAnimScript_Next(system);
@@ -1119,6 +1131,7 @@ static void BattleAnimScriptCmd_End(BattleAnimSystem *system)
     system->soundEffectWaitTimer = 0;
     system->endDelayFrames = 0;
     gBattleAnimSpeedPercent = 100;
+    SPL_SetDefaultSmoothChildren(FALSE);
 
     for (i = 0; i < BATTLE_ANIM_SCRIPT_MAX_CALL_STACK_DEPTH; i++) {
         system->callStack[i] = NULL;

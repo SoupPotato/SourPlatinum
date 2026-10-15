@@ -29,6 +29,12 @@ typedef struct FieldFunc8 {
 } FieldFunc8;
 
 static int sDefaultTimeScale = 1;
+static BOOL sDefaultSmoothChildren = FALSE;
+
+void SPL_SetDefaultSmoothChildren(BOOL smooth)
+{
+    sDefaultSmoothChildren = smooth;
+}
 
 void SPL_SetDefaultTimeScale(int timeScale)
 {
@@ -81,6 +87,7 @@ void SPLEmitter_Init(SPLEmitter *emtr, SPLResource *res, const VecFx32 *pos)
 
     emtr->age = 0;
     emtr->timeScale = sDefaultTimeScale;
+    emtr->smoothChildren = sDefaultSmoothChildren;
     emtr->emissionCountFractional = 0;
 
     emtr->axis = emtr->resource->header->axis;
@@ -282,7 +289,7 @@ void SPLEmitter_Update(SPLManager *mgr, SPLEmitter *emtr)
 
             // Sour Platinum: a child that lives one original frame (the glow in the middle of an orb) is emitted on
             // every update and lives one update, so it is always exactly where its parent is drawn.
-            BOOL lockstepChild = timeScale > 1 && child->lifeTime == 1 && child->misc.emissionInterval == 1;
+            BOOL lockstepChild = timeScale > 1 && child->misc.emissionInterval == 1 && (child->lifeTime == 1 || emtr->smoothChildren);
 
             if (diff >= 0 && (lockstepChild || ((diff >> FX32_SHIFT) % (child->misc.emissionInterval * timeScale) == 0))) {
                 SPLEmitter_EmitChildren(ptcl, emtr, &mgr->inactiveParticles);
