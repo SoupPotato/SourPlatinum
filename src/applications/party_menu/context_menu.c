@@ -31,6 +31,7 @@
 #include "sprite_system.h"
 #include "string_list.h"
 #include "string_template.h"
+#include "sys_task_manager.h"
 #include "system.h"
 #include "text.h"
 
@@ -491,6 +492,9 @@ enum {
     SWITCHSTATE_CLEANUP,
 };
 
+static SysTask *sSwitchTask = NULL;
+static void SysTask_DoSwitch(SysTask *task, void *data);
+
 void PartyMenu_PrepareSwitch(PartyMenuApplication *application)
 {
     application->orderSwitch.slots[0] = application->currPartySlot;
@@ -498,6 +502,11 @@ void PartyMenu_PrepareSwitch(PartyMenuApplication *application)
     application->orderSwitch.inProgress = TRUE;
     application->orderSwitch.scrollTicker = 0;
     application->orderSwitch.state = SWITCHSTATE_SCROLL_OUT_SOUND;
+
+    if (gSystem.fps60 && sSwitchTask == NULL) {
+        sSwitchTask = SysTask_Start(SysTask_DoSwitch, application, 100);
+        SysTask_SetTickDiv(sSwitchTask, 1);
+    }
 
     if (application->orderSwitch.slots[0] & 1) {
         application->orderSwitch.sides[0] = 1;
@@ -529,7 +538,33 @@ void PartyMenu_PrepareSwitch(PartyMenuApplication *application)
     Sprite_SetDrawFlag(application->sprites[PARTY_MENU_SPRITE_CURSOR_SWITCH], FALSE);
 }
 
+static BOOL DoSwitchStep(PartyMenuApplication *application);
+
+// Sour Platinum: in 60 fps mode the slide runs on every tick instead of every other one. It moves one tile per tick,
+// which makes it twice as fast as the original (and 60 steps per second instead of 30).
+static void SysTask_DoSwitch(SysTask *task, void *data)
+{
+    PartyMenuApplication *application = data;
+
+    if (application->orderSwitch.state == SWITCHSTATE_CLEANUP) {
+        SysTask_Done(task);
+        sSwitchTask = NULL;
+        return;
+    }
+
+    DoSwitchStep(application);
+}
+
 BOOL PartyMenu_DoSwitch(PartyMenuApplication *application)
+{
+    if (sSwitchTask != NULL) {
+        return FALSE;
+    }
+
+    return DoSwitchStep(application);
+}
+
+static BOOL DoSwitchStep(PartyMenuApplication *application)
 {
     PartyOrderSwitchData *orderSwitch = &application->orderSwitch;
 

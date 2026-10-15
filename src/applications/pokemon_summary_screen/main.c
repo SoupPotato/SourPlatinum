@@ -47,6 +47,7 @@
 #include "sprite_system.h"
 #include "string_gf.h"
 #include "string_template.h"
+#include "sys_task_manager.h"
 #include "system.h"
 #include "system_flags.h"
 #include "touch_pad.h"
@@ -202,6 +203,16 @@ BOOL PokemonSummaryScreen_ShowContestData(SaveData *saveData)
     return SystemFlag_CheckContestHallVisited(SaveData_GetVarsFlags(saveData));
 }
 
+static SysTask *sRedraw3DTask = NULL;
+
+// Sour Platinum: runs on every 60 fps tick; on the ticks between two logic ticks it submits the 3D scene again
+static void SysTask_Redraw3D(SysTask *task, void *data)
+{
+    if (gSystem.fps60 && !gSystem.logicTick) {
+        PokemonSummaryScreen_Redraw3DGfx(data);
+    }
+}
+
 static int PokemonSummaryScreen_Init(ApplicationManager *appMan, int *state)
 {
     SetVBlankCallback(NULL, NULL);
@@ -250,6 +261,13 @@ static int PokemonSummaryScreen_Init(ApplicationManager *appMan, int *state)
     PokemonSummaryScreen_SetSubscreenType(summaryScreen);
     PokemonSummaryScreen_SetupCamera(summaryScreen);
     SetVBlankCallback(PokemonSummaryScreenVBlank, summaryScreen);
+    MenuFps60_Begin();
+
+    if (gSystem.fps60) {
+        sRedraw3DTask = SysTask_Start(SysTask_Redraw3D, summaryScreen, 60000);
+        SysTask_SetTickDiv(sRedraw3DTask, 1);
+    }
+
     GXLayers_TurnBothDispOn();
     Sound_SetSceneAndPlayBGM(SOUND_SCENE_SUB_61, SEQ_NONE, 0);
     NetworkIcon_InitIfConnected();
@@ -342,6 +360,13 @@ static int PokemonSummaryScreen_Exit(ApplicationManager *appMan, int *state)
     PokemonSummaryScreen *summaryScreen = ApplicationManager_Data(appMan);
 
     SetVBlankCallback(NULL, NULL);
+
+    if (sRedraw3DTask != NULL) {
+        SysTask_Done(sRedraw3DTask);
+        sRedraw3DTask = NULL;
+    }
+
+    MenuFps60_End();
     PokemonSummaryScreen_FreeCameraAndMonSprite(summaryScreen);
     PokemonSummaryScreen_FreeSpriteResources(summaryScreen);
     PokemonSummaryScreen_RemoveWindows(summaryScreen);

@@ -337,6 +337,7 @@ static BOOL PartyMenu_Init(ApplicationManager *appMan, int *state)
     }
 
     SetVBlankCallback(sub_0207E898, application);
+    MenuFps60_Begin();
     NetworkIcon_InitIfConnected();
     NARC_dtor(narc);
 
@@ -669,6 +670,7 @@ static BOOL PartyMenu_Exit(ApplicationManager *appMan, int *state)
     u32 v1;
 
     SetVBlankCallback(NULL, NULL);
+    MenuFps60_End();
     PartyMenu_CleanupSprites(v0);
     PartyMenu_RemoveWindows(v0);
     sub_0207EA24(v0->bgConfig);

@@ -8,6 +8,7 @@
 
 #include "bg_window.h"
 #include "boot.h"
+#include "communication_system.h"
 #include "heap.h"
 #include "math_util.h"
 #include "sound.h"
@@ -82,6 +83,33 @@ void SetFps60Mode(BOOL enabled)
         gSystem.vblankCallbackEveryTick = FALSE;
         Bg_ClearBlendRegistry();
     }
+}
+
+// Sour Platinum: 60 fps for menu screens (SP_MENUS_60FPS)
+static BOOL sMenuFps60Owner = FALSE;
+
+void MenuFps60_Begin(void)
+{
+#if SP_MENUS_60FPS
+    if (!gSystem.fps60 && !CommSys_IsInitialized()) {
+        SetFps60Mode(TRUE);
+        sMenuFps60Owner = TRUE;
+    }
+
+    if (gSystem.fps60) {
+        gSystem.vblankCallbackEveryTick = TRUE;
+    }
+#endif
+}
+
+void MenuFps60_End(void)
+{
+#if SP_MENUS_60FPS
+    if (sMenuFps60Owner) {
+        SetFps60Mode(FALSE);
+        sMenuFps60Owner = FALSE;
+    }
+#endif
 }
 
 void DisableHBlank(void)
