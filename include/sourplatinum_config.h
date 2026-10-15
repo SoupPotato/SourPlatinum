@@ -8,6 +8,10 @@
 // Set to 0 for the original 30 fps behavior.
 #define SP_BATTLE_60FPS 1
 
+// When set to 1, menu screens that have been converted (see MenuFps60_Begin) run at 60 ticks per second like the
+// battles do, with their original pace. It does nothing while a link/wireless connection is active.
+#define SP_MENUS_60FPS 1
+
 // Wild Pokemon modifier for testing (replaces the Action Replay code). Type a number into the Poketch calculator and
 // press L to set the species (National Dex number, 0 turns it off), R for the level (1-100, 0 turns it off) or
 // Select for the nature (0-24, a bigger number turns it off). Every wild Pokemon created after that uses these

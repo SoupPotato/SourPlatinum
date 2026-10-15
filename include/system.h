@@ -93,6 +93,12 @@ extern u16 gDebugWildMap; // map the modifier was set on, it is cleared when the
 void SetDummyVBlankIntr(void);
 void SetVBlankCallback(Callback cb, void *data);
 void SetFps60Mode(BOOL enabled);
+
+// Sour Platinum: switches a menu screen to 60 ticks per second. Call MenuFps60_Begin right after the screen's VBlank
+// callback has been set (SetVBlankCallback resets it) and MenuFps60_End when the screen exits. If 60 fps mode was
+// already on (a battle), it stays on.
+void MenuFps60_Begin(void);
+void MenuFps60_End(void);
 void DisableHBlank(void);
 BOOL SetHBlankCallback(Callback cb, void *data);
 void InitSystem(void);

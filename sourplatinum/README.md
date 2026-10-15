@@ -78,6 +78,13 @@ per two VBlanks. Link battles stay at the original 30 Hz. Set `SP_BATTLE_60FPS` 
 - `SP_DEBUG_*` switches in the same header turn individual parts off when tracking down visual
   problems.
 
+## 60 fps menus
+
+`SP_MENUS_60FPS` (on by default) runs converted menu screens at 60 ticks per second with their original pace, using
+`MenuFps60_Begin` / `MenuFps60_End` in `src/system.c`. It stays off during link and wireless sessions. Converted so
+far: the Party screen and the Pokémon Summary screen (whose 3D Pokémon sprite and Condition graph are redrawn on the
+in-between ticks). The Party screen's switch slide runs natively at one tile per tick, twice as fast as the original.
+
 ## Move animation speed commands
 
 Move animation scripts (`res/moves/*/anim.s`) have three commands for adjusting how fast an

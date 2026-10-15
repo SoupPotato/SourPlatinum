@@ -5,6 +5,7 @@
 
 void PokemonSummaryScreen_Setup3DGfx(PokemonSummaryScreen *summaryScreen);
 void PokemonSummaryScreen_Update3DGfx(PokemonSummaryScreen *summaryScreen);
+void PokemonSummaryScreen_Redraw3DGfx(PokemonSummaryScreen *summaryScreen);
 void PokemonSummaryScreen_FreeCameraAndMonSprite(PokemonSummaryScreen *summaryScreen);
 void PokemonSummaryScreen_SetupCamera(PokemonSummaryScreen *summaryScreen);
 void PokemonSummaryScreen_InitConditionRects(PokemonSummaryScreen *summaryScreen);

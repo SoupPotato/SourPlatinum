@@ -157,6 +157,30 @@ void PokemonSummaryScreen_Update3DGfx(PokemonSummaryScreen *summaryScreen)
     G3_SwapBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);
 }
 
+// Sour Platinum: on the 60 fps ticks between two logic ticks the 3D scene has to be submitted again, without
+// advancing any state (the Pokemon sprite is drawn from the draw log, see PokemonSpriteManager_DrawSprites).
+void PokemonSummaryScreen_Redraw3DGfx(PokemonSummaryScreen *summaryScreen)
+{
+    if (summaryScreen->page == SUMMARY_PAGE_CONDITION) {
+        G3_ResetG3X();
+        Camera_ComputeViewMatrix();
+
+        G3_MtxMode(GX_MTXMODE_PROJECTION);
+        G3_Identity();
+        G3_MtxMode(GX_MTXMODE_POSITION_VECTOR);
+        G3_Identity();
+
+        NNS_G3dGlbFlush();
+        DrawConditionRects(summaryScreen->graph.currRects);
+        NNS_G3dGlbFlush();
+    }
+
+    NNS_G2dSetupSoftwareSpriteCamera();
+    PokemonSpriteManager_ReplayDrawLog();
+
+    G3_SwapBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);
+}
+
 void PokemonSummaryScreen_FreeCameraAndMonSprite(PokemonSummaryScreen *summaryScreen)
 {
     Camera_Delete(summaryScreen->monSprite.camera);
