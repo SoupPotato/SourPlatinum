@@ -213,7 +213,10 @@ typedef struct SPLColorAnim {
         u16 randomStartColor : 1;
         u16 loop : 1;
         u16 interpolate : 1;
-        u16 : 13;
+        // Sour Platinum: with randomStartColor, the particles take the colors in order instead of at random:
+        // two with the base color, two with the end color, then the start color.
+        u16 sequentialStartColor : 1;
+        u16 : 12;
     } flags;
     u16 padding;
 } SPLColorAnim;

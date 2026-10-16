@@ -240,6 +240,13 @@ void SPLEmitter_EmitParticles(SPLEmitter *emtr, SPLParticleList *list)
             clr[1] = header->color;
             clr[2] = res->colorAnim->end;
             ptcl->color = clr[index % 3];
+
+            if (res->colorAnim->flags.sequentialStartColor) {
+                static const u8 sOrder[] = { 1, 2, 0 };
+                u32 emission = emtr->age / emtr->misc.emissionInterval / 2;
+
+                ptcl->color = clr[sOrder[emission < 2 ? emission : 2]];
+            }
         } else {
             ptcl->color = header->color;
         }
