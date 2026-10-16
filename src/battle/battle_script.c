@@ -4795,6 +4795,8 @@ static BOOL BtlCmd_TryConversion2(BattleSystem *battleSys, BattleContext *battle
                 ATTACKING_MON.type1 = defType;
                 ATTACKING_MON.type2 = defType;
                 battleCtx->msgTemp = defType;
+                // Sour Platinum: the animation plays on the battler whose move is copied
+                battleCtx->msgBattlerTemp = battleCtx->conversion2Battler[battleCtx->attacker];
                 return FALSE;
             }
         }
@@ -4808,6 +4810,8 @@ static BOOL BtlCmd_TryConversion2(BattleSystem *battleSys, BattleContext *battle
                 ATTACKING_MON.type1 = defType;
                 ATTACKING_MON.type2 = defType;
                 battleCtx->msgTemp = defType;
+                // Sour Platinum: the animation plays on the battler whose move is copied
+                battleCtx->msgBattlerTemp = battleCtx->conversion2Battler[battleCtx->attacker];
                 return FALSE;
             }
 

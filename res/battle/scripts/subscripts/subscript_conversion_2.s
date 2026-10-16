@@ -3,7 +3,12 @@
 
 _000:
     TryConversion2 _012
-    Call BATTLE_SUBSCRIPT_ATTACK_MESSAGE_AND_ANIMATION
+    // Sour Platinum: Conversion 2 targets the user, so its animation took the type from the user instead of from the
+    // battler whose move is copied (set by TryConversion2)
+    PrintAttackMessage 
+    Wait 
+    PlayMoveAnimationOnMons BTLSCR_ATTACKER, BTLSCR_ATTACKER, BTLSCR_MSG_BATTLER_TEMP
+    Wait 
     // {0} transformed into the {1} type!
     PrintMessage BattleStrings_Text_PokemonTransformedIntoType_Ally, TAG_NICKNAME_TYPE, BTLSCR_ATTACKER, BTLSCR_MSG_TEMP
     Wait 
