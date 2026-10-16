@@ -8,13 +8,11 @@ L_0:
     LoadCellResObj 0, kinesis_cell_NCER_lz
     LoadAnimResObj 0, kinesis_anim_NANR_lz
     AddSpriteWithFunc 0, SPRITE_FUNC_KINESIS, kinesis_NCGR_lz, kinesis_NCLR, kinesis_cell_NCER_lz, kinesis_anim_NANR_lz, 0, 0
-    Delay 32
+    Delay 17
+    WaitForSoundEffects
     PlaySoundEffectL SEQ_SE_DP_154_sseq
     PlayDelayedSoundEffectL SEQ_SE_DP_154_sseq, 20
-    BeginLoop 3
-    Delay 20
-    EndLoop
-    Delay 27
+    Delay 55
     PlaySoundEffectL SEQ_SE_DP_150_sseq
     Delay 13
     WaitForAnimTasks

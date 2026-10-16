@@ -24,8 +24,11 @@
 #include "palette.h"
 #include "pokemon_sprite.h"
 #include "sprite.h"
+#include "sound_playback.h"
 #include "sprite_system.h"
 #include "sys_task_manager.h"
+
+#include "res/sound/pl_sound_data.naix"
 
 // -------------------------------------------------------------------
 // Quick Attack
@@ -117,6 +120,8 @@ typedef struct KinesisSpriteContext {
     int delay;
     int activeSpoon;
     int spoonAlpha;
+    BOOL bendStarted;
+    int soundWait;
 } KinesisSpriteContext;
 
 enum KinesisSpriteState {
@@ -140,6 +145,9 @@ enum KinesisSpriteState {
 #define KINESIS_SPRITE_BG_START_ALPHA       31
 #define KINESIS_SPRITE_SPOON_END_ALPHA      31
 #define KINESIS_SPRITE_ALPHA_SCALE          10
+#define KINESIS_SPRITE_BEND_SKIP_FRAMES     22 // Sour Platinum: frames of the straight spoon that are skipped before it bends
+#define KINESIS_SPRITE_MAX_SOUND_WAIT       90 // frames to wait for the fade in sound at the most
+#define KINESIS_SPRITE_FADE_SPEED           2 // Sour Platinum: the fade in and fade out take half as long (the bend plays twice as fast too)
 #define KINESIS_SPRITE_SPOON_STAGGER_FRAMES 8
 
 // -------------------------------------------------------------------
@@ -1532,7 +1540,13 @@ static void BattleAnimTask_KinesisSprite(SysTask *task, void *param)
         ctx->state++;
         break;
     case KINESIS_SPRITE_STATE_FADE_IN_SPOONS:
-        ctx->spoonAlpha += 1 * KINESIS_SPRITE_ALPHA_SCALE;
+        ctx->spoonAlpha += KINESIS_SPRITE_FADE_SPEED * KINESIS_SPRITE_ALPHA_SCALE;
+
+        // The alpha must stay in range (an alpha of 32 made the spoon disappear for a frame)
+        if (ctx->spoonAlpha > KINESIS_SPRITE_SPOON_END_ALPHA * KINESIS_SPRITE_ALPHA_SCALE) {
+            ctx->spoonAlpha = KINESIS_SPRITE_SPOON_END_ALPHA * KINESIS_SPRITE_ALPHA_SCALE;
+        }
+
         G2_ChangeBlendAlpha(
             ctx->spoonAlpha / KINESIS_SPRITE_ALPHA_SCALE,
             KINESIS_SPRITE_BG_START_ALPHA - (ctx->spoonAlpha / KINESIS_SPRITE_ALPHA_SCALE));
@@ -1545,6 +1559,12 @@ static void BattleAnimTask_KinesisSprite(SysTask *task, void *param)
         break;
     case KINESIS_SPRITE_STATE_FIX_ALPHA:
         G2_ChangeBlendAlpha(BATTLE_ANIM_DEFAULT_ALPHA, BATTLE_ANIM_DEFAULT_ALPHA);
+
+        // Sour Platinum: the spoons start orbiting when the sound of the fade in has finished
+        if (Sound_IsEffectPlaying(SEQ_SE_DP_W060_sseq) && ++ctx->soundWait < KINESIS_SPRITE_MAX_SOUND_WAIT) {
+            break;
+        }
+
         ctx->state++;
         break;
     case KINESIS_SPRITE_STATE_MOVE_SPOONS: {
@@ -1576,15 +1596,30 @@ static void BattleAnimTask_KinesisSprite(SysTask *task, void *param)
         break;
     }
     case KINESIS_SPRITE_STATE_ANIMATE_SPOON:
-        ManagedSprite_TickFrame(ctx->spoon.sprite);
+        if (ctx->bendStarted == FALSE) {
+            // The spoon waits a long time (44 frames) before it bends, cut that short
+            Sprite_UpdateAnim(ctx->spoon.sprite->sprite, FX32_CONST(KINESIS_SPRITE_BEND_SKIP_FRAMES));
+            ctx->bendStarted = TRUE;
+        }
+
+        ManagedSprite_TickTwoFrames(ctx->spoon.sprite);
 
         if (Sprite_IsAnimated(ctx->spoon.sprite->sprite) == FALSE) {
             ManagedSprite_SetExplicitOamMode(ctx->spoon.sprite, GX_OAM_MODE_XLU);
+
+            // The spoon is translucent from now on, so the blending has to be at its full strength already or the spoon
+            // would be hidden for a frame before the fade out starts
+            G2_ChangeBlendAlpha(KINESIS_SPRITE_SPOON_END_ALPHA, KINESIS_SPRITE_BG_START_ALPHA - KINESIS_SPRITE_SPOON_END_ALPHA);
             ctx->state++;
         }
         break;
     case KINESIS_SPRITE_STATE_FADE_OUT_SPOONS:
-        ctx->spoonAlpha -= 1 * KINESIS_SPRITE_ALPHA_SCALE;
+        ctx->spoonAlpha -= KINESIS_SPRITE_FADE_SPEED * KINESIS_SPRITE_ALPHA_SCALE;
+
+        if (ctx->spoonAlpha < 0) {
+            ctx->spoonAlpha = 0;
+        }
+
         G2_ChangeBlendAlpha(
             ctx->spoonAlpha / KINESIS_SPRITE_ALPHA_SCALE,
             KINESIS_SPRITE_BG_START_ALPHA - (ctx->spoonAlpha / KINESIS_SPRITE_ALPHA_SCALE));
@@ -1621,6 +1656,8 @@ void BattleAnimSpriteFunc_Kinesis(BattleAnimSystem *system, SpriteSystem *sprite
     ctx->delay = KINESIS_SPRITE_SPOON_STAGGER_FRAMES;
     ctx->activeSpoon = 0;
     ctx->state = 0;
+    ctx->bendStarted = FALSE;
+    ctx->soundWait = 0;
 
     int attacker = BattleAnimSystem_GetAttacker(system);
     int revRadiusX = BattleAnimUtil_GetTransformDirectionX(system, attacker);
