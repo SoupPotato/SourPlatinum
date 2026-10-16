@@ -2807,6 +2807,9 @@ static void BattleAnimTask_FaintAttack(SysTask *task, void *param)
                 ctx->attackerY - ctx->attackerShadowHeight,
                 ctx->sprite)
             == FALSE) {
+            // Sour Platinum: the oval does not always end exactly on its start (the step size is rounded), which left
+            // the sprite 1 pixel off while it faded back in. Rest at the exact original position.
+            ManagedSprite_SetPositionXY(ctx->sprite, ctx->attackerX, ctx->attackerY - ctx->attackerShadowHeight + REVOLUTION_CONTEXT_OVAL_RADIUS_Y_INT);
             ctx->state++;
             ctx->delay = FAINT_ATTACK_FADE_IN_DELAY;
         }
