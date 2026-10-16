@@ -9,6 +9,7 @@
 #include "generated/genders.h"
 #include "generated/journal_location_events.h"
 #include "generated/pokemon_data_params.h"
+#include "generated/signpost_commands.h"
 #include "generated/species.h"
 #include "generated/text_banks.h"
 
@@ -21,8 +22,12 @@
 #include "applications/pokemon_summary_screen/main.h"
 #include "applications/town_map/main.h"
 #include "field/field_system.h"
+#include "field/field_system_sub2_t.h"
 #include "overlay005/fieldmap.h"
+#include "overlay005/map_name_popup.h"
+#include "overlay005/ov5_021DFB54.h"
 #include "overlay005/save_info_window.h"
+#include "overlay005/signpost.h"
 #include "overlay005/sprite_resource_manager.h"
 
 #include "appearance.h"
@@ -1914,6 +1919,18 @@ BOOL StartMenu_StartPoketchFieldMove(FieldSystem *fieldSystem, enum FieldMoveLis
     menu->fromPoketch = TRUE;
     menu->cursorPos = fieldMove;
     menu->state = START_MENU_STATE_POKETCH_INIT;
+
+    // Do what the overworld does when a menu is opened. Above all the map name sign has to be hidden: right after
+    // arriving somewhere it is still showing, and its task kept running after the overworld was closed for Fly, which
+    // crashed the game.
+    if (PlayerAvatar_CheckForceStopMovement(fieldSystem->playerAvatar) == 1) {
+        PlayerAvatar_ForceStopMovement(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDir(fieldSystem->playerAvatar));
+    }
+
+    MapNamePopUp_Hide(fieldSystem->unk_04->mapPopup);
+    Signpost_DoCommand(fieldSystem, SIGNPOST_CMD_REMOVE);
+    PlayerAvatar_ClearMoveState(fieldSystem->playerAvatar);
+    ov5_021E0EEC(fieldSystem->playerAvatar);
 
     FieldSystem_CreateTask(fieldSystem, StartMenu_PoketchFieldMove, menu);
 
