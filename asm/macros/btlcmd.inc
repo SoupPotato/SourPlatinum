@@ -1235,6 +1235,17 @@
     .long BTLCMD_END
     .endm
 
+    // Sour Platinum: brings in the ability banner of a battler before the effect of its ability
+    .macro ShowAbilityBanner battler
+    .long BTLCMD_SHOWABILITYBANNER
+    .long \battler
+    .endm
+
+    // Sour Platinum: brings in the ability banner for the buffered message, if it names an ability
+    .macro ShowBufferedAbilityBanner
+    .long BTLCMD_SHOWBUFFEREDABILITYBANNER
+    .endm
+
     .text
     .globl _start
 _start:

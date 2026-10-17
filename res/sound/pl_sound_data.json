@@ -10343,6 +10343,22 @@
 			"channelPriority":	0,
 			"playerPriority":	0,
 			"player":	"PLAYER_PV"
+		}, {
+			"name":	"SEQ_SE_WB_SHOOTER",
+			"fileName":	"SEQ_SE_WB_SHOOTER.sseq",
+			"bank":	"BANK_SE_WB_SHOOTER",
+			"volume":	78,
+			"channelPriority":	104,
+			"playerPriority":	64,
+			"player":	"PLAYER_SE_1"
+		}, {
+			"name":	"SEQ_SE_WB_DECIDE2",
+			"fileName":	"SEQ_SE_WB_DECIDE2.sseq",
+			"bank":	"BANK_SE_WB_DECIDE2",
+			"volume":	127,
+			"channelPriority":	114,
+			"playerPriority":	64,
+			"player":	"PLAYER_SE_1"
 		}],
 	"seqarcInfo":	[],
 	"bankInfo":	[{
@@ -12929,6 +12945,14 @@
 			"name":	"BANK_SE_HIROBA",
 			"fileName":	"BANK_SE_HIROBA.sbnk",
 			"waves":	["WAVE_ARC_BASIC", "WAVE_ARC_SE_HIROBA", "", ""]
+		}, {
+			"name":	"BANK_SE_WB_SHOOTER",
+			"fileName":	"BANK_SE_WB_SHOOTER.sbnk",
+			"waves":	["WAVE_ARC_SE_WB_SHOOTER", "", "", ""]
+		}, {
+			"name":	"BANK_SE_WB_DECIDE2",
+			"fileName":	"BANK_SE_WB_DECIDE2.sbnk",
+			"waves":	["WAVE_ARC_SE_WB_DECIDE2", "", "", ""]
 		}],
 	"wavarcInfo":	[{
 			"name":	""
@@ -14993,6 +15017,12 @@
 		}, {
 			"name":	"WAVE_ARC_SE_HIROBA",
 			"fileName":	"WAVE_ARC_SE_HIROBA.swar"
+		}, {
+			"name":	"WAVE_ARC_SE_WB_SHOOTER",
+			"fileName":	"WAVE_ARC_SE_WB_SHOOTER.swar"
+		}, {
+			"name":	"WAVE_ARC_SE_WB_DECIDE2",
+			"fileName":	"WAVE_ARC_SE_WB_DECIDE2.swar"
 		}],
 	"playerInfo":	[{
 			"name":	"PLAYER_PV",

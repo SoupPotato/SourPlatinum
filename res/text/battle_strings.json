@@ -8488,6 +8488,18 @@
         "The Distortion World’s {STRVAR_1 1, 0, 0}\n",
         "appeared!\r"
       ]
+    },
+    {
+      "id": "BattleStrings_Text_AbilityBannerOwner",
+      "en_US": "{STRVAR_1 1, 0, 0}’s"
+    },
+    {
+      "id": "BattleStrings_Text_AbilityBannerAbility",
+      "en_US": "{STRVAR_1 5, 1, 0}"
+    },
+    {
+      "id": "BattleStrings_Text_AbilityBanner",
+      "en_US": ""
     }
   ]
 }

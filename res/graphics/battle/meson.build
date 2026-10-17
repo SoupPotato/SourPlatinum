@@ -5,6 +5,7 @@ battle_sprites = []
 base_directory = meson.current_source_dir()
 base_build_directory = meson.current_build_dir()
 
+subdir('ability_banner')
 subdir('ball_throws')
 subdir('healthbox')
 subdir('interface')

@@ -31,4 +31,6 @@ sound_bank_files = files([
     'BANK_SE_TRAIN.txt',
     'BANK_SE_TRCARD.txt',
     'BANK_SE_ZUKAN.txt',
+    'BANK_SE_WB_DECIDE2.txt',
+    'BANK_SE_WB_SHOOTER.txt',
 ])

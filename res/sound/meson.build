@@ -39,6 +39,8 @@ pl_sound_data_sdat = custom_target('pl_sound_data.sdat',
         copy_gen.process(WAVE_ARC_SE_TRAIN),
         copy_gen.process(WAVE_ARC_SE_TRCARD),
         copy_gen.process(WAVE_ARC_SE_ZUKAN),
+        copy_gen.process(WAVE_ARC_SE_WB_DECIDE2),
+        copy_gen.process(WAVE_ARC_SE_WB_SHOOTER),
     ],
     output: [
         'pl_sound_data.sdat',

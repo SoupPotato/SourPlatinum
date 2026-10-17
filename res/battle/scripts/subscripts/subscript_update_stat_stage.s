@@ -13,6 +13,12 @@ _010:
     Wait 
 
 _018:
+    // Sour Platinum: when the stat change comes from an ability, its banner comes in before the effect
+    CompareVarToValue OPCODE_NEQ, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_ABILITY, _AbilityBannerShown
+    ShowBufferedAbilityBanner 
+    Wait 
+
+_AbilityBannerShown:
     CompareVarToValue OPCODE_FLAG_SET, BTLVAR_BATTLE_CTX_STATUS_2, SYSCTL_UPDATE_STAT_STAGES, _036
     PlayBattleAnimationFromVar BTLSCR_SIDE_EFFECT_MON, BTLVAR_SCRIPT_TEMP
     Wait 

@@ -22,6 +22,7 @@
 #include "struct_defs/trainer.h"
 
 #include "battle/battle_anim_battler_context.h"
+#include "battle/ability_banner.h"
 #include "battle/battle_context.h"
 #include "battle/battle_controller.h"
 #include "battle/battle_lib.h"
@@ -1002,7 +1003,18 @@ void BattleDisplay_PrintMessage(BattleSystem *battleSys, BattlerData *battlerDat
     waitTask->battleSys = battleSys;
     waitTask->command = battlerData->data[0];
     waitTask->battler = battlerData->battler;
-    waitTask->msgIdx = BattleMessage_Print(battleSys, msgLoader, battleMsg, BattleSystem_GetTextSpeed(battleSys));
+
+    // Sour Platinum: a message that only brings in the ability banner (before the effect of the ability) is not printed.
+    // This has to be checked before printing, which changes the ID of the message for the side of the battler.
+    if (AbilityBanner_IsBannerOnlyMessage(battleMsg)) {
+        waitTask->msgIdx = ABILITY_BANNER_NO_MESSAGE;
+        AbilityBanner_TryShow(battleSys, battleMsg, ABILITY_BANNER_NO_MESSAGE);
+    } else {
+        waitTask->msgIdx = BattleMessage_Print(battleSys, msgLoader, battleMsg, BattleSystem_GetTextSpeed(battleSys));
+
+        // Sour Platinum: show the ability banner for messages that name an ability
+        AbilityBanner_TryShow(battleSys, battleMsg, waitTask->msgIdx);
+    }
 
     SysTask_Start(Task_WaitForBattleMessagePrint, waitTask, 0);
 }
@@ -5237,7 +5249,8 @@ static void Task_WaitForBattleMessagePrint(SysTask *task, void *data)
         BattleSystem_SetWaitDial(waitTask->battleSys, NULL);
     }
 
-    if (Text_IsPrinterActive(waitTask->msgIdx) == FALSE) {
+    // Sour Platinum: the effect of an ability waits for its banner
+    if ((waitTask->msgIdx == ABILITY_BANNER_NO_MESSAGE || Text_IsPrinterActive(waitTask->msgIdx) == FALSE) && AbilityBanner_IsIntroPlaying() == FALSE) {
         BattleController_EmitClearCommand(waitTask->battleSys, waitTask->battler, waitTask->command);
         Heap_Free(data);
         SysTask_Done(task);

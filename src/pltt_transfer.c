@@ -177,6 +177,23 @@ BOOL PlttTransfer_HasTask(int resourceID)
     return FindTransferTask(resourceID) != NULL;
 }
 
+BOOL PlttTransfer_HasFreeSpace(int numPalettes, NNS_G2D_VRAM_TYPE vramType)
+{
+    if (sTaskManager == NULL || FindNextFreeTask() == NULL) {
+        return FALSE;
+    }
+
+    if ((vramType & NNS_G2D_VRAM_TYPE_2DMAIN) && FindAvailableTransferSlot(sTaskManager->vramTransferMain, numPalettes) == -1) {
+        return FALSE;
+    }
+
+    if ((vramType & NNS_G2D_VRAM_TYPE_2DSUB) && FindAvailableTransferSlot(sTaskManager->vramTransferSub, numPalettes) == -1) {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 void PlttTransfer_ResetTask(int resourceID)
 {
     PlttTransferTask *task = FindTransferTask(resourceID);

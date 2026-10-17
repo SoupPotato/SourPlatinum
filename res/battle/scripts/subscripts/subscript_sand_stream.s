@@ -2,6 +2,9 @@
 
 
 _000:
+    // Sour Platinum: the ability banner comes in before the effect
+    ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
+    Wait 
     PlayBattleAnimation BTLSCR_PLAYER, BATTLE_ANIMATION_WEATHER_SAND
     Wait 
     // {0}’s {1} whipped up a sandstorm!
