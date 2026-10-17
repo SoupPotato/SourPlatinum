@@ -26,6 +26,7 @@
 #include "applications/naming_screen.h"
 #include "applications/pokedex/ov21_021E8D48.h"
 #include "applications/pokedex/struct_ov21_021E8E0C.h"
+#include "battle/ability_banner.h"
 #include "battle/battle_context.h"
 #include "battle/battle_controller.h"
 #include "battle/battle_controller_player.h"
@@ -307,6 +308,8 @@ static BOOL BtlCmd_CheckCurMoveIsType(BattleSystem *battleSys, BattleContext *ba
 static BOOL BtlCmd_LoadArchivedMonData(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BtlCmd_RefreshMonData(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BtlCmd_End(BattleSystem *battleSys, BattleContext *battleCtx);
+static BOOL BtlCmd_ShowAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
+static BOOL BtlCmd_ShowBufferedAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
 
 static int BattleScript_Read(BattleContext *battleCtx);
 static void BattleScript_Iter(BattleContext *battleCtx, int i);
@@ -9459,6 +9462,59 @@ static BOOL BtlCmd_End(BattleSystem *battleSys, BattleContext *battleCtx)
 {
     battleCtx->battleProgressFlag = TRUE;
     return BattleSystem_PopScript(battleCtx);
+}
+
+/**
+ * @brief Sour Platinum: bring in the ability banner of a battler before the effect of its ability.
+ *
+ * This prints an empty message tagged with the battler and its ability, which only shows the banner (see
+ * battle/ability_banner.h). The banner stays for the message of the ability that follows.
+ *
+ * Inputs:
+ * 1. The battler whose ability is shown.
+ *
+ * @param battleSys
+ * @param battleCtx
+ * @return FALSE
+ */
+static BOOL BtlCmd_ShowAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx)
+{
+    BattleScript_Iter(battleCtx, 1);
+    int inBattler = BattleScript_Read(battleCtx);
+
+    BattleMessageParams msgParams;
+    msgParams.id = BattleStrings_Text_AbilityBanner;
+    msgParams.tags = TAG_NICKNAME_ABILITY;
+    msgParams.params[0] = inBattler;
+    msgParams.params[1] = inBattler;
+
+    BattleMessage msg;
+    BattleMessage_Make(battleSys, battleCtx, &msgParams, &msg);
+    BattleController_EmitPrintMessage(battleSys, battleCtx, &msg);
+
+    return FALSE;
+}
+
+/**
+ * @brief Sour Platinum: bring in the ability banner for the buffered message, if it names an ability.
+ *
+ * Used before stat changes that come from an ability (Intimidate, Download...), whose message is built in code.
+ *
+ * @param battleSys
+ * @param battleCtx
+ * @return FALSE
+ */
+static BOOL BtlCmd_ShowBufferedAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx)
+{
+    BattleScript_Iter(battleCtx, 1);
+
+    if (AbilityBanner_MessageNamesAbility(&battleCtx->msgBuffer)) {
+        BattleMessage msg = battleCtx->msgBuffer;
+        msg.id = BattleStrings_Text_AbilityBanner;
+        BattleController_EmitPrintMessage(battleSys, battleCtx, &msg);
+    }
+
+    return FALSE;
 }
 
 /**

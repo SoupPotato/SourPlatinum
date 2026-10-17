@@ -341,3 +341,6 @@ ball_throws/mud.NCGR.lz
 interface/top_stock.NCGR.lz
 interface/top_stock_cell.NCER.lz
 interface/top_stock_anim.NANR.lz
+ability_banner/banner.NCLR
+ability_banner/banner.NCGR.lz
+ability_banner/banner_cell.NCER.lz

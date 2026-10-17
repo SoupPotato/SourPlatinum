@@ -6,6 +6,9 @@ _000:
     Wait 
     WaitButtonABTime 15
     CompareMonDataToValue OPCODE_EQU, BTLSCR_DEFENDER, BATTLEMON_SPEED_STAGE, 12, _032
+    // Sour Platinum: the ability banner comes in before the effect
+    ShowAbilityBanner BTLSCR_DEFENDER
+    Wait 
     PlayBattleAnimation BTLSCR_DEFENDER, BATTLE_ANIMATION_STAT_BOOST
     Wait 
     UpdateMonData OPCODE_ADD, BTLSCR_DEFENDER, BATTLEMON_SPEED_STAGE, 1

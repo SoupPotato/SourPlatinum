@@ -2,6 +2,9 @@
 
 
 _000:
+    // Sour Platinum: the ability banner comes in before the effect
+    ShowAbilityBanner BTLSCR_DEFENDER
+    Wait 
     UpdateVar OPCODE_FLAG_ON, BTLVAR_BATTLE_CTX_STATUS, SYSCTL_SKIP_SPRITE_BLINK
     Call BATTLE_SUBSCRIPT_UPDATE_HP
     // {0}’s {1} hurt {2}!

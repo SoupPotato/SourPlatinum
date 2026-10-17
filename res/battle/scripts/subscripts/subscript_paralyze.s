@@ -31,6 +31,12 @@ _041:
     Wait 
 
 _076:
+    // Sour Platinum: when the status comes from an ability, its banner comes in before the effect
+    CompareVarToValue OPCODE_NEQ, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_ABILITY, _AbilityBannerShown
+    ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
+    Wait 
+
+_AbilityBannerShown:
     PlayBattleAnimation BTLSCR_SIDE_EFFECT_MON, BATTLE_ANIMATION_PARALYZED
     Wait 
     UpdateMonData OPCODE_FLAG_ON, BTLSCR_SIDE_EFFECT_MON, BATTLEMON_STATUS, MON_CONDITION_PARALYSIS

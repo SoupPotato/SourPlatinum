@@ -20,6 +20,10 @@ BOOL PlttTransfer_RequestWholeRange(const PlttTransferTaskTemplate *template);
 BOOL PlttTransfer_RequestFreeSpace(const PlttTransferTaskTemplate *template);
 void PlttTransfer_ReplacePlttData(int resourceID, NNSG2dPaletteData *data);
 BOOL PlttTransfer_HasTask(int resourceID);
+
+// Sour Platinum: TRUE if a palette of numPalettes palettes can be loaded right now. Loading one when there is no room
+// stops the game with an assert, so code that loads a palette in the middle of a busy screen checks this first.
+BOOL PlttTransfer_HasFreeSpace(int numPalettes, NNS_G2D_VRAM_TYPE vramType);
 void PlttTransfer_ResetTask(int resourceID);
 void PlttTransfer_ResetAllTasks(void);
 NNSG2dImagePaletteProxy *PlttTransfer_GetPaletteProxy(int resourceID);

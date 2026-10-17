@@ -698,6 +698,7 @@ Overlay battle
 	Object main.nef.p/src_battle_cursor_renderer.c.o
 	Object main.nef.p/src_battle_indicator.c.o
 	Object main.nef.p/src_battle_stop_recording_task_data.c.o
+	Object main.nef.p/src_battle_ability_banner.c.o
 }
 
 Overlay overlay17
