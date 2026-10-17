@@ -1310,6 +1310,10 @@ static void BattleAnimTask_Growth(SysTask *task, void *param)
         PokemonSprite_SetAttribute(ctx->sprite, MON_SPRITE_SCALE_Y, ctx->scale.y);
         break;
     default:
+        // Sour Platinum: the last step of the scale lerp does not always land exactly on the normal size, which left
+        // the sprite slightly scaled (and with artifacts) after the move. End at exactly the normal size.
+        PokemonSprite_SetAttribute(ctx->sprite, MON_SPRITE_SCALE_X, MON_AFFINE_SCALE(1));
+        PokemonSprite_SetAttribute(ctx->sprite, MON_SPRITE_SCALE_Y, MON_AFFINE_SCALE(1));
         BattleAnimSystem_EndAnimTask(ctx->battleAnimSys, task);
         Heap_Free(ctx);
         break;
