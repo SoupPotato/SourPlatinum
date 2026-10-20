@@ -25,6 +25,7 @@
 #include "battle_anim/is_form_symmetrical.h"
 #include "battle_anim/ov12_022380BC.h"
 #include "battle_anim/script_func_tables.h"
+#include "battle_anim/script_funcs_3.h"
 #include "battle_anim/struct_ov12_02223764.h"
 #include "battle_anim/struct_ov12_022380DC.h"
 #include "global/utility.h"
@@ -418,6 +419,7 @@ BOOL BattleAnimSystem_StartMove(BattleAnimSystem *system, MoveAnimation *moveAni
 
     gBattleAnimSpeedPercent = 100;
     SPL_SetDefaultSmoothChildren(FALSE);
+    BattleAnimUtil_ResetScaleBattlerSpriteOwners();
 
     for (i = 0; i < MAX_PARTICLE_SYSTEMS; i++) {
         system->cameraProjections[i] = CAMERA_PROJECTION_ORTHOGRAPHIC;
@@ -1132,6 +1134,7 @@ static void BattleAnimScriptCmd_End(BattleAnimSystem *system)
     system->endDelayFrames = 0;
     gBattleAnimSpeedPercent = 100;
     SPL_SetDefaultSmoothChildren(FALSE);
+    BattleAnimUtil_ResetScaleBattlerSpriteOwners();
 
     for (i = 0; i < BATTLE_ANIM_SCRIPT_MAX_CALL_STACK_DEPTH; i++) {
         system->callStack[i] = NULL;

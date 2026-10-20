@@ -259,7 +259,15 @@ typedef struct ScaleBattlerSpriteContext {
     int cycles;
     int scaleFrames;
     int hold;
+    BOOL superseded; // Sour Platinum: a newer scale animation took over the sprite
 } ScaleBattlerSpriteContext;
+
+// Sour Platinum: the scale animation that currently owns each sprite. When a move starts a new one before the previous
+// one is done (Facade, Uproar), the previous one stops without touching the sprite, instead of resetting its size in the
+// middle of the new one.
+#define SCALE_BATTLER_SPRITE_OWNERS 4
+
+static ScaleBattlerSpriteContext *sScaleBattlerSpriteOwners[SCALE_BATTLER_SPRITE_OWNERS];
 
 enum ScaleBattlerSpriteState {
     SCALE_BATTLER_SPRITE_STATE_INIT_SCALE = 0,
@@ -1878,9 +1886,31 @@ void BattleAnimScriptFunc_ScalePokemonSprite(BattleAnimSystem *system)
     }
 }
 
+void BattleAnimUtil_ResetScaleBattlerSpriteOwners(void)
+{
+    for (int i = 0; i < SCALE_BATTLER_SPRITE_OWNERS; i++) {
+        sScaleBattlerSpriteOwners[i] = NULL;
+    }
+}
+
+static void ScaleBattlerSprite_ReleaseOwner(ScaleBattlerSpriteContext *ctx)
+{
+    for (int i = 0; i < SCALE_BATTLER_SPRITE_OWNERS; i++) {
+        if (sScaleBattlerSpriteOwners[i] == ctx) {
+            sScaleBattlerSpriteOwners[i] = NULL;
+        }
+    }
+}
+
 static void BattleAnimTask_ScaleBattlerSprite(SysTask *task, void *param)
 {
     ScaleBattlerSpriteContext *ctx = param;
+
+    if (ctx->superseded) {
+        Heap_Free(ctx);
+        BattleAnimSystem_EndAnimTask(ctx->battleAnimSys, task);
+        return;
+    }
 
     switch (ctx->state) {
     case SCALE_BATTLER_SPRITE_STATE_INIT_SCALE:
@@ -1892,7 +1922,16 @@ static void BattleAnimTask_ScaleBattlerSprite(SysTask *task, void *param)
             ctx->endY,
             ctx->reference,
             SCALE_POKEMON_SPRITE_SCALE_FRAMES(ctx->scaleFrames));
-        ScaleLerpContext_UpdateAndApplyToMon(&ctx->scale, ctx->monSprite);
+        // Sour Platinum: this used ScaleLerpContext_UpdateAndApplyToMon, which steps both axes by the X step, so
+        // for a stretch (wider and shorter) the height went the wrong way for a frame. The sprite also stays on the
+        // ground on this frame now.
+        ScaleLerpContext_UpdateXYAndApplyToMon(&ctx->scale, ctx->monSprite);
+        BattleAnimUtil_SetPokemonSpriteAnchoredPosition(
+            ctx->monSprite,
+            ctx->battlerY,
+            ctx->battlerSpriteHeight,
+            ctx->scale.data[XY_PARAM_CUR_Y],
+            BATTLE_ANIM_ANCHOR_BOTTOM);
         ctx->state++;
         break;
     case SCALE_BATTLER_SPRITE_STATE_SCALE:
@@ -1926,6 +1965,12 @@ static void BattleAnimTask_ScaleBattlerSprite(SysTask *task, void *param)
             ctx->reference,
             SCALE_POKEMON_SPRITE_RESTORE_FRAMES(ctx->scaleFrames));
         ScaleLerpContext_UpdateXYAndApplyToMon(&ctx->scale, ctx->monSprite);
+        BattleAnimUtil_SetPokemonSpriteAnchoredPosition(
+            ctx->monSprite,
+            ctx->battlerY,
+            ctx->battlerSpriteHeight,
+            ctx->scale.data[XY_PARAM_CUR_Y],
+            BATTLE_ANIM_ANCHOR_BOTTOM);
         ctx->state++;
         break;
     case SCALE_BATTLER_SPRITE_STATE_RESTORE:
@@ -1947,7 +1992,11 @@ static void BattleAnimTask_ScaleBattlerSprite(SysTask *task, void *param)
         }
         break;
     case SCALE_BATTLER_SPRITE_STATE_CLEANUP:
+        // Sour Platinum: the position goes back too, the last step does not always land exactly on it
         ResetMonScale(ctx->monSprite);
+        PokemonSprite_SetAttribute(ctx->monSprite, MON_SPRITE_Y_CENTER, ctx->battlerY);
+        PokemonSprite_SetNoBlend(ctx->monSprite, FALSE);
+        ScaleBattlerSprite_ReleaseOwner(ctx);
         Heap_Free(ctx);
         BattleAnimSystem_EndAnimTask(ctx->battleAnimSys, task);
         return;
@@ -2071,6 +2120,30 @@ void BattleAnimScriptFunc_ScaleBattlerSprite(BattleAnimSystem *system)
     ctx->battlerY = PokemonSprite_GetAttribute(ctx->monSprite, MON_SPRITE_Y_CENTER);
     ctx->battlerSpriteHeight = PokemonSprite_GetAttribute(ctx->monSprite, MON_SPRITE_SHADOW_HEIGHT);
     ctx->battlerSpriteHeight += 16;
+    ctx->superseded = FALSE;
+
+    // Sour Platinum: take over from a scale animation that is still running on this sprite. Its sprite is in the middle
+    // of a squash, so its original position is used rather than the current one.
+    int ownerSlot = -1;
+
+    for (int i = 0; i < SCALE_BATTLER_SPRITE_OWNERS; i++) {
+        ScaleBattlerSpriteContext *owner = sScaleBattlerSpriteOwners[i];
+
+        if (owner != NULL && owner->monSprite == ctx->monSprite) {
+            ctx->battlerY = owner->battlerY;
+            owner->superseded = TRUE;
+            ownerSlot = i;
+            break;
+        }
+
+        if (owner == NULL && ownerSlot < 0) {
+            ownerSlot = i;
+        }
+    }
+
+    if (ownerSlot >= 0) {
+        sScaleBattlerSpriteOwners[ownerSlot] = ctx;
+    }
 
     ctx->startX = BattleAnimSystem_GetScriptVar(system, SCALE_BATTLER_SPRITE_VAR_START_X);
     ctx->endX = BattleAnimSystem_GetScriptVar(system, SCALE_BATTLER_SPRITE_VAR_END_X);
@@ -2082,7 +2155,11 @@ void BattleAnimScriptFunc_ScaleBattlerSprite(BattleAnimSystem *system)
     ctx->cycles = SCALE_BATTLER_SPRITE_CYCLES(BattleAnimSystem_GetScriptVar(system, SCALE_BATTLER_SPRITE_VAR_HOLD_CYCLES));
     ctx->hold = SCALE_BATTLER_SPRITE_HOLD(BattleAnimSystem_GetScriptVar(system, SCALE_BATTLER_SPRITE_VAR_HOLD_CYCLES));
 
-    SysTask *task = BattleAnimSystem_StartAnimTask(ctx->battleAnimSys, BattleAnimTask_ScaleBattlerSprite, ctx);
+    // Sour Platinum: scale on every tick in 60 fps mode instead of blending the original-rate steps. The hold is
+    // counted in ticks then.
+    ctx->hold = BattleTime_Frames(ctx->hold, SP_PACE_ANIM_PERCENT);
+    PokemonSprite_SetNoBlend(ctx->monSprite, TRUE);
+    SysTask *task = BattleAnimSystem_StartNativeAnimTask(ctx->battleAnimSys, BattleAnimTask_ScaleBattlerSprite, ctx);
     BattleAnimTask_ScaleBattlerSprite(task, ctx);
 }
 
