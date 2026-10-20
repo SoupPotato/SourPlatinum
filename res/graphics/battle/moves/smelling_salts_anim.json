@@ -42,7 +42,7 @@
 					"frameDelay":	1,
 					"resultId":	5
 				}, {
-					"frameDelay":	50,
+					"frameDelay":	15,
 					"resultId":	0
 				}]
 		}],
