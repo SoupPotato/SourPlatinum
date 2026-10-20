@@ -623,6 +623,13 @@ void PokemonSpriteManager_DrawSpritesPass(PokemonSpriteManager *monSpriteMan, en
             } else {
                 width = (MON_SPRITE_FRAME_WIDTH * monSpriteMan->sprites[i].transforms.scaleX) >> MON_AFFINE_SHIFT;
                 height = (MON_SPRITE_FRAME_HEIGHT * monSpriteMan->sprites[i].transforms.scaleY) >> MON_AFFINE_SHIFT;
+
+                // Sour Platinum: a scaled sprite is drawn at an even size. With an odd size the half size is rounded
+                // down, so the sprite sat half a pixel off its center on every other step of a scale animation (Growth)
+                // and shimmered. At an even size both edges move together and the center stays put.
+                width = (width + 1) & ~1;
+                height = (height + 1) & ~1;
+
                 u0 = sMonSpriteTextureCoords[i][monSpriteMan->sprites[i].currSpriteFrame][0];
                 u1 = sMonSpriteTextureCoords[i][monSpriteMan->sprites[i].currSpriteFrame][2];
                 v0 = sMonSpriteTextureCoords[i][monSpriteMan->sprites[i].currSpriteFrame][1];

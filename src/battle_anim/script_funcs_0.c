@@ -1314,6 +1314,7 @@ static void BattleAnimTask_Growth(SysTask *task, void *param)
         // the sprite slightly scaled (and with artifacts) after the move. End at exactly the normal size.
         PokemonSprite_SetAttribute(ctx->sprite, MON_SPRITE_SCALE_X, MON_AFFINE_SCALE(1));
         PokemonSprite_SetAttribute(ctx->sprite, MON_SPRITE_SCALE_Y, MON_AFFINE_SCALE(1));
+        PokemonSprite_SetNoBlend(ctx->sprite, FALSE);
         BattleAnimSystem_EndAnimTask(ctx->battleAnimSys, task);
         Heap_Free(ctx);
         break;
@@ -1330,7 +1331,10 @@ void BattleAnimScriptFunc_Growth(BattleAnimSystem *system)
     ctx->battleAnimSys = system;
     ctx->sprite = BattleAnimSystem_GetBattlerSprite(ctx->battleAnimSys, BattleAnimSystem_GetAttacker(ctx->battleAnimSys));
 
-    BattleAnimSystem_StartAnimTask(ctx->battleAnimSys, BattleAnimTask_Growth, ctx);
+    // Sour Platinum: scale on every tick in 60 fps mode instead of blending the original-rate steps, which made the
+    // sprite waver while it grew and shrank
+    PokemonSprite_SetNoBlend(ctx->sprite, TRUE);
+    BattleAnimSystem_StartNativeAnimTask(ctx->battleAnimSys, BattleAnimTask_Growth, ctx);
 }
 
 enum {
