@@ -10,9 +10,11 @@ L_0:
     SwitchBg 10, BATTLE_BG_SWITCH_MODE_FADE | BATTLE_BG_SWITCH_FLAG_MOVE
     WaitForBgSwitch
     PlayLoopedSoundEffectC SEQ_SE_DP_W081_sseq, 2, 4
-    CreateEmitter 0, 0, EMITTER_CB_GENERIC
-    SetExtraParams 0, 2, 6, 1, 0, 0
-    Delay 15
+    // Sour Platinum: like Energy Ball, the ball's emitter is moved from the user to the target and the ball rides on it
+    // (mist_ball.spa), so that it arrives with the hit (15 frames) and stays on the target, instead of flying past it
+    CreateEmitter 0, 0, EMITTER_CB_SET_POS_TO_ATTACKER
+    Func_MoveEmitterA2BLinear 0, 0, 0, 0, 15, 64
+    Delay 14 // the hit starts 1 frame before the ball arrives
     PlayLoopedSoundEffectR SEQ_SE_DP_W028_sseq, 2, 4
     Func_FadeBg FADE_BG_TYPE_BASE, 1, 0, 8, BATTLE_COLOR_WHITE
     CreateEmitter 0, 5, EMITTER_CB_SET_POS_TO_DEFENDER
