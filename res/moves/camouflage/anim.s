@@ -1,6 +1,7 @@
 #include "macros/btlanimcmd.inc"
 
 L_0:
+    SetAnimSpeed 150
     PlaySoundEffectL SEQ_SE_DP_W185_sseq
     InitPokemonSpriteManager
     LoadPokemonSpriteDummyResources 0
