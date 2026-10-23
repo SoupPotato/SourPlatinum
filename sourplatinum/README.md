@@ -130,3 +130,30 @@ Set `SP_DEBUG_WILD_MODIFIER` to `1` in `include/sourplatinum_config.h` (it is `0
 into the Pokétch calculator and press L (species, National Dex number), R (level, 1-100) or Select (nature,
 0-24). Every wild Pokémon created afterwards uses the values. 0 (or 25+ for the nature) turns a setting off, and
 all settings reset when you load a different map.
+
+## Editing with DSPRE
+
+Retail DSPRE reads its tables from fixed Platinum offsets, which this build moves. A DSPRE fork (branch
+`sourplatinum-offsets`) reads replacement offsets from a `<rom name>.dspre_offsets.json` next to the ROM, and can
+open this repository directly (menu **Repository**):
+
+- **Open SourPlatinum Repository...** runs `sourplatinum/tools/dspre_build.py` through WSL: it copies changed files
+  from this tree into the WSL build clone (`~/SourPlatinum`), runs `make`, and publishes `build/dspre/sourplatinum.nds`
+  with its offsets file and a baseline copy. DSPRE then opens that ROM.
+- **Write Back to Repository** runs `sourplatinum/tools/dspre_writeback.py`, which turns the edits DSPRE saved into
+  changes to this tree's source files, field by field, so the rest of each file stays as it was.
+- **Write Back, Rebuild and Reopen** does both.
+
+What gets written back: trainers, wild encounters (`encounters_*.json`), species stats, TM/HM compatibility, level-up
+learnsets and evolutions, item data, text banks (plus species, item, move and trainer names and item/move
+descriptions) and field scripts. Changed script blocks are rewritten with the file's own labels and names; new code
+gets `<Map>_DSPRE_*` labels at the end of the file. Level scripts (`scripts_init_*`), four scripts using conditional
+macros (`scripts_group_connection`, `scripts_mystery_gift_deliveryman`, `scripts_field_moves`,
+`scripts_tv_broadcast`) and everything else (maps, events, graphics, ARM9/overlay tables) aren't written back. DSPRE
+lists those edits before a rebuild would lose them.
+
+`dspre_writeback.py --self-test` decodes the whole baseline build and checks it against the source; run it after
+changing a data format or one of the `tools/dataproc` processors. To make the offsets file by hand (debug and release
+builds lay out differently, so the map and ROM must come from the same build):
+
+    python3 sourplatinum/tools/dspre_offsets.py --rom build/pokeplatinum.us.nds -o build/sourplatinum.dspre_offsets.json
