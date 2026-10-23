@@ -277,7 +277,11 @@ void SPLEmitter_EmitParticles(SPLEmitter *emtr, SPLParticleList *list)
             ptcl->texture = header->misc.textureIndex;
         }
 
-        ptcl->loopTimeFactor = 0xFFFF / (res->header->misc.loopFrames * emtr->timeScale);
+        // Sour Platinum: a loop of 1 frame wraps around to the same point on every frame (lifeRate 255), so the
+        // looped animations stay still. Spreading it over the updates of a frame would make them flicker between
+        // two values instead (the music notes of Sing pulsing in size), so it is kept as it is.
+        int loopFrames = res->header->misc.loopFrames;
+        ptcl->loopTimeFactor = 0xFFFF / (loopFrames == 1 ? 1 : loopFrames * emtr->timeScale);
         ptcl->lifeTimeFactor = 0xFFFF / ptcl->lifeTime;
 
         ptcl->lifeRateOffset = 0;
