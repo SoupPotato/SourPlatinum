@@ -104,7 +104,7 @@ def mismatches(src, dec, path=''):
 
 class Ctx:
     def __init__(self, contents, baseline, clone, dry_run):
-        self.contents, self.clone, self.dry_run = contents, clone, dry_run
+        self.contents, self.baseline, self.clone, self.dry_run = contents, baseline, clone, dry_run
         self.rom = ndspy.rom.NintendoDSRom.fromFile(baseline)
         self._narcs, self._enums, self._json = {}, {}, {}
         self.written, self.not_written, self.errors = [], [], []
@@ -131,7 +131,11 @@ class Ctx:
         out = []
         if os.path.isdir(d):
             for f in os.listdir(d):
-                if f.isdigit() and self.old(dirname, int(f)) != open(os.path.join(d, f), 'rb').read():
+                if not f.isdigit():
+                    continue
+                old, new = self.old(dirname, int(f)), open(os.path.join(d, f), 'rb').read()
+                # DSPRE's Pokémon editor saves an absent female height (an empty file) as a single 0 byte
+                if old != new and not (dirname == 'pokeHeight' and old == b'' and new == b'\0'):
                     out.append(int(f))
         return sorted(out)
 
@@ -593,6 +597,141 @@ class Text:
         print(f'Text: {bad} message(s) disagree with the build')
         return bad
 
+# --- Pokémon icons: res/pokemon/**/icon.png <- pl_poke_icon.narc, palettes <- sPokemonIconPaletteIndex in ARM9 -------
+
+class Icons:
+    SHARED = 7   # pl_poke_icon.narc members before the first icon: shared palettes, cells and animations
+
+    def __init__(self, ctx):
+        self.ctx = ctx
+        species = [n[len('SPECIES_'):].lower() for n in lines('generated/species.txt')]
+        # species icons up to the egg (bad_egg has none), then the form icons in res/pokemon/meson.build order
+        self.icons = [(s, None) for s in species[:species.index('egg') + 1]]
+        form_vars = {}
+        for s in species:
+            mb = os.path.join(REPO, 'res', 'pokemon', s, 'meson.build')
+            if os.path.exists(mb):
+                for var, form in re.findall(r"(\w+_icon)\s*=\s*files\('forms/(\w+)/icon\.png'\)", open(mb).read()):
+                    form_vars[var] = (s, form)
+        block = re.search(r'poke_icon_files \+= \[(.*?)\]', open(os.path.join(REPO, 'res', 'pokemon', 'meson.build')).read(), re.S)
+        self.icons += [form_vars[v] for v in re.findall(r'(\w+_icon)', block.group(1))]
+        self.table = None
+        mp = os.path.join(ctx.clone, 'build', 'main.nef.xMAP')
+        m = re.search(r'^\s+([0-9A-F]{8}) ([0-9A-F]{8}) \.rodata\s+sPokemonIconPaletteIndex\s', open(mp, encoding='latin1').read(), re.M)
+        if m and int(m.group(2), 16) == len(self.icons):
+            self.table = int(m.group(1), 16) - 0x02000000
+        _, (_, self.arm9_old), _, _ = load_rom(ctx.baseline)
+        arm9_new = ctx.contents and next((os.path.join(ctx.contents, p) for p in ('arm9/arm9.bin', 'arm9.bin')
+                                          if os.path.exists(os.path.join(ctx.contents, p))), None)
+        self.arm9_new = open(arm9_new, 'rb').read() if arm9_new else self.arm9_old
+
+    def png_rel(self, k):
+        s, form = self.icons[k]
+        return f'res/pokemon/{s}/' + (f'forms/{form}/' if form else '') + 'icon.png'
+
+    def palette_slot(self, k):
+        """(data.json, key path) holding icon k's palette, or None."""
+        s, form = self.icons[k]
+        rel = f'res/pokemon/{s}/data.json'
+        value = self.ctx.json(rel).get('icon_palette')
+        if isinstance(value, list):
+            for n, (name, _) in enumerate(value):
+                if name == (form or 'base'):
+                    return rel, ('icon_palette', n, 1)
+            return None
+        if form is None:
+            return rel, ('icon_palette',)
+        form_rel = f'res/pokemon/{s}/forms/{form}/data.json'
+        if os.path.exists(os.path.join(REPO, form_rel)) and 'icon_palette' in self.ctx.json(form_rel):
+            return form_rel, ('icon_palette',)
+        return None
+
+    def palette(self, arm9, k):
+        return arm9[self.table + k] if self.table is not None else None
+
+    def handled_arm9(self):
+        return range(self.table, self.table + len(self.icons)) if self.table is not None else range(0)
+
+    def nitrogfx(self, *args):
+        r = subprocess.run([os.path.join(self.ctx.clone, 'build', 'tools', 'nitrogfx', 'nitrogfx'), *args], capture_output=True, text=True)
+        if r.returncode:
+            raise ValueError((r.stderr or r.stdout).strip()[:300])
+
+    def to_png(self, ncgr, palette):
+        """(PNG bytes, re-encoded tile bytes) for an icon NCGR, drawn with shared palette `palette`."""
+        with tempfile.TemporaryDirectory() as tmp:
+            pals, src, png, back = (os.path.join(tmp, n) for n in ('pals.NCLR', 'icon.NCGR', 'icon.png', 'back.NCGR'))
+            open(pals, 'wb').write(self.ctx.old('monIcons', 0)); open(src, 'wb').write(ncgr)
+            self.nitrogfx(src, png, '-palette', pals, '-width', '4', '-palindex', str(palette + 1))
+            self.nitrogfx(png, back, '-clobbersize', '-version101')
+            return open(png, 'rb').read(), open(back, 'rb').read()[0x30:]
+
+    @staticmethod
+    def same_image(png_a, png_b):
+        from PIL import Image
+        import io
+        a, b = Image.open(io.BytesIO(png_a)), Image.open(io.BytesIO(png_b))
+        return a.size == b.size and list(a.getdata()) == list(b.getdata()) and (a.getpalette() or [])[:48] == (b.getpalette() or [])[:48]
+
+    def writeback(self):
+        ctx = self.ctx
+        members = ctx.changed('monIcons')
+        for m in members:
+            if m < self.SHARED or m - self.SHARED >= len(self.icons):
+                ctx.not_written.append(f'monIcons member {m}: only species and form icons can be written back')
+        pixels = {m - self.SHARED for m in members if self.SHARED <= m < self.SHARED + len(self.icons)}
+        palettes = {k for k in range(len(self.icons)) if self.table is not None and self.palette(self.arm9_new, k) != self.palette(self.arm9_old, k)}
+        for k in sorted(pixels | palettes):
+            rel, pal = self.png_rel(k), self.palette(self.arm9_new, k)
+            try:
+                if pal is None or pal > 2:
+                    raise ValueError(f'icon palette {pal} is not one of the three shared palettes')
+                if k in palettes:
+                    slot = self.palette_slot(k)
+                    if slot is None:
+                        raise LookupError('its palette has no source field')
+                    data = ctx.json(slot[0])
+                    for key in slot[1][:-1]:
+                        data = data[key]
+                    data[slot[1][-1]] = pal
+                ncgr = ctx.new('monIcons', k + self.SHARED)
+                png, tiles = self.to_png(ncgr, pal)
+                if tiles != ncgr[0x30:0x30 + len(tiles)]:
+                    raise ValueError('the icon doesn\'t survive conversion to PNG and back')
+                path = os.path.join(REPO, rel)
+                if not (os.path.exists(path) and self.same_image(open(path, 'rb').read(), png)):
+                    if not ctx.dry_run:
+                        open(path, 'wb').write(png)
+                    ctx.written.append(rel)
+            except LookupError as e:
+                ctx.not_written.append(f'{rel}: {e}')
+            except ValueError as e:
+                ctx.errors.append(f'{rel}: {e}')
+
+    def self_test(self):
+        bad = 0
+        if self.table is None:
+            print('Icons: sPokemonIconPaletteIndex not found in the build map'); return 1
+        for k in range(len(self.icons)):
+            rel, pal = self.png_rel(k), self.palette(self.arm9_old, k)
+            problems = []
+            slot = self.palette_slot(k)
+            if slot:
+                data = self.ctx.json(slot[0])
+                for key in slot[1]:
+                    data = data[key]
+                if data != pal:
+                    problems.append(f'icon_palette {data} != {pal} in the build')
+            png, tiles = self.to_png(self.ctx.old('monIcons', k + self.SHARED), pal)
+            if not self.same_image(open(os.path.join(REPO, rel), 'rb').read(), png):
+                problems.append('icon.png differs from the build\'s icon')
+            if problems:
+                bad += 1
+                if bad <= 5:
+                    print(f'  {rel}: ' + '; '.join(problems))
+        print(f'Icons: {bad} of {len(self.icons)} icon(s) disagree with the build')
+        return bad
+
 # --- field scripts: res/field/scripts/<file>.s, patched by dspre_scripts.py -------------------------------------------
 
 class Scripts:
@@ -658,16 +797,19 @@ class Scripts:
 # ---------------------------------------------------------------------------------------------------------------------
 
 KINDS = [Trainers, Encounters, Species, Items]
-HANDLED_DIRS = {d for k in KINDS for d in k.dirs} | {'textArchives', 'scripts'}
+HANDLED_DIRS = {d for k in KINDS for d in k.dirs} | {'textArchives', 'scripts', 'monIcons'}
 
-def code_changes(ctx, baseline):
-    """ARM9/overlay edits (spawn point, fly table, item table...) live in code tables this tool doesn't write."""
+def code_changes(ctx, baseline, handled_arm9=range(0)):
+    """ARM9/overlay edits (spawn point, fly table, item table...) live in code tables this tool doesn't write.
+    handled_arm9: ARM9 offsets another writer already took care of (the icon palette table)."""
     out = []
     _, (_, arm9), overlays, _ = load_rom(baseline)
     path = next((p for p in ('arm9/arm9.bin', 'arm9.bin') if os.path.exists(os.path.join(ctx.contents, p))), None)
-    # ds-rom projects keep ITCM/DTCM out of arm9.bin, so only the part DSPRE has is compared
-    if path and arm9[:os.path.getsize(os.path.join(ctx.contents, path))] != open(os.path.join(ctx.contents, path), 'rb').read():
-        out.append('ARM9 (tables such as the spawn point, fly destinations, item data index, TM list)')
+    if path:
+        # ds-rom projects keep ITCM/DTCM out of arm9.bin, so only the part DSPRE has is compared
+        mine = open(os.path.join(ctx.contents, path), 'rb').read()
+        if any(a != b and i not in handled_arm9 for i, (a, b) in enumerate(zip(arm9, mine))):
+            out.append('ARM9 (tables such as the spawn point, fly destinations, item data index, TM list)')
     for i, (_, _, data) in enumerate(overlays):
         for p in (f'arm9_overlays/ov{i:03}.bin', f'overlay/overlay_{i:04}.bin'):
             path = os.path.join(ctx.contents, p)
@@ -697,7 +839,7 @@ def main():
 
     if args.self_test:
         ctx = Ctx(None, baseline, clone, dry_run=True)
-        bad = sum(kind(ctx).self_test() for kind in KINDS) + Text(ctx).self_test() + Scripts(ctx).self_test()
+        bad = sum(kind(ctx).self_test() for kind in KINDS) + Text(ctx).self_test() + Icons(ctx).self_test() + Scripts(ctx).self_test()
         sys.exit(1 if bad else 0)
 
     if not args.contents:
@@ -715,6 +857,8 @@ def main():
     for kind in KINDS:
         kind(ctx).writeback()
     Text(ctx).writeback()
+    icons = Icons(ctx)
+    icons.writeback()
     ctx.flush()
     if ctx.changed('scripts'):
         Scripts(ctx).writeback()
@@ -723,7 +867,7 @@ def main():
             members = ctx.changed(dirname)
             if members:
                 ctx.not_written.append(f'{dirname} ({NARCS[dirname]}) members {members[:20]}{" ..." if len(members) > 20 else ""}')
-    ctx.not_written += code_changes(ctx, baseline)
+    ctx.not_written += code_changes(ctx, baseline, icons.handled_arm9())
 
     verb = 'would write' if args.dry_run else 'wrote'
     print(f'{verb} {len(ctx.written)} file(s)', *('  ' + w for w in ctx.written), sep='\n')
