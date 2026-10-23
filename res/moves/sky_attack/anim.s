@@ -91,6 +91,7 @@ L_7:
     CreateEmitter 0, 0, EMITTER_CB_SET_POS_TO_ATTACKER
     CreateEmitter 0, 1, EMITTER_CB_SET_POS_TO_ATTACKER
     Delay 5
+    Delay 6
     PlaySoundEffectR SEQ_SE_DP_186_sseq
     Func_Shake 4, 0, 1, 6, BATTLE_ANIM_BATTLER_SPRITE_DEFENDER
     CreateEmitter 0, 6, EMITTER_CB_SET_POS_TO_DEFENDER
