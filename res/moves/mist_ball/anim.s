@@ -29,8 +29,9 @@ L_1:
     WaitForAnimTasks
     Func_FadeBg FADE_BG_TYPE_BASE, 1, 8, 0, BATTLE_COLOR_WHITE
     Func_FadeBattlerSprite BATTLE_ANIM_DEFENDER, 0, 1, BATTLE_COLOR_WHITE, 10, 0
-    WaitForAnimTasks
+    Delay 2
     PlaySoundEffectC SEQ_SE_DP_186_sseq
+    WaitForAnimTasks
     WaitForAllEmitters
     UnloadParticleSystem 0
     ResetVars
