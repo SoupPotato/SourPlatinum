@@ -14,13 +14,16 @@ def primitives(macros, ops):
     opidx={o:i for i,o in enumerate(ops)}; prim={}; complex_=[]
     for name,(params,body) in macros.items():
         if not body: continue
-        m=re.match(r'\.short\s+(SCRCMD_\w+)$', body[0])
+        m=re.match(r'\.short\s+(\w+)$', re.sub(r'/\*.*?\*/|//.*','',body[0]).strip())
         if not m or m.group(1) not in opidx: continue
         op=opidx[m.group(1)]; fields=[]; ok=True
         for l in body[1:]:
+            l=re.sub(r'/\*.*?\*/|//.*','',l).strip()
             mm=re.match(r'\.(byte|short|long)\s+\\(\w+)(\s*-\s*\.\s*-\s*4)?$', l)
+            cc=re.match(r'\.(byte|short|long)\s+(-?\d+|0x[0-9a-fA-F]+)\s*(//.*)?$', l)
             if mm and mm.group(2) in params:
                 fields.append((mm.group(1), mm.group(2), bool(mm.group(3))))
+            elif cc: fields.append((cc.group(1), None, False))   # constant field, e.g. Warp's unused short
             else: ok=False; break
         if ok:
             # prefer the macro named closest to the opcode (first seen otherwise)

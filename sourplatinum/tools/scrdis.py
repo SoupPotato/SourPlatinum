@@ -23,9 +23,10 @@ SZ={'byte':1,'short':2,'long':4}
 class Script:
     def __init__(s,data):
         s.d=data; s.entries=[]; o=0
-        while struct.unpack_from('<H',data,o)[0]!=0xFD13:
+        # the entry table ends with 0xFD13 (ScriptEntryEnd), or without it where the first entry's code starts
+        while not (s.entries and o>=min(s.entries)) and struct.unpack_from('<H',data,o)[0]!=0xFD13:
             v=struct.unpack_from('<i',data,o)[0]; s.entries.append(o+4+v); o+=4
-        s.hdr_end=o+2
+        s.hdr_end=o+2 if o<len(data)-1 and struct.unpack_from('<H',data,o)[0]==0xFD13 else o
         s.code={}; s.mov={}; s.labels={}
         work=list(s.entries)
         while work:
@@ -40,11 +41,11 @@ class Script:
                     v=struct.unpack_from(fmt,data,p)
                     v=v[0]
                     if rel:
-                        t=p+4+v; args.append(('label',t))
+                        t=p+4+v; args.append(('label',t,pn))
                         if pn=='movementOffset': s.mov[t]=None
                         else: work.append(t)
                         s.labels[t]=None
-                    else: args.append((pn,v,kind))
+                    elif pn is not None: args.append((pn,v,kind))
                     p+=SZ[kind]
                 s.code[a]=(name,args,p)
                 if op in STOP: break
