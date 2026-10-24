@@ -283,6 +283,7 @@ void PosLerpContext_Init(XYTransformContext *ctx, s16 sx, s16 ex, s16 sy, s16 ey
 {
     GF_ASSERT(ctx);
 
+    u16 originalSteps = steps;
     steps = BattleTime_Frames(steps, SP_PACE_ANIM_PERCENT);
 
     ctx->x = sx;
@@ -292,6 +293,16 @@ void PosLerpContext_Init(XYTransformContext *ctx, s16 sx, s16 ex, s16 sy, s16 ey
     ctx->data[XY_PARAM_STEP_SIZE_Y] = BattleAnimMath_GetStepSize(sy * FX32_ONE, ey * FX32_ONE, steps);
     ctx->data[XY_PARAM_CUR_X] = sx * FX32_ONE;
     ctx->data[XY_PARAM_CUR_Y] = sy * FX32_ONE;
+
+    // Sour Platinum: the rounded step size adds up differently over more steps, so the movement could end a pixel away
+    // from where the original steps ended (a thrown Poke Ball landed 1 pixel low). The last step goes to that spot.
+    ctx->data[XY_PARAM_END_VALID] = FALSE;
+
+    if (steps != originalSteps && originalSteps != 0) {
+        ctx->data[XY_PARAM_END_X] = sx * FX32_ONE + BattleAnimMath_GetStepSize(sx * FX32_ONE, ex * FX32_ONE, originalSteps) * originalSteps;
+        ctx->data[XY_PARAM_END_Y] = sy * FX32_ONE + BattleAnimMath_GetStepSize(sy * FX32_ONE, ey * FX32_ONE, originalSteps) * originalSteps;
+        ctx->data[XY_PARAM_END_VALID] = TRUE;
+    }
 }
 
 static BOOL PosLerpContext_Step(XYTransformContext *ctx)
@@ -301,6 +312,12 @@ static BOOL PosLerpContext_Step(XYTransformContext *ctx)
     if (ctx->data[XY_PARAM_STEPS]) {
         ctx->data[XY_PARAM_CUR_X] += ctx->data[XY_PARAM_STEP_SIZE_X];
         ctx->data[XY_PARAM_CUR_Y] += ctx->data[XY_PARAM_STEP_SIZE_Y];
+
+        if (ctx->data[XY_PARAM_STEPS] == 1 && ctx->data[XY_PARAM_END_VALID] == TRUE) {
+            ctx->data[XY_PARAM_CUR_X] = ctx->data[XY_PARAM_END_X];
+            ctx->data[XY_PARAM_CUR_Y] = ctx->data[XY_PARAM_END_Y];
+        }
+
         ctx->x = ctx->data[XY_PARAM_CUR_X] >> FX32_SHIFT;
         ctx->y = ctx->data[XY_PARAM_CUR_Y] >> FX32_SHIFT;
         ctx->data[XY_PARAM_STEPS]--;

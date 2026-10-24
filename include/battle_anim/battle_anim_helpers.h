@@ -53,6 +53,9 @@ enum XYTransformParam {
     XY_PARAM_STEP_SIZE_Y,
     XY_PARAM_CUR_X,
     XY_PARAM_CUR_Y,
+    XY_PARAM_END_X, // Sour Platinum: where the original 30 fps steps ended (see PosLerpContext_Init)
+    XY_PARAM_END_Y,
+    XY_PARAM_END_VALID,
 
     XY_PARAM_SHAKE_COUNTER = 0,
     XY_PARAM_SHAKE_INTERVAL,
