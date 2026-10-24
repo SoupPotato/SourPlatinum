@@ -3438,23 +3438,21 @@ static void EmitterAnimationContext_Init(BattleAnimSystem *system, EmitterAnimat
 
 static BOOL IsEmitterActive(SPLEmitter *emitter)
 {
-    BOOL active = FALSE;
     SPLParticle *particle = emitter->particles.first;
 
-    int age;
-    int lifeTime;
-    while (particle != NULL) {
-        age = particle->age;
-        lifeTime = particle->lifeTime;
+    // Sour Platinum: with no particles left this read uninitialised values. A particle is only at age == lifeTime for one
+    // update before it is removed, and a sped up animation (SetAnimSpeed) can update twice in one tick, so the check
+    // could miss it and keep the emitter forever (Bullet Seed softlocked). No particles means the emitter is done.
+    if (particle == NULL) {
+        return FALSE;
+    }
+
+    while (particle->next != NULL) {
         particle = particle->next;
     }
 
     // If the youngest particle is still alive, the emitter is active
-    if (age != lifeTime) {
-        active = TRUE;
-    }
-
-    return active;
+    return particle->age < particle->lifeTime;
 }
 
 static void BattleAnimTask_MoveEmitterA2BLinear(SysTask *task, void *param)
