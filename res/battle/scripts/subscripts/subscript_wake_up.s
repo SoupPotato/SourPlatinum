@@ -2,7 +2,7 @@
 
 
 _000:
-    CheckAbility CHECK_HAVE, BTLSCR_MSG_TEMP, ABILITY_SOUNDPROOF, _015
+    // Sour Platinum: Soundproof Pokemon are woken by an uproar too
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_FIELD_CONDITIONS, FIELD_CONDITION_UPROAR, _015
     // The uproar woke up the {0}!
     PrintMessage BattleStrings_Text_TheUproarWokeUpThePokemon_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
