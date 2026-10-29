@@ -1,6 +1,8 @@
 #include "macros/btlanimcmd.inc"
 
 L_0:
+    // Sour Platinum: 10% faster, and the user stretches 10 frames after the distortion (40 originally)
+    SetAnimSpeed 110
     LoadParticleResource 0, extrasensory_spa
     Func_FadeBg FADE_BG_TYPE_BASE, 1, 0, 12, BATTLE_COLOR_BLACK
     WaitForAnimTasks
@@ -16,7 +18,7 @@ L_0:
     PlayMovingSoundEffectAtkDef SEQ_SE_DP_SHUSHU_sseq, BATTLE_SOUND_PAN_LEFT, BATTLE_SOUND_PAN_RIGHT, 4, 2
     Delay 16
     EndLoop
-    Delay 40
+    Delay 10
     PlaySoundEffectL SEQ_SE_DP_W043_sseq
     AddPokemonSprite BATTLER_ROLE_ATTACKER, FALSE, BATTLE_ANIM_MON_SPRITE_0, 0
     LoadPokemonSpriteDummyResources 4

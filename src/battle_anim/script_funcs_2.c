@@ -4966,19 +4966,19 @@ static void ExtrasensoryContext_SetParameters(ExtrasensoryContext *ctx)
         ctx->baseAngle = EXTRASENSORY_DISTORTION_1_ANGLE;
         ctx->amplitudeStep = EXTRASENSORY_DISTORTION_1_STEP;
         ctx->baseAmplitude = EXTRASENSORY_DISTORTION_1_AMPLITUDE;
-        ctx->delay = EXTRASENSORY_DISTORTION_1_FRAMES;
+        ctx->delay = BattleTime_ScaleBySpeed(EXTRASENSORY_DISTORTION_1_FRAMES); // Sour Platinum: follows SetAnimSpeed
         break;
     case 1:
         ctx->baseAngle = EXTRASENSORY_DISTORTION_2_ANGLE;
         ctx->amplitudeStep = EXTRASENSORY_DISTORTION_2_STEP;
         ctx->baseAmplitude = EXTRASENSORY_DISTORTION_2_AMPLITUDE;
-        ctx->delay = EXTRASENSORY_DISTORTION_2_FRAMES;
+        ctx->delay = BattleTime_ScaleBySpeed(EXTRASENSORY_DISTORTION_2_FRAMES); // Sour Platinum: follows SetAnimSpeed
         break;
     case 2:
         ctx->baseAngle = EXTRASENSORY_DISTORTION_3_ANGLE;
         ctx->amplitudeStep = EXTRASENSORY_DISTORTION_3_STEP;
         ctx->baseAmplitude = EXTRASENSORY_DISTORTION_3_AMPLITUDE;
-        ctx->delay = EXTRASENSORY_DISTORTION_3_FRAMES;
+        ctx->delay = BattleTime_ScaleBySpeed(EXTRASENSORY_DISTORTION_3_FRAMES); // Sour Platinum: follows SetAnimSpeed
         break;
     }
 }
