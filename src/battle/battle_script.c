@@ -6080,24 +6080,9 @@ static BOOL BtlCmd_TryFutureSight(BattleSystem *battleSys, BattleContext *battle
         battleCtx->fieldConditions.futureSightMove[battleCtx->defender] = battleCtx->moveCur;
         battleCtx->fieldConditions.futureSightAttacker[battleCtx->defender] = battleCtx->attacker;
 
-        // Calculate the damage at the time of Future Sight setup.
-        // Do not check for type effectiveness nor crits.
-        int damage = BattleSystem_CalcMoveDamage(battleSys,
-                         battleCtx,
-                         battleCtx->moveCur,
-                         battleCtx->sideConditionsMask[side],
-                         battleCtx->fieldConditionsMask,
-                         0,
-                         0,
-                         battleCtx->attacker,
-                         battleCtx->defender,
-                         1)
-            * -1;
-        battleCtx->fieldConditions.futureSightDamage[battleCtx->defender] = BattleSystem_CalcDamageVariance(battleSys, battleCtx, damage);
-
-        if (ATTACKER_TURN_FLAGS.helpingHand) {
-            battleCtx->fieldConditions.futureSightDamage[battleCtx->defender] = battleCtx->fieldConditions.futureSightDamage[battleCtx->defender] * 15 / 10;
-        }
+        // Sour Platinum: like Generation 5, the damage is worked out when the attack hits
+        // (BattleSystem_CalcFutureSightDamage), so only the user's party slot is remembered
+        battleCtx->fieldConditions.futureSightAttackerSlot[battleCtx->defender] = battleCtx->selectedPartySlot[battleCtx->attacker];
     } else {
         BattleScript_Iter(battleCtx, jumpOnFail);
     }

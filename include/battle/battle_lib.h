@@ -464,6 +464,7 @@ int Battler_SlotForMove(BattleMon *mon, u16 move);
  * @return Damage value after applying the type-chart and related multipliers
  */
 int BattleSystem_ApplyTypeChart(BattleSystem *battleSys, BattleContext *battleCtx, int move, int inType, int attacker, int defender, int damage, u32 *moveStatusMask);
+BOOL BattleSystem_CalcFutureSightDamage(BattleSystem *battleSys, BattleContext *battleCtx, int defender, int *damage, u32 *moveStatusMask);
 
 /**
  * @brief Calculate the effectiveness mask of the given move.

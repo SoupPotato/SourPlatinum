@@ -31,7 +31,7 @@ typedef struct FieldConditions {
     u8 wishTurns[MAX_BATTLERS];
     u16 futureSightMove[MAX_BATTLERS];
     int futureSightAttacker[MAX_BATTLERS];
-    s32 futureSightDamage[MAX_BATTLERS];
+    s32 futureSightAttackerSlot[MAX_BATTLERS]; // Sour Platinum: the user's party slot (was the damage, worked out on use)
     u8 wishTarget[MAX_BATTLERS];
 } FieldConditions;
 
