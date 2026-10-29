@@ -2748,6 +2748,20 @@ BOOL BattleSystem_CalcFutureSightDamage(BattleSystem *battleSys, BattleContext *
     return TRUE;
 }
 
+// Sour Platinum: TRUE during the turn an uproar was started (its counter still has the starting value of 3, see
+// subscript_uproar.s)
+BOOL Battle_UproarJustStarted(BattleContext *battleCtx)
+{
+    for (int i = 0; i < MAX_BATTLERS; i++) {
+        if ((battleCtx->fieldConditionsMask & (FlagIndex(i) << FIELD_CONDITION_UPROAR_SHIFT))
+            && ((battleCtx->battleMons[i].statusVolatile & VOLATILE_CONDITION_UPROAR) >> VOLATILE_CONDITION_UPROAR_SHIFT) == 3) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 void BattleSystem_CalcEffectiveness(BattleContext *battleCtx, int move, int inType, int attackerAbility, int defenderAbility, int defenderItemEffect, int defenderType1, int defenderType2, u32 *moveStatusMask)
 {
     int chartEntry;

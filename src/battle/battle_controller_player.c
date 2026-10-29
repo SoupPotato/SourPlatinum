@@ -1507,9 +1507,11 @@ static void BattleControllerPlayer_CheckMonConditions(BattleSystem *battleSys, B
             if (battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_UPROAR) {
                 u8 j;
                 for (j = 0; j < maxBattlers; j++) {
+                    // Sour Platinum: Generation 5, only the turn the uproar starts wakes the Pokemon that are asleep (Soundproof
+                    // included). Later on none can fall asleep.
                     if ((battleCtx->battleMons[j].status & MON_CONDITION_SLEEP)
                         && battleCtx->battleMons[j].curHP
-                        && Battler_Ability(battleCtx, j) != ABILITY_SOUNDPROOF) {
+                        && Battle_UproarJustStarted(battleCtx)) {
                         battleCtx->msgBattlerTemp = j;
                         PrepareSubroutineSequence(battleCtx, subscript_wake_up);
                         break;
@@ -2448,8 +2450,7 @@ static BOOL BattleControllerPlayer_CheckStatusDisruption(BattleSystem *battleSys
 
         case CHECK_STATUS_STATE_SLEEP:
             if (ATTACKING_MON.status & MON_CONDITION_SLEEP) {
-                if ((battleCtx->fieldConditionsMask & FIELD_CONDITION_UPROAR)
-                    && Battler_Ability(battleCtx, battleCtx->attacker) != ABILITY_SOUNDPROOF) {
+                if ((battleCtx->fieldConditionsMask & FIELD_CONDITION_UPROAR) && Battle_UproarJustStarted(battleCtx)) {
                     battleCtx->msgBattlerTemp = battleCtx->attacker;
 
                     LOAD_SUBSEQ(subscript_wake_up);
@@ -3375,7 +3376,9 @@ static void BattleControllerPlayer_UpdateHP(BattleSystem *battleSys, BattleConte
 
         battleCtx->lastHitByBattler[battleCtx->defender] = battleCtx->attacker;
 
-        if ((DEFENDING_MON.statusVolatile & VOLATILE_CONDITION_SUBSTITUTE) && battleCtx->damage < 0) {
+        // Sour Platinum: Generation 5, Uproar hits a Pokemon behind a Substitute
+        if ((DEFENDING_MON.statusVolatile & VOLATILE_CONDITION_SUBSTITUTE) && battleCtx->damage < 0
+            && CURRENT_MOVE_DATA.effect != BATTLE_EFFECT_UPROAR) {
             if (DEFENDING_MON.moveEffectsData.substituteHP + battleCtx->damage <= 0) {
                 ATTACKER_SELF_TURN_FLAGS.shellBellDamageDealt += DEFENDING_MON.moveEffectsData.substituteHP * -1;
                 DEFENDING_MON.statusVolatile &= ~VOLATILE_CONDITION_SUBSTITUTE;
