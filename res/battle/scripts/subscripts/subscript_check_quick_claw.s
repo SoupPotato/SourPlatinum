@@ -16,7 +16,7 @@ _022:
     // {0}’s {1} let it move first!
     PrintMessage BattleStrings_Text_PokemonsItemLetItMoveFirst_Ally, TAG_NICKNAME_ITEM, BTLSCR_ATTACKER, BTLSCR_ATTACKER
     Wait 
-    WaitButtonABTime 10
+    WaitButtonABTime 30
 
 _039:
     CompareMonDataToValue OPCODE_EQU, BTLSCR_ATTACKER, BATTLEMON_QUICK_CLAW, 0, _050

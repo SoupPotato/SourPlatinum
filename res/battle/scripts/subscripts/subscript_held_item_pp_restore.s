@@ -7,6 +7,6 @@ _000:
     // {0} restored {2}’s PP using its {1}!
     PrintMessage BattleStrings_Text_PokemonRestoredMovesPPUsingItsItem_Ally, TAG_NICKNAME_ITEM_MOVE, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP
     Wait 
-    WaitButtonABTime 10
+    WaitButtonABTime 30
     Call BATTLE_SUBSCRIPT_PLUCK_CHECK
     End 

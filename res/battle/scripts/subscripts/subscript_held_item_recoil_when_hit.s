@@ -13,6 +13,6 @@ _009:
     // {0} is hurt by {1}’s {2}!
     PrintMessage BattleStrings_Text_PokemonIsHurtByPokemonsItem_AllyAlly, TAG_NICKNAME_NICKNAME_ITEM, BTLSCR_ATTACKER, BTLSCR_DEFENDER, BTLSCR_DEFENDER
     Wait 
-    WaitButtonABTime 10
+    WaitButtonABTime 30
     RemoveItem BTLSCR_DEFENDER
     End 

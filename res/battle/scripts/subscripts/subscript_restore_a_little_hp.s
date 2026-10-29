@@ -9,5 +9,5 @@ _000:
     // {0} restored a little HP using its {1}!
     PrintMessage BattleStrings_Text_PokemonRestoredALittleHPUsingItsItem_Ally, TAG_NICKNAME_ITEM, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP
     Wait 
-    WaitButtonABTime 10
+    WaitButtonABTime 30
     End 
