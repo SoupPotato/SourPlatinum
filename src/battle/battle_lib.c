@@ -2748,6 +2748,25 @@ BOOL BattleSystem_CalcFutureSightDamage(BattleSystem *battleSys, BattleContext *
     return TRUE;
 }
 
+u8 BattleSystem_GetHiddenPowerType(BattleContext *battleCtx, int battler)
+{
+    BattleMon *mon = &battleCtx->battleMons[battler];
+    u8 type = (mon->hpIV & 1)
+        | ((mon->attackIV & 1) << 1)
+        | ((mon->defenseIV & 1) << 2)
+        | ((mon->speedIV & 1) << 3)
+        | ((mon->spAttackIV & 1) << 4)
+        | ((mon->spDefenseIV & 1) << 5);
+
+    type = type * 15 / 63 + 1;
+
+    if (type >= TYPE_MYSTERY) {
+        type++;
+    }
+
+    return type;
+}
+
 // Sour Platinum: TRUE during the turn an uproar was started (its counter still has the starting value of 3, see
 // subscript_uproar.s)
 BOOL Battle_UproarJustStarted(BattleContext *battleCtx)

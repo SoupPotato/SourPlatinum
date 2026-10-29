@@ -3200,7 +3200,7 @@ static void Task_PlayerSetCommandSelection(SysTask *task, void *data)
             moveDisplayInfo.maxPP[i] = commandSetData->maxPP[i];
         }
 
-        moveDisplayInfo.hiddenPowerType = Pokemon_GetHiddenPowerType(BattleSystem_GetPartyPokemon(commandSetData->battleSys, commandSetData->battler, commandSetData->partySlot));
+        moveDisplayInfo.hiddenPowerType = BattleSystem_GetHiddenPowerType(BattleSystem_GetBattleContext(commandSetData->battleSys), commandSetData->battler);
 
         BattleSubscreen_UpdateMoveDisplay(BattleSystem_GetBattleSubscreen(commandSetData->battleSys), commandSetData->battlerType, &moveDisplayInfo);
         commandSetData->state++;
@@ -3548,7 +3548,7 @@ static void Task_PlayerShowMoveSelectMenu(SysTask *task, void *data)
         }
 
         moveSelectData.battlerType = moveSelectMenuData->battlerType;
-        moveSelectData.hiddenPowerType = Pokemon_GetHiddenPowerType(BattleSystem_GetPartyPokemon(moveSelectMenuData->battleSys, moveSelectMenuData->battler, moveSelectMenuData->partySlot));
+        moveSelectData.hiddenPowerType = BattleSystem_GetHiddenPowerType(BattleSystem_GetBattleContext(moveSelectMenuData->battleSys), moveSelectMenuData->battler);
 
         BattleSubscreen_SetupBackground(bgNarc, objNarc, btlSubscreen, 11, 0, &moveSelectData);
         NARC_dtor(bgNarc);
