@@ -327,6 +327,15 @@ u32 SpeciesData_GetLevelAt(SpeciesData *speciesData, u16 unused_monSpecies, u32 
 u8 Pokemon_GetNature(Pokemon *mon);
 
 /**
+ * @brief Sour Platinum: the type Hidden Power has for a Pokemon, worked out from its IVs
+ * (the same formula the battle engine uses).
+ *
+ * @param mon
+ * @return A TYPE_* value
+ */
+u8 Pokemon_GetHiddenPowerType(Pokemon *mon);
+
+/**
  * @brief Gets the nature of a BoxPokemon based on its personality value
  *
  * @param boxMon
