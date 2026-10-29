@@ -118,6 +118,7 @@ typedef struct ActionSelectData {
 } ActionSelectData;
 
 typedef struct MoveSelectData {
+    u8 hiddenPowerType; // Sour Platinum: the type Hidden Power has for the Pokemon choosing a move
     u16 moveIDs[4];
     u8 currPP[4];
     u8 maxPP[4];
@@ -160,6 +161,7 @@ typedef struct TextWindowLayout {
 } TextWindowLayout;
 
 typedef struct MoveDisplayInfo {
+    u8 hiddenPowerType; // Sour Platinum: the type Hidden Power has for the Pokemon choosing a move
     u16 move[LEARNED_MOVES_MAX];
     u16 curPP[LEARNED_MOVES_MAX];
     u16 maxPP[LEARNED_MOVES_MAX];

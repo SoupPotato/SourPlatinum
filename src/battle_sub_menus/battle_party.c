@@ -1288,7 +1288,7 @@ static void InitialisePartyPokemon(BattleParty *battleParty)
             move->currentPP = Pokemon_GetValue(battleParty->partyPokemon[i].mon, MON_DATA_MOVE1_PP + l, NULL);
             move->maxPP = Pokemon_GetValue(battleParty->partyPokemon[i].mon, MON_DATA_MOVE1_PP_UPS + l, NULL);
             move->maxPP = MoveTable_CalcMaxPP(move->move, move->maxPP);
-            move->type = MoveTable_LoadParam(move->move, MOVEATTRIBUTE_TYPE);
+            move->type = MoveTable_LoadDisplayType(move->move, Pokemon_GetHiddenPowerType(battleParty->partyPokemon[i].mon));
             move->class = MoveTable_LoadParam(move->move, MOVEATTRIBUTE_CLASS);
             move->accuracy = MoveTable_LoadParam(move->move, MOVEATTRIBUTE_ACCURACY);
             move->power = MoveTable_LoadParam(move->move, MOVEATTRIBUTE_POWER);

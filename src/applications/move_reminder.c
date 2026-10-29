@@ -1530,7 +1530,7 @@ static void MoveReminder_LoadSpriteResources(MoveReminderController *controller,
 static void MoveReminder_DrawTypeIcon(MoveReminderController *controller, u16 move, u16 index)
 {
     u32 type = (controller->data->showingContest == 0)
-        ? MoveTable_LoadParam(move, MOVEATTRIBUTE_TYPE)
+        ? MoveTable_LoadDisplayType(move, Pokemon_GetHiddenPowerType(controller->data->mon))
         : MoveTable_LoadParam(move, MOVEATTRIBUTE_CONTEST_TYPE) + 18;
 
     SpriteSystem_ReplaceCharResObj(controller->spriteSystem, controller->spriteManager, TypeIcon_GetNARC(), TypeIcon_GetChar(type), 1, 47276 + index);

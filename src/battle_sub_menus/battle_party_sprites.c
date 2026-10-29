@@ -18,6 +18,7 @@
 #include "narc.h"
 #include "palette.h"
 #include "party.h"
+#include "pokemon.h"
 #include "pokemon_icon.h"
 #include "sprite_system.h"
 #include "type_icon.h"
@@ -685,7 +686,7 @@ static void DrawStandardMovesSprites(BattleParty *battleParty)
     }
 
     if (battleParty->context->moveToLearn != MOVE_NONE) {
-        InitializeTypeIcon(battleParty, battleParty->sprites[MOVE_TO_LEARN_TYPE_SPRITE_INDEX], MOVE_TYPES_CHAR_RESOURCE_ID_OFFSET + MOVE_TO_LEARN_SLOT, MoveTable_LoadParam(battleParty->context->moveToLearn, MOVEATTRIBUTE_TYPE));
+        InitializeTypeIcon(battleParty, battleParty->sprites[MOVE_TO_LEARN_TYPE_SPRITE_INDEX], MOVE_TYPES_CHAR_RESOURCE_ID_OFFSET + MOVE_TO_LEARN_SLOT, MoveTable_LoadDisplayType(battleParty->context->moveToLearn, Pokemon_GetHiddenPowerType(battleParty->partyPokemon[battleParty->context->selectedPartyIndex].mon)));
         DrawSprite(battleParty->sprites[MOVE_TO_LEARN_TYPE_SPRITE_INDEX], sLearnMoveScreenMoveTypeSpritePositions[MOVE_TO_LEARN_SLOT].x, sLearnMoveScreenMoveTypeSpritePositions[MOVE_TO_LEARN_SLOT].y);
     }
 }

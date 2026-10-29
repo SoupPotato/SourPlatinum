@@ -1590,7 +1590,7 @@ static void BattleSubscreen_DrawMoveSelectMenu(BattleSubscreen *btlSubscreen, in
 
     for (i = 0; i < LEARNED_MOVES_MAX; i++) {
         if (moveData->moveIDs[i] != 0) {
-            int moveType = MoveTable_LoadParam(moveData->moveIDs[i], MOVEATTRIBUTE_TYPE);
+            int moveType = MoveTable_LoadDisplayType(moveData->moveIDs[i], moveData->hiddenPowerType);
             LoadMoveSelectPlttSlot(btlSubscreen, moveType, i);
         } else {
             LoadEmptyMoveSlotBg(btlSubscreen, i);
@@ -2381,7 +2381,7 @@ void BattleSubscreen_UpdateMoveDisplay(BattleSubscreen *btlSubscreen, int battle
 
     for (i = 0; i < LEARNED_MOVES_MAX; i++) {
         if (moveDisplayInfo->move[i] != moveDisplayData->moveDisplayInfo.move[i] && moveDisplayInfo->move[i]) {
-            int moveType = MoveTable_LoadParam(moveDisplayInfo->move[i], MOVEATTRIBUTE_TYPE);
+            int moveType = MoveTable_LoadDisplayType(moveDisplayInfo->move[i], moveDisplayInfo->hiddenPowerType);
             void *charData = Graphics_GetCharData(TypeIcon_GetNARC(), TypeIcon_GetChar(moveType), TRUE, &typeIconCharInfo, HEAP_ID_BATTLE);
             MI_CpuCopy32(typeIconCharInfo->pRawData, moveDisplayData->moveIcons[i], charDataSize);
             Heap_Free(charData);
@@ -2454,7 +2454,7 @@ static void DrawMoveTypeIcons(BattleSubscreen *btlSubscreen)
         GF_ASSERT(btlSubscreen->moveSelectSprites[i] == NULL);
 
         if (moveData->moveIDs[i] != 0) {
-            int moveType = MoveTable_LoadParam(moveData->moveIDs[i], MOVEATTRIBUTE_TYPE);
+            int moveType = MoveTable_LoadDisplayType(moveData->moveIDs[i], moveData->hiddenPowerType);
             spriteTemplate.resources[0] = 20025 + i;
             spriteTemplate.x = sMoveTypeIconPositions[i][0];
             spriteTemplate.y = sMoveTypeIconPositions[i][1];

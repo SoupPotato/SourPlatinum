@@ -84,3 +84,12 @@ static void LoadMoveEntry(int move, MoveTable *entry)
 {
     NARC_ReadWholeMemberByIndexPair(entry, NARC_INDEX_POKETOOL__WAZA__PL_WAZA_TBL, move);
 }
+
+u32 MoveTable_LoadDisplayType(int move, u8 hiddenPowerType)
+{
+    if (move == MOVE_HIDDEN_POWER) {
+        return hiddenPowerType;
+    }
+
+    return MoveTable_LoadParam(move, MOVEATTRIBUTE_TYPE);
+}
