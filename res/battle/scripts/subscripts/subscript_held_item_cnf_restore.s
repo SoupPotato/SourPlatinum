@@ -7,7 +7,7 @@ _000:
     // {0}’s {1} snapped it out of confusion!
     PrintMessage BattleStrings_Text_PokemonsItemSnappedItOutOfConfusion_Ally, TAG_NICKNAME_ITEM, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP
     Wait 
-    WaitButtonABTime 30
+    WaitButtonABTime 10
     UpdateMonData OPCODE_FLAG_OFF, BTLSCR_MSG_TEMP, BATTLEMON_VOLATILE_STATUS, VOLATILE_CONDITION_CONFUSION
     Call BATTLE_SUBSCRIPT_PLUCK_CHECK
     End 

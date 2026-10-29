@@ -75,7 +75,7 @@ _endure_done:
     // {0} hung on using its {1}!
     PrintMessage BattleStrings_Text_PokemonHungOnUsingItsItem_Ally, TAG_NICKNAME_ITEM, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP
     Wait 
-    WaitButtonABTime 30
+    WaitButtonABTime 10
     CheckItemHoldEffect CHECK_NOT_HAVE, BTLSCR_MSG_TEMP, HOLD_EFFECT_ENDURE, _116
     RemoveItem BTLSCR_MSG_TEMP
 
