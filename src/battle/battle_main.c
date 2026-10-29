@@ -713,6 +713,8 @@ static void BattleMain_CopyBattleSysToDTOAndFree(ApplicationManager *appMan)
         BattleSystem_InitCaptureAttempt(battleSys, Party_GetPokemonBySlotIndex(battleSys->parties[BATTLER_ENEMY_1], 0));
     }
 
+    BattleSystem_ReturnStolenItems(battleSys);
+
     for (battlerId = 0; battlerId < MAX_BATTLERS; battlerId++) {
         Party_Copy(battleSys->parties[battlerId], dto->parties[battlerId]);
         Heap_Free(battleSys->parties[battlerId]);

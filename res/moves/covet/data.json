@@ -20,7 +20,8 @@
     "flags": [
         "MOVE_FLAG_MAKES_CONTACT",
         "MOVE_FLAG_CAN_PROTECT",
-        "MOVE_FLAG_CAN_MIRROR_MOVE"
+        "MOVE_FLAG_CAN_MIRROR_MOVE",
+        "MOVE_FLAG_TRIGGERS_KINGS_ROCK"
     ],
     "contest": {
         "effect": "CONTEST_EFFECT_STEAL_VOLTAGE",

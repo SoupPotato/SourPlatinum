@@ -5109,11 +5109,15 @@ static BOOL BtlCmd_TryStealItem(BattleSystem *battleSys, BattleContext *battleCt
     } else if (battleCtx->sideConditions[attackingSide].knockedOffItemsMask & FlagIndex(battleCtx->selectedPartySlot[battleCtx->attacker])) {
         // The attacker has an item which has been suppressed.
         BattleScript_Iter(battleCtx, jumpOnFail);
-    } else if (Battler_Ability(battleCtx, battleCtx->attacker) == ABILITY_MULTITYPE || Battler_Ability(battleCtx, battleCtx->defender) == ABILITY_MULTITYPE) {
-        // Either battler has Multitype.
+    } else if (DEFENDING_MON.heldItem >= ITEM_FLAME_PLATE && DEFENDING_MON.heldItem <= ITEM_IRON_PLATE
+        && (ATTACKING_MON.species == SPECIES_ARCEUS || DEFENDING_MON.species == SPECIES_ARCEUS)) {
+        // Sour Platinum (Generation 5): a Plate cannot be stolen if either battler is Arceus. Multitype used to block
+        // every item.
         BattleScript_Iter(battleCtx, jumpOnFail);
-    } else if (DEFENDING_MON.heldItem == ITEM_GRISEOUS_ORB) {
-        // The defender is holding a Griseous Orb.
+    } else if (DEFENDING_MON.heldItem == ITEM_GRISEOUS_ORB
+        && (ATTACKING_MON.species == SPECIES_GIRATINA || DEFENDING_MON.species == SPECIES_GIRATINA)) {
+        // Sour Platinum (Generation 5): a Griseous Orb cannot be stolen if either battler is Giratina. It used to never be
+        // stealable.
         BattleScript_Iter(battleCtx, jumpOnFail);
     } else if (DEFENDING_MON.moveEffectsData.custapBerry || DEFENDING_MON.moveEffectsData.quickClaw) {
         // The defender activated a Custap Berry or a Quick Claw this turn.
@@ -5124,6 +5128,9 @@ static BOOL BtlCmd_TryStealItem(BattleSystem *battleSys, BattleContext *battleCt
     } else if (ATTACKING_MON.heldItem || BattleSystem_CanStealItem(battleSys, battleCtx, battleCtx->defender) == FALSE) {
         // The attacker has an item, or the defender's item cannot be stolen.
         BattleScript_Iter(battleCtx, jumpOnFail);
+    } else {
+        // The item will be stolen; in a trainer battle it is given back when the battle ends
+        BattleSystem_MarkStolenItem(battleSys, battleCtx->attacker, battleCtx->selectedPartySlot[battleCtx->attacker]);
     }
 
     return FALSE;

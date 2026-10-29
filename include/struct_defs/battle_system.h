@@ -140,6 +140,7 @@ struct BattleSystem {
     u32 padding_2474_1 : 31;
     SysTask *playbackStopButton;
     u8 recordedChatter[MAX_BATTLERS];
+    u8 stolenItemSlots[MAX_BATTLERS]; // Sour Platinum: per party, the slots that stole an item in a trainer battle
 };
 
 #endif // POKEPLATINUM_STRUCT_BATTLE_SYSTEM_H
