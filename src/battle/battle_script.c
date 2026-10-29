@@ -2642,11 +2642,18 @@ static BOOL BtlCmd_SetMultiHit(BattleSystem *battleSys, BattleContext *battleCtx
             if (Battler_Ability(battleCtx, battleCtx->attacker) == ABILITY_SKILL_LINK) {
                 hits = 5;
             } else {
-                hits = BattleSystem_RandNext(battleSys) & 3;
-                if (hits < 2) { // 2 or 3 hits
-                    hits += 2;
-                } else { // 4 or 5 hits
-                    hits = (BattleSystem_RandNext(battleSys) & 3) + 2;
+                // Sour Platinum: Generation 5 odds, 2 and 3 hits 35% each, 4 and 5 hits 15% each
+                // (originally 37.5% and 12.5%)
+                int roll = BattleSystem_RandNext(battleSys) % 20;
+
+                if (roll < 7) {
+                    hits = 2;
+                } else if (roll < 14) {
+                    hits = 3;
+                } else if (roll < 17) {
+                    hits = 4;
+                } else {
+                    hits = 5;
                 }
             }
         }
