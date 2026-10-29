@@ -8,15 +8,11 @@ _000:
     PrintMessage BattleStrings_Text_PokemonKeptGoingAndCrashed_Ally, TAG_NICKNAME, BTLSCR_ATTACKER
     Wait 
     WaitButtonABTime 30
-    UpdateVarFromVar OPCODE_SET, BTLVAR_HP_CALC_TEMP, BTLVAR_DAMAGE
+    // Sour Platinum: Generation 5, the user loses half of its own max HP (rounded down). It used to be half the damage
+    // the move would have done, at most half the target's max HP.
+    UpdateMonDataFromVar OPCODE_GET, BTLSCR_ATTACKER, BATTLEMON_MAX_HP, BTLVAR_HP_CALC_TEMP
     DivideVarByValue BTLVAR_HP_CALC_TEMP, 2
-    UpdateMonDataFromVar OPCODE_GET, BTLSCR_DEFENDER, BATTLEMON_MAX_HP, BTLVAR_SCRIPT_TEMP
-    UpdateVar OPCODE_MUL, BTLVAR_SCRIPT_TEMP, -1
-    DivideVarByValue BTLVAR_SCRIPT_TEMP, 2
-    CompareVarToVar OPCODE_LTE, BTLVAR_SCRIPT_TEMP, BTLVAR_HP_CALC_TEMP, _044
-    UpdateVarFromVar OPCODE_SET, BTLVAR_HP_CALC_TEMP, BTLVAR_SCRIPT_TEMP
-
-_044:
+    UpdateVar OPCODE_MUL, BTLVAR_HP_CALC_TEMP, -1
     UpdateVarFromVar OPCODE_SET, BTLVAR_MSG_BATTLER_TEMP, BTLVAR_ATTACKER
     UpdateVar OPCODE_FLAG_ON, BTLVAR_BATTLE_CTX_STATUS, SYSCTL_SKIP_SPRITE_BLINK
     Call BATTLE_SUBSCRIPT_UPDATE_HP
