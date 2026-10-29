@@ -9,5 +9,5 @@ _000:
     // {0} is hurt by its {1}!
     PrintMessage BattleStrings_Text_PokemonIsHurtByItsItem_Ally, TAG_NICKNAME_ITEM, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP
     Wait 
-    WaitButtonABTime 30
+    WaitButtonABTime 10
     End 

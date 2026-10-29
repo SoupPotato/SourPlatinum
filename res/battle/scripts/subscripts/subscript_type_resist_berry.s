@@ -112,7 +112,7 @@ _245:
     // The {0} weakened {1}’s power!
     PrintMessage BattleStrings_Text_TheItemWeakenedMovesPower, TAG_ITEM_MOVE, BTLSCR_MSG_BATTLER_TEMP, BTLSCR_ATTACKER
     Wait 
-    WaitButtonABTime 30
+    WaitButtonABTime 10
     RemoveItem BTLSCR_MSG_TEMP
 
 _262:
