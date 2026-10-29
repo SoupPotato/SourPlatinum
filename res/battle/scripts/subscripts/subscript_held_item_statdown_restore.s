@@ -7,6 +7,6 @@ _000:
     // {0} restored its status using its {1}!
     PrintMessage BattleStrings_Text_PokemonRestoredItsStatusUsingItsItem_Ally, TAG_NICKNAME_ITEM, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP
     Wait 
-    WaitButtonABTime 10
+    WaitButtonABTime 30
     Call BATTLE_SUBSCRIPT_PLUCK_CHECK
     End 

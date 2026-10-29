@@ -10,7 +10,7 @@ _000:
     // The {1} sharply raised {0}’s {2}!
     PrintMessage BattleStrings_Text_TheItemSharplyRaisedPokemonsStat_Ally, TAG_NICKNAME_ITEM_STAT, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP
     Wait 
-    WaitButtonABTime 10
+    WaitButtonABTime 30
     UpdateVar OPCODE_SET, BTLVAR_SCRIPT_TEMP, 18
     UpdateVarFromVar OPCODE_ADD, BTLVAR_SCRIPT_TEMP, BTLVAR_MSG_TEMP
     UpdateMonData OPCODE_ADD, BTLSCR_MSG_TEMP, BATTLEMON_TEMP, 2

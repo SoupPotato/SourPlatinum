@@ -8,7 +8,7 @@ _000:
     PrintMessage BattleStrings_Text_PokemonsItemDefrostedIt_Ally, TAG_NICKNAME_ITEM, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP
     Wait 
     SetHealthBoxStatusIcon BTLSCR_MSG_TEMP, BATTLE_ANIMATION_NONE
-    WaitButtonABTime 10
+    WaitButtonABTime 30
     UpdateMonData OPCODE_SET, BTLSCR_MSG_TEMP, BATTLEMON_STATUS, MON_CONDITION_NONE
     Call BATTLE_SUBSCRIPT_PLUCK_CHECK
     End 
