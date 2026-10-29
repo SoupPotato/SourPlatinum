@@ -1,6 +1,7 @@
 #include "macros/btlanimcmd.inc"
 
 L_0:
+    SetAnimSpeed 120 // Sour Platinum: 20% faster
     LoadParticleResource 0, fury_attack_spa
     Func_MoveBattler BATTLE_ANIM_BATTLER_SPRITE_ATTACKER, 14, -8, 2
     WaitForAnimTasks
