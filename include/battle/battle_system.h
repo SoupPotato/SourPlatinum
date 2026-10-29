@@ -54,6 +54,8 @@ BattleContext *BattleSystem_GetBattleContext(BattleSystem *battleSys);
 BattlerData *BattleSystem_GetBattlerData(BattleSystem *battleSys, int battler);
 int BattleSystem_GetMaxBattlers(BattleSystem *battleSys);
 Party *BattleSystem_GetParty(BattleSystem *battleSys, int battler);
+void BattleSystem_MarkStolenItem(BattleSystem *battleSys, int battler, int slot);
+void BattleSystem_ReturnStolenItems(BattleSystem *battleSys);
 
 /**
  * @brief Get the party count for a particular battler.
