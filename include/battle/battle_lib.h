@@ -465,6 +465,10 @@ int Battler_SlotForMove(BattleMon *mon, u16 move);
  */
 int BattleSystem_ApplyTypeChart(BattleSystem *battleSys, BattleContext *battleCtx, int move, int inType, int attacker, int defender, int damage, u32 *moveStatusMask);
 BOOL Battle_UproarJustStarted(BattleContext *battleCtx);
+
+// Sour Platinum: the type Hidden Power has for a battler right now, from the IVs it is battling with (Transform copies
+// them), the same values the move uses when it is used
+u8 BattleSystem_GetHiddenPowerType(BattleContext *battleCtx, int battler);
 BOOL BattleSystem_CalcFutureSightDamage(BattleSystem *battleSys, BattleContext *battleCtx, int defender, int *damage, u32 *moveStatusMask);
 
 /**
