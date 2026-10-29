@@ -4060,7 +4060,7 @@ static void Task_PlayerShowBagMenu(SysTask *task, void *data)
         MessageLoader *msgLoader = BattleSystem_GetMessageLoader(bagMenuData->battleSys);
 
         bagMenuData->msgIdx = BattleMessage_Print(bagMenuData->battleSys, msgLoader, &battleMsg, BattleSystem_GetTextSpeed(bagMenuData->battleSys));
-        bagMenuData->delay = 30;
+        bagMenuData->delay = 10; // Sour Platinum: 30 originally
         bagMenuData->state++;
         break;
     case 10:
@@ -4141,7 +4141,7 @@ static void Task_PlayerShowBagMenu(SysTask *task, void *data)
 
         MessageLoader *msgLoader = BattleSystem_GetMessageLoader(bagMenuData->battleSys);
         bagMenuData->msgIdx = BattleMessage_Print(bagMenuData->battleSys, msgLoader, &battleMsg, BattleSystem_GetTextSpeed(bagMenuData->battleSys));
-        bagMenuData->delay = 30;
+        bagMenuData->delay = 10; // Sour Platinum: 30 originally
     }
         bagMenuData->state++;
         break;
@@ -4209,7 +4209,7 @@ static void Task_PlayerShowBagMenu(SysTask *task, void *data)
         }
 
         bagMenuData->msgIdx = BattleMessage_Print(bagMenuData->battleSys, msgLoader, &battleMsg, BattleSystem_GetTextSpeed(bagMenuData->battleSys));
-        bagMenuData->delay = 30;
+        bagMenuData->delay = 10; // Sour Platinum: 30 originally
 
         bagMenuData->state++;
     } break;
@@ -4297,7 +4297,7 @@ static void Task_PlayerShowBagMenu(SysTask *task, void *data)
 
         MessageLoader *msgLoader = BattleSystem_GetMessageLoader(bagMenuData->battleSys);
         bagMenuData->msgIdx = BattleMessage_Print(bagMenuData->battleSys, msgLoader, &battleMsg, BattleSystem_GetTextSpeed(bagMenuData->battleSys));
-        bagMenuData->delay = 30;
+        bagMenuData->delay = 10; // Sour Platinum: 30 originally
     }
         bagMenuData->state++;
         break;
