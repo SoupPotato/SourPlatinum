@@ -8354,8 +8354,10 @@ static BOOL BtlCmd_CheckEffectActivation(BattleSystem *battleSys, BattleContext 
 }
 
 /**
- * @brief Check if Chatter's secondary effect should activate based on Chatot's
- * sound data.
+ * @brief Check if Chatter's secondary effect should activate.
+ *
+ * Sour Platinum: Generation 5, Chatter always confuses the target while it is still alive. It used to depend on
+ * the volume of Chatot's recorded cry (0%, 10% or 30%).
  *
  * Inputs:
  * 1. The distance to jump ahead if the secondary effect should NOT activate.
@@ -8369,36 +8371,7 @@ static BOOL BtlCmd_CheckChatterActivation(BattleSystem *battleSys, BattleContext
     BattleScript_Iter(battleCtx, 1);
     int jumpNoEffect = BattleScript_Read(battleCtx);
 
-    if (ATTACKING_MON.species == SPECIES_CHATOT
-        && DEFENDING_MON.curHP
-        && (ATTACKING_MON.statusVolatile & VOLATILE_CONDITION_TRANSFORM) == FALSE) {
-        int chatter;
-        if ((BattleSystem_GetBattleStatusMask(battleSys) & BATTLE_STATUS_RECORDING) == FALSE) {
-            chatter = Sound_GetChatterActivationParameter(BattleSystem_GetChatotCry(battleSys, battleCtx->attacker));
-        } else {
-            chatter = BattleSystem_GetRecordedChatter(battleSys, battleCtx->attacker);
-        }
-
-        u16 effectChance;
-        switch (chatter) {
-        default:
-        case 0:
-            effectChance = 0;
-            break;
-
-        case 1:
-            effectChance = 10;
-            break;
-
-        case 2:
-            effectChance = 30;
-            break;
-        }
-
-        if (BattleSystem_RandNext(battleSys) % 100 > effectChance) {
-            BattleScript_Iter(battleCtx, jumpNoEffect);
-        }
-    } else {
+    if (DEFENDING_MON.curHP == 0) {
         BattleScript_Iter(battleCtx, jumpNoEffect);
     }
 
