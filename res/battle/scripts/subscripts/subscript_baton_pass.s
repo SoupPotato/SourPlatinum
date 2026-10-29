@@ -13,7 +13,11 @@ _013:
     HealthBoxSlideOut BTLSCR_ATTACKER
     Wait 
     UpdateVarFromVar OPCODE_SET, BTLVAR_SWITCHED_MON, BTLVAR_ATTACKER
+    // Sour Platinum: Teleport (Generation 8) switches the user out through this script, but passes nothing on
+    CompareVarToValue OPCODE_EQU, BTLVAR_CURRENT_MOVE, MOVE_TELEPORT, _passes_nothing
     UpdateVar OPCODE_FLAG_ON, BTLVAR_BATTLE_CTX_STATUS, SYSCTL_BATON_PASS
+
+_passes_nothing:
     GoToSubscript BATTLE_SUBSCRIPT_SHOW_PARTY_LIST
 
 _029:

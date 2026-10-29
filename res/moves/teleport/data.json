@@ -17,7 +17,7 @@
         "chance": 0
     },
     "range": "RANGE_USER",
-    "priority": 0,
+    "priority": -6,
     "flags": [],
     "contest": {
         "effect": "CONTEST_EFFECT_FIRST_NEXT_TURN",
