@@ -6153,9 +6153,9 @@ static BOOL BtlCmd_TryTeleport(BattleSystem *battleSys, BattleContext *battleCtx
     return FALSE;
 }
 
-static inline BOOL BeatUpEligibleMon(BattleContext *battleCtx, Pokemon *mon)
+static inline BOOL BeatUpEligibleMon(BattleContext *battleCtx, int slot, Pokemon *mon)
 {
-    return battleCtx->beatUpCounter == battleCtx->selectedPartySlot[battleCtx->attacker]
+    return slot == battleCtx->selectedPartySlot[battleCtx->attacker]
         || (Pokemon_GetValue(mon, MON_DATA_HP, NULL) != 0
             && Pokemon_GetValue(mon, MON_DATA_SPECIES_OR_EGG, NULL) != SPECIES_NONE
             && Pokemon_GetValue(mon, MON_DATA_SPECIES_OR_EGG, NULL) != SPECIES_EGG
@@ -6163,7 +6163,15 @@ static inline BOOL BeatUpEligibleMon(BattleContext *battleCtx, Pokemon *mon)
 }
 
 /**
- * @brief Calculate the damage for a single hit of Beat Up.
+ * @brief Set up a single hit of Beat Up.
+ *
+ * Sour Platinum: works like Generation 5. The hit's power is the party member's base Attack / 10 + 5, and the damage
+ * is then calculated like any other move (CalcDamage in the effect script), with the user's Attack, the target's
+ * Defense, STAB and type effectiveness. Originally the damage was typeless and used the party member's base Attack
+ * against the target's base Defense.
+ *
+ * The hits are counted on the first hit, so Beat Up runs like any other multi-hit move and ends with
+ * "Hit X time(s)!" instead of announcing each party member's attack.
  *
  * @param battleSys
  * @param battleCtx
@@ -6171,77 +6179,41 @@ static inline BOOL BeatUpEligibleMon(BattleContext *battleCtx, Pokemon *mon)
  */
 static BOOL BtlCmd_BeatUp(BattleSystem *battleSys, BattleContext *battleCtx)
 {
-    int partyCount;
-    int species;
-    int form;
-    int level;
-    Pokemon *mon;
-
     BattleScript_Iter(battleCtx, 1);
 
-    partyCount = BattleSystem_GetPartyCount(battleSys, battleCtx->attacker);
+    int partyCount = BattleSystem_GetPartyCount(battleSys, battleCtx->attacker);
+    Pokemon *mon;
 
     if (battleCtx->multiHitNumHits == 0) {
-        battleCtx->multiHitNumHits = 2; // not actually used, just set to make multi-hit stuff work
+        int hits = 0;
+
+        for (int slot = 0; slot < partyCount; slot++) {
+            if (BeatUpEligibleMon(battleCtx, slot, BattleSystem_GetPartyPokemon(battleSys, battleCtx->attacker, slot))) {
+                hits++;
+            }
+        }
+
+        battleCtx->multiHitCounter = hits;
+        battleCtx->multiHitNumHits = hits;
         battleCtx->multiHitAccuracyCheck = SYSCTL_MULTI_HIT_MOVE;
         battleCtx->beatUpCounter = 0;
+    }
 
-        while (TRUE) {
-            // Find the next mon to deal Beat Up damage
-            mon = BattleSystem_GetPartyPokemon(battleSys, battleCtx->attacker, battleCtx->beatUpCounter);
-            if (BeatUpEligibleMon(battleCtx, mon)) {
-                break;
-            }
+    // Find the party member that makes this hit
+    while (battleCtx->beatUpCounter < partyCount
+        && BeatUpEligibleMon(battleCtx, battleCtx->beatUpCounter, BattleSystem_GetPartyPokemon(battleSys, battleCtx->attacker, battleCtx->beatUpCounter)) == FALSE) {
+        battleCtx->beatUpCounter++;
+    }
 
-            battleCtx->beatUpCounter++;
-        }
+    if (battleCtx->beatUpCounter >= partyCount) {
+        // Should not happen; let the user make the last hit
+        battleCtx->beatUpCounter = battleCtx->selectedPartySlot[battleCtx->attacker];
+        battleCtx->multiHitCounter = 1;
     }
 
     mon = BattleSystem_GetPartyPokemon(battleSys, battleCtx->attacker, battleCtx->beatUpCounter);
-    species = Pokemon_GetValue(mon, MON_DATA_SPECIES, NULL);
-    form = Pokemon_GetValue(mon, MON_DATA_FORM, NULL);
-    level = Pokemon_GetValue(mon, MON_DATA_LEVEL, NULL);
-
-    battleCtx->damage = SpeciesData_GetFormValue(species, form, SPECIES_DATA_BASE_ATK);
-    battleCtx->damage *= CURRENT_MOVE_DATA.power;
-    battleCtx->damage *= (level * 2 / 5) + 2;
-    battleCtx->damage /= SpeciesData_GetFormValue(DEFENDING_MON.species, DEFENDING_MON.formNum, SPECIES_DATA_BASE_DEF);
-    battleCtx->damage /= 50;
-    battleCtx->damage += 2;
-    battleCtx->damage *= battleCtx->criticalMul;
-
-    if (battleCtx->turnFlags[battleCtx->attacker].helpingHand) {
-        battleCtx->damage = battleCtx->damage * 15 / 10;
-    }
-
-    battleCtx->damage = BattleSystem_CalcDamageVariance(battleSys, battleCtx, battleCtx->damage);
-    battleCtx->damage *= -1;
-
-    battleCtx->msgBuffer.id = BattleStrings_Text_PokemonsBeatUpAttack_Ally; // "{0}'s attack!"
-    battleCtx->msgBuffer.tags = TAG_NICKNAME;
-    battleCtx->msgBuffer.params[0] = (battleCtx->attacker | (battleCtx->beatUpCounter << 8));
-
+    battleCtx->movePower = SpeciesData_GetFormValue(Pokemon_GetValue(mon, MON_DATA_SPECIES, NULL), Pokemon_GetValue(mon, MON_DATA_FORM, NULL), SPECIES_DATA_BASE_ATK) / 10 + 5;
     battleCtx->beatUpCounter++;
-    battleCtx->multiHitCounter = 2;
-
-    // Check if there are more eligible mons in the back to attack
-    if (battleCtx->beatUpCounter < partyCount) {
-        while (TRUE) {
-            mon = BattleSystem_GetPartyPokemon(battleSys, battleCtx->attacker, battleCtx->beatUpCounter);
-            if (BeatUpEligibleMon(battleCtx, mon)) {
-                break;
-            }
-
-            battleCtx->beatUpCounter++;
-
-            if (battleCtx->beatUpCounter >= partyCount) {
-                battleCtx->multiHitCounter = 1;
-                break;
-            }
-        }
-    } else {
-        battleCtx->multiHitCounter = 1;
-    }
 
     return FALSE;
 }
