@@ -5,6 +5,10 @@ _000:
     PrintBufferedMessage 
     Wait 
     WaitButtonABTime 30
+    // Sour Platinum: Generation 5, the attack has a type, so it can fail to affect the target (checked before the
+    // accuracy check, which would otherwise call it a failure)
+    CompareVarToValue OPCODE_FLAG_SET, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_WONDER_GUARD, _wonder_guard
+    CompareVarToValue OPCODE_FLAG_SET, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_INEFFECTIVE, _no_effect
     CheckMoveHit BTLSCR_MSG_ATTACKER, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP, _117
     UpdateVar OPCODE_SET, BTLVAR_MOVE_EFFECT_CHANCE, 1
     PlayMoveAnimationOnMons BTLSCR_MSG_TEMP, BTLSCR_MSG_ATTACKER, BTLSCR_MSG_TEMP
@@ -37,6 +41,34 @@ _058:
     WaitButtonABTime 30
 
 _092:
+    CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_CRITICAL_HIT, _crit_done
+    // A critical hit!
+    PrintMessage BattleStrings_Text_ACriticalHit, TAG_NONE
+    Wait
+    WaitButtonABTime 30
+
+_crit_done:
+    CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_SUPER_EFFECTIVE, _super_done
+    // It’s super effective!
+    PrintMessage BattleStrings_Text_ItsSuperEffective, TAG_NONE
+    Wait
+    WaitButtonABTime 30
+
+_super_done:
+    CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_NOT_VERY_EFFECTIVE, _not_very_done
+    // It’s not very effective...
+    PrintMessage BattleStrings_Text_ItsNotVeryEffective, TAG_NONE
+    Wait
+    WaitButtonABTime 30
+
+_not_very_done:
+    CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED, _endure_done
+    // {0} endured the hit!
+    PrintMessage BattleStrings_Text_PokemonEnduredTheHit_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
+    Wait
+    WaitButtonABTime 30
+
+_endure_done:
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED_ITEM, _116
     PlayBattleAnimation BTLSCR_MSG_TEMP, BATTLE_ANIMATION_HELD_ITEM
     Wait 
@@ -49,6 +81,20 @@ _092:
 
 _116:
     End 
+
+_wonder_guard:
+    // {0} avoided damage by using {1}!
+    PrintMessage BattleStrings_Text_PokemonAvoidedDamageByUsingAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP
+    Wait
+    WaitButtonABTime 30
+    End
+
+_no_effect:
+    // It doesn’t affect {0}...
+    PrintMessage BattleStrings_Text_ItDoesntAffectPokemon_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
+    Wait
+    WaitButtonABTime 30
+    End
 
 _117:
     WaitButtonABTime 30

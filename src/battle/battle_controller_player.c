@@ -1769,6 +1769,24 @@ static void BattleControllerPlayer_CheckSideConditions(BattleSystem *battleSys, 
                 && battleCtx->battleMons[battler].curHP) {
                 battleCtx->sideConditionsMask[BattleSystem_GetBattlerSide(battleSys, battler)] &= ~SIDE_CONDITION_FUTURE_SIGHT;
 
+                // Sour Platinum: Generation 5 Future Sight, the damage is worked out now
+                int damage;
+                u32 moveStatusMask;
+
+                if (BattleSystem_CalcFutureSightDamage(battleSys, battleCtx, battler, &damage, &moveStatusMask) == FALSE) {
+                    continue;
+                }
+
+                // Endure now protects from it too
+                if (battleCtx->turnFlags[battler].enduring
+                    && (battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_SUBSTITUTE) == FALSE
+                    && battleCtx->battleMons[battler].curHP + damage <= 0) {
+                    damage = (battleCtx->battleMons[battler].curHP - 1) * -1;
+                    moveStatusMask |= MOVE_STATUS_ENDURED;
+                }
+
+                battleCtx->moveStatusFlags = moveStatusMask;
+
                 battleCtx->msgBuffer.id = 475;
                 battleCtx->msgBuffer.tags = TAG_NICKNAME_MOVE;
                 battleCtx->msgBuffer.params[0] = BattleSystem_NicknameTag(battleCtx, battler);
@@ -1777,7 +1795,7 @@ static void BattleControllerPlayer_CheckSideConditions(BattleSystem *battleSys, 
                 battleCtx->msgBattlerTemp = battler;
                 battleCtx->msgAttacker = battleCtx->fieldConditions.futureSightAttacker[battler];
                 battleCtx->msgMoveTemp = battleCtx->fieldConditions.futureSightMove[battler];
-                battleCtx->hpCalcTemp = battleCtx->fieldConditions.futureSightDamage[battler];
+                battleCtx->hpCalcTemp = damage;
 
                 PrepareSubroutineSequence(battleCtx, subscript_future_sight_damage);
                 return;

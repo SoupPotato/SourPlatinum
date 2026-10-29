@@ -2678,6 +2678,76 @@ int BattleSystem_ApplyTypeChart(BattleSystem *battleSys, BattleContext *battleCt
     return damage;
 }
 
+/**
+ * Sour Platinum: Future Sight and Doom Desire work like Generation 5. The damage is worked out when the attack hits,
+ * like a normal hit of the move's type: with the user's Special Attack and the target's Special Defense at that time,
+ * STAB, type effectiveness (Wonder Guard can block it) and critical hits. If the user is not on the field any more,
+ * its stats from the party are used without stat changes, ability or held item.
+ *
+ * Returns FALSE if the attack disappears without a word (it would hit the user itself).
+ * damage is negative, like hpCalcTemp. moveStatusMask gets the effectiveness and critical hit flags.
+ */
+BOOL BattleSystem_CalcFutureSightDamage(BattleSystem *battleSys, BattleContext *battleCtx, int defender, int *damage, u32 *moveStatusMask)
+{
+    int attacker = battleCtx->fieldConditions.futureSightAttacker[defender];
+    int slot = battleCtx->fieldConditions.futureSightAttackerSlot[defender];
+    int move = battleCtx->fieldConditions.futureSightMove[defender];
+    BOOL onField = battleCtx->battleMons[attacker].curHP && battleCtx->selectedPartySlot[attacker] == slot;
+
+    if (onField && attacker == defender) {
+        return FALSE;
+    }
+
+    BattleMon saved = battleCtx->battleMons[attacker];
+
+    if (onField == FALSE) {
+        Pokemon *mon = BattleSystem_GetPartyPokemon(battleSys, attacker, slot);
+        BattleMon *user = &battleCtx->battleMons[attacker];
+        int species = Pokemon_GetValue(mon, MON_DATA_SPECIES, NULL);
+        int form = Pokemon_GetValue(mon, MON_DATA_FORM, NULL);
+
+        user->species = species;
+        user->formNum = form;
+        user->level = Pokemon_GetValue(mon, MON_DATA_LEVEL, NULL);
+        user->attack = Pokemon_GetValue(mon, MON_DATA_ATK, NULL);
+        user->spAttack = Pokemon_GetValue(mon, MON_DATA_SP_ATK, NULL);
+        user->type1 = SpeciesData_GetFormValue(species, form, SPECIES_DATA_TYPE_1);
+        user->type2 = SpeciesData_GetFormValue(species, form, SPECIES_DATA_TYPE_2);
+        user->ability = ABILITY_NONE;
+        user->heldItem = ITEM_NONE;
+        user->status = MON_CONDITION_NONE;
+        user->statusVolatile = 0;
+        user->moveEffectsMask = 0;
+        MI_CpuClear8(&user->moveEffectsData, sizeof(user->moveEffectsData));
+
+        for (int i = 0; i < NUM_BOOSTABLE_STATS; i++) {
+            user->statBoosts[i] = DEFAULT_STAT_STAGE;
+        }
+    }
+
+    // The flags left behind by the last move used this turn must not change how this hit works
+    u32 savedStatusMask = battleCtx->battleStatusMask;
+    battleCtx->battleStatusMask &= ~(SYSCTL_IGNORE_TYPE_CHECKS | SYSCTL_IGNORE_IMMUNITIES);
+
+    u32 sideConditions = battleCtx->sideConditionsMask[BattleSystem_GetBattlerSide(battleSys, defender)];
+    int criticalMul = BattleSystem_CalcCriticalMulti(battleSys, battleCtx, attacker, defender, 0, sideConditions);
+    int hit = BattleSystem_CalcMoveDamage(battleSys, battleCtx, move, sideConditions, battleCtx->fieldConditionsMask, 0, 0, attacker, defender, criticalMul) * criticalMul;
+
+    hit = BattleSystem_CalcDamageVariance(battleSys, battleCtx, hit);
+    *moveStatusMask = 0;
+    hit = BattleSystem_ApplyTypeChart(battleSys, battleCtx, move, 0, attacker, defender, hit, moveStatusMask);
+
+    if (criticalMul > 1) {
+        *moveStatusMask |= MOVE_STATUS_CRITICAL_HIT;
+    }
+
+    battleCtx->battleStatusMask = savedStatusMask;
+    battleCtx->battleMons[attacker] = saved;
+
+    *damage = hit * -1;
+    return TRUE;
+}
+
 void BattleSystem_CalcEffectiveness(BattleContext *battleCtx, int move, int inType, int attackerAbility, int defenderAbility, int defenderItemEffect, int defenderType1, int defenderType2, u32 *moveStatusMask)
 {
     int chartEntry;
