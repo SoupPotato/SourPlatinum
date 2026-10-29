@@ -1381,6 +1381,12 @@ static BOOL BtlCmd_CalcDamage(BattleSystem *battleSys, BattleContext *battleCtx)
 {
     BattleScript_Iter(battleCtx, 1);
 
+    // Sour Platinum: like Stomp, Body Slam and Dragon Rush do double damage to a Pokemon that used Minimize
+    if ((battleCtx->moveCur == MOVE_BODY_SLAM || battleCtx->moveCur == MOVE_DRAGON_RUSH)
+        && (DEFENDING_MON.moveEffectsMask & MOVE_EFFECT_MINIMIZE)) {
+        battleCtx->powerMul = 20;
+    }
+
     BattleScript_CalcMoveDamage(battleSys, battleCtx);
     battleCtx->damage = BattleSystem_CalcDamageVariance(battleSys, battleCtx, battleCtx->damage);
     battleCtx->damage *= -1;
