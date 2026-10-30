@@ -3406,7 +3406,14 @@ static void BattleControllerPlayer_UpdateHP(BattleSystem *battleSys, BattleConte
             battleCtx->damage = (DEFENDING_MON.curHP - 1) * -1;
         }
 
-        if (DEFENDER_TURN_FLAGS.enduring == 0) {
+        // Sour Platinum: Generation 5 Sturdy, a Pokemon with full HP is left with 1 HP by a hit that would have knocked it
+        // out. It works before a Focus Sash (which is then not used) and Mold Breaker ignores it.
+        BOOL sturdy = (DEFENDER_TURN_FLAGS.enduring == 0
+            && DEFENDING_MON.curHP == DEFENDING_MON.maxHP
+            && DEFENDING_MON.curHP + battleCtx->damage <= 0
+            && Battler_IgnorableAbility(battleCtx, battleCtx->attacker, battleCtx->defender, ABILITY_STURDY) == TRUE);
+
+        if (DEFENDER_TURN_FLAGS.enduring == 0 && sturdy == FALSE) {
             if (itemEffect == HOLD_EFFECT_MAYBE_ENDURE && (BattleSystem_RandNext(battleSys) % 100) < itemPower) {
                 DEFENDER_SELF_TURN_FLAGS.focusItemActivated = TRUE;
             }
@@ -3416,11 +3423,11 @@ static void BattleControllerPlayer_UpdateHP(BattleSystem *battleSys, BattleConte
             }
         }
 
-        if ((DEFENDER_TURN_FLAGS.enduring || DEFENDER_SELF_TURN_FLAGS.focusItemActivated)
+        if ((DEFENDER_TURN_FLAGS.enduring || sturdy || DEFENDER_SELF_TURN_FLAGS.focusItemActivated)
             && DEFENDING_MON.curHP + battleCtx->damage <= 0) {
             battleCtx->damage = (DEFENDING_MON.curHP - 1) * -1;
 
-            if (DEFENDER_TURN_FLAGS.enduring) {
+            if (DEFENDER_TURN_FLAGS.enduring || sturdy) {
                 battleCtx->moveStatusFlags |= MOVE_STATUS_ENDURED;
             } else {
                 battleCtx->moveStatusFlags |= MOVE_STATUS_ENDURED_ITEM;
