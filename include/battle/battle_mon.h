@@ -94,7 +94,8 @@ typedef struct BattleMon {
     u32 friskAnnounced : 1;
     u32 moldBreakerAnnounced : 1;
     u32 pressureAnnounced : 1;
-    u32 padding0028_0B : 2;
+    u32 cloudNineAnnounced : 1; // Sour Platinum: Cloud Nine announces that the weather has no effect
+    u32 padding0028_0B : 1;
 
     u8 ppCur[LEARNED_MOVES_MAX];
     u8 ppUps[LEARNED_MOVES_MAX];
