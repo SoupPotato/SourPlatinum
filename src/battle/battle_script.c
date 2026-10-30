@@ -9094,11 +9094,15 @@ static BOOL BtlCmd_TryRestoreStatusOnSwitch(BattleSystem *battleSys, BattleConte
     int battler = BattleScript_Battler(battleSys, battleCtx, inBattler);
     if (battleCtx->battleMons[battler].curHP && battleCtx->selectedPartySlot[battler] != 6) {
         Pokemon *mon = BattleSystem_GetPartyPokemon(battleSys, battler, battleCtx->selectedPartySlot[battler]);
-        int ability = Pokemon_GetValue(mon, MON_DATA_ABILITY, NULL);
         int status = Pokemon_GetValue(mon, MON_DATA_STATUS, NULL);
 
+        // Sour Platinum: Generation 5, a Pokemon whose original Ability forbids its status (Limber with paralysis, Immunity with
+        // poison, Insomnia and Vital Spirit with sleep, Water Veil with burn, Magma Armor with freeze) but whose current Ability
+        // does not (Skill Swap and the like) keeps the status when it is switched out. Only its current Ability counts.
+        BOOL forbidsStatus = Ability_ForbidsStatus(battleCtx, battleCtx->battleMons[battler].ability, status);
+
         if (battleCtx->battleMons[battler].ability != ABILITY_NATURAL_CURE
-            && Ability_ForbidsStatus(battleCtx, ability, status) == FALSE) {
+            && forbidsStatus == FALSE) {
             BattleScript_Iter(battleCtx, jumpNoStatusRestore);
         }
     } else {
