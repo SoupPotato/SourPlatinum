@@ -22,8 +22,8 @@
     {
       "id": "pl_msg_00000612_00003",
       "en_US": [
-        "The Pokémon’s Speed stat\n",
-        "is gradually boosted."
+        "Its Speed stat is\n",
+        "gradually boosted."
       ]
     },
     {
@@ -43,14 +43,14 @@
     {
       "id": "pl_msg_00000612_00006",
       "en_US": [
-        "Prevents combatants from\n",
-        "self destructing."
+        "Prevents the use of\n",
+        "self-destructing moves."
       ]
     },
     {
       "id": "pl_msg_00000612_00007",
       "en_US": [
-        "Protects the Pokémon\n",
+        "The Pokémon is protected\n",
         "from paralysis."
       ]
     },
@@ -85,8 +85,8 @@
     {
       "id": "pl_msg_00000612_00012",
       "en_US": [
-        "Prevents the Pokémon\n",
-        "from becoming infatuated."
+        "Prevents it from\n",
+        "becoming infatuated."
       ]
     },
     {
@@ -127,8 +127,8 @@
     {
       "id": "pl_msg_00000612_00018",
       "en_US": [
-        "Powers up Fire-type moves\n",
-        "if hit by a fire move."
+        "It powers up Fire-type\n",
+        "moves if it’s hit by one."
       ]
     },
     {
@@ -148,7 +148,7 @@
     {
       "id": "pl_msg_00000612_00021",
       "en_US": [
-        "Negates moves that\n",
+        "Negates all moves that\n",
         "force switching out."
       ]
     },
@@ -170,7 +170,7 @@
       "id": "pl_msg_00000612_00024",
       "en_US": [
         "Inflicts damage to the\n",
-        "foe on contact."
+        "attacker on contact."
       ]
     },
     {
@@ -190,36 +190,36 @@
     {
       "id": "pl_msg_00000612_00027",
       "en_US": [
-        "Contact may paralyze,\n",
-        "poison, or cause sleep."
+        "Contact may poison or\n",
+        "cause paralysis or sleep."
       ]
     },
     {
       "id": "pl_msg_00000612_00028",
       "en_US": [
-        "Passes on a burn, poison,\n",
+        "Passes a burn, poison,\n",
         "or paralysis to the foe."
       ]
     },
     {
       "id": "pl_msg_00000612_00029",
       "en_US": [
-        "Prevents the Pokémon’s\n",
-        "stats from being lowered."
+        "Prevents other Pokémon\n",
+        "from lowering its stats."
       ]
     },
     {
       "id": "pl_msg_00000612_00030",
       "en_US": [
-        "All status problems are\n",
-        "healed upon switching out."
+        "All status problems heal\n",
+        "when it switches out."
       ]
     },
     {
       "id": "pl_msg_00000612_00031",
       "en_US": [
-        "The Pokémon draws in all\n",
-        "Electric-type moves."
+        "Draws in all Electric-type\n",
+        "moves to up Sp. Attack."
       ]
     },
     {
@@ -246,15 +246,15 @@
     {
       "id": "pl_msg_00000612_00035",
       "en_US": [
-        "Raises the likelihood of\n",
-        "meeting wild Pokémon."
+        "Prevents other Pokémon\n",
+        "from lowering accuracy."
       ]
     },
     {
       "id": "pl_msg_00000612_00036",
       "en_US": [
-        "The Pokémon copies the\n",
-        "foe’s ability."
+        "The Pokémon copies\n",
+        "a foe’s Ability."
       ]
     },
     {
@@ -268,7 +268,7 @@
       "id": "pl_msg_00000612_00038",
       "en_US": [
         "Contact with the Pokémon\n",
-        "may poison the foe."
+        "may poison the attacker."
       ]
     },
     {
@@ -310,7 +310,7 @@
       "id": "pl_msg_00000612_00044",
       "en_US": [
         "The Pokémon gradually\n",
-        "recovers HP in rain."
+        "regains HP in rain."
       ]
     },
     {
@@ -330,7 +330,7 @@
     {
       "id": "pl_msg_00000612_00047",
       "en_US": [
-        "Raises resistance to Fire-\n",
+        "Ups resistance to Fire-\n",
         "and Ice-type moves."
       ]
     },
@@ -345,28 +345,28 @@
       "id": "pl_msg_00000612_00049",
       "en_US": [
         "Contact with the Pokémon\n",
-        "may burn the foe."
+        "may burn the attacker."
       ]
     },
     {
       "id": "pl_msg_00000612_00050",
       "en_US": [
-        "Enables sure getaway from\n",
-        "wild Pokémon."
+        "Enables a sure getaway\n",
+        "from wild Pokémon."
       ]
     },
     {
       "id": "pl_msg_00000612_00051",
       "en_US": [
-        "Prevents the Pokémon\n",
-        "from losing accuracy."
+        "Prevents other Pokémon\n",
+        "from lowering accuracy."
       ]
     },
     {
       "id": "pl_msg_00000612_00052",
       "en_US": [
-        "Prevents the Attack stat\n",
-        "from being lowered."
+        "Prevents other Pokémon\n",
+        "from lowering Attack stat."
       ]
     },
     {
@@ -400,15 +400,15 @@
     {
       "id": "pl_msg_00000612_00057",
       "en_US": [
-        "Boosts Sp. Atk if another\n",
-        "Pokémon has Minus."
+        "Ups Sp. Atk if another\n",
+        "Pokémon has Plus or Minus."
       ]
     },
     {
       "id": "pl_msg_00000612_00058",
       "en_US": [
-        "Boosts Sp. Atk if another\n",
-        "Pokémon has Plus."
+        "Ups Sp. Atk if another\n",
+        "Pokémon has Plus or Minus."
       ]
     },
     {
@@ -442,15 +442,15 @@
     {
       "id": "pl_msg_00000612_00063",
       "en_US": [
-        "Boosts Defense if there is\n",
-        "a status problem."
+        "Ups Defense if there\n",
+        "is a status problem."
       ]
     },
     {
       "id": "pl_msg_00000612_00064",
       "en_US": [
-        "Inflicts damage on foes\n",
-        "using any draining move."
+        "Damages attackers using\n",
+        "any draining move."
       ]
     },
     {
@@ -491,8 +491,8 @@
     {
       "id": "pl_msg_00000612_00070",
       "en_US": [
-        "The Pokémon makes it\n",
-        "sunny if it is in battle."
+        "Turns the sunlight harsh\n",
+        "if it is in battle."
       ]
     },
     {
@@ -512,15 +512,15 @@
     {
       "id": "pl_msg_00000612_00073",
       "en_US": [
-        "Prevents the Pokémon’s\n",
-        "stats from being lowered."
+        "Prevents other Pokémon\n",
+        "from lowering its stats."
       ]
     },
     {
       "id": "pl_msg_00000612_00074",
       "en_US": [
-        "Boosts the power of\n",
-        "physical attacks."
+        "Raises the Pokémon’s\n",
+        "Attack stat."
       ]
     },
     {
@@ -554,8 +554,8 @@
     {
       "id": "pl_msg_00000612_00079",
       "en_US": [
-        "Raises Attack if the foe\n",
-        "is of the same gender."
+        "Deals more damage to a\n",
+        "Pokémon of same gender."
       ]
     },
     {
@@ -582,8 +582,8 @@
     {
       "id": "pl_msg_00000612_00083",
       "en_US": [
-        "Raises Attack upon taking\n",
-        "a critical hit."
+        "Maxes Attack after\n",
+        "taking a critical hit."
       ]
     },
     {
@@ -618,7 +618,7 @@
       "id": "pl_msg_00000612_00088",
       "en_US": [
         "Adjusts power according\n",
-        "to the foe’s ability."
+        "to a foe’s defenses."
       ]
     },
     {
@@ -659,8 +659,8 @@
     {
       "id": "pl_msg_00000612_00094",
       "en_US": [
-        "Boosts Sp. Atk, but\n",
-        "lowers HP in sunshine."
+        "In sunshine, Sp. Atk is\n",
+        "boosted but HP decreases."
       ]
     },
     {
@@ -694,15 +694,15 @@
     {
       "id": "pl_msg_00000612_00099",
       "en_US": [
-        "Ensures the Pokémon and\n",
-        "its foe’s attacks land."
+        "Ensures attacks by or\n",
+        "against the Pokémon land."
       ]
     },
     {
       "id": "pl_msg_00000612_00100",
       "en_US": [
         "The Pokémon moves after\n",
-        "even slower foes."
+        "all other Pokémon do."
       ]
     },
     {
@@ -715,8 +715,8 @@
     {
       "id": "pl_msg_00000612_00102",
       "en_US": [
-        "Prevents status problems\n",
-        "in sunny weather."
+        "Prevents problems with\n",
+        "status in sunny weather."
       ]
     },
     {
@@ -730,7 +730,7 @@
       "id": "pl_msg_00000612_00104",
       "en_US": [
         "Moves can be used\n",
-        "regardless of abilities."
+        "regardless of Abilities."
       ]
     },
     {
@@ -743,29 +743,29 @@
     {
       "id": "pl_msg_00000612_00106",
       "en_US": [
-        "Damages the foe landing\n",
-        "the finishing hit."
+        "Damages the attacker\n",
+        "landing the finishing hit."
       ]
     },
     {
       "id": "pl_msg_00000612_00107",
       "en_US": [
-        "Senses the foe’s\n",
+        "Senses a foe’s\n",
         "dangerous moves."
       ]
     },
     {
       "id": "pl_msg_00000612_00108",
       "en_US": [
-        "Determines what moves\n",
-        "the foe has."
+        "Determines what\n",
+        "moves a foe has."
       ]
     },
     {
       "id": "pl_msg_00000612_00109",
       "en_US": [
-        "Ignores any change in\n",
-        "ability by the foe."
+        "Ignores the opposing\n",
+        "Pokémon’s stat changes."
       ]
     },
     {
@@ -778,8 +778,8 @@
     {
       "id": "pl_msg_00000612_00111",
       "en_US": [
-        "Powers down super-\n",
-        "effective moves."
+        "Reduces damage from\n",
+        "supereffective attacks."
       ]
     },
     {
@@ -793,28 +793,28 @@
       "id": "pl_msg_00000612_00113",
       "en_US": [
         "Enables moves to hit\n",
-        "Ghost-type foes."
+        "Ghost-type Pokémon."
       ]
     },
     {
       "id": "pl_msg_00000612_00114",
       "en_US": [
-        "The Pokémon draws in all\n",
-        "Water-type moves."
+        "Draws in all Water-type\n",
+        "moves to up Sp. Attack."
       ]
     },
     {
       "id": "pl_msg_00000612_00115",
       "en_US": [
-        "The Pokémon regains HP in\n",
-        "a hailstorm."
+        "The Pokémon gradually\n",
+        "regains HP in a hailstorm."
       ]
     },
     {
       "id": "pl_msg_00000612_00116",
       "en_US": [
-        "Powers down super-\n",
-        "effective moves."
+        "Reduces damage from\n",
+        "supereffective attacks."
       ]
     },
     {
@@ -835,7 +835,7 @@
       "id": "pl_msg_00000612_00119",
       "en_US": [
         "The Pokémon can check\n",
-        "the foe’s held item."
+        "a foe’s held item."
       ]
     },
     {
