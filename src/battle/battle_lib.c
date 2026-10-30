@@ -4527,8 +4527,14 @@ BOOL BattleSystem_RecoverStatusByAbility(BattleSystem *battleSys, BattleContext 
         break;
 
     case ABILITY_OBLIVIOUS:
-        if (battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_ATTRACT) {
+        // Sour Platinum: a Mental Herb is used first (Generation 5), and Oblivious also shakes off a taunt
+        // (Generation 6-7)
+        if ((battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_ATTRACT)
+            && Battler_HeldItemEffect(battleCtx, battler) != HOLD_EFFECT_HEAL_INFATUATION) {
             battleCtx->msgTemp = MSGCOND_INFATUATION;
+            result = TRUE;
+        } else if (battleCtx->battleMons[battler].moveEffectsData.tauntedTurns) {
+            battleCtx->msgTemp = MSGCOND_TAUNT;
             result = TRUE;
         }
         break;
