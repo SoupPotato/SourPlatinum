@@ -18,6 +18,7 @@
 #define MSGCOND_FREEZE      4
 #define MSGCOND_CONFUSION   5
 #define MSGCOND_INFATUATION 6
+#define MSGCOND_TAUNT       7 // Sour Platinum: Oblivious shaking off a taunt
 
 #define BTLSCR_THROW_POKE_BALL   0
 #define BTLSCR_THROW_SAFARI_BALL 1
