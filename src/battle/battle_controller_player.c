@@ -1760,6 +1760,19 @@ static void BattleControllerPlayer_CheckSideConditions(BattleSystem *battleSys, 
     int battler;
     switch (battleCtx->sideConditionCheckState) {
     case SIDE_COND_CHECK_STATE_FUTURE_SIGHT:
+        // Sour Platinum: Color Change of a Pokemon that was just hit by Future Sight or Doom Desire
+        for (battler = 0; battler < maxBattlers; battler++) {
+            if (battleCtx->fieldConditions.futureSightColorChange[battler]) {
+                battleCtx->msgTemp = battleCtx->fieldConditions.futureSightColorChange[battler] - 1;
+                battleCtx->fieldConditions.futureSightColorChange[battler] = 0;
+                battleCtx->defender = battler;
+                battleCtx->msgBattlerTemp = battler;
+
+                PrepareSubroutineSequence(battleCtx, subscript_color_change);
+                return;
+            }
+        }
+
         while (battleCtx->sideConditionCheckTemp < maxBattlers) {
             battler = battleCtx->monSpeedOrder[battleCtx->sideConditionCheckTemp];
             if (battleCtx->battlersSwitchingMask & FlagIndex(battler)) {
@@ -1790,6 +1803,25 @@ static void BattleControllerPlayer_CheckSideConditions(BattleSystem *battleSys, 
                 }
 
                 battleCtx->moveStatusFlags = moveStatusMask;
+
+                if (Battler_Ability(battleCtx, battler) == ABILITY_COLOR_CHANGE
+                    && (moveStatusMask & MOVE_STATUS_NO_EFFECTS) == FALSE
+                    && (battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_SUBSTITUTE) == FALSE
+                    && battleCtx->battleMons[battler].curHP + damage > 0
+                    && damage != 0) {
+                    int futureSightAttacker = battleCtx->fieldConditions.futureSightAttacker[battler];
+                    int type = MoveTable_LoadParam(battleCtx->fieldConditions.futureSightMove[battler], MOVEATTRIBUTE_TYPE);
+
+                    if (battleCtx->battleMons[futureSightAttacker].curHP
+                        && battleCtx->selectedPartySlot[futureSightAttacker] == battleCtx->fieldConditions.futureSightAttackerSlot[battler]
+                        && Battler_Ability(battleCtx, futureSightAttacker) == ABILITY_NORMALIZE) {
+                        type = TYPE_NORMAL;
+                    }
+
+                    if (battleCtx->battleMons[battler].type1 != type && battleCtx->battleMons[battler].type2 != type) {
+                        battleCtx->fieldConditions.futureSightColorChange[battler] = type + 1;
+                    }
+                }
 
                 battleCtx->msgBuffer.id = 475;
                 battleCtx->msgBuffer.tags = TAG_NICKNAME_MOVE;
