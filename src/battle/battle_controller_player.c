@@ -121,6 +121,7 @@ static BOOL BattleControllerPlayer_CriticalMessage(BattleSystem *battleSys, Batt
 static BOOL BattleControllerPlayer_FollowupMessage(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BattleControllerPlayer_RageBuilding(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BattleControllerPlayer_CheckExtraFlinch(BattleSystem *battleSys, BattleContext *battleCtx);
+static BOOL Move_CanFlinch(int effect);
 static BOOL BattleControllerPlayer_ToggleSemiInvulnMons(BattleSystem *battleSys, BattleContext *battleCtx);
 static void BattleControllerPlayer_InitAI(BattleSystem *battleSys, BattleContext *battleCtx);
 static void BattleSystem_RecordCommand(BattleSystem *battleSys, BattleContext *battleCtx);
@@ -4641,9 +4642,27 @@ static BOOL BattleControllerPlayer_RageBuilding(BattleSystem *battleSys, BattleC
     return result;
 }
 
+// Sour Platinum: TRUE for the move effects that already have a chance to make the target flinch
+static BOOL Move_CanFlinch(int effect)
+{
+    switch (effect) {
+    case BATTLE_EFFECT_FLINCH_HIT:
+    case BATTLE_EFFECT_CHARGE_TURN_HIGH_CRIT_FLINCH:
+    case BATTLE_EFFECT_FLINCH_DOUBLE_DAMAGE_FLY_OR_BOUNCE:
+    case BATTLE_EFFECT_FLINCH_MINIMIZE_DOUBLE_HIT:
+    case BATTLE_EFFECT_ALWAYS_FLINCH_FIRST_TURN_ONLY:
+    case BATTLE_EFFECT_FLINCH_BURN_HIT:
+    case BATTLE_EFFECT_FLINCH_FREEZE_HIT:
+    case BATTLE_EFFECT_FLINCH_PARALYZE_HIT:
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 /**
  * @brief Check if an additional flinch effect should be applied due to King's
- * Rock.
+ * Rock or Stench.
  *
  * @param battleSys
  * @param battleCtx
@@ -4655,12 +4674,19 @@ static BOOL BattleControllerPlayer_CheckExtraFlinch(BattleSystem *battleSys, Bat
     int itemEffect = Battler_HeldItemEffect(battleCtx, battleCtx->attacker);
     int itemPower = Battler_HeldItemPower(battleCtx, battleCtx->attacker, 0);
 
+    // Sour Platinum: Generation 5 Stench, a damaging move has a 10% chance of making the target flinch (on every hit of a
+    // multi-hit move). It does not stack with King's Rock or Razor Fang, nor with moves that can already flinch.
+    BOOL kingsRock = (itemEffect == HOLD_EFFECT_SOMETIMES_FLINCH);
+    BOOL stench = (kingsRock == FALSE
+        && Battler_Ability(battleCtx, battleCtx->attacker) == ABILITY_STENCH
+        && Move_CanFlinch(CURRENT_MOVE_DATA.effect) == FALSE);
+
     if (battleCtx->defender != BATTLER_NONE
-        && itemEffect == HOLD_EFFECT_SOMETIMES_FLINCH
+        && (kingsRock || stench)
         && (battleCtx->moveStatusFlags & MOVE_STATUS_NO_EFFECTS) == FALSE
         && (DEFENDER_SELF_TURN_FLAGS.physicalDamageTaken || DEFENDER_SELF_TURN_FLAGS.specialDamageTaken)
-        && (BattleSystem_RandNext(battleSys) % 100) < itemPower
-        && (CURRENT_MOVE_DATA.flags & MOVE_FLAG_TRIGGERS_KINGS_ROCK)
+        && (BattleSystem_RandNext(battleSys) % 100) < (kingsRock ? itemPower : 10)
+        && (stench || (CURRENT_MOVE_DATA.flags & MOVE_FLAG_TRIGGERS_KINGS_ROCK))
         && DEFENDING_MON.curHP) {
         battleCtx->sideEffectMon = battleCtx->defender;
         battleCtx->sideEffectType = SIDE_EFFECT_TYPE_INDIRECT;
