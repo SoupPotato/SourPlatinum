@@ -4543,24 +4543,22 @@
     {
       "id": "BattleStrings_Text_PokemonsAbilityRaisedThePowerOfItsFireTypeMoves_Ally",
       "en_US": [
-        "{STRVAR_1 1, 0, 0}’s {STRVAR_1 5, 1, 0} raised\n",
-        "the power of its Fire-type moves!"
+        "The power of {STRVAR_1 1, 0, 0}’s\n",
+        "Fire-type moves rose!"
       ]
     },
     {
       "id": "BattleStrings_Text_PokemonsAbilityRaisedThePowerOfItsFireTypeMoves_Wild",
       "en_US": [
-        "The wild {STRVAR_1 1, 0, 0}’s\n",
-        "{STRVAR_1 5, 1, 0} raised the power\f",
-        "of its Fire-type moves!"
+        "The power of the wild {STRVAR_1 1, 0, 0}’s\n",
+        "Fire-type moves rose!"
       ]
     },
     {
       "id": "BattleStrings_Text_PokemonsAbilityRaisedThePowerOfItsFireTypeMoves_Foe",
       "en_US": [
-        "The foe’s {STRVAR_1 1, 0, 0}’s\n",
-        "{STRVAR_1 5, 1, 0} raised the power\f",
-        "of its Fire-type moves!"
+        "The power of the foe’s {STRVAR_1 1, 0, 0}’s\n",
+        "Fire-type moves rose!"
       ]
     },
     {
