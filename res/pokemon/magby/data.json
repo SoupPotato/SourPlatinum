@@ -36,18 +36,17 @@
         "by_level": [
             [ 1, "MOVE_SMOG" ],
             [ 1, "MOVE_LEER" ],
-            [ 5, "MOVE_EMBER" ],
-            [ 9, "MOVE_SMOKE_SCREEN" ],
-            [ 13, "MOVE_FAINT_ATTACK" ],
-            [ 17, "MOVE_FIRE_SPIN" ],
-            [ 21, "MOVE_FLAME_WHEEL" ],
-            [ 25, "MOVE_CONFUSE_RAY" ],
-            [ 29, "MOVE_FIRE_PUNCH" ],
+            [ 6, "MOVE_EMBER" ],
+            [ 10, "MOVE_SMOKE_SCREEN" ],
+            [ 15, "MOVE_FAINT_ATTACK" ],
+            [ 19, "MOVE_FIRE_SPIN" ],
+            [ 24, "MOVE_CONFUSE_RAY" ],
+            [ 28, "MOVE_FIRE_PUNCH" ],
             [ 33, "MOVE_LAVA_PLUME" ],
             [ 37, "MOVE_LOW_KICK" ],
-            [ 41, "MOVE_FLAMETHROWER" ],
-            [ 45, "MOVE_SUNNY_DAY" ],
-            [ 49, "MOVE_FIRE_BLAST" ]
+            [ 42, "MOVE_FLAMETHROWER" ],
+            [ 46, "MOVE_SUNNY_DAY" ],
+            [ 51, "MOVE_FIRE_BLAST" ]
         ],
         "by_tm": [
             "TM01",

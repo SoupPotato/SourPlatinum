@@ -36,18 +36,17 @@
         "by_level": [
             [ 1, "MOVE_QUICK_ATTACK" ],
             [ 1, "MOVE_LEER" ],
-            [ 5, "MOVE_THUNDER_SHOCK" ],
-            [ 9, "MOVE_CHARGE" ],
-            [ 13, "MOVE_SWIFT" ],
-            [ 17, "MOVE_THUNDER_WAVE" ],
-            [ 21, "MOVE_SHOCK_WAVE" ],
-            [ 25, "MOVE_SCREECH" ],
-            [ 29, "MOVE_THUNDER_PUNCH" ],
+            [ 6, "MOVE_THUNDER_SHOCK" ],
+            [ 10, "MOVE_THUNDER_WAVE" ],
+            [ 15, "MOVE_SWIFT" ],
+            [ 19, "MOVE_SHOCK_WAVE" ],
+            [ 24, "MOVE_SCREECH" ],
+            [ 28, "MOVE_THUNDER_PUNCH" ],
             [ 33, "MOVE_DISCHARGE" ],
             [ 37, "MOVE_LOW_KICK" ],
-            [ 41, "MOVE_THUNDERBOLT" ],
-            [ 45, "MOVE_LIGHT_SCREEN" ],
-            [ 49, "MOVE_THUNDER" ]
+            [ 42, "MOVE_THUNDERBOLT" ],
+            [ 46, "MOVE_LIGHT_SCREEN" ],
+            [ 51, "MOVE_THUNDER" ]
         ],
         "by_tm": [
             "TM01",
