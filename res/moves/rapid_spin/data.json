@@ -2,10 +2,10 @@
     "name": "Rapid Spin",
     "description": [
         "A spin attack that\n",
-        "can also eliminate\n",
-        "such moves as Bind,\n",
-        "Wrap, Leech Seed,\n",
-        "and Spikes."
+        "also eliminates moves\n",
+        "like Bind and Leech\n",
+        "Seed, and raises the\n",
+        "user’s Speed stat."
     ],
     "class": "CLASS_PHYSICAL",
     "type": "TYPE_NORMAL",

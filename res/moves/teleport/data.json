@@ -1,11 +1,11 @@
 {
     "name": "Teleport",
     "description": [
-        "Use it to flee from\n",
-        "any wild Pokémon.\n",
-        "It may also be used\n",
-        "to warp to the last\n",
-        "Poké Center visited."
+        "The user switches\n",
+        "places with a party\n",
+        "Pokémon in waiting.\n",
+        "Can also flee from\n",
+        "any wild Pokémon."
     ],
     "class": "CLASS_STATUS",
     "type": "TYPE_PSYCHIC",
