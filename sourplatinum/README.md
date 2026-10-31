@@ -145,7 +145,9 @@ open this repository directly (menu **Repository**):
 - **Write Back, Rebuild and Reopen** does both.
 
 What gets written back: trainers, wild encounters (`encounters_*.json`), species stats, TM/HM compatibility, level-up
-learnsets and evolutions, Pokémon icons (`icon.png`) and their palettes (`icon_palette`), item data, text banks (plus species, item, move and trainer names and item/move
+learnsets and evolutions, Pokémon icons (`icon.png`) and their palettes (`icon_palette`), Pokémon battle sprites (`{female,male}_{front,back}.png` with
+their `.key` files, and `normal.pal`/`shiny.pal`; the Pokémon sprite editor saves straight into the packed NARC, which is
+compared with the baseline when DSPRE has no unpacked copy; forms and other sprite archives aren't written back), item data, text banks (plus species, item, move and trainer names and item/move
 descriptions) and field scripts. Changed script blocks are rewritten with the file's own labels and names; new code
 gets `<Map>_DSPRE_*` labels at the end of the file. Level scripts (`scripts_init_*`), four scripts using conditional
 macros (`scripts_group_connection`, `scripts_mystery_gift_deliveryman`, `scripts_field_moves`,

@@ -5,7 +5,8 @@
 # CONTENTS_DIR is DSPRE's <rom>_DSPRE_contents folder for build/dspre/sourplatinum.nds (Windows paths are accepted).
 #
 # Every NARC member DSPRE unpacked is compared with the same member in the baseline ROM that dspre_build.py published.
-# Changed members of a supported kind (trainers, wild encounters, species stats/learnsets/evolutions, items, text) are
+# Changed members of a supported kind (trainers, wild encounters, species stats/learnsets/evolutions, items, text, icons,
+# Pokémon battle sprites) are
 # decoded, diffed field by field against the baseline and only the changed fields are written into the matching
 # source file, so untouched fields keep their exact text. Anything else that changed (other NARCs, ARM9, overlays) is
 # listed as not written back; it is lost on the next build.
@@ -69,24 +70,37 @@ def dumps(rel, data):
 
 MISSING = object()
 
-def apply_changes(src, old, new):
-    """Copy into src (a source JSON object) only the values that differ between the old and new decodes."""
+def report_conflicts(ctx, rel, conflicts):
+    if conflicts:
+        ctx.not_written.append(f'{rel}: {", ".join(c.lstrip(".") for c in conflicts[:6])}{" ..." if len(conflicts) > 6 else ""} '
+                               'changed in source since the build DSPRE opened, so DSPRE\'s value wasn\'t written')
+
+def apply_changes(src, old, new, conflicts, path=''):
+    """Copy into src (a source JSON object) only the values that differ between the old and new decodes.
+    A three-way merge: a value the source already has is left alone, and one the source has changed to something
+    else since the build (or that decodes differently because the build no longer matches) is added to conflicts
+    instead of being overwritten."""
     for key, nv in new.items():
         ov, sv = old.get(key, MISSING), src.get(key, MISSING)
-        if nv == ov:
+        if nv == ov or sv == nv:
             continue
+        p = f'{path}.{key}'
         if isinstance(nv, dict) and isinstance(ov, dict) and isinstance(sv, dict):
-            apply_changes(sv, ov, nv)
-        elif (isinstance(nv, list) and isinstance(ov, list) and isinstance(sv, list) and len(nv) == len(ov) == len(sv)
-              and all(isinstance(o, dict) or o == s for o, s in zip(ov, sv))):
+            apply_changes(sv, ov, nv, conflicts, p)
+        elif isinstance(nv, list) and isinstance(ov, list) and isinstance(sv, list) and len(nv) == len(ov) == len(sv):
             for i, (n, o) in enumerate(zip(nv, ov)):
-                if n != o:
-                    if isinstance(n, dict) and isinstance(o, dict) and isinstance(sv[i], dict):
-                        apply_changes(sv[i], o, n)
-                    else:
-                        sv[i] = n
-        else:
+                if n == o or sv[i] == n:
+                    continue
+                if isinstance(n, dict) and isinstance(o, dict) and isinstance(sv[i], dict):
+                    apply_changes(sv[i], o, n, conflicts, f'{p}[{i}]')
+                elif sv[i] == o:
+                    sv[i] = n
+                else:
+                    conflicts.append(f'{p}[{i}]')
+        elif sv == ov:
             src[key] = nv
+        else:
+            conflicts.append(p)
 
 def mismatches(src, dec, path=''):
     """Paths where a decode disagrees with the source (keys only in the source are ignored)."""
@@ -106,8 +120,16 @@ class Ctx:
     def __init__(self, contents, baseline, clone, dry_run):
         self.contents, self.baseline, self.clone, self.dry_run = contents, baseline, clone, dry_run
         self.rom = ndspy.rom.NintendoDSRom.fromFile(baseline)
-        self._narcs, self._enums, self._json = {}, {}, {}
+        self._narcs, self._enums, self._json, self._packed = {}, {}, {}, {}
         self.written, self.not_written, self.errors = [], [], []
+
+    def packed(self, dirname):
+        """Members of DSPRE's packed copy of a NARC, or None. Editors such as the Pokemon sprite editor write the packed
+        NARC directly, and only keep an unpacked folder in step if one exists."""
+        if dirname not in self._packed:
+            path = self.contents and os.path.join(self.contents, 'files', NARCS[dirname])
+            self._packed[dirname] = ndspy.narc.NARC(open(path, 'rb').read()).files if path and os.path.exists(path) else None
+        return self._packed[dirname]
 
     # members
     def old(self, dirname, i):
@@ -123,12 +145,21 @@ class Ctx:
     def new(self, dirname, i):
         """DSPRE's copy of a member, or the baseline one if DSPRE never unpacked it."""
         path = self.contents and os.path.join(self.contents, 'unpacked', dirname, '%04d' % i)
-        return open(path, 'rb').read() if path and os.path.exists(path) else self.old(dirname, i)
+        if path and os.path.exists(path):
+            return open(path, 'rb').read()
+        packed = self.contents and self.packed(dirname)
+        return bytes(packed[i]) if packed and i < len(packed) else self.old(dirname, i)
 
     def changed(self, dirname):
         """Indices of members DSPRE changed or added."""
         d = os.path.join(self.contents, 'unpacked', dirname)
         out = []
+        if not os.path.isdir(d):
+            packed = self.packed(dirname)
+            if packed:
+                self.old(dirname, 0)
+                old = self._narcs[dirname]
+                out = [i for i in range(min(len(old), len(packed))) if bytes(old[i]) != bytes(packed[i])]
         if os.path.isdir(d):
             for f in os.listdir(d):
                 if not f.isdigit():
@@ -213,10 +244,12 @@ class Kind:
                 ctx.not_written.append(f'{self.dirs[0]} {i}: {e}'); continue
             except (ValueError, struct.error, TypeError) as e:
                 ctx.errors.append(f'{self.dirs[0]} {i}: {e}'); continue
-            self.apply(rel, old, new)
+            conflicts = []
+            self.apply(rel, old, new, conflicts)
+            report_conflicts(ctx, rel, conflicts)
 
-    def apply(self, rel, old, new):
-        apply_changes(self.ctx.json(rel), old, new)
+    def apply(self, rel, old, new, conflicts):
+        apply_changes(self.ctx.json(rel), old, new, conflicts)
 
     def self_test(self):
         bad = 0
@@ -276,22 +309,20 @@ class Trainers(Kind):
                                  'item': item, 'moves': moves, 'iv_scale': iv, 'ball_seal': seal})
         return out
 
-    def apply(self, rel, old, new):
+    def apply(self, rel, old, new, conflicts):
+        # a party format change (first mon gains/loses items or moves) shows up as item/moves changing on every mon,
+        # so the field merge below covers it
         data = self.ctx.json(rel)
-        # the first mon's item/moves decide the whole party's format, so a format change rewrites those fields
-        if new['party'] and old['party'] and any((new['party'][0][f] is None) != (old['party'][0][f] is None) for f in ('item', 'moves')):
-            for n, mon in enumerate(new['party'][:len(data['party'])]):
-                data['party'][n]['item'], data['party'][n]['moves'] = mon['item'], mon['moves']
         party_old, party_new = old.pop('party'), new.pop('party')
-        apply_changes(data, old, new)
+        apply_changes(data, old, new, conflicts)
         if len(party_new) == len(party_old) == len(data['party']):
-            apply_changes(data, {'party': party_old}, {'party': party_new})
+            apply_changes(data, {'party': party_old}, {'party': party_new}, conflicts)
+        elif len(data['party']) != len(party_old):
+            conflicts.append('.party (its size changed in source)')
         else:
             for n, mon in enumerate(party_new):
-                if n < len(data['party']) and n < len(party_old):
-                    apply_changes(data['party'][n], party_old[n], mon)
-                elif n < len(data['party']):
-                    data['party'][n].update(mon)
+                if n < len(party_old):
+                    apply_changes(data['party'][n], party_old[n], mon, conflicts, f'.party[{n}]')
                 else:
                     data['party'].append(mon)
             del data['party'][len(party_new):]
@@ -459,12 +490,17 @@ class Items(Kind):
             out['itemUseParams'] = None
         return out
 
-    def apply(self, rel, old, new):
+    def apply(self, rel, old, new, conflicts):
         data = self.ctx.json(rel)
         # itemUseParams is a set of non-default keys, so a changed set replaces the whole object
-        if new.get('itemUseParams', MISSING) != old.get('itemUseParams', MISSING):
-            data['itemUseParams'] = new.pop('itemUseParams', None); old.pop('itemUseParams', None)
-        apply_changes(data, old, new)
+        nv, ov = new.pop('itemUseParams', MISSING), old.pop('itemUseParams', MISSING)
+        sv = data.get('itemUseParams', MISSING)
+        if nv != ov and sv != nv:
+            if sv == ov:
+                data['itemUseParams'] = nv
+            else:
+                conflicts.append('.itemUseParams')
+        apply_changes(data, old, new, conflicts)
 
 # --- text banks: decoded with the repo's own msgenc -------------------------------------------------------------------
 
@@ -528,24 +564,37 @@ class Text:
             raise LookupError(f'{rel} does not exist')
         raise LookupError(f'{bank} is generated from other source files (see generated_text_banks in res/text/meson.build)')
 
-    def set(self, bank, rel, path, message):
+    def set(self, bank, rel, path, message, old_message):
+        """Write one message; returns False if the source changed it since the build (left alone)."""
         data = self.ctx.json(rel)
         if path[0] == 'messages':
             msgs = data['messages']
             if path[1] < len(msgs):
                 entry = msgs[path[1]]
+                current = {k: v for k, v in entry.items() if k != 'id'}
+                if current == message:
+                    return True
+                if current != old_message:
+                    return False
                 for k in ('en_US', 'garbage'):
                     entry.pop(k, None)
                 entry.update(message)
             else:
                 msgs.append({'id': f'{os.path.basename(rel)[:-5]}_dspre_{path[1]:04}', **message})
-            return
+            return True
         if 'en_US' not in message:
             raise ValueError(f'{rel}: a garbage message has no place in {".".join(path)}')
         for k in path[:-1]:
             data = data[k]
-        value = self.field_value(bank, message)
-        data[path[-1]] = [value] if isinstance(data.get(path[-1]), list) and isinstance(value, str) else value
+        current = data.get(path[-1])
+        as_source = lambda v: [v] if isinstance(current, list) and isinstance(v, str) else v
+        value = as_source(self.field_value(bank, message))
+        if current == value:
+            return True
+        if old_message is None or current != as_source(self.field_value(bank, old_message)):
+            return False
+        data[path[-1]] = value
+        return True
 
     def writeback(self):
         ctx = self.ctx
@@ -563,7 +612,8 @@ class Text:
                     continue
                 try:
                     rel, path = self.target(bank, n, len(new))
-                    self.set(bank, rel, path, message)
+                    if not self.set(bank, rel, path, message, old[n] if n < len(old) else None):
+                        report_conflicts(ctx, rel, [f'text bank {bank} message {n}'])
                 except LookupError as e:
                     ctx.not_written.append(f'text bank {bank} message {n}: {e}')
                     break
@@ -615,12 +665,17 @@ class Icons:
                     form_vars[var] = (s, form)
         block = re.search(r'poke_icon_files \+= \[(.*?)\]', open(os.path.join(REPO, 'res', 'pokemon', 'meson.build')).read(), re.S)
         self.icons += [form_vars[v] for v in re.findall(r'(\w+_icon)', block.group(1))]
-        self.table = None
-        mp = os.path.join(ctx.clone, 'build', 'main.nef.xMAP')
-        m = re.search(r'^\s+([0-9A-F]{8}) ([0-9A-F]{8}) \.rodata\s+sPokemonIconPaletteIndex\s', open(mp, encoding='latin1').read(), re.M)
-        if m and int(m.group(2), 16) == len(self.icons):
-            self.table = int(m.group(1), 16) - 0x02000000
         _, (_, self.arm9_old), _, _ = load_rom(ctx.baseline)
+        # The table is found through the offsets file published with the baseline (same build), never through the
+        # clone's current map, which may already be from a later build.
+        self.table = None
+        offsets = re.sub(r'\.baseline\.nds$', '.dspre_offsets.json', ctx.baseline)
+        if offsets != ctx.baseline and os.path.exists(offsets):
+            pointer = json.load(open(offsets)).get('monIconPalTablePointerOffset')
+            if pointer:
+                table = struct.unpack_from('<I', self.arm9_old, int(pointer, 16))[0] - 0x02000000
+                if 0 <= table <= len(self.arm9_old) - len(self.icons):
+                    self.table = table
         arm9_new = ctx.contents and next((os.path.join(ctx.contents, p) for p in ('arm9/arm9.bin', 'arm9.bin')
                                           if os.path.exists(os.path.join(ctx.contents, p))), None)
         self.arm9_new = open(arm9_new, 'rb').read() if arm9_new else self.arm9_old
@@ -671,7 +726,7 @@ class Icons:
         from PIL import Image
         import io
         a, b = Image.open(io.BytesIO(png_a)), Image.open(io.BytesIO(png_b))
-        return a.size == b.size and list(a.getdata()) == list(b.getdata()) and (a.getpalette() or [])[:48] == (b.getpalette() or [])[:48]
+        return a.size == b.size and a.mode == b.mode and a.tobytes() == b.tobytes() and (a.getpalette() or [])[:48] == (b.getpalette() or [])[:48]
 
     def writeback(self):
         ctx = self.ctx
@@ -681,11 +736,15 @@ class Icons:
                 ctx.not_written.append(f'monIcons member {m}: only species and form icons can be written back')
         pixels = {m - self.SHARED for m in members if self.SHARED <= m < self.SHARED + len(self.icons)}
         palettes = {k for k in range(len(self.icons)) if self.table is not None and self.palette(self.arm9_new, k) != self.palette(self.arm9_old, k)}
+        if self.table is None and pixels:
+            ctx.errors.append('icon edits need build/dspre/sourplatinum.dspre_offsets.json from the same build; rebuild from DSPRE')
+            return
         for k in sorted(pixels | palettes):
-            rel, pal = self.png_rel(k), self.palette(self.arm9_new, k)
+            rel, pal, pal_old = self.png_rel(k), self.palette(self.arm9_new, k), self.palette(self.arm9_old, k)
             try:
                 if pal is None or pal > 2:
                     raise ValueError(f'icon palette {pal} is not one of the three shared palettes')
+                # three-way, like the JSON kinds: skip what the source already has, keep what it changed since the build
                 if k in palettes:
                     slot = self.palette_slot(k)
                     if slot is None:
@@ -693,16 +752,24 @@ class Icons:
                     data = ctx.json(slot[0])
                     for key in slot[1][:-1]:
                         data = data[key]
-                    data[slot[1][-1]] = pal
+                    if data[slot[1][-1]] == pal_old:
+                        data[slot[1][-1]] = pal
+                    elif data[slot[1][-1]] != pal:
+                        report_conflicts(ctx, slot[0], ['.icon_palette'])
                 ncgr = ctx.new('monIcons', k + self.SHARED)
                 png, tiles = self.to_png(ncgr, pal)
                 if tiles != ncgr[0x30:0x30 + len(tiles)]:
                     raise ValueError('the icon doesn\'t survive conversion to PNG and back')
                 path = os.path.join(REPO, rel)
-                if not (os.path.exists(path) and self.same_image(open(path, 'rb').read(), png)):
-                    if not ctx.dry_run:
-                        open(path, 'wb').write(png)
-                    ctx.written.append(rel)
+                current = open(path, 'rb').read() if os.path.exists(path) else None
+                if current is not None and self.same_image(current, png):
+                    continue
+                if current is not None and not self.same_image(current, self.to_png(ctx.old('monIcons', k + self.SHARED), pal_old)[0]):
+                    report_conflicts(ctx, rel, ['the image'])
+                    continue
+                if not ctx.dry_run:
+                    open(path, 'wb').write(png)
+                ctx.written.append(rel)
             except LookupError as e:
                 ctx.not_written.append(f'{rel}: {e}')
             except ValueError as e:
@@ -711,7 +778,7 @@ class Icons:
     def self_test(self):
         bad = 0
         if self.table is None:
-            print('Icons: sPokemonIconPaletteIndex not found in the build map'); return 1
+            print('Icons: the icon palette table wasn\'t found (needs the offsets file next to the baseline)'); return 1
         for k in range(len(self.icons)):
             rel, pal = self.png_rel(k), self.palette(self.arm9_old, k)
             problems = []
@@ -730,6 +797,142 @@ class Icons:
                 if bad <= 5:
                     print(f'  {rel}: ' + '; '.join(problems))
         print(f'Icons: {bad} of {len(self.icons)} icon(s) disagree with the build')
+        return bad
+
+# --- Pokémon battle sprites: res/pokemon/<species>/{female,male}_{back,front}.png(.key), normal.pal, shiny.pal <- pl_pokegra.narc ---
+# pl_pokegra.narc has six members per species: female back, male back, female front, male front, normal and shiny palette.
+
+class Sprites:
+    DIR = 'pokemonBattleSprites'
+    FACES = ('female_back', 'male_back', 'female_front', 'male_front')
+    NO_SPRITES = ('none', 'egg', 'bad_egg')
+
+    def __init__(self, ctx):
+        self.ctx = ctx
+        self.species = [n[len('SPECIES_'):].lower() for n in lines('generated/species.txt')]
+
+    def nitrogfx(self, *args):
+        r = subprocess.run([os.path.join(self.ctx.clone, 'build', 'tools', 'nitrogfx', 'nitrogfx'), *args], capture_output=True, text=True)
+        if r.returncode:
+            raise ValueError((r.stderr or r.stdout).strip()[:300])
+
+    def palette_text(self, nclr):
+        """The JASC palette text (LF line endings) of a palette member."""
+        with tempfile.TemporaryDirectory() as tmp:
+            src, pal = os.path.join(tmp, 'p.NCLR'), os.path.join(tmp, 'p.pal')
+            open(src, 'wb').write(nclr)
+            self.nitrogfx(src, pal)
+            return open(pal, encoding='utf-8').read()
+
+    def decode(self, ncgr, nclr):
+        """(PNG bytes, key bytes) of a sprite member drawn with a palette member."""
+        with tempfile.TemporaryDirectory() as tmp:
+            pal, src, png = (os.path.join(tmp, n) for n in ('p.NCLR', 'i.NCGR', 'o.png'))
+            open(pal, 'wb').write(nclr); open(src, 'wb').write(ncgr)
+            self.nitrogfx(src, png, '-palette', pal, '-encodefronttoback')
+            return open(png, 'rb').read(), (open(png + '.key', 'rb').read() if os.path.exists(png + '.key') else b'')
+
+    def encode_check(self, png, key, nclr, ncgr):
+        """True if the PNG and key build back into a sprite that draws the same as ncgr."""
+        with tempfile.TemporaryDirectory() as tmp:
+            src, out = os.path.join(tmp, 's.png'), os.path.join(tmp, 's.NCGR')
+            open(src, 'wb').write(png); open(src + '.key', 'wb').write(key)
+            self.nitrogfx(src, out, '-encodefronttoback', '-scan')
+            return self.same_image(self.decode(open(out, 'rb').read(), nclr)[0], self.decode(ncgr, nclr)[0])
+
+    @staticmethod
+    def same_image(png_a, png_b):
+        """Same size and palette indices (the PNG's own palette colours aren't used by the build, normal.pal is)."""
+        from PIL import Image
+        import io
+        a, b = Image.open(io.BytesIO(png_a)), Image.open(io.BytesIO(png_b))
+        return a.size == b.size and a.mode == b.mode == 'P' and a.tobytes() == b.tobytes()
+
+    def write_palette(self, rel, old, new):
+        ctx = self.ctx
+        path = os.path.join(REPO, rel)
+        text_new, text_old = self.palette_text(new), self.palette_text(old)
+        raw = open(path, encoding='utf-8', newline='').read() if os.path.exists(path) else None
+        here = raw.replace('\r\n', '\n') if raw is not None else None
+        if here == text_new:
+            return
+        if here is not None and here != text_old:
+            report_conflicts(ctx, rel, ['the palette'])
+            return
+        if not ctx.dry_run:
+            eol = '\r\n' if raw is None or '\r\n' in raw else '\n'
+            with open(path, 'w', encoding='utf-8', newline='') as f:
+                f.write(text_new.replace('\n', eol))
+        ctx.written.append(rel)
+
+    def writeback(self):
+        ctx = self.ctx
+        members = ctx.changed(self.DIR)
+        by_species = {}
+        for m in members:
+            by_species.setdefault(m // 6, []).append(m % 6)
+        for s, parts in sorted(by_species.items()):
+            if s >= len(self.species) or self.species[s] in self.NO_SPRITES:
+                ctx.not_written.append(f'{self.DIR} members {[s * 6 + p for p in parts]}: only the sprites of species can be written back')
+                continue
+            name = self.species[s]
+            folder = f'res/pokemon/{name}'
+            try:
+                for j, fname in ((4, 'normal.pal'), (5, 'shiny.pal')):
+                    if j in parts:
+                        self.write_palette(f'{folder}/{fname}', ctx.old(self.DIR, s * 6 + j), ctx.new(self.DIR, s * 6 + j))
+                pal_old, pal_new = ctx.old(self.DIR, s * 6 + 4), ctx.new(self.DIR, s * 6 + 4)
+                for j in (p for p in parts if p < 4):
+                    rel = f'{folder}/{self.FACES[j]}.png'
+                    old, new = ctx.old(self.DIR, s * 6 + j), ctx.new(self.DIR, s * 6 + j)
+                    if not new:
+                        ctx.not_written.append(f'{rel}: removing a sprite can only be done in source')
+                        continue
+                    png, key = self.decode(new, pal_new)
+                    path = os.path.join(REPO, rel)
+                    current = open(path, 'rb').read() if os.path.exists(path) else None
+                    if current is not None and self.same_image(current, png):
+                        continue
+                    if current is not None and old and not self.same_image(current, self.decode(old, pal_old)[0]):
+                        report_conflicts(ctx, rel, ['the image'])
+                        continue
+                    if not self.encode_check(png, key, pal_new, new):
+                        raise ValueError(f'{rel}: the sprite doesn\'t survive conversion to PNG and back')
+                    if not ctx.dry_run:
+                        open(path, 'wb').write(png)
+                        open(path + '.key', 'wb').write(key)
+                    ctx.written.append(rel)
+            except ValueError as e:
+                ctx.errors.append(f'{folder}: {e}')
+
+    def self_test(self):
+        bad, total = 0, 0
+        for s, name in enumerate(self.species):
+            if name in self.NO_SPRITES or s * 6 + 5 >= self.ctx.count(self.DIR):
+                continue
+            pal = self.ctx.old(self.DIR, s * 6 + 4)
+            problems = []
+            for j, face in enumerate(self.FACES):
+                ncgr, path = self.ctx.old(self.DIR, s * 6 + j), os.path.join(REPO, f'res/pokemon/{name}/{face}.png')
+                if not ncgr or not os.path.exists(path):
+                    if bool(ncgr) != os.path.exists(path):
+                        problems.append(f'{face}.png {"missing" if ncgr else "not in the build"}')
+                    continue
+                total += 1
+                try:
+                    if not self.same_image(open(path, 'rb').read(), self.decode(ncgr, pal)[0]):
+                        problems.append(f'{face}.png differs from the build')
+                except ValueError as e:
+                    problems.append(f'{face}.png: {e}')
+            for j, fname in ((4, 'normal.pal'), (5, 'shiny.pal')):
+                path = os.path.join(REPO, f'res/pokemon/{name}/{fname}')
+                if os.path.exists(path) and open(path, encoding='utf-8', newline='').read().replace('\r\n', '\n') != self.palette_text(self.ctx.old(self.DIR, s * 6 + j)):
+                    problems.append(f'{fname} differs from the build')
+            if problems:
+                bad += 1
+                if bad <= 5:
+                    print(f'  res/pokemon/{name}: ' + '; '.join(problems))
+        print(f'Sprites: {bad} species disagree with the build ({total} sprites checked)')
         return bad
 
 # --- field scripts: res/field/scripts/<file>.s, patched by dspre_scripts.py -------------------------------------------
@@ -797,7 +1000,7 @@ class Scripts:
 # ---------------------------------------------------------------------------------------------------------------------
 
 KINDS = [Trainers, Encounters, Species, Items]
-HANDLED_DIRS = {d for k in KINDS for d in k.dirs} | {'textArchives', 'scripts', 'monIcons'}
+HANDLED_DIRS = {d for k in KINDS for d in k.dirs} | {'textArchives', 'scripts', 'monIcons', 'pokemonBattleSprites'}
 
 def code_changes(ctx, baseline, handled_arm9=range(0)):
     """ARM9/overlay edits (spawn point, fly table, item table...) live in code tables this tool doesn't write.
@@ -820,10 +1023,10 @@ def code_changes(ctx, baseline, handled_arm9=range(0)):
                 break
     return out
 
-def report_error(args, message):
+def report_error(args, message, baseline_mismatch=False):
     if args.report:
         with open(to_wsl(args.report), 'w') as f:
-            json.dump({'written': [], 'notWritten': [], 'errors': [message]}, f, indent=2)
+            json.dump({'written': [], 'notWritten': [], 'errors': [message], 'baselineMismatch': baseline_mismatch}, f, indent=2)
     sys.exit(message)
 
 def main():
@@ -839,7 +1042,7 @@ def main():
 
     if args.self_test:
         ctx = Ctx(None, baseline, clone, dry_run=True)
-        bad = sum(kind(ctx).self_test() for kind in KINDS) + Text(ctx).self_test() + Icons(ctx).self_test() + Scripts(ctx).self_test()
+        bad = sum(kind(ctx).self_test() for kind in KINDS) + Text(ctx).self_test() + Icons(ctx).self_test() + Sprites(ctx).self_test() + Scripts(ctx).self_test()
         sys.exit(1 if bad else 0)
 
     if not args.contents:
@@ -851,7 +1054,7 @@ def main():
     if os.path.exists(stamp):
         if hashlib.sha1(open(baseline, 'rb').read()).hexdigest() != open(stamp).read().strip():
             report_error(args, f'{baseline} is from a later build than the one DSPRE opened, so DSPRE\'s edits can\'t be '
-                               'told apart from the rebuild. Write back from DSPRE before building outside it.')
+                               'told apart from the rebuild. Write back from DSPRE before building outside it.', baseline_mismatch=True)
     ctx = Ctx(contents, baseline, clone, args.dry_run)
 
     for kind in KINDS:
@@ -859,6 +1062,7 @@ def main():
     Text(ctx).writeback()
     icons = Icons(ctx)
     icons.writeback()
+    Sprites(ctx).writeback()
     ctx.flush()
     if ctx.changed('scripts'):
         Scripts(ctx).writeback()
