@@ -3,7 +3,7 @@
 (res/fonts/font_banner_sheet.png).
 
 The sheet has a cyan background, glyphs with a dark outline and a white fill, one glyph after another with a column of
-background between them. Its rows are the digits, A-Z, a-z and (lower down) a few punctuation marks. Every glyph that
+background between them. Its rows are the digits, A-Z, a-z and (lower down) a few punctuation marks, among them the apostrophe. Every glyph that
 isn't on the sheet (accents, most punctuation) keeps the glyph of the system font, so that any name can be printed.
 
 The outline becomes color 2 of the font (the shadow color) and the fill color 1 (the text color). The banner prints with
@@ -28,6 +28,7 @@ OUTLINE = (33, 33, 33)
 GLYPH_HEIGHT = 9
 COLOR_FILL = 1
 COLOR_OUTLINE = 2
+SPACE_WIDTH = 2
 
 charmap = {}
 for line in open(os.path.join(ROOT, 'tools', 'msgenc', 'charmap.txt'), encoding='utf-8'):
@@ -95,6 +96,14 @@ for i in range(26):
 punctuation = segments(43)
 put_char('-', 43, punctuation[0])
 put_char('.', 43, punctuation[1])
+
+# The apostrophe is the eleventh glyph of the fourth row, the one before the parentheses
+punctuation = segments(32)
+put_char('’', 32, punctuation[10])
+put_char('‘', 32, punctuation[10])
+
+# A space is 2 pixels wide
+widths[charmap[' '] - 1] = SPACE_WIDTH
 
 out.save(os.path.join(FONTS, 'font_banner.png'))
 
