@@ -3,7 +3,7 @@
 L_0:
     LoadParticleResource 0, weather_ball_spa
     Func_ScaleBattlerSprite BATTLE_ANIM_BATTLER_SPRITE_ATTACKER, 100, 100, 100, 140, 100, CYCLES(1), SCALE_F(5) | RESTORE_F(5)
-    PlaySoundEffectL SEQ_SE_DP_W207_sseq
+    PlaySoundEffectL SEQ_SE_DP_W360_sseq
     CreateEmitter 0, 1, EMITTER_CB_SET_POS_TO_ATTACKER
     CreateEmitter 0, 2, EMITTER_CB_SET_POS_TO_ATTACKER
     Delay 25
@@ -17,13 +17,16 @@ L_0:
     End
 
 L_1:
-    PlayLoopedSoundEffectR SEQ_SE_DP_W172_sseq, 2, 7
     CreateEmitter 0, 3, EMITTER_CB_SET_POS_TO_DEFENDER
     CreateEmitter 0, 8, EMITTER_CB_SET_POS_TO_DEFENDER
     CreateEmitter 0, 0, EMITTER_CB_SET_POS_TO_DEFENDER
-    PlaySoundEffectL SEQ_SE_DP_W152_sseq
-    Delay 20
+    Delay 1
+    PlaySoundEffectR SEQ_SE_DP_W360B_sseq
+    Delay 14
+    PlaySoundEffectR SEQ_SE_DP_W145_sseq
     Func_Shake 2, 0, 1, 2, BATTLE_ANIM_BATTLER_SPRITE_DEFENDER
+    Delay 1
+    PlaySoundEffectR SEQ_SE_DP_W280_sseq
     WaitForAllEmitters
     UnloadParticleSystem 0
     End
@@ -31,13 +34,17 @@ L_1:
 L_4:
     Func_FadeBg FADE_BG_TYPE_BASE, 1, 0, 10, BATTLE_COLOR_DARK_RED2
     WaitForAnimTasks
-    PlayLoopedSoundEffectR SEQ_SE_DP_W172_sseq, 2, 7
     CreateEmitter 0, 4, EMITTER_CB_SET_POS_TO_DEFENDER
     CreateEmitter 0, 9, EMITTER_CB_SET_POS_TO_DEFENDER
     CreateEmitter 0, 0, EMITTER_CB_SET_POS_TO_DEFENDER
-    PlaySoundEffectL SEQ_SE_DP_W152_sseq
-    Delay 20
+    Delay 2
+    PlaySoundEffectR SEQ_SE_DP_W360B_sseq
+    Delay 14
+
+    PlaySoundEffectR SEQ_SE_DP_W145_sseq
     Func_Shake 2, 0, 1, 2, BATTLE_ANIM_BATTLER_SPRITE_DEFENDER
+    Delay 1
+    PlaySoundEffectR SEQ_SE_DP_W280_sseq
     WaitForAllEmitters
     UnloadParticleSystem 0
     Func_FadeBg FADE_BG_TYPE_BASE, 1, 10, 0, BATTLE_COLOR_DARK_RED2
@@ -47,13 +54,18 @@ L_4:
 L_2:
     Func_FadeBg FADE_BG_TYPE_BASE, 1, 0, 10, BATTLE_COLOR_TEAL_GREEN
     WaitForAnimTasks
-    PlayLoopedSoundEffectR SEQ_SE_DP_W172_sseq, 2, 7
     CreateEmitter 0, 5, EMITTER_CB_SET_POS_TO_DEFENDER
     CreateEmitter 0, 10, EMITTER_CB_SET_POS_TO_DEFENDER
     CreateEmitter 0, 0, EMITTER_CB_SET_POS_TO_DEFENDER
-    PlaySoundEffectL SEQ_SE_DP_W152_sseq
-    Delay 20
+    Delay 2
+    PlaySoundEffectR SEQ_SE_DP_W360B_sseq
+    Delay 14
+
+    PlaySoundEffectR SEQ_SE_DP_W145_sseq
     Func_Shake 2, 0, 1, 2, BATTLE_ANIM_BATTLER_SPRITE_DEFENDER
+    Delay 1
+    PlaySoundEffectR SEQ_SE_DP_W280_sseq
+
     WaitForAllEmitters
     UnloadParticleSystem 0
     Func_FadeBg FADE_BG_TYPE_BASE, 1, 10, 0, BATTLE_COLOR_TEAL_GREEN
@@ -63,13 +75,16 @@ L_2:
 L_5:
     Func_FadeBg FADE_BG_TYPE_BASE, 1, 0, 10, BATTLE_COLOR_GRAY
     WaitForAnimTasks
-    PlayLoopedSoundEffectR SEQ_SE_DP_W172_sseq, 2, 7
     CreateEmitter 0, 6, EMITTER_CB_SET_POS_TO_DEFENDER
     CreateEmitter 0, 11, EMITTER_CB_SET_POS_TO_DEFENDER
     CreateEmitter 0, 0, EMITTER_CB_SET_POS_TO_DEFENDER
-    PlaySoundEffectL SEQ_SE_DP_W152_sseq
-    Delay 20
+    Delay 2
+    PlaySoundEffectL SEQ_SE_DP_W360B_sseq
+    Delay 14
+    PlaySoundEffectR SEQ_SE_DP_W145_sseq
     Func_Shake 2, 0, 1, 2, BATTLE_ANIM_BATTLER_SPRITE_DEFENDER
+    Delay 1
+    PlaySoundEffectR SEQ_SE_DP_W280_sseq
     WaitForAllEmitters
     UnloadParticleSystem 0
     Func_FadeBg FADE_BG_TYPE_BASE, 1, 10, 0, BATTLE_COLOR_GRAY
@@ -79,13 +94,16 @@ L_5:
 L_3:
     Func_FadeBg FADE_BG_TYPE_BASE, 1, 0, 10, BATTLE_COLOR_YELLOW
     WaitForAnimTasks
-    PlayLoopedSoundEffectR SEQ_SE_DP_W172_sseq, 2, 7
     CreateEmitter 0, 7, EMITTER_CB_SET_POS_TO_DEFENDER
     CreateEmitter 0, 12, EMITTER_CB_SET_POS_TO_DEFENDER
     CreateEmitter 0, 0, EMITTER_CB_SET_POS_TO_DEFENDER
-    PlaySoundEffectL SEQ_SE_DP_W152_sseq
-    Delay 20
+    Delay 2
+    PlaySoundEffectR SEQ_SE_DP_W360B_sseq
+    Delay 14
+    PlaySoundEffectR SEQ_SE_DP_W145_sseq
     Func_Shake 2, 0, 1, 2, BATTLE_ANIM_BATTLER_SPRITE_DEFENDER
+    Delay 1
+    PlaySoundEffectR SEQ_SE_DP_W280_sseq
     WaitForAllEmitters
     UnloadParticleSystem 0
     Func_FadeBg FADE_BG_TYPE_BASE, 1, 10, 0, BATTLE_COLOR_YELLOW

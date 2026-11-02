@@ -1384,6 +1384,12 @@ static BOOL BtlCmd_CalcDamage(BattleSystem *battleSys, BattleContext *battleCtx)
 {
     BattleScript_Iter(battleCtx, 1);
 
+    // Sour Platinum: like Stomp, Body Slam and Dragon Rush do double damage to a Pokemon that used Minimize
+    if ((battleCtx->moveCur == MOVE_BODY_SLAM || battleCtx->moveCur == MOVE_DRAGON_RUSH)
+        && (DEFENDING_MON.moveEffectsMask & MOVE_EFFECT_MINIMIZE)) {
+        battleCtx->powerMul = 20;
+    }
+
     BattleScript_CalcMoveDamage(battleSys, battleCtx);
     battleCtx->damage = BattleSystem_CalcDamageVariance(battleSys, battleCtx, battleCtx->damage);
     battleCtx->damage *= -1;
@@ -2645,11 +2651,18 @@ static BOOL BtlCmd_SetMultiHit(BattleSystem *battleSys, BattleContext *battleCtx
             if (Battler_Ability(battleCtx, battleCtx->attacker) == ABILITY_SKILL_LINK) {
                 hits = 5;
             } else {
-                hits = BattleSystem_RandNext(battleSys) & 3;
-                if (hits < 2) { // 2 or 3 hits
-                    hits += 2;
-                } else { // 4 or 5 hits
-                    hits = (BattleSystem_RandNext(battleSys) & 3) + 2;
+                // Sour Platinum: Generation 5 odds, 2 and 3 hits 35% each, 4 and 5 hits 15% each
+                // (originally 37.5% and 12.5%)
+                int roll = BattleSystem_RandNext(battleSys) % 20;
+
+                if (roll < 7) {
+                    hits = 2;
+                } else if (roll < 14) {
+                    hits = 3;
+                } else if (roll < 17) {
+                    hits = 4;
+                } else {
+                    hits = 5;
                 }
             }
         }
@@ -5112,11 +5125,15 @@ static BOOL BtlCmd_TryStealItem(BattleSystem *battleSys, BattleContext *battleCt
     } else if (battleCtx->sideConditions[attackingSide].knockedOffItemsMask & FlagIndex(battleCtx->selectedPartySlot[battleCtx->attacker])) {
         // The attacker has an item which has been suppressed.
         BattleScript_Iter(battleCtx, jumpOnFail);
-    } else if (Battler_Ability(battleCtx, battleCtx->attacker) == ABILITY_MULTITYPE || Battler_Ability(battleCtx, battleCtx->defender) == ABILITY_MULTITYPE) {
-        // Either battler has Multitype.
+    } else if (DEFENDING_MON.heldItem >= ITEM_FLAME_PLATE && DEFENDING_MON.heldItem <= ITEM_IRON_PLATE
+        && (ATTACKING_MON.species == SPECIES_ARCEUS || DEFENDING_MON.species == SPECIES_ARCEUS)) {
+        // Sour Platinum (Generation 5): a Plate cannot be stolen if either battler is Arceus. Multitype used to block
+        // every item.
         BattleScript_Iter(battleCtx, jumpOnFail);
-    } else if (DEFENDING_MON.heldItem == ITEM_GRISEOUS_ORB) {
-        // The defender is holding a Griseous Orb.
+    } else if (DEFENDING_MON.heldItem == ITEM_GRISEOUS_ORB
+        && (ATTACKING_MON.species == SPECIES_GIRATINA || DEFENDING_MON.species == SPECIES_GIRATINA)) {
+        // Sour Platinum (Generation 5): a Griseous Orb cannot be stolen if either battler is Giratina. It used to never be
+        // stealable.
         BattleScript_Iter(battleCtx, jumpOnFail);
     } else if (DEFENDING_MON.moveEffectsData.custapBerry || DEFENDING_MON.moveEffectsData.quickClaw) {
         // The defender activated a Custap Berry or a Quick Claw this turn.
@@ -5127,6 +5144,9 @@ static BOOL BtlCmd_TryStealItem(BattleSystem *battleSys, BattleContext *battleCt
     } else if (ATTACKING_MON.heldItem || BattleSystem_CanStealItem(battleSys, battleCtx, battleCtx->defender) == FALSE) {
         // The attacker has an item, or the defender's item cannot be stolen.
         BattleScript_Iter(battleCtx, jumpOnFail);
+    } else {
+        // The item will be stolen; in a trainer battle it is given back when the battle ends
+        BattleSystem_MarkStolenItem(battleSys, battleCtx->attacker, battleCtx->selectedPartySlot[battleCtx->attacker]);
     }
 
     return FALSE;
@@ -5363,6 +5383,7 @@ static BOOL BtlCmd_Transform(BattleSystem *battleSys, BattleContext *battleCtx)
     ATTACKING_MON.friskAnnounced = FALSE;
     ATTACKING_MON.moldBreakerAnnounced = FALSE;
     ATTACKING_MON.pressureAnnounced = FALSE;
+    ATTACKING_MON.cloudNineAnnounced = FALSE;
     ATTACKING_MON.moveEffectsData.truant = battleCtx->totalTurns & 1;
     ATTACKING_MON.moveEffectsData.slowStartTurnNumber = battleCtx->totalTurns + 1;
     ATTACKING_MON.slowStartAnnounced = FALSE;
@@ -6076,24 +6097,9 @@ static BOOL BtlCmd_TryFutureSight(BattleSystem *battleSys, BattleContext *battle
         battleCtx->fieldConditions.futureSightMove[battleCtx->defender] = battleCtx->moveCur;
         battleCtx->fieldConditions.futureSightAttacker[battleCtx->defender] = battleCtx->attacker;
 
-        // Calculate the damage at the time of Future Sight setup.
-        // Do not check for type effectiveness nor crits.
-        int damage = BattleSystem_CalcMoveDamage(battleSys,
-                         battleCtx,
-                         battleCtx->moveCur,
-                         battleCtx->sideConditionsMask[side],
-                         battleCtx->fieldConditionsMask,
-                         0,
-                         0,
-                         battleCtx->attacker,
-                         battleCtx->defender,
-                         1)
-            * -1;
-        battleCtx->fieldConditions.futureSightDamage[battleCtx->defender] = BattleSystem_CalcDamageVariance(battleSys, battleCtx, damage);
-
-        if (ATTACKER_TURN_FLAGS.helpingHand) {
-            battleCtx->fieldConditions.futureSightDamage[battleCtx->defender] = battleCtx->fieldConditions.futureSightDamage[battleCtx->defender] * 15 / 10;
-        }
+        // Sour Platinum: like Generation 5, the damage is worked out when the attack hits
+        // (BattleSystem_CalcFutureSightDamage), so only the user's party slot is remembered
+        battleCtx->fieldConditions.futureSightAttackerSlot[battleCtx->defender] = battleCtx->selectedPartySlot[battleCtx->attacker];
     } else {
         BattleScript_Iter(battleCtx, jumpOnFail);
     }
@@ -6156,9 +6162,9 @@ static BOOL BtlCmd_TryTeleport(BattleSystem *battleSys, BattleContext *battleCtx
     return FALSE;
 }
 
-static inline BOOL BeatUpEligibleMon(BattleContext *battleCtx, Pokemon *mon)
+static inline BOOL BeatUpEligibleMon(BattleContext *battleCtx, int slot, Pokemon *mon)
 {
-    return battleCtx->beatUpCounter == battleCtx->selectedPartySlot[battleCtx->attacker]
+    return slot == battleCtx->selectedPartySlot[battleCtx->attacker]
         || (Pokemon_GetValue(mon, MON_DATA_HP, NULL) != 0
             && Pokemon_GetValue(mon, MON_DATA_SPECIES_OR_EGG, NULL) != SPECIES_NONE
             && Pokemon_GetValue(mon, MON_DATA_SPECIES_OR_EGG, NULL) != SPECIES_EGG
@@ -6166,7 +6172,15 @@ static inline BOOL BeatUpEligibleMon(BattleContext *battleCtx, Pokemon *mon)
 }
 
 /**
- * @brief Calculate the damage for a single hit of Beat Up.
+ * @brief Set up a single hit of Beat Up.
+ *
+ * Sour Platinum: works like Generation 5. The hit's power is the party member's base Attack / 10 + 5, and the damage
+ * is then calculated like any other move (CalcDamage in the effect script), with the user's Attack, the target's
+ * Defense, STAB and type effectiveness. Originally the damage was typeless and used the party member's base Attack
+ * against the target's base Defense.
+ *
+ * The hits are counted on the first hit, so Beat Up runs like any other multi-hit move and ends with
+ * "Hit X time(s)!" instead of announcing each party member's attack.
  *
  * @param battleSys
  * @param battleCtx
@@ -6174,77 +6188,41 @@ static inline BOOL BeatUpEligibleMon(BattleContext *battleCtx, Pokemon *mon)
  */
 static BOOL BtlCmd_BeatUp(BattleSystem *battleSys, BattleContext *battleCtx)
 {
-    int partyCount;
-    int species;
-    int form;
-    int level;
-    Pokemon *mon;
-
     BattleScript_Iter(battleCtx, 1);
 
-    partyCount = BattleSystem_GetPartyCount(battleSys, battleCtx->attacker);
+    int partyCount = BattleSystem_GetPartyCount(battleSys, battleCtx->attacker);
+    Pokemon *mon;
 
     if (battleCtx->multiHitNumHits == 0) {
-        battleCtx->multiHitNumHits = 2; // not actually used, just set to make multi-hit stuff work
+        int hits = 0;
+
+        for (int slot = 0; slot < partyCount; slot++) {
+            if (BeatUpEligibleMon(battleCtx, slot, BattleSystem_GetPartyPokemon(battleSys, battleCtx->attacker, slot))) {
+                hits++;
+            }
+        }
+
+        battleCtx->multiHitCounter = hits;
+        battleCtx->multiHitNumHits = hits;
         battleCtx->multiHitAccuracyCheck = SYSCTL_MULTI_HIT_MOVE;
         battleCtx->beatUpCounter = 0;
+    }
 
-        while (TRUE) {
-            // Find the next mon to deal Beat Up damage
-            mon = BattleSystem_GetPartyPokemon(battleSys, battleCtx->attacker, battleCtx->beatUpCounter);
-            if (BeatUpEligibleMon(battleCtx, mon)) {
-                break;
-            }
+    // Find the party member that makes this hit
+    while (battleCtx->beatUpCounter < partyCount
+        && BeatUpEligibleMon(battleCtx, battleCtx->beatUpCounter, BattleSystem_GetPartyPokemon(battleSys, battleCtx->attacker, battleCtx->beatUpCounter)) == FALSE) {
+        battleCtx->beatUpCounter++;
+    }
 
-            battleCtx->beatUpCounter++;
-        }
+    if (battleCtx->beatUpCounter >= partyCount) {
+        // Should not happen; let the user make the last hit
+        battleCtx->beatUpCounter = battleCtx->selectedPartySlot[battleCtx->attacker];
+        battleCtx->multiHitCounter = 1;
     }
 
     mon = BattleSystem_GetPartyPokemon(battleSys, battleCtx->attacker, battleCtx->beatUpCounter);
-    species = Pokemon_GetValue(mon, MON_DATA_SPECIES, NULL);
-    form = Pokemon_GetValue(mon, MON_DATA_FORM, NULL);
-    level = Pokemon_GetValue(mon, MON_DATA_LEVEL, NULL);
-
-    battleCtx->damage = SpeciesData_GetFormValue(species, form, SPECIES_DATA_BASE_ATK);
-    battleCtx->damage *= CURRENT_MOVE_DATA.power;
-    battleCtx->damage *= (level * 2 / 5) + 2;
-    battleCtx->damage /= SpeciesData_GetFormValue(DEFENDING_MON.species, DEFENDING_MON.formNum, SPECIES_DATA_BASE_DEF);
-    battleCtx->damage /= 50;
-    battleCtx->damage += 2;
-    battleCtx->damage *= battleCtx->criticalMul;
-
-    if (battleCtx->turnFlags[battleCtx->attacker].helpingHand) {
-        battleCtx->damage = battleCtx->damage * 15 / 10;
-    }
-
-    battleCtx->damage = BattleSystem_CalcDamageVariance(battleSys, battleCtx, battleCtx->damage);
-    battleCtx->damage *= -1;
-
-    battleCtx->msgBuffer.id = BattleStrings_Text_PokemonsBeatUpAttack_Ally; // "{0}'s attack!"
-    battleCtx->msgBuffer.tags = TAG_NICKNAME;
-    battleCtx->msgBuffer.params[0] = (battleCtx->attacker | (battleCtx->beatUpCounter << 8));
-
+    battleCtx->movePower = SpeciesData_GetFormValue(Pokemon_GetValue(mon, MON_DATA_SPECIES, NULL), Pokemon_GetValue(mon, MON_DATA_FORM, NULL), SPECIES_DATA_BASE_ATK) / 10 + 5;
     battleCtx->beatUpCounter++;
-    battleCtx->multiHitCounter = 2;
-
-    // Check if there are more eligible mons in the back to attack
-    if (battleCtx->beatUpCounter < partyCount) {
-        while (TRUE) {
-            mon = BattleSystem_GetPartyPokemon(battleSys, battleCtx->attacker, battleCtx->beatUpCounter);
-            if (BeatUpEligibleMon(battleCtx, mon)) {
-                break;
-            }
-
-            battleCtx->beatUpCounter++;
-
-            if (battleCtx->beatUpCounter >= partyCount) {
-                battleCtx->multiHitCounter = 1;
-                break;
-            }
-        }
-    } else {
-        battleCtx->multiHitCounter = 1;
-    }
 
     return FALSE;
 }
@@ -8386,8 +8364,10 @@ static BOOL BtlCmd_CheckEffectActivation(BattleSystem *battleSys, BattleContext 
 }
 
 /**
- * @brief Check if Chatter's secondary effect should activate based on Chatot's
- * sound data.
+ * @brief Check if Chatter's secondary effect should activate.
+ *
+ * Sour Platinum: Generation 5, Chatter always confuses the target while it is still alive. It used to depend on
+ * the volume of Chatot's recorded cry (0%, 10% or 30%).
  *
  * Inputs:
  * 1. The distance to jump ahead if the secondary effect should NOT activate.
@@ -8401,36 +8381,7 @@ static BOOL BtlCmd_CheckChatterActivation(BattleSystem *battleSys, BattleContext
     BattleScript_Iter(battleCtx, 1);
     int jumpNoEffect = BattleScript_Read(battleCtx);
 
-    if (ATTACKING_MON.species == SPECIES_CHATOT
-        && DEFENDING_MON.curHP
-        && (ATTACKING_MON.statusVolatile & VOLATILE_CONDITION_TRANSFORM) == FALSE) {
-        int chatter;
-        if ((BattleSystem_GetBattleStatusMask(battleSys) & BATTLE_STATUS_RECORDING) == FALSE) {
-            chatter = Sound_GetChatterActivationParameter(BattleSystem_GetChatotCry(battleSys, battleCtx->attacker));
-        } else {
-            chatter = BattleSystem_GetRecordedChatter(battleSys, battleCtx->attacker);
-        }
-
-        u16 effectChance;
-        switch (chatter) {
-        default:
-        case 0:
-            effectChance = 0;
-            break;
-
-        case 1:
-            effectChance = 10;
-            break;
-
-        case 2:
-            effectChance = 30;
-            break;
-        }
-
-        if (BattleSystem_RandNext(battleSys) % 100 > effectChance) {
-            BattleScript_Iter(battleCtx, jumpNoEffect);
-        }
-    } else {
+    if (DEFENDING_MON.curHP == 0) {
         BattleScript_Iter(battleCtx, jumpNoEffect);
     }
 
@@ -9147,11 +9098,15 @@ static BOOL BtlCmd_TryRestoreStatusOnSwitch(BattleSystem *battleSys, BattleConte
     int battler = BattleScript_Battler(battleSys, battleCtx, inBattler);
     if (battleCtx->battleMons[battler].curHP && battleCtx->selectedPartySlot[battler] != 6) {
         Pokemon *mon = BattleSystem_GetPartyPokemon(battleSys, battler, battleCtx->selectedPartySlot[battler]);
-        int ability = Pokemon_GetValue(mon, MON_DATA_ABILITY, NULL);
         int status = Pokemon_GetValue(mon, MON_DATA_STATUS, NULL);
 
+        // Sour Platinum: Generation 5, a Pokemon whose original Ability forbids its status (Limber with paralysis, Immunity with
+        // poison, Insomnia and Vital Spirit with sleep, Water Veil with burn, Magma Armor with freeze) but whose current Ability
+        // does not (Skill Swap and the like) keeps the status when it is switched out. Only its current Ability counts.
+        BOOL forbidsStatus = Ability_ForbidsStatus(battleCtx, battleCtx->battleMons[battler].ability, status);
+
         if (battleCtx->battleMons[battler].ability != ABILITY_NATURAL_CURE
-            && Ability_ForbidsStatus(battleCtx, ability, status) == FALSE) {
+            && forbidsStatus == FALSE) {
             BattleScript_Iter(battleCtx, jumpNoStatusRestore);
         }
     } else {

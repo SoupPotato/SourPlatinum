@@ -139,6 +139,9 @@ static void Task_RecordingShowYesNoMenu(SysTask *task, void *data);
 static void Task_SetMoveAnimation(SysTask *task, void *data);
 static void Task_FlickerBattler(SysTask *task, void *data);
 static void Task_UpdateHPGauge(SysTask *task, void *data);
+static void Task_DrawItemHPBar(SysTask *task, void *data);
+
+static BOOL sItemHPBarDone; // Sour Platinum: set by Task_DrawItemHPBar when the HP bar has filled
 static void Task_UpdateExpGauge(SysTask *task, void *data);
 static void Task_PlayFaintingSequence(SysTask *task, void *data);
 static void Task_FadeOut(SysTask *task, void *data);
@@ -3209,6 +3212,8 @@ static void Task_PlayerSetCommandSelection(SysTask *task, void *data)
             moveDisplayInfo.maxPP[i] = commandSetData->maxPP[i];
         }
 
+        moveDisplayInfo.hiddenPowerType = BattleSystem_GetHiddenPowerType(BattleSystem_GetBattleContext(commandSetData->battleSys), commandSetData->battler);
+
         BattleSubscreen_UpdateMoveDisplay(BattleSystem_GetBattleSubscreen(commandSetData->battleSys), commandSetData->battlerType, &moveDisplayInfo);
         commandSetData->state++;
 
@@ -3555,6 +3560,7 @@ static void Task_PlayerShowMoveSelectMenu(SysTask *task, void *data)
         }
 
         moveSelectData.battlerType = moveSelectMenuData->battlerType;
+        moveSelectData.hiddenPowerType = BattleSystem_GetHiddenPowerType(BattleSystem_GetBattleContext(moveSelectMenuData->battleSys), moveSelectMenuData->battler);
 
         BattleSubscreen_SetupBackground(bgNarc, objNarc, btlSubscreen, 11, 0, &moveSelectData);
         NARC_dtor(bgNarc);
@@ -4182,6 +4188,12 @@ static void Task_PlayerShowBagMenu(SysTask *task, void *data)
         }
 
         HealthBox_CalcHP(healthbox, healthbox->damage);
+
+        // Sour Platinum: the bar is drawn by a task that runs on every tick, so that it fills at 60 fps like the HP
+        // bar of a move does (this task runs at the original rate)
+        sItemHPBarDone = FALSE;
+        SysTask *barTask = SysTask_Start(Task_DrawItemHPBar, healthbox, 1000);
+        SysTask_SetTickDiv(barTask, 1);
     }
         bagMenuData->state++;
         break;
@@ -4189,7 +4201,7 @@ static void Task_PlayerShowBagMenu(SysTask *task, void *data)
         int battler = bagMenuData->partyMenuData->battlePartyCtx->selectedPartyIndex * 2;
         HealthBox *healthbox = BattleSystem_GetHealthBox(bagMenuData->battleSys, battler);
 
-        if (Healthbox_DrawHPBar(healthbox) == -1) {
+        if (sItemHPBarDone) {
             HealthBox_DrawInfo(healthbox, NULL, HEALTHBOX_INFO_STATUS);
             bagMenuData->state++;
         }
@@ -4926,6 +4938,17 @@ static u8 Healthbox_ExpSoundFrames(void)
 
 static void Task_UpdateHPGaugeStep(SysTask *task, HealthBox *healthbox);
 static void Task_UpdateExpGaugeStep(SysTask *task, HealthBox *healthbox);
+
+// Sour Platinum: the HP bar after a healing item is used from the bag (see the bag menu task)
+static void Task_DrawItemHPBar(SysTask *task, void *data)
+{
+    HealthBox *healthbox = data;
+
+    if (Healthbox_DrawHPBar(healthbox) == -1) {
+        sItemHPBarDone = TRUE;
+        SysTask_Done(task);
+    }
+}
 
 static void Task_UpdateHPGauge(SysTask *task, void *data)
 {

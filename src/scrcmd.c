@@ -110,6 +110,7 @@
 #include "field_map_change.h"
 #include "field_map_change_flags.h"
 #include "field_message.h"
+#include "field_move_tasks.h"
 #include "field_overworld_state.h"
 #include "field_script_context.h"
 #include "field_system.h"
@@ -406,6 +407,7 @@ static BOOL ScrCmd_UseRockClimb(ScriptContext *ctx);
 static BOOL ScrCmd_UseSurf(ScriptContext *ctx);
 static BOOL ScrCmd_UseWaterfall(ScriptContext *ctx);
 static BOOL ScrCmd_UseFly(ScriptContext *ctx);
+static BOOL ScrCmd_UseFlyFromApp(ScriptContext *ctx);
 static BOOL ScrCmd_0C3(ScriptContext *ctx);
 static BOOL ScrCmd_0C4(ScriptContext *ctx);
 static BOOL ScrCmd_PlayHMCutIn(ScriptContext *ctx);
@@ -3654,6 +3656,21 @@ static BOOL ScrCmd_UseFly(ScriptContext *ctx)
     return TRUE;
 }
 
+// Sour Platinum: the Fly cut-in and the flight of the Hidden Moves app, after its message
+static BOOL ScrCmd_UseFlyFromApp(ScriptContext *ctx)
+{
+    u16 slot = ScriptContext_GetVar(ctx);
+    u16 mapID = ScriptContext_GetVar(ctx);
+    u16 x = ScriptContext_GetVar(ctx);
+    u16 z = ScriptContext_GetVar(ctx);
+
+    Pokemon *mon = FieldMoves_GetPokemonBySlot(SaveData_GetParty(ctx->fieldSystem->saveData), slot);
+    FlyContext *flyCtx = FlyContext_New(HEAP_ID_FIELD2, ctx->fieldSystem, mon, mapID, x, z);
+
+    FieldSystem_CreateTask(ctx->fieldSystem, FieldMoves_FlyTask, flyCtx);
+    return TRUE;
+}
+
 static BOOL ScrCmd_0C3(ScriptContext *ctx)
 {
     FieldOverworldState *fieldState = SaveData_GetFieldOverworldState(ctx->fieldSystem->saveData);
@@ -3679,7 +3696,7 @@ static BOOL ScrCmd_PlayHMCutIn(ScriptContext *ctx)
     void **dataPtr = FieldSystem_GetScriptMemberPtr(ctx->fieldSystem, SCRIPT_MANAGER_DATA_PTR);
     u16 slot = ScriptContext_GetVar(ctx);
 
-    Pokemon *mon = Party_GetPokemonBySlotIndex(SaveData_GetParty(ctx->fieldSystem->saveData), slot);
+    Pokemon *mon = FieldMoves_GetPokemonBySlot(SaveData_GetParty(ctx->fieldSystem->saveData), slot);
     *dataPtr = HMCutIn_StartTask(ctx->fieldSystem, FALSE, mon, PlayerAvatar_GetGender(ctx->fieldSystem->playerAvatar));
 
     ScriptContext_Pause(ctx, ScriptContext_WaitForHMCutInFinished);

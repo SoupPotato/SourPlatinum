@@ -182,6 +182,36 @@
     {
       "id": "FieldMoves_Text_YoureAlreadySurfing",
       "en_US": "You’re already surfing."
+    },
+    {
+      "id": "FieldMoves_Text_RockAppearsBreakable",
+      "en_US": "This rock appears to be breakable."
+    },
+    {
+      "id": "FieldMoves_Text_WallIsVeryRocky",
+      "en_US": "The wall is very rocky..."
+    },
+    {
+      "id": "FieldMoves_Text_LargeWaterfall",
+      "en_US": "It’s a large waterfall."
+    },
+    {
+      "id": "FieldMoves_Text_WaterIsDeepBlue",
+      "en_US": "The water is a deep blue color..."
+    },
+    {
+      "id": "FieldMoves_Text_WouldYouLikeToUseApp",
+      "en_US": [
+        "Would you like to use {STRVAR_1 6, 0, 0}\n",
+        "from the Hidden Moves app?"
+      ]
+    },
+    {
+      "id": "FieldMoves_Text_PlayerSummonedPokemonToUseMove",
+      "en_US": [
+        "{STRVAR_1 3, 0, 0} summoned {STRVAR_1 5, 1, 0}\n",
+        "to use {STRVAR_1 6, 2, 0}!\r"
+      ]
     }
   ]
 }

@@ -1131,6 +1131,7 @@ static void SetMonDataFromMon(PokemonSummaryScreen *summaryScreen, Pokemon *mon,
     monData->speed = Pokemon_GetValue(mon, MON_DATA_SPEED, NULL);
     monData->ability = Pokemon_GetValue(mon, MON_DATA_ABILITY, NULL);
     monData->nature = Pokemon_GetNature(mon);
+    monData->hiddenPowerType = Pokemon_GetHiddenPowerType(mon);
 
     u16 i;
     u8 maxPP;

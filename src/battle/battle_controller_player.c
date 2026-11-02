@@ -121,6 +121,7 @@ static BOOL BattleControllerPlayer_CriticalMessage(BattleSystem *battleSys, Batt
 static BOOL BattleControllerPlayer_FollowupMessage(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BattleControllerPlayer_RageBuilding(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BattleControllerPlayer_CheckExtraFlinch(BattleSystem *battleSys, BattleContext *battleCtx);
+static BOOL Move_CanFlinch(int effect);
 static BOOL BattleControllerPlayer_ToggleSemiInvulnMons(BattleSystem *battleSys, BattleContext *battleCtx);
 static void BattleControllerPlayer_InitAI(BattleSystem *battleSys, BattleContext *battleCtx);
 static void BattleSystem_RecordCommand(BattleSystem *battleSys, BattleContext *battleCtx);
@@ -1464,7 +1465,8 @@ static void BattleControllerPlayer_CheckMonConditions(BattleSystem *battleSys, B
                 battleCtx->battleMons[battler].statusVolatile -= (1 << VOLATILE_CONDITION_BIND_SHIFT);
 
                 if (battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_BIND) {
-                    battleCtx->hpCalcTemp = BattleSystem_Divide(battleCtx->battleMons[battler].maxHP * -1, 16);
+                    // Sour Platinum: 1/8 of the max HP each turn, like Generation 6 onwards (1/16 originally)
+                    battleCtx->hpCalcTemp = BattleSystem_Divide(battleCtx->battleMons[battler].maxHP * -1, 8);
                     LOAD_SUBSEQ(subscript_bind_effect);
                 } else {
                     LOAD_SUBSEQ(subscript_bind_end);
@@ -1506,9 +1508,11 @@ static void BattleControllerPlayer_CheckMonConditions(BattleSystem *battleSys, B
             if (battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_UPROAR) {
                 u8 j;
                 for (j = 0; j < maxBattlers; j++) {
+                    // Sour Platinum: Generation 5, only the turn the uproar starts wakes the Pokemon that are asleep (Soundproof
+                    // included). Later on none can fall asleep.
                     if ((battleCtx->battleMons[j].status & MON_CONDITION_SLEEP)
                         && battleCtx->battleMons[j].curHP
-                        && Battler_Ability(battleCtx, j) != ABILITY_SOUNDPROOF) {
+                        && Battle_UproarJustStarted(battleCtx)) {
                         battleCtx->msgBattlerTemp = j;
                         PrepareSubroutineSequence(battleCtx, subscript_wake_up);
                         break;
@@ -1756,6 +1760,19 @@ static void BattleControllerPlayer_CheckSideConditions(BattleSystem *battleSys, 
     int battler;
     switch (battleCtx->sideConditionCheckState) {
     case SIDE_COND_CHECK_STATE_FUTURE_SIGHT:
+        // Sour Platinum: Color Change of a Pokemon that was just hit by Future Sight or Doom Desire
+        for (battler = 0; battler < maxBattlers; battler++) {
+            if (battleCtx->fieldConditions.futureSightColorChange[battler]) {
+                battleCtx->msgTemp = battleCtx->fieldConditions.futureSightColorChange[battler] - 1;
+                battleCtx->fieldConditions.futureSightColorChange[battler] = 0;
+                battleCtx->defender = battler;
+                battleCtx->msgBattlerTemp = battler;
+
+                PrepareSubroutineSequence(battleCtx, subscript_color_change);
+                return;
+            }
+        }
+
         while (battleCtx->sideConditionCheckTemp < maxBattlers) {
             battler = battleCtx->monSpeedOrder[battleCtx->sideConditionCheckTemp];
             if (battleCtx->battlersSwitchingMask & FlagIndex(battler)) {
@@ -1769,6 +1786,43 @@ static void BattleControllerPlayer_CheckSideConditions(BattleSystem *battleSys, 
                 && battleCtx->battleMons[battler].curHP) {
                 battleCtx->sideConditionsMask[BattleSystem_GetBattlerSide(battleSys, battler)] &= ~SIDE_CONDITION_FUTURE_SIGHT;
 
+                // Sour Platinum: Generation 5 Future Sight, the damage is worked out now
+                int damage;
+                u32 moveStatusMask;
+
+                if (BattleSystem_CalcFutureSightDamage(battleSys, battleCtx, battler, &damage, &moveStatusMask) == FALSE) {
+                    continue;
+                }
+
+                // Endure now protects from it too
+                if (battleCtx->turnFlags[battler].enduring
+                    && (battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_SUBSTITUTE) == FALSE
+                    && battleCtx->battleMons[battler].curHP + damage <= 0) {
+                    damage = (battleCtx->battleMons[battler].curHP - 1) * -1;
+                    moveStatusMask |= MOVE_STATUS_ENDURED;
+                }
+
+                battleCtx->moveStatusFlags = moveStatusMask;
+
+                if (Battler_Ability(battleCtx, battler) == ABILITY_COLOR_CHANGE
+                    && (moveStatusMask & MOVE_STATUS_NO_EFFECTS) == FALSE
+                    && (battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_SUBSTITUTE) == FALSE
+                    && battleCtx->battleMons[battler].curHP + damage > 0
+                    && damage != 0) {
+                    int futureSightAttacker = battleCtx->fieldConditions.futureSightAttacker[battler];
+                    int type = MoveTable_LoadParam(battleCtx->fieldConditions.futureSightMove[battler], MOVEATTRIBUTE_TYPE);
+
+                    if (battleCtx->battleMons[futureSightAttacker].curHP
+                        && battleCtx->selectedPartySlot[futureSightAttacker] == battleCtx->fieldConditions.futureSightAttackerSlot[battler]
+                        && Battler_Ability(battleCtx, futureSightAttacker) == ABILITY_NORMALIZE) {
+                        type = TYPE_NORMAL;
+                    }
+
+                    if (battleCtx->battleMons[battler].type1 != type && battleCtx->battleMons[battler].type2 != type) {
+                        battleCtx->fieldConditions.futureSightColorChange[battler] = type + 1;
+                    }
+                }
+
                 battleCtx->msgBuffer.id = 475;
                 battleCtx->msgBuffer.tags = TAG_NICKNAME_MOVE;
                 battleCtx->msgBuffer.params[0] = BattleSystem_NicknameTag(battleCtx, battler);
@@ -1777,7 +1831,7 @@ static void BattleControllerPlayer_CheckSideConditions(BattleSystem *battleSys, 
                 battleCtx->msgBattlerTemp = battler;
                 battleCtx->msgAttacker = battleCtx->fieldConditions.futureSightAttacker[battler];
                 battleCtx->msgMoveTemp = battleCtx->fieldConditions.futureSightMove[battler];
-                battleCtx->hpCalcTemp = battleCtx->fieldConditions.futureSightDamage[battler];
+                battleCtx->hpCalcTemp = damage;
 
                 PrepareSubroutineSequence(battleCtx, subscript_future_sight_damage);
                 return;
@@ -2429,8 +2483,7 @@ static BOOL BattleControllerPlayer_CheckStatusDisruption(BattleSystem *battleSys
 
         case CHECK_STATUS_STATE_SLEEP:
             if (ATTACKING_MON.status & MON_CONDITION_SLEEP) {
-                if ((battleCtx->fieldConditionsMask & FIELD_CONDITION_UPROAR)
-                    && Battler_Ability(battleCtx, battleCtx->attacker) != ABILITY_SOUNDPROOF) {
+                if ((battleCtx->fieldConditionsMask & FIELD_CONDITION_UPROAR) && Battle_UproarJustStarted(battleCtx)) {
                     battleCtx->msgBattlerTemp = battleCtx->attacker;
 
                     LOAD_SUBSEQ(subscript_wake_up);
@@ -3356,7 +3409,9 @@ static void BattleControllerPlayer_UpdateHP(BattleSystem *battleSys, BattleConte
 
         battleCtx->lastHitByBattler[battleCtx->defender] = battleCtx->attacker;
 
-        if ((DEFENDING_MON.statusVolatile & VOLATILE_CONDITION_SUBSTITUTE) && battleCtx->damage < 0) {
+        // Sour Platinum: Generation 5, Uproar hits a Pokemon behind a Substitute
+        if ((DEFENDING_MON.statusVolatile & VOLATILE_CONDITION_SUBSTITUTE) && battleCtx->damage < 0
+            && CURRENT_MOVE_DATA.effect != BATTLE_EFFECT_UPROAR) {
             if (DEFENDING_MON.moveEffectsData.substituteHP + battleCtx->damage <= 0) {
                 ATTACKER_SELF_TURN_FLAGS.shellBellDamageDealt += DEFENDING_MON.moveEffectsData.substituteHP * -1;
                 DEFENDING_MON.statusVolatile &= ~VOLATILE_CONDITION_SUBSTITUTE;
@@ -3383,7 +3438,14 @@ static void BattleControllerPlayer_UpdateHP(BattleSystem *battleSys, BattleConte
             battleCtx->damage = (DEFENDING_MON.curHP - 1) * -1;
         }
 
-        if (DEFENDER_TURN_FLAGS.enduring == 0) {
+        // Sour Platinum: Generation 5 Sturdy, a Pokemon with full HP is left with 1 HP by a hit that would have knocked it
+        // out. It works before a Focus Sash (which is then not used) and Mold Breaker ignores it.
+        BOOL sturdy = (DEFENDER_TURN_FLAGS.enduring == 0
+            && DEFENDING_MON.curHP == DEFENDING_MON.maxHP
+            && DEFENDING_MON.curHP + battleCtx->damage <= 0
+            && Battler_IgnorableAbility(battleCtx, battleCtx->attacker, battleCtx->defender, ABILITY_STURDY) == TRUE);
+
+        if (DEFENDER_TURN_FLAGS.enduring == 0 && sturdy == FALSE) {
             if (itemEffect == HOLD_EFFECT_MAYBE_ENDURE && (BattleSystem_RandNext(battleSys) % 100) < itemPower) {
                 DEFENDER_SELF_TURN_FLAGS.focusItemActivated = TRUE;
             }
@@ -3393,11 +3455,11 @@ static void BattleControllerPlayer_UpdateHP(BattleSystem *battleSys, BattleConte
             }
         }
 
-        if ((DEFENDER_TURN_FLAGS.enduring || DEFENDER_SELF_TURN_FLAGS.focusItemActivated)
+        if ((DEFENDER_TURN_FLAGS.enduring || sturdy || DEFENDER_SELF_TURN_FLAGS.focusItemActivated)
             && DEFENDING_MON.curHP + battleCtx->damage <= 0) {
             battleCtx->damage = (DEFENDING_MON.curHP - 1) * -1;
 
-            if (DEFENDER_TURN_FLAGS.enduring) {
+            if (DEFENDER_TURN_FLAGS.enduring || sturdy) {
                 battleCtx->moveStatusFlags |= MOVE_STATUS_ENDURED;
             } else {
                 battleCtx->moveStatusFlags |= MOVE_STATUS_ENDURED_ITEM;
@@ -4619,9 +4681,27 @@ static BOOL BattleControllerPlayer_RageBuilding(BattleSystem *battleSys, BattleC
     return result;
 }
 
+// Sour Platinum: TRUE for the move effects that already have a chance to make the target flinch
+static BOOL Move_CanFlinch(int effect)
+{
+    switch (effect) {
+    case BATTLE_EFFECT_FLINCH_HIT:
+    case BATTLE_EFFECT_CHARGE_TURN_HIGH_CRIT_FLINCH:
+    case BATTLE_EFFECT_FLINCH_DOUBLE_DAMAGE_FLY_OR_BOUNCE:
+    case BATTLE_EFFECT_FLINCH_MINIMIZE_DOUBLE_HIT:
+    case BATTLE_EFFECT_ALWAYS_FLINCH_FIRST_TURN_ONLY:
+    case BATTLE_EFFECT_FLINCH_BURN_HIT:
+    case BATTLE_EFFECT_FLINCH_FREEZE_HIT:
+    case BATTLE_EFFECT_FLINCH_PARALYZE_HIT:
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 /**
  * @brief Check if an additional flinch effect should be applied due to King's
- * Rock.
+ * Rock or Stench.
  *
  * @param battleSys
  * @param battleCtx
@@ -4633,12 +4713,19 @@ static BOOL BattleControllerPlayer_CheckExtraFlinch(BattleSystem *battleSys, Bat
     int itemEffect = Battler_HeldItemEffect(battleCtx, battleCtx->attacker);
     int itemPower = Battler_HeldItemPower(battleCtx, battleCtx->attacker, 0);
 
+    // Sour Platinum: Generation 5 Stench, a damaging move has a 10% chance of making the target flinch (on every hit of a
+    // multi-hit move). It does not stack with King's Rock or Razor Fang, nor with moves that can already flinch.
+    BOOL kingsRock = (itemEffect == HOLD_EFFECT_SOMETIMES_FLINCH);
+    BOOL stench = (kingsRock == FALSE
+        && Battler_Ability(battleCtx, battleCtx->attacker) == ABILITY_STENCH
+        && Move_CanFlinch(CURRENT_MOVE_DATA.effect) == FALSE);
+
     if (battleCtx->defender != BATTLER_NONE
-        && itemEffect == HOLD_EFFECT_SOMETIMES_FLINCH
+        && (kingsRock || stench)
         && (battleCtx->moveStatusFlags & MOVE_STATUS_NO_EFFECTS) == FALSE
         && (DEFENDER_SELF_TURN_FLAGS.physicalDamageTaken || DEFENDER_SELF_TURN_FLAGS.specialDamageTaken)
-        && (BattleSystem_RandNext(battleSys) % 100) < itemPower
-        && (CURRENT_MOVE_DATA.flags & MOVE_FLAG_TRIGGERS_KINGS_ROCK)
+        && (BattleSystem_RandNext(battleSys) % 100) < (kingsRock ? itemPower : 10)
+        && (stench || (CURRENT_MOVE_DATA.flags & MOVE_FLAG_TRIGGERS_KINGS_ROCK))
         && DEFENDING_MON.curHP) {
         battleCtx->sideEffectMon = battleCtx->defender;
         battleCtx->sideEffectType = SIDE_EFFECT_TYPE_INDIRECT;

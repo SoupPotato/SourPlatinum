@@ -873,6 +873,13 @@
         "It will be fixed if you enter the\n",
         "Hall of Fame again.\r"
       ]
+    },
+    {
+      "id": "CommonStrings_Text_HiddenMovesAppNewMove",
+      "en_US": [
+        "You can now use {STRVAR_1 6, 0, 0} from\n",
+        "the Hidden Moves app!"
+      ]
     }
   ]
 }

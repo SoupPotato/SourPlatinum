@@ -46,4 +46,8 @@ void BattleAnimScriptFunc_SetPokemonSpritePriority(BattleAnimSystem *system);
 void BattleAnimScriptFunc_RenderPokemonSprites(BattleAnimSystem *system);
 void BattleAnimScriptFunc_ScrollSwitchedBg(BattleAnimSystem *system);
 
+// Sour Platinum: forget which scale animation owns each Pokemon sprite (see BattleAnimScriptFunc_ScaleBattlerSprite).
+// Called when a move animation starts and ends.
+void BattleAnimUtil_ResetScaleBattlerSpriteOwners(void);
+
 #endif // POKEPLATINUM_SCRIPT_FUNCS_3_H
