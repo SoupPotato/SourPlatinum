@@ -24,6 +24,7 @@ pl_font_narc = custom_target('pl_font.narc',
                 'font_message.png',
                 'font_subscreen.png',
                 'font_unown.png',
+                'font_banner.png',
             )
         ),
         ncgr_lz_gen.process(

@@ -384,9 +384,12 @@ static void AbilityBanner_Draw(BattleSystem *battleSys, ManagedSprite *sprite, c
 
     MI_CpuCopy16(art, window.pixels, ABILITY_BANNER_BYTES);
 
+    // The font is only needed to print the two lines
+    Font_InitManager(FONT_BANNER, HEAP_ID_BATTLE);
+
     TextColor textColor = TEXT_COLOR(ABILITY_BANNER_COLOR_TEXT, ABILITY_BANNER_COLOR_SHADOW, ABILITY_BANNER_COLOR_KEY);
-    int line1Width = Font_CalcStringWidth(FONT_SYSTEM, line1, 0);
-    int line2Width = Font_CalcStringWidth(FONT_SYSTEM, line2, 0);
+    int line1Width = Font_CalcStringWidth(FONT_BANNER, line1, 0);
+    int line2Width = Font_CalcStringWidth(FONT_BANNER, line2, 0);
     int blockWidth = line1Width > line2Width + ABILITY_BANNER_TEXT_STAGGER ? line1Width : line2Width + ABILITY_BANNER_TEXT_STAGGER;
     int center = isPlayerSide ? ABILITY_BANNER_PLAYER_TEXT_CENTER : ABILITY_BANNER_ENEMY_TEXT_CENTER;
     int blockStart = center - blockWidth / 2;
@@ -402,8 +405,10 @@ static void AbilityBanner_Draw(BattleSystem *battleSys, ManagedSprite *sprite, c
     int line1X = blockStart;
     int line2X = blockStart + blockWidth - line2Width;
 
-    Text_AddPrinterWithParamsColorAndSpacing(&textWindow, FONT_SYSTEM, line1, line1X, ABILITY_BANNER_LINE_1_Y, TEXT_SPEED_NO_TRANSFER, textColor, 0, 0, NULL);
-    Text_AddPrinterWithParamsColorAndSpacing(&textWindow, FONT_SYSTEM, line2, line2X, ABILITY_BANNER_LINE_2_Y, TEXT_SPEED_NO_TRANSFER, textColor, 0, 0, NULL);
+    Text_AddPrinterWithParamsColorAndSpacing(&textWindow, FONT_BANNER, line1, line1X, ABILITY_BANNER_LINE_1_Y, TEXT_SPEED_NO_TRANSFER, textColor, 0, 0, NULL);
+    Text_AddPrinterWithParamsColorAndSpacing(&textWindow, FONT_BANNER, line2, line2X, ABILITY_BANNER_LINE_2_Y, TEXT_SPEED_NO_TRANSFER, textColor, 0, 0, NULL);
+
+    Font_Free(FONT_BANNER);
 
     for (int y = 0; y < ABILITY_BANNER_HEIGHT; y++) {
         for (int x = 0; x < ABILITY_BANNER_WIDTH; x++) {
