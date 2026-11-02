@@ -7,7 +7,10 @@
 #include "constants/field/map_load.h"
 #include "generated/badges.h"
 #include "generated/journal_location_events.h"
+#include "generated/items.h"
 #include "generated/object_events_gfx.h"
+#include "generated/poketch_apps.h"
+#include "generated/species.h"
 
 #include "struct_decls/map_object.h"
 #include "struct_defs/struct_020711C8.h"
@@ -21,6 +24,7 @@
 
 #include "field_map_change.h"
 #include "field_overworld_state.h"
+#include "bag.h"
 #include "field_task.h"
 #include "heap.h"
 #include "inlines.h"
@@ -31,6 +35,7 @@
 #include "persisted_map_features_init.h"
 #include "player_avatar.h"
 #include "player_move.h"
+#include "poketch.h"
 #include "save_player.h"
 #include "script_manager.h"
 #include "spawn_locations.h"
@@ -204,6 +209,66 @@ static inline BOOL PlayerOutsideLinkRoom(const FieldMoveContext *fieldMoveContex
     return TRUE;
 }
 
+static const u16 sHelperSpecies[] = {
+    [FIELD_MOVE_CUT] = SPECIES_BIDOOF,
+    [FIELD_MOVE_FLY] = SPECIES_STARAPTOR,
+    [FIELD_MOVE_SURF] = SPECIES_MANTINE,
+    [FIELD_MOVE_STRENGTH] = SPECIES_MACHOKE,
+    [FIELD_MOVE_DEFOG] = SPECIES_DRIFLOON,
+    [FIELD_MOVE_ROCK_SMASH] = SPECIES_NOSEPASS,
+    [FIELD_MOVE_WATERFALL] = SPECIES_SEAKING,
+    [FIELD_MOVE_ROCK_CLIMB] = SPECIES_GRAVELER,
+};
+
+static const u16 sHelperItems[] = {
+    [FIELD_MOVE_CUT] = ITEM_HM01,
+    [FIELD_MOVE_FLY] = ITEM_HM02,
+    [FIELD_MOVE_SURF] = ITEM_HM03,
+    [FIELD_MOVE_STRENGTH] = ITEM_HM04,
+    [FIELD_MOVE_DEFOG] = ITEM_HM05,
+    [FIELD_MOVE_ROCK_SMASH] = ITEM_HM06,
+    [FIELD_MOVE_WATERFALL] = ITEM_HM07,
+    [FIELD_MOVE_ROCK_CLIMB] = ITEM_HM08,
+};
+
+// Whether the Hidden Moves app is installed and the player has the HM and the badge, so the app can do the move
+BOOL FieldMoves_CanUsePoketchApp(FieldSystem *fieldSystem, enum FieldMoveList fieldMove)
+{
+    // The scripts use these slot codes
+    SDK_COMPILER_ASSERT(FIELD_MOVE_HELPER_SLOT_CUT == FIELD_MOVE_HELPER_SLOT_BASE + FIELD_MOVE_CUT);
+    SDK_COMPILER_ASSERT(FIELD_MOVE_HELPER_SLOT_SURF == FIELD_MOVE_HELPER_SLOT_BASE + FIELD_MOVE_SURF);
+    SDK_COMPILER_ASSERT(FIELD_MOVE_HELPER_SLOT_STRENGTH == FIELD_MOVE_HELPER_SLOT_BASE + FIELD_MOVE_STRENGTH);
+    SDK_COMPILER_ASSERT(FIELD_MOVE_HELPER_SLOT_DEFOG == FIELD_MOVE_HELPER_SLOT_BASE + FIELD_MOVE_DEFOG);
+    SDK_COMPILER_ASSERT(FIELD_MOVE_HELPER_SLOT_ROCK_SMASH == FIELD_MOVE_HELPER_SLOT_BASE + FIELD_MOVE_ROCK_SMASH);
+    SDK_COMPILER_ASSERT(FIELD_MOVE_HELPER_SLOT_WATERFALL == FIELD_MOVE_HELPER_SLOT_BASE + FIELD_MOVE_WATERFALL);
+    SDK_COMPILER_ASSERT(FIELD_MOVE_HELPER_SLOT_ROCK_CLIMB == FIELD_MOVE_HELPER_SLOT_BASE + FIELD_MOVE_ROCK_CLIMB);
+
+    return Poketch_IsAppRegistered(SaveData_GetPoketch(fieldSystem->saveData), POKETCH_APPID_FIELDMOVES)
+        && FieldMoves_HasBadgeForMove(fieldSystem, fieldMove)
+        && Bag_CanRemoveItem(SaveData_GetBag(fieldSystem->saveData), sHelperItems[fieldMove], 1, HEAP_ID_FIELD2);
+}
+
+u16 FieldMoves_GetHelperSpecies(enum FieldMoveList fieldMove)
+{
+    return sHelperSpecies[fieldMove];
+}
+
+// Returns the party Pokemon in the slot, or for a helper slot code a Pokemon of the species that belongs to the move.
+// The helper is only used for its sprite, cry and name, so one shared copy is enough.
+Pokemon *FieldMoves_GetPokemonBySlot(Party *party, int slot)
+{
+    static Pokemon sHelperMon;
+
+    if (slot < FIELD_MOVE_HELPER_SLOT_BASE) {
+        return Party_GetPokemonBySlotIndex(party, slot);
+    }
+
+    // The personality and OT ID are fixed (and not shiny) so that this doesn't use the random number generator
+    Pokemon_InitWith(&sHelperMon, sHelperSpecies[slot - FIELD_MOVE_HELPER_SLOT_BASE], 30, 0, TRUE, 0x10, OTID_SET, 0);
+
+    return &sHelperMon;
+}
+
 FlyContext *FlyContext_New(enum HeapID heapID, FieldSystem *fieldSystem, Pokemon *mon, u16 mapID, s16 x, s16 z)
 {
     FlyContext *ctx = Heap_AllocAtEnd(heapID, sizeof(FlyContext));
@@ -217,6 +282,19 @@ FlyContext *FlyContext_New(enum HeapID heapID, FieldSystem *fieldSystem, Pokemon
     ctx->z = z;
 
     return ctx;
+}
+
+// Sour Platinum: Fly from the Poketch app. A script shows the summoning message, then starts FieldMoves_FlyTask.
+BOOL FieldMoves_PoketchFlyScriptTask(FieldTask *task)
+{
+    FieldSystem *fieldSystem = FieldTask_GetFieldSystem(task);
+    FlyContext *ctx = FieldTask_GetEnv(task);
+
+    ScriptManager_Change(task, SCRIPT_ID(FIELD_MOVES, 17), NULL);
+    FieldSystem_SetScriptParameters(fieldSystem, FIELD_MOVE_HELPER_SLOT_FLY, ctx->mapID, ctx->x, ctx->z);
+    Heap_Free(ctx);
+
+    return FALSE;
 }
 
 BOOL FieldMoves_FlyTask(FieldTask *task)

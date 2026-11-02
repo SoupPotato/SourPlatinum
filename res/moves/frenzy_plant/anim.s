@@ -14,7 +14,7 @@ L_0:
     LoadCellResObj 0, vines_cell_NCER_lz
     LoadAnimResObj 0, vines_anim_NANR_lz
     AddSpriteWithFunc 0, SPRITE_FUNC_FRENZY_PLANT, vines_NCGR_lz, vines_NCLR, vines_cell_NCER_lz, vines_anim_NANR_lz, 0, 0, 8
-    Delay 96
+    Delay 40 // Sour Platinum: 96 originally (the roots vanish after the shake, see FRENZY_PLANT_ROOT_LIFETIME)
     PlayLoopedSoundEffectR SEQ_SE_DP_W025B_sseq, 3, 6
     CreateEmitter 0, 0, EMITTER_CB_SET_POS_TO_DEFENDER
     Func_Shake 2, 0, 1, 10, BATTLE_ANIM_BATTLER_SPRITE_DEFENDER

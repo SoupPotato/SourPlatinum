@@ -6,9 +6,10 @@ L_0:
     End
 
 L_1:
+    SetAnimSpeed 120 // Sour Platinum: 20% faster (the sound is played once, so it is unchanged)
     Func_FadeBg FADE_BG_TYPE_BASE, 0, 0, 12, BATTLE_COLOR_BLACK
     WaitForAnimTasks
-    Delay 30
+    Delay 12 // Sour Platinum: 30 originally; 12 is a 10 frame pause at this speed
     CreateEmitter 0, 0, EMITTER_CB_GENERIC
     SetExtraParams 0, 1, 2, 0, 0, 0
     CreateEmitter 0, 3, EMITTER_CB_GENERIC

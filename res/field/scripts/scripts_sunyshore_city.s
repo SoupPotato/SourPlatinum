@@ -442,6 +442,7 @@ SunyshoreCity_GiveWaterfall:
     SetVar VAR_0x8004, ITEM_HM07
     SetVar VAR_0x8005, 1
     Common_GiveItemQuantity
+    Common_HiddenMovesAppNewMove
     SetFlag FLAG_RECEIVED_SUNYSHORE_CITY_HM07
     Message SunyshoreCity_Text_ThatHMContainsWaterfall
     Return

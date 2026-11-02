@@ -84,6 +84,7 @@
     ScriptEntry CommonScript_SetLookerBGM @ 0x807
     ScriptEntry CommonScript_FadeToDefaultMusic @ 0x808
     ScriptEntry CommonScript_GriseousOrbCouldNotBeRemoved @ 0x809
+    ScriptEntry CommonScript_HiddenMovesAppNewMove @ 0x80A
     ScriptEntryEnd
 
 CommonScript_Dummy2010:
@@ -1691,6 +1692,32 @@ CommonScript_GriseousOrbCouldNotBeRemoved:
     WaitButton
     CloseMessage
     ReleaseAll
+    ReturnCommonScript
+    End
+
+// Sour Platinum: tells the player that a new HM can be used from the Hidden Moves app. VAR_0x8004 is the HM item. Does
+// nothing for other items, or if the player doesn't have the app.
+CommonScript_HiddenMovesAppNewMove:
+    CheckPoketchAppRegistered POKETCH_APPID_FIELDMOVES, VAR_RESULT
+    GoToIfEq VAR_RESULT, FALSE, CommonScript_HiddenMovesAppNewMoveEnd
+    GoToIfEq VAR_0x8004, ITEM_HM01, CommonScript_HiddenMovesAppNewMoveMessage
+    GoToIfEq VAR_0x8004, ITEM_HM02, CommonScript_HiddenMovesAppNewMoveMessage
+    GoToIfEq VAR_0x8004, ITEM_HM03, CommonScript_HiddenMovesAppNewMoveMessage
+    GoToIfEq VAR_0x8004, ITEM_HM04, CommonScript_HiddenMovesAppNewMoveMessage
+    GoToIfEq VAR_0x8004, ITEM_HM05, CommonScript_HiddenMovesAppNewMoveMessage
+    GoToIfEq VAR_0x8004, ITEM_HM06, CommonScript_HiddenMovesAppNewMoveMessage
+    GoToIfEq VAR_0x8004, ITEM_HM07, CommonScript_HiddenMovesAppNewMoveMessage
+    GoToIfEq VAR_0x8004, ITEM_HM08, CommonScript_HiddenMovesAppNewMoveMessage
+    GoTo CommonScript_HiddenMovesAppNewMoveEnd
+
+CommonScript_HiddenMovesAppNewMoveMessage:
+    BufferTMHMMoveName 0, VAR_0x8004
+    PlayFanfare SEQ_POCKETCH_sseq
+    Message CommonStrings_Text_HiddenMovesAppNewMove
+    WaitFanfare
+    WaitButton
+
+CommonScript_HiddenMovesAppNewMoveEnd:
     ReturnCommonScript
     End
 

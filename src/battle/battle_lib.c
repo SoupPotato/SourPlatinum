@@ -111,6 +111,7 @@ void BattleSystem_InitBattleMon(BattleSystem *battleSys, BattleContext *battleCt
     battleCtx->battleMons[battler].friskAnnounced = FALSE;
     battleCtx->battleMons[battler].moldBreakerAnnounced = FALSE;
     battleCtx->battleMons[battler].pressureAnnounced = FALSE;
+    battleCtx->battleMons[battler].cloudNineAnnounced = FALSE;
     battleCtx->battleMons[battler].type1 = Pokemon_GetValue(mon, MON_DATA_TYPE_1, NULL);
     battleCtx->battleMons[battler].type2 = Pokemon_GetValue(mon, MON_DATA_TYPE_2, NULL);
     battleCtx->battleMons[battler].gender = Pokemon_GetGender(mon);
@@ -2678,6 +2679,109 @@ int BattleSystem_ApplyTypeChart(BattleSystem *battleSys, BattleContext *battleCt
     return damage;
 }
 
+/**
+ * Sour Platinum: Future Sight and Doom Desire work like Generation 5. The damage is worked out when the attack hits,
+ * like a normal hit of the move's type: with the user's Special Attack and the target's Special Defense at that time,
+ * STAB, type effectiveness (Wonder Guard can block it) and critical hits. If the user is not on the field any more,
+ * its stats from the party are used without stat changes, ability or held item.
+ *
+ * Returns FALSE if the attack disappears without a word (it would hit the user itself).
+ * damage is negative, like hpCalcTemp. moveStatusMask gets the effectiveness and critical hit flags.
+ */
+BOOL BattleSystem_CalcFutureSightDamage(BattleSystem *battleSys, BattleContext *battleCtx, int defender, int *damage, u32 *moveStatusMask)
+{
+    int attacker = battleCtx->fieldConditions.futureSightAttacker[defender];
+    int slot = battleCtx->fieldConditions.futureSightAttackerSlot[defender];
+    int move = battleCtx->fieldConditions.futureSightMove[defender];
+    BOOL onField = battleCtx->battleMons[attacker].curHP && battleCtx->selectedPartySlot[attacker] == slot;
+
+    if (onField && attacker == defender) {
+        return FALSE;
+    }
+
+    BattleMon saved = battleCtx->battleMons[attacker];
+
+    if (onField == FALSE) {
+        Pokemon *mon = BattleSystem_GetPartyPokemon(battleSys, attacker, slot);
+        BattleMon *user = &battleCtx->battleMons[attacker];
+        int species = Pokemon_GetValue(mon, MON_DATA_SPECIES, NULL);
+        int form = Pokemon_GetValue(mon, MON_DATA_FORM, NULL);
+
+        user->species = species;
+        user->formNum = form;
+        user->level = Pokemon_GetValue(mon, MON_DATA_LEVEL, NULL);
+        user->attack = Pokemon_GetValue(mon, MON_DATA_ATK, NULL);
+        user->spAttack = Pokemon_GetValue(mon, MON_DATA_SP_ATK, NULL);
+        user->type1 = SpeciesData_GetFormValue(species, form, SPECIES_DATA_TYPE_1);
+        user->type2 = SpeciesData_GetFormValue(species, form, SPECIES_DATA_TYPE_2);
+        user->ability = ABILITY_NONE;
+        user->heldItem = ITEM_NONE;
+        user->status = MON_CONDITION_NONE;
+        user->statusVolatile = 0;
+        user->moveEffectsMask = 0;
+        MI_CpuClear8(&user->moveEffectsData, sizeof(user->moveEffectsData));
+
+        for (int i = 0; i < NUM_BOOSTABLE_STATS; i++) {
+            user->statBoosts[i] = DEFAULT_STAT_STAGE;
+        }
+    }
+
+    // The flags left behind by the last move used this turn must not change how this hit works
+    u32 savedStatusMask = battleCtx->battleStatusMask;
+    battleCtx->battleStatusMask &= ~(SYSCTL_IGNORE_TYPE_CHECKS | SYSCTL_IGNORE_IMMUNITIES);
+
+    u32 sideConditions = battleCtx->sideConditionsMask[BattleSystem_GetBattlerSide(battleSys, defender)];
+    int criticalMul = BattleSystem_CalcCriticalMulti(battleSys, battleCtx, attacker, defender, 0, sideConditions);
+    int hit = BattleSystem_CalcMoveDamage(battleSys, battleCtx, move, sideConditions, battleCtx->fieldConditionsMask, 0, 0, attacker, defender, criticalMul) * criticalMul;
+
+    hit = BattleSystem_CalcDamageVariance(battleSys, battleCtx, hit);
+    *moveStatusMask = 0;
+    hit = BattleSystem_ApplyTypeChart(battleSys, battleCtx, move, 0, attacker, defender, hit, moveStatusMask);
+
+    if (criticalMul > 1) {
+        *moveStatusMask |= MOVE_STATUS_CRITICAL_HIT;
+    }
+
+    battleCtx->battleStatusMask = savedStatusMask;
+    battleCtx->battleMons[attacker] = saved;
+
+    *damage = hit * -1;
+    return TRUE;
+}
+
+u8 BattleSystem_GetHiddenPowerType(BattleContext *battleCtx, int battler)
+{
+    BattleMon *mon = &battleCtx->battleMons[battler];
+    u8 type = (mon->hpIV & 1)
+        | ((mon->attackIV & 1) << 1)
+        | ((mon->defenseIV & 1) << 2)
+        | ((mon->speedIV & 1) << 3)
+        | ((mon->spAttackIV & 1) << 4)
+        | ((mon->spDefenseIV & 1) << 5);
+
+    type = type * 15 / 63 + 1;
+
+    if (type >= TYPE_MYSTERY) {
+        type++;
+    }
+
+    return type;
+}
+
+// Sour Platinum: TRUE during the turn an uproar was started (its counter still has the starting value of 3, see
+// subscript_uproar.s)
+BOOL Battle_UproarJustStarted(BattleContext *battleCtx)
+{
+    for (int i = 0; i < MAX_BATTLERS; i++) {
+        if ((battleCtx->fieldConditionsMask & (FlagIndex(i) << FIELD_CONDITION_UPROAR_SHIFT))
+            && ((battleCtx->battleMons[i].statusVolatile & VOLATILE_CONDITION_UPROAR) >> VOLATILE_CONDITION_UPROAR_SHIFT) == 3) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 void BattleSystem_CalcEffectiveness(BattleContext *battleCtx, int move, int inType, int attackerAbility, int defenderAbility, int defenderItemEffect, int defenderType1, int defenderType2, u32 *moveStatusMask)
 {
     int chartEntry;
@@ -3632,6 +3736,7 @@ enum SwitchInCheckState {
     SWITCH_IN_CHECK_STATE_SLOW_START,
     SWITCH_IN_CHECK_STATE_MOLD_BREAKER,
     SWITCH_IN_CHECK_STATE_PRESSURE,
+    SWITCH_IN_CHECK_STATE_CLOUD_NINE,
     SWITCH_IN_CHECK_STATE_FORM_CHANGE,
     SWITCH_IN_CHECK_STATE_AMULET_COIN,
     SWITCH_IN_CHECK_STATE_FORBIDDEN_STATUS,
@@ -4112,6 +4217,28 @@ int BattleSystem_TriggerEffectOnSwitch(BattleSystem *battleSys, BattleContext *b
             }
             break;
 
+        case SWITCH_IN_CHECK_STATE_CLOUD_NINE:
+            // Sour Platinum: Generation 5, a Pokemon with Cloud Nine says that the effects of weather disappeared when it
+            // is brought out
+            for (i = 0; i < maxBattlers; i++) {
+                battler = battleCtx->monSpeedOrder[i];
+
+                if (battleCtx->battleMons[battler].cloudNineAnnounced == FALSE
+                    && battleCtx->battleMons[battler].curHP
+                    && Battler_Ability(battleCtx, battler) == ABILITY_CLOUD_NINE) {
+                    battleCtx->battleMons[battler].cloudNineAnnounced = TRUE;
+                    battleCtx->msgBattlerTemp = battler;
+                    subscript = subscript_cloud_nine;
+                    result = SWITCH_IN_CHECK_RESULT_BREAK;
+                    break;
+                }
+            }
+
+            if (i == maxBattlers) {
+                battleCtx->switchInCheckState++;
+            }
+            break;
+
         case SWITCH_IN_CHECK_STATE_FORM_CHANGE:
             if (BattleSystem_TriggerFormChange(battleSys, battleCtx, &subscript) == TRUE) {
                 result = SWITCH_IN_CHECK_RESULT_BREAK;
@@ -4240,11 +4367,13 @@ BOOL BattleSystem_TriggerAbilityOnHit(BattleSystem *battleSys, BattleContext *ba
             moveType = CURRENT_MOVE_DATA.type;
         }
 
+        // Sour Platinum: Generation 5, with a multi-hit move Color Change only activates after the last hit
         if (DEFENDING_MON.curHP
             && (battleCtx->moveStatusFlags & MOVE_STATUS_NO_EFFECTS) == FALSE
             && battleCtx->moveCur != MOVE_STRUGGLE
             && (DEFENDER_SELF_TURN_FLAGS.physicalDamageTaken || DEFENDER_SELF_TURN_FLAGS.specialDamageTaken)
             && (battleCtx->battleStatusMask2 & SYSCTL_UTURN_ACTIVE) == FALSE
+            && (battleCtx->multiHitNumHits == 0 || battleCtx->multiHitCounter <= 1)
             && CURRENT_MOVE_DATA.power
             && BattleMon_Get(battleCtx, battleCtx->defender, BATTLEMON_TYPE_1, NULL) != moveType
             && BattleMon_Get(battleCtx, battleCtx->defender, BATTLEMON_TYPE_2, NULL) != moveType) {
@@ -4424,8 +4553,14 @@ BOOL BattleSystem_RecoverStatusByAbility(BattleSystem *battleSys, BattleContext 
         break;
 
     case ABILITY_OBLIVIOUS:
-        if (battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_ATTRACT) {
+        // Sour Platinum: a Mental Herb is used first (Generation 5), and Oblivious also shakes off a taunt
+        // (Generation 6-7)
+        if ((battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_ATTRACT)
+            && Battler_HeldItemEffect(battleCtx, battler) != HOLD_EFFECT_HEAL_INFATUATION) {
             battleCtx->msgTemp = MSGCOND_INFATUATION;
+            result = TRUE;
+        } else if (battleCtx->battleMons[battler].moveEffectsData.tauntedTurns) {
+            battleCtx->msgTemp = MSGCOND_TAUNT;
             result = TRUE;
         }
         break;

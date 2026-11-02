@@ -132,6 +132,37 @@ Party *BattleSystem_GetParty(BattleSystem *battleSys, int battler)
     }
 }
 
+// Sour Platinum: like Generation 5, an item stolen from a trainer's Pokemon (Thief, Covet) is only kept for the battle
+void BattleSystem_MarkStolenItem(BattleSystem *battleSys, int battler, int slot)
+{
+    if ((battleSys->battleType & BATTLE_TYPE_TRAINER) == FALSE) {
+        return; // items stolen from wild Pokemon are kept
+    }
+
+    for (int i = 0; i < MAX_BATTLERS; i++) {
+        if (battleSys->parties[i] == BattleSystem_GetParty(battleSys, battler)) {
+            battleSys->stolenItemSlots[i] |= 1 << slot;
+            return;
+        }
+    }
+}
+
+// Called when the battle ends: the Pokemon that stole an item lose it again
+void BattleSystem_ReturnStolenItems(BattleSystem *battleSys)
+{
+    u16 item = ITEM_NONE;
+
+    for (int i = 0; i < MAX_BATTLERS; i++) {
+        for (int slot = 0; slot < Party_GetCurrentCount(battleSys->parties[i]); slot++) {
+            if (battleSys->stolenItemSlots[i] & (1 << slot)) {
+                Pokemon_SetValue(Party_GetPokemonBySlotIndex(battleSys->parties[i], slot), MON_DATA_HELD_ITEM, &item);
+            }
+        }
+
+        battleSys->stolenItemSlots[i] = 0;
+    }
+}
+
 int BattleSystem_GetPartyCount(BattleSystem *battleSys, int battler)
 {
     if ((battleSys->battleType & BATTLE_TYPE_2vs2)

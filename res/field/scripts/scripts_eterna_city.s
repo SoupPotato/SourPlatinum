@@ -181,6 +181,7 @@ EternaCity_CynthiaGiveCut:
     SetVar VAR_0x8004, ITEM_HM01
     SetVar VAR_0x8005, 1
     Common_GiveItemQuantity
+    Common_HiddenMovesAppNewMove
     Message EternaCity_Text_CutCanBeUsedInField
     CloseMessage
     GetPlayerMapPos VAR_0x8004, VAR_0x8005

@@ -2,9 +2,11 @@
 
 
 _000:
-    UpdateVar OPCODE_FLAG_ON, BTLVAR_BATTLE_CTX_STATUS, SYSCTL_IGNORE_IMMUNITIES
+    // Sour Platinum: Generation 5 Beat Up. BeatUp counts the hits and sets the power of each one, and CalcDamage works out
+    // the damage like any other Dark move (it used to be typeless, which is why immunities were ignored). It ends with
+    // "Hit X time(s)!" like other multi-hit moves instead of announcing each party member's attack.
+    UpdateVar OPCODE_SET, BTLVAR_AFTER_MOVE_MESSAGE_TYPE, AFTER_MOVE_MESSAGE_MULTI_HIT
     CalcCrit 
     BeatUp 
-    UpdateVar OPCODE_SET, BTLVAR_SIDE_EFFECT_FLAGS_DIRECT, MOVE_SIDE_EFFECT_ON_HIT|MOVE_SUBSCRIPT_PTR_FUTURE_SIGHT_START
-    UpdateVar OPCODE_FLAG_ON, BTLVAR_BATTLE_CTX_STATUS, SYSCTL_MULTI_HIT_SKIP_MESSAGE
+    CalcDamage 
     End 

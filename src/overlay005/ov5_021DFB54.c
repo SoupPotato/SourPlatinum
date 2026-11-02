@@ -30,6 +30,7 @@
 #include "encounter.h"
 #include "field_battle_data_transfer.h"
 #include "field_bgm.h"
+#include "field_move_tasks.h"
 #include "field_task.h"
 #include "game_records.h"
 #include "heap.h"
@@ -1784,6 +1785,6 @@ static void MonRideTaskEnv_Free(void *taskEnv)
 
 static Pokemon *GetPokemonByIndex(FieldSystem *fieldSystem, int partySlot)
 {
-    Pokemon *partyMon = Party_GetPokemonBySlotIndex(SaveData_GetParty(fieldSystem->saveData), partySlot);
+    Pokemon *partyMon = FieldMoves_GetPokemonBySlot(SaveData_GetParty(fieldSystem->saveData), partySlot);
     return partyMon;
 }

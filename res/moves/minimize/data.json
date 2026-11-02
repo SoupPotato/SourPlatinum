@@ -3,9 +3,9 @@
     "description": [
         "The user compresses\n",
         "its body to make\n",
-        "itself look smaller.\n",
-        "The user’s evasion\n",
-        "stat is boosted."
+        "itself look smaller,\n",
+        "which sharply raises\n",
+        "its evasiveness."
     ],
     "class": "CLASS_STATUS",
     "type": "TYPE_NORMAL",

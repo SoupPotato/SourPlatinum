@@ -98,6 +98,7 @@ IronIsland_Riley:
     SetVar VAR_0x8004, ITEM_HM04
     SetVar VAR_0x8005, 1
     Common_GiveItemQuantity
+    Common_HiddenMovesAppNewMove
     CheckBadgeAcquired BADGE_ID_MINE, VAR_RESULT
     GoToIfEq VAR_RESULT, FALSE, IronIsland_YouNeedMineBadge
     GoTo IronIsland_YouCanJoinMeInside

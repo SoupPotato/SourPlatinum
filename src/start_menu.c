@@ -1599,7 +1599,7 @@ BOOL StartMenu_FlyDestinationSelected(FieldTask *fieldTask)
             StartMenu_SetCallback(menu, StartMenu_ExitPartyMenu);
         }
     } else {
-        Pokemon *mon = Party_GetPokemonBySlotIndex(SaveData_GetParty(fieldSystem->saveData), slot);
+        Pokemon *mon = FieldMoves_GetPokemonBySlot(SaveData_GetParty(fieldSystem->saveData), slot);
         FlyContext *flyCtx = FlyContext_New(HEAP_ID_FIELD2, fieldSystem, mon, mapCtx->flyLocationMapHeader, mapCtx->flyLocationX * MAP_TILES_COUNT_X + MAP_TILES_COUNT_X / 2, mapCtx->flyLocationZ * MAP_TILES_COUNT_Z + MAP_TILES_COUNT_Z / 2);
         void *journalEntryLocationEvent = JournalEntry_CreateEventUsedMove(FIELD_MOVE_FLY, mapCtx->flyLocationMapHeader, HEAP_ID_FIELD2);
 
@@ -1607,7 +1607,8 @@ BOOL StartMenu_FlyDestinationSelected(FieldTask *fieldTask)
         Heap_FreeExplicit(HEAP_ID_FIELD2, menu->taskData);
         FieldSystem_StartFieldMap(fieldSystem);
 
-        menu->callback = FieldMoves_FlyTask;
+        // Sour Platinum: the app shows its summoning message first
+        menu->callback = menu->fromPoketch ? FieldMoves_PoketchFlyScriptTask : FieldMoves_FlyTask;
         menu->taskData = flyCtx;
         menu->state = START_MENU_STATE_NEW_TASK;
     }
@@ -1791,22 +1792,12 @@ static void StartMenu_Evolve(FieldTask *fieldTask)
     }
 }
 
-// Sour Platinum: the Poketch field moves app. It uses the same tasks as the party menu, with the first Pokemon in the
-// party (that isn't an Egg) as the user of the move. The move is stored in menu->cursorPos.
-static int StartMenu_GetPoketchFieldMoveUser(FieldSystem *fieldSystem)
+// Sour Platinum: the Poketch field moves app. It uses the same tasks as the party menu, but the user of the move is a
+// fixed helper Pokemon per move instead of a party member (see FieldMoves_GetPokemonBySlot). The move is stored in
+// menu->cursorPos.
+static int StartMenu_GetPoketchFieldMoveUser(enum FieldMoveList fieldMove)
 {
-    Party *party = SaveData_GetParty(fieldSystem->saveData);
-    int count = Party_GetCurrentCount(party);
-
-    for (int slot = 0; slot < count; slot++) {
-        Pokemon *mon = Party_GetPokemonBySlotIndex(party, slot);
-
-        if (Pokemon_GetValue(mon, MON_DATA_IS_EGG, NULL) == FALSE) {
-            return slot;
-        }
-    }
-
-    return 0;
+    return FIELD_MOVE_HELPER_SLOT_BASE + fieldMove;
 }
 
 static BOOL StartMenu_PoketchFieldMove(FieldTask *fieldTask)
@@ -1842,7 +1833,7 @@ static BOOL StartMenu_PoketchFieldMove(FieldTask *fieldTask)
             FieldMovePokemon fieldMoveMon;
 
             fieldMoveMon.fieldMove = fieldMove;
-            fieldMoveMon.fieldMonId = StartMenu_GetPoketchFieldMoveUser(fieldSystem);
+            fieldMoveMon.fieldMonId = StartMenu_GetPoketchFieldMoveUser(fieldMove);
             fieldMoveMon.fieldTask = fieldTask;
 
             FieldMoveTask task = (FieldMoveTask)FieldMove_GetTaskOrError(FIELD_MOVE_TASK, fieldMove);
@@ -1858,7 +1849,7 @@ static BOOL StartMenu_PoketchFieldMove(FieldTask *fieldTask)
             FieldMovePokemon fieldMoveMon;
 
             fieldMoveMon.fieldMove = FIELD_MOVE_FLY;
-            fieldMoveMon.fieldMonId = StartMenu_GetPoketchFieldMoveUser(fieldSystem);
+            fieldMoveMon.fieldMonId = StartMenu_GetPoketchFieldMoveUser(FIELD_MOVE_FLY);
             fieldMoveMon.fieldTask = fieldTask;
 
             FieldMoveTask task = (FieldMoveTask)FieldMove_GetTaskOrError(FIELD_MOVE_TASK, FIELD_MOVE_FLY);

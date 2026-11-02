@@ -107,6 +107,9 @@ foreach species : species_dirnames
     if species not in ['none', 'egg', 'bad_egg']
         cry_banks += files(species / 'cry.txt')
         cry_waves += files(species / 'cry.wav')
+        # Sour Platinum: the palettes are inputs of pl_pokegra.narc too, so changing one rebuilds it (only the
+        # images were listed, and a palette edit never reached the ROM)
+        pokegra_files += files(species / 'normal.pal', species / 'shiny.pal')
     endif
 endforeach
 

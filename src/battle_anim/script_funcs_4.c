@@ -10,6 +10,7 @@
 #include "battle_anim/battle_anim_util.h"
 
 #include "battle_script_battlers.h"
+#include "battle_time.h"
 #include "bg_window.h"
 #include "heap.h"
 #include "math_util.h"
@@ -850,7 +851,7 @@ static void BattleAnimTask_Camouflage(SysTask *task, void *param)
             CAMOUFLAGE_BG_SCROLL_END_Y,
             CAMOUFLAGE_BG_SCROLL_ANGLE_STEP,
             CAMOUFLAGE_BG_SCROLL_AMPLITUDE,
-            CAMOUFLAGE_BG_SCROLL_SPEED,
+            CAMOUFLAGE_BG_SCROLL_SPEED * gBattleAnimSpeedPercent / 100, // Sour Platinum: follows SetAnimSpeed
             BattleAnimSystem_GetBgID(ctx->common.battleAnimSys, BATTLE_ANIM_BG_BASE),
             0,
             BattleAnimUtil_MakeBgOffsetValue(0, 0),
@@ -859,7 +860,8 @@ static void BattleAnimTask_Camouflage(SysTask *task, void *param)
         break;
     case CAMOUFLAGE_STATE_SCROLL:
         ctx->timer++;
-        if (ctx->timer < CAMOUFLAGE_BG_SCROLL_FRAMES) {
+        // Sour Platinum: the length of the ripple follows SetAnimSpeed (the fades already do)
+        if (ctx->timer < (int)BattleTime_ScaleBySpeed(CAMOUFLAGE_BG_SCROLL_FRAMES)) {
             break;
         }
 

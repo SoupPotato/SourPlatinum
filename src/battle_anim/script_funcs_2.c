@@ -1288,6 +1288,14 @@ static void BattleAnimTask_QuickAttack(SysTask *task, void *param)
     transformsActive[1] = Afterimage_Update(&ctx->afterImageCtx);
     transformsActive[2] = FALSE;
 
+    // Sour Platinum: like the sprite (see below), an afterimage on the last step of its turn is put on the exact start
+    // position. The rounded step size made it end 1 pixel left of the sprite.
+    for (int i = 0; i < ctx->afterImageCtx.activeCount; i++) {
+        if (ctx->afterImageCtx.transforms[i].data[XY_PARAM_REV_STEPS] == 0) {
+            ManagedSprite_SetPositionXY(ctx->afterimageSprites[i], ctx->afterImageCtx.x, ctx->afterImageCtx.y + (REVOLUTION_CONTEXT_OVAL_RADIUS_Y >> FX32_SHIFT));
+        }
+    }
+
     if (transformsActive[0] == FALSE) {
         // Sour Platinum: the oval does not always end exactly on its start (the step size is rounded), which left
         // the sprite 1 pixel off while the afterimages finished. Rest at the exact original position.
@@ -1965,6 +1973,7 @@ void BattleAnimScriptFunc_AcidArmor(BattleAnimSystem *system)
 
     PosLerpContext_Init(&ctx->pos, 0, ACID_ARMOR_MOVE_X, 0, ACID_ARMOR_MOVE_Y, ACID_ARMOR_MOVE_FRAMES);
     ctx->pos.data[XY_PARAM_STEP_SIZE_X] *= dir;
+    ctx->pos.data[XY_PARAM_END_X] *= dir; // Sour Platinum: the 60 fps end position (the movement starts at 0)
 
     int battlerType = BattleAnimUtil_GetBattlerType(ctx->battleAnimSys, BattleAnimSystem_GetAttacker(system));
     if (battlerType == BATTLER_TYPE_ENEMY_SIDE_SLOT_1 || battlerType == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
@@ -4957,19 +4966,19 @@ static void ExtrasensoryContext_SetParameters(ExtrasensoryContext *ctx)
         ctx->baseAngle = EXTRASENSORY_DISTORTION_1_ANGLE;
         ctx->amplitudeStep = EXTRASENSORY_DISTORTION_1_STEP;
         ctx->baseAmplitude = EXTRASENSORY_DISTORTION_1_AMPLITUDE;
-        ctx->delay = EXTRASENSORY_DISTORTION_1_FRAMES;
+        ctx->delay = BattleTime_ScaleBySpeed(EXTRASENSORY_DISTORTION_1_FRAMES); // Sour Platinum: follows SetAnimSpeed
         break;
     case 1:
         ctx->baseAngle = EXTRASENSORY_DISTORTION_2_ANGLE;
         ctx->amplitudeStep = EXTRASENSORY_DISTORTION_2_STEP;
         ctx->baseAmplitude = EXTRASENSORY_DISTORTION_2_AMPLITUDE;
-        ctx->delay = EXTRASENSORY_DISTORTION_2_FRAMES;
+        ctx->delay = BattleTime_ScaleBySpeed(EXTRASENSORY_DISTORTION_2_FRAMES); // Sour Platinum: follows SetAnimSpeed
         break;
     case 2:
         ctx->baseAngle = EXTRASENSORY_DISTORTION_3_ANGLE;
         ctx->amplitudeStep = EXTRASENSORY_DISTORTION_3_STEP;
         ctx->baseAmplitude = EXTRASENSORY_DISTORTION_3_AMPLITUDE;
-        ctx->delay = EXTRASENSORY_DISTORTION_3_FRAMES;
+        ctx->delay = BattleTime_ScaleBySpeed(EXTRASENSORY_DISTORTION_3_FRAMES); // Sour Platinum: follows SetAnimSpeed
         break;
     }
 }

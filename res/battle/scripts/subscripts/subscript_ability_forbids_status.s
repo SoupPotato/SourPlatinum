@@ -2,6 +2,8 @@
 
 
 _000:
+    // Sour Platinum: Oblivious shaking off a taunt
+    CompareVarToValue OPCODE_EQU, BTLVAR_MSG_TEMP, 7, _taunt
     // {0} cured its {2} status with its {1}!
     PrintMessage BattleStrings_Text_PokemonCuredItsStatusWithItsAbility_Ally, TAG_NICKNAME_ABILITY_STATUS, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP
     Wait 
@@ -26,4 +28,13 @@ _052:
     UpdateMonData OPCODE_FLAG_OFF, BTLSCR_MSG_TEMP, BATTLEMON_VOLATILE_STATUS, VOLATILE_CONDITION_ATTRACT
 
 _057:
+    End 
+
+_taunt:
+    UpdateMonData OPCODE_SET, BTLSCR_MSG_TEMP, BATTLEMON_TAUNTED_TURNS, 0
+    UpdateVar OPCODE_SET, BTLVAR_MSG_MOVE_TEMP, MOVE_TAUNT
+    // {0}’s {1} wore off!
+    PrintMessage BattleStrings_Text_PokemonsTauntWoreOff_Ally, TAG_NICKNAME_MOVE, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP
+    Wait
+    WaitButtonABTime 30
     End 

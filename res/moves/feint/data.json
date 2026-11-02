@@ -18,7 +18,9 @@
     },
     "range": "RANGE_SINGLE_TARGET",
     "priority": 2,
-    "flags": [],
+    "flags": [
+        "MOVE_FLAG_CAN_MIRROR_MOVE"
+    ],
     "contest": {
         "effect": "CONTEST_EFFECT_LOW_VOLTAGE_ADVANTAGE",
         "type": "CONTEST_TYPE_BEAUTY"

@@ -2397,6 +2397,24 @@ u8 Pokemon_GetNature(Pokemon *mon)
     return BoxPokemon_GetNature(&mon->box);
 }
 
+u8 Pokemon_GetHiddenPowerType(Pokemon *mon)
+{
+    u8 type = (Pokemon_GetValue(mon, MON_DATA_HP_IV, NULL) & 1)
+        | ((Pokemon_GetValue(mon, MON_DATA_ATK_IV, NULL) & 1) << 1)
+        | ((Pokemon_GetValue(mon, MON_DATA_DEF_IV, NULL) & 1) << 2)
+        | ((Pokemon_GetValue(mon, MON_DATA_SPEED_IV, NULL) & 1) << 3)
+        | ((Pokemon_GetValue(mon, MON_DATA_SPATK_IV, NULL) & 1) << 4)
+        | ((Pokemon_GetValue(mon, MON_DATA_SPDEF_IV, NULL) & 1) << 5);
+
+    type = type * 15 / 63 + 1;
+
+    if (type >= TYPE_MYSTERY) {
+        type++;
+    }
+
+    return type;
+}
+
 u8 BoxPokemon_GetNature(BoxPokemon *boxMon)
 {
     BOOL reencrypt = BoxPokemon_EnterDecryptionContext(boxMon);
