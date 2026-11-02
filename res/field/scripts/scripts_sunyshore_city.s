@@ -444,6 +444,8 @@ SunyshoreCity_GiveWaterfall:
     Common_GiveItemQuantity
     SetFlag FLAG_RECEIVED_SUNYSHORE_CITY_HM07
     Message SunyshoreCity_Text_ThatHMContainsWaterfall
+    SetVar VAR_0x8004, ITEM_HM07
+    Common_HiddenMovesAppNewMove
     Return
 
 SunyshoreCity_OnFrame_Flint:

@@ -10,6 +10,7 @@
 
 #include "appearance.h"
 #include "berry_data.h"
+#include "field_move_tasks.h"
 #include "field_script_context.h"
 #include "field_system.h"
 #include "inlines.h"
@@ -193,7 +194,7 @@ BOOL ScrCmd_BufferPartyMonNickname(ScriptContext *ctx)
     u8 templateArg = ScriptContext_ReadByte(ctx);
     u16 partySlot = ScriptContext_GetVar(ctx);
 
-    Pokemon *mon = Party_GetPokemonBySlotIndex(SaveData_GetParty(fieldSystem->saveData), partySlot);
+    Pokemon *mon = FieldMoves_GetPokemonBySlot(SaveData_GetParty(fieldSystem->saveData), partySlot);
     StringTemplate_SetNickname(*strTemplate, templateArg, (BoxPokemon *)mon);
 
     return FALSE;
@@ -582,6 +583,20 @@ BOOL ScrCmd_CapitalizeFirstLetter(ScriptContext *ctx)
     u8 templateArg = ScriptContext_ReadByte(ctx);
 
     StringTemplate_CapitalizeArgAtIndex(*strTemplate, templateArg);
+    return FALSE;
+}
+
+// Also works for the slot codes of the Hidden Moves app helper Pokemon
+BOOL ScrCmd_BufferPartyMonSpeciesNameWithArticle(ScriptContext *ctx)
+{
+    FieldSystem *fieldSystem = ctx->fieldSystem;
+    StringTemplate **strTemplate = FieldSystem_GetScriptMemberPtr(fieldSystem, SCRIPT_MANAGER_STR_TEMPLATE);
+    u8 templateArg = ScriptContext_ReadByte(ctx);
+    u16 partySlot = ScriptContext_GetVar(ctx);
+
+    Pokemon *mon = FieldMoves_GetPokemonBySlot(SaveData_GetParty(fieldSystem->saveData), partySlot);
+    StringTemplate_SetSpeciesNameWithArticle(*strTemplate, templateArg, (BoxPokemon *)mon);
+
     return FALSE;
 }
 

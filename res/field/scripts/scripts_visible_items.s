@@ -2392,6 +2392,7 @@ VisibleItems_MessagePlayerPutItemInItemPocket:
     CreateJournalEvent LOCATION_EVENT_ITEM_WAS_OBTAINED, VAR_0x8004
     Message VisibleItems_Text_PlayerPutItemInItemPocket2
     WaitButton
+    Common_HiddenMovesAppNewMove
     SetVar VAR_RESULT, TRUE
     GoTo VisibleItems_End
     End

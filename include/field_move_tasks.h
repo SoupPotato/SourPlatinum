@@ -1,6 +1,7 @@
 #ifndef POKEPLATINUM_FIELD_MOVE_TASKS_H
 #define POKEPLATINUM_FIELD_MOVE_TASKS_H
 
+#include "constants/field/field_move_helper.h"
 #include "generated/map_headers.h"
 
 #include "struct_decls/map_object.h"
@@ -8,6 +9,7 @@
 #include "field/field_system_decl.h"
 
 #include "field_task.h"
+#include "party.h"
 #include "pokemon.h"
 
 typedef struct FieldMoveContext {
@@ -70,6 +72,10 @@ typedef enum FieldMoveError (*FieldMoveErrContext)(const FieldMoveContext *);
 
 FlyContext *FlyContext_New(enum HeapID heapID, FieldSystem *fieldSystem, Pokemon *mon, u16 mapID, s16 x, s16 z);
 BOOL FieldMoves_FlyTask(FieldTask *fieldTask);
+BOOL FieldMoves_PoketchFlyScriptTask(FieldTask *fieldTask);
+Pokemon *FieldMoves_GetPokemonBySlot(Party *party, int slot);
+u16 FieldMoves_GetHelperSpecies(enum FieldMoveList fieldMove);
+BOOL FieldMoves_CanUsePoketchApp(FieldSystem *fieldSystem, enum FieldMoveList fieldMove);
 void *FieldMove_GetTaskOrError(u16 taskOrError, u16 fieldMove);
 void FieldMoves_SetUsableMoves(FieldSystem *fieldSystem, FieldMoveContext *fieldMoveContext);
 BOOL FieldMoves_HasBadgeForMove(FieldSystem *fieldSystem, enum FieldMoveList fieldMove);
