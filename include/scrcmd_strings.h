@@ -49,5 +49,6 @@ BOOL ScrCmd_BufferTrainerClassNameWithArticle(ScriptContext *ctx);
 BOOL ScrCmd_BufferBallSealNamePlural(ScriptContext *ctx);
 BOOL ScrCmd_CapitalizeFirstLetter(ScriptContext *ctx);
 BOOL ScrCmd_BufferFloorNumber(ScriptContext *ctx);
+BOOL ScrCmd_BufferPartyMonSpeciesNameWithArticle(ScriptContext *ctx);
 
 #endif // POKEPLATINUM_SCRCMD_STRINGS_H

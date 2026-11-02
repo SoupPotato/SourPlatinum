@@ -37,6 +37,7 @@
 #include "encounter.h"
 #include "field_comm_manager.h"
 #include "field_map_change.h"
+#include "field_move_tasks.h"
 #include "field_overworld_state.h"
 #include "game_records.h"
 #include "inlines.h"
@@ -688,7 +689,8 @@ u16 Field_TileBehaviorToScript(FieldSystem *fieldSystem, u8 behavior)
         u32 distortionBehavior = PlayerAvatar_GetDistortionCurrTileBehaviour(fieldSystem->playerAvatar);
 
         if (PlayerAvatar_CanUseSurf(fieldSystem->playerAvatar, distortionBehavior, behavior) && TrainerInfo_HasBadge(info, 3)) {
-            if (Party_HasMonWithMove(SaveData_GetParty(fieldSystem->saveData), MOVE_SURF) != PARTY_SLOT_NONE) {
+            if (Party_HasMonWithMove(SaveData_GetParty(fieldSystem->saveData), MOVE_SURF) != PARTY_SLOT_NONE
+                || FieldMoves_CanUsePoketchApp(fieldSystem, FIELD_MOVE_SURF)) {
                 return SCRIPT_ID(FIELD_MOVES, 4);
             }
         }

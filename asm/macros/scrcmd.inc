@@ -4995,6 +4995,20 @@
     .byte \floor
     .endm
 
+    .macro UseFlyFromApp partySlot, mapID, x, z
+    .short SCRCMD_USEFLYFROMAPP
+    .short \partySlot
+    .short \mapID
+    .short \x
+    .short \z
+    .endm
+
+    .macro BufferPartyMonSpeciesNameWithArticle templateArg, partySlot
+    .short SCRCMD_BUFFERPARTYMONSPECIESNAMEWITHARTICLE
+    .byte \templateArg
+    .short \partySlot
+    .endm
+
 
 
     .macro GoToIfLt varID, valueOrVarID, offset
@@ -5261,6 +5275,10 @@
 
     .macro Common_GivePoketchApp
     CallCommonScript 0x7D9
+    .endm
+
+    .macro Common_HiddenMovesAppNewMove
+    CallCommonScript 0x80A
     .endm
 
     .macro Common_SendToUndergroundPC
