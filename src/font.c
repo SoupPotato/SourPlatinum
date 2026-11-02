@@ -43,6 +43,10 @@ static const struct {
         .arcFileIdx = font_unown_NFGR,
         .isMonospace = FALSE,
     },
+    [FONT_BANNER] = {
+        .arcFileIdx = font_banner_NFGR,
+        .isMonospace = FALSE,
+    },
 };
 
 static const FontAttributes sFontAttributes[FONT_MAX + 1] = {
@@ -74,6 +78,15 @@ static const FontAttributes sFontAttributes[FONT_MAX + 1] = {
         .shadowColor = 2,
     },
     [FONT_UNOWN] = {
+        .maxLetterWidth = 11,
+        .maxLetterHeight = 16,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .fgColor = 1,
+        .bgColor = 15,
+        .shadowColor = 2,
+    },
+    [FONT_BANNER] = {
         .maxLetterWidth = 11,
         .maxLetterHeight = 16,
         .letterSpacing = 0,
