@@ -54,9 +54,9 @@
 
 // Position of the center of the banner on the top screen
 #define ABILITY_BANNER_PLAYER_X        64
-#define ABILITY_BANNER_PLAYER_Y        124
+#define ABILITY_BANNER_PLAYER_Y        123
 #define ABILITY_BANNER_ENEMY_X         192
-#define ABILITY_BANNER_ENEMY_Y         60
+#define ABILITY_BANNER_ENEMY_Y         59
 #define ABILITY_BANNER_OFFSCREEN_DX    128 // how far from its resting position the banner starts
 #define ABILITY_BANNER_SLIDE_SPEED     16
 #define ABILITY_BANNER_HOLD_FRAMES     45 // the banner stays at least this long
@@ -79,8 +79,8 @@
 #define ABILITY_BANNER_PLAYER_TEXT_CENTER 53
 #define ABILITY_BANNER_TEXT_STAGGER       16 // the ability starts at least this far right of the name
 #define ABILITY_BANNER_ENEMY_TEXT_CENTER  74
-#define ABILITY_BANNER_LINE_1_Y    6
-#define ABILITY_BANNER_LINE_2_Y    18
+#define ABILITY_BANNER_LINE_1_Y    8
+#define ABILITY_BANNER_LINE_2_Y    19
 
 enum AbilityBannerState {
     ABILITY_BANNER_STATE_SLIDE_IN = 0,
