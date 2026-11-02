@@ -129,12 +129,11 @@ CelesticTownCave_DefeatedCyrus:
     SetVar VAR_0x8004, ITEM_HM03
     SetVar VAR_0x8005, 1
     Common_GiveItemQuantity
+    Common_HiddenMovesAppNewMove
     SetFlag FLAG_HIDE_CELESTIC_TOWN_ELDER
     ClearFlag FLAG_HIDE_CELESTIC_TOWN_NORTH_HOUSE_ELDER
     SetFlag FLAG_DUMMY_0x098D
     Message CelesticTownCave_Text_SurfAcrossWater
-    SetVar VAR_0x8004, ITEM_HM03
-    Common_HiddenMovesAppNewMove
     CloseMessage
     GetPlayerMapPos VAR_0x8004, VAR_0x8005
     CallIfEq VAR_0x8004, 9, CelesticTownCave_ElderLeaveX9
