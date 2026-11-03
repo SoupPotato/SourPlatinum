@@ -21,6 +21,7 @@
 
 #include "spl_emitter.h"
 
+#include "battle/ability_banner.h"
 #include "battle/battle_context.h"
 #include "battle/battle_controller.h"
 #include "battle/battle_controller_player.h"
@@ -335,6 +336,7 @@ void BattleSystem_FreeGraphics(BattleSystem *battleSys)
     BattleMain_FreeBgLayers(battleSys->bgConfig);
     Dummy_0223C2BC(battleSys);
 
+    AbilityBanner_FreeAll();
     SpriteSystem_FreeResourcesAndManager(battleSys->spriteSys, battleSys->spriteMan);
     SpriteSystem_Free(battleSys->spriteSys);
     VramTransfer_Free();

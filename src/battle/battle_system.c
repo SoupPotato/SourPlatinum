@@ -21,6 +21,7 @@
 #include "struct_defs/chatot_cry.h"
 #include "struct_defs/trainer.h"
 
+#include "battle/ability_banner.h"
 #include "battle/battle_context.h"
 #include "battle/battle_display.h"
 #include "battle/battle_lib.h"
@@ -1625,6 +1626,8 @@ u8 BattleMessage_PrintTrainerMessage(BattleSystem *battleSys, int trainerID, int
     Window *window = BattleSystem_GetWindow(battleSys, 0);
     int printerID;
 
+    AbilityBanner_OnMessageBoxCleared();
+
     if (battleSys->battleType & BATTLE_TYPE_FRONTIER) {
         if (trainerID == 10000) {
             String *string;
@@ -1683,6 +1686,9 @@ u8 BattleMessage_PrintTrainerMessage(BattleSystem *battleSys, int trainerID, int
 u8 BattleMessage_Print(BattleSystem *battleSys, MessageLoader *msgLoader, BattleMessage *battleMsg, int renderDelay)
 {
     Window *textWindow = BattleSystem_GetWindow(battleSys, 0);
+
+    // Sour Platinum: this message replaces the one that an ability banner stays up for
+    AbilityBanner_OnMessage(battleMsg);
 
     BattleMessage_CheckSide(battleSys, battleMsg);
     BattleMessage_FillFormatBuffers(battleSys, battleMsg);

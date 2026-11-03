@@ -32,6 +32,9 @@ void AbilityBanner_OnMessage(const BattleMessage *battleMsg);
 // The message box was cleared: the banner goes away
 void AbilityBanner_OnMessageBoxCleared(void);
 
+// The battle is ending: the banners use its sprites, so they go away first
+void AbilityBanner_FreeAll(void);
+
 // A message that doesn't name an ability is printed while a banner waits for its message: the banner stays until it is done
 void AbilityBanner_AttachMessage(u8 msgIdx);
 
