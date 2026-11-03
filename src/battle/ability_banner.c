@@ -34,10 +34,11 @@
 #include "res/text/bank/battle_strings.h"
 
 // Resource IDs of the sprite resources while the banner is showing
-#define ABILITY_BANNER_RESID_CHAR 21100
-#define ABILITY_BANNER_RESID_PLTT 21101
-#define ABILITY_BANNER_RESID_CELL 21102
-#define ABILITY_BANNER_RESID_ANIM 21103
+// (one set for the banner of each side, since a banner can stay up while the banner of the other side comes in)
+#define ABILITY_BANNER_RESID_CHAR(side) (21100 + (side) * 10)
+#define ABILITY_BANNER_RESID_PLTT(side) (21101 + (side) * 10)
+#define ABILITY_BANNER_RESID_CELL(side) (21102 + (side) * 10)
+#define ABILITY_BANNER_RESID_ANIM(side) (21103 + (side) * 10)
 
 #define ABILITY_BANNER_WIDTH_TILES  16
 #define ABILITY_BANNER_HEIGHT_TILES 4
@@ -67,7 +68,7 @@
 // A banner that is shown before the effect of an ability (see BattleStrings_Text_AbilityBanner) waits for the message
 // of the ability, however long the effect takes. If none comes at all, it goes away after this long.
 #define ABILITY_BANNER_WAIT_FOR_MESSAGE_FRAMES 600
-#define ABILITY_BANNER_LINGER_FRAMES           300 // the longest that the banner stays after its message is printed
+#define ABILITY_BANNER_LINGER_FRAMES           1200 // a safety net: the banner leaves when its message is replaced or the message box is cleared
 
 // Palette indexes of banner.png
 #define ABILITY_BANNER_COLOR_TEXT        1
@@ -99,6 +100,8 @@ typedef struct AbilityBanner {
     u16 timeout; // frames until the banner goes away when it has no message
     u16 lingerFrames; // frames since the message was printed; the banner stays while the message is on the screen
     u8 messageGone; // the message was replaced or cleared
+    u8 printed; // the message was seen done printing; its printer is not checked after that, since its number is used again
+    u8 side; // 0 for the banner of the player's side, 1 for the enemy's
     int owner; // battler and party slot of the Pokemon, as in the message tags; -1 for other banners
     s16 restX;
     s16 x;
@@ -106,7 +109,10 @@ typedef struct AbilityBanner {
     u16 colors[PALETTE_SIZE]; // the colors of the banner, to fade back to after the flash
 } AbilityBanner;
 
-static AbilityBanner *sAbilityBanner = NULL;
+// One banner for each side. A banner that is up for an ability that was suppressed (Intimidate against Clear Body) stays
+// until the banner of the ability that suppressed it, which has the message, is gone.
+static AbilityBanner *sAbilityBanners[2] = { NULL, NULL };
+static AbilityBanner *sLastBanner = NULL; // the last banner that came in: the one that gets the next message
 
 // The sounds of the banner are loaded into the sound heap while it is showing and freed after it, so that they don't
 // take room from the battle music (the trainer music does not fit next to them)
@@ -227,18 +233,23 @@ void AbilityBanner_TryShow(BattleSystem *battleSys, const BattleMessage *battleM
 
     BOOL bannerOnly = (msgIdx == ABILITY_BANNER_NO_MESSAGE);
 
+    int battler = owner & 0xFF;
+    AbilityBanner *shown = sAbilityBanners[BattleSystem_GetBattlerSide(battleSys, battler) == 0 ? 0 : 1];
+
     // The banner was already shown before the effect of the ability: it stays until this message is done
-    if (sAbilityBanner != NULL && sAbilityBanner->owner == (owner & 0xFFFF)) {
+    if (shown != NULL && shown->owner == (owner & 0xFFFF)) {
         if (bannerOnly) {
-            sAbilityBanner->timeout = ABILITY_BANNER_WAIT_FOR_MESSAGE_FRAMES;
+            shown->timeout = ABILITY_BANNER_WAIT_FOR_MESSAGE_FRAMES;
         } else {
-            sAbilityBanner->msgIdx = msgIdx;
+            shown->msgIdx = msgIdx;
+            shown->printed = FALSE;
+            shown->messageGone = FALSE;
+            sLastBanner = shown;
         }
 
         return;
     }
 
-    int battler = owner & 0xFF;
     int partySlot = (owner >> 8) & 0xFF;
     Pokemon *mon = BattleSystem_GetPartyPokemon(battleSys, battler, partySlot);
 
@@ -281,8 +292,11 @@ void AbilityBanner_TryShow(BattleSystem *battleSys, const BattleMessage *battleM
 
 static AbilityBanner *AbilityBanner_New(BattleSystem *battleSys, const String *line1, const String *line2, BOOL isPlayerSide)
 {
-    if (sAbilityBanner != NULL) {
-        AbilityBanner_Free(sAbilityBanner);
+    int side = isPlayerSide ? 0 : 1;
+
+    // A new banner replaces the one of its side
+    if (sAbilityBanners[side] != NULL) {
+        AbilityBanner_Free(sAbilityBanners[side]);
     }
 
     // Without room for the palette there is no banner, the message is enough
@@ -296,10 +310,10 @@ static AbilityBanner *AbilityBanner_New(BattleSystem *battleSys, const String *l
     NARC *narc = NARC_ctor(NARC_INDEX_BATTLE__GRAPHIC__PL_BATT_OBJ, HEAP_ID_BATTLE);
 
     // The palette goes into the palette buffer too, because the battle copies the buffer to the screen every frame
-    SpriteSystem_LoadCharResObjFromOpenNarc(spriteSys, spriteMan, narc, ability_banner_banner_NCGR_lz, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, ABILITY_BANNER_RESID_CHAR);
-    u8 paletteSlot = SpriteSystem_LoadPaletteBufferFromOpenNarc(paletteData, PLTTBUF_MAIN_OBJ, spriteSys, spriteMan, narc, ability_banner_banner_NCLR, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, ABILITY_BANNER_RESID_PLTT);
-    SpriteSystem_LoadCellResObjFromOpenNarc(spriteSys, spriteMan, narc, ability_banner_banner_cell_NCER_lz, TRUE, ABILITY_BANNER_RESID_CELL);
-    SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSys, spriteMan, narc, misc_single_frame_anim_NANR_lz_5, TRUE, ABILITY_BANNER_RESID_ANIM);
+    SpriteSystem_LoadCharResObjFromOpenNarc(spriteSys, spriteMan, narc, ability_banner_banner_NCGR_lz, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, ABILITY_BANNER_RESID_CHAR(side));
+    u8 paletteSlot = SpriteSystem_LoadPaletteBufferFromOpenNarc(paletteData, PLTTBUF_MAIN_OBJ, spriteSys, spriteMan, narc, ability_banner_banner_NCLR, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, ABILITY_BANNER_RESID_PLTT(side));
+    SpriteSystem_LoadCellResObjFromOpenNarc(spriteSys, spriteMan, narc, ability_banner_banner_cell_NCER_lz, TRUE, ABILITY_BANNER_RESID_CELL(side));
+    SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSys, spriteMan, narc, misc_single_frame_anim_NANR_lz_5, TRUE, ABILITY_BANNER_RESID_ANIM(side));
     NARC_dtor(narc);
 
     AbilityBanner *banner = Heap_Alloc(HEAP_ID_BATTLE, sizeof(AbilityBanner));
@@ -309,6 +323,7 @@ static AbilityBanner *AbilityBanner_New(BattleSystem *battleSys, const String *l
     banner->state = ABILITY_BANNER_STATE_SLIDE_IN;
     banner->msgIdx = ABILITY_BANNER_NO_MESSAGE;
     banner->owner = -1;
+    banner->side = side;
     banner->paletteSlot = paletteSlot;
     MI_CpuCopy16(PaletteData_GetUnfadedBuffer(paletteData, PLTTBUF_MAIN_OBJ) + PLTT_DEST(paletteSlot), banner->colors, sizeof(banner->colors));
 
@@ -334,10 +349,10 @@ static AbilityBanner *AbilityBanner_New(BattleSystem *battleSys, const String *l
         .plttIdx = 0,
         .vramType = NNS_G2D_VRAM_TYPE_2DMAIN,
         .resources = {
-            ABILITY_BANNER_RESID_CHAR,
-            ABILITY_BANNER_RESID_PLTT,
-            ABILITY_BANNER_RESID_CELL,
-            ABILITY_BANNER_RESID_ANIM,
+            ABILITY_BANNER_RESID_CHAR(side),
+            ABILITY_BANNER_RESID_PLTT(side),
+            ABILITY_BANNER_RESID_CELL(side),
+            ABILITY_BANNER_RESID_ANIM(side),
             SPRITE_RESOURCE_NONE,
             SPRITE_RESOURCE_NONE,
         },
@@ -349,7 +364,8 @@ static AbilityBanner *AbilityBanner_New(BattleSystem *battleSys, const String *l
     AbilityBanner_Draw(battleSys, banner->sprite, line1, line2, isPlayerSide);
 
     banner->task = SysTask_Start(AbilityBanner_Task, banner, 0);
-    sAbilityBanner = banner;
+    sAbilityBanners[side] = banner;
+    sLastBanner = banner;
 
     // The sounds of the ability window of Black and White: one as it slides in, one as it flashes
     AbilityBanner_LoadSounds();
@@ -503,10 +519,21 @@ static void AbilityBanner_Task(SysTask *task, void *data)
                 AbilityBanner_Free(banner);
                 return;
             }
-        } else if (banner->timer >= ABILITY_BANNER_HOLD_FRAMES && Text_IsPrinterActive(banner->msgIdx) == FALSE) {
+        } else if (banner->printed == FALSE && (banner->messageGone || Text_IsPrinterActive(banner->msgIdx) == FALSE)) {
+            banner->printed = TRUE;
+        }
+
+        if (banner->msgIdx != ABILITY_BANNER_NO_MESSAGE && banner->printed && banner->timer >= ABILITY_BANNER_HOLD_FRAMES) {
             // The message is printed. The banner stays while it is on the screen, until the next message or the
             // clearing of the message box, or after a while if neither comes.
             if (banner->messageGone || ++banner->lingerFrames >= ABILITY_BANNER_LINGER_FRAMES) {
+                // The banners of the abilities that were suppressed go away with it
+                for (int i = 0; i < 2; i++) {
+                    if (sAbilityBanners[i] != NULL && sAbilityBanners[i] != banner && sAbilityBanners[i]->msgIdx == ABILITY_BANNER_NO_MESSAGE) {
+                        AbilityBanner_Free(sAbilityBanners[i]);
+                    }
+                }
+
                 AbilityBanner_Free(banner);
                 return;
             }
@@ -521,49 +548,75 @@ void AbilityBanner_OnMessage(const BattleMessage *battleMsg)
 {
     int owner, ability;
 
-    if (sAbilityBanner == NULL || sAbilityBanner->msgIdx == ABILITY_BANNER_NO_MESSAGE) {
-        return;
-    }
+    for (int i = 0; i < 2; i++) {
+        AbilityBanner *banner = sAbilityBanners[i];
 
-    // The next message about the same ability keeps the banner
-    if (AbilityBanner_GetOwnerAndAbility(battleMsg, &owner, &ability) && sAbilityBanner->owner == (owner & 0xFFFF)) {
-        sAbilityBanner->lingerFrames = 0;
-        return;
-    }
+        if (banner == NULL || banner->msgIdx == ABILITY_BANNER_NO_MESSAGE) {
+            continue;
+        }
 
-    sAbilityBanner->messageGone = TRUE;
+        // The next message about the same ability keeps the banner
+        if (AbilityBanner_GetOwnerAndAbility(battleMsg, &owner, &ability) && banner->owner == (owner & 0xFFFF)) {
+            banner->lingerFrames = 0;
+            continue;
+        }
+
+        banner->messageGone = TRUE;
+    }
 }
 
 void AbilityBanner_OnMessageBoxCleared(void)
 {
-    if (sAbilityBanner != NULL && sAbilityBanner->msgIdx != ABILITY_BANNER_NO_MESSAGE) {
-        sAbilityBanner->messageGone = TRUE;
+    for (int i = 0; i < 2; i++) {
+        if (sAbilityBanners[i] != NULL && sAbilityBanners[i]->msgIdx != ABILITY_BANNER_NO_MESSAGE) {
+            sAbilityBanners[i]->messageGone = TRUE;
+        }
     }
 }
 
 void AbilityBanner_AttachMessage(u8 msgIdx)
 {
-    if (sAbilityBanner != NULL && sAbilityBanner->msgIdx == ABILITY_BANNER_NO_MESSAGE) {
-        sAbilityBanner->msgIdx = msgIdx;
+    if (sLastBanner != NULL && sLastBanner->msgIdx == ABILITY_BANNER_NO_MESSAGE) {
+        sLastBanner->msgIdx = msgIdx;
+        sLastBanner->printed = FALSE;
+    }
+}
+
+void AbilityBanner_FreeAll(void)
+{
+    for (int i = 0; i < 2; i++) {
+        if (sAbilityBanners[i] != NULL) {
+            AbilityBanner_Free(sAbilityBanners[i]);
+        }
     }
 }
 
 BOOL AbilityBanner_CanShow(void)
 {
     // A banner that is already up is replaced by the next one, which needs the palette of the old one
-    return sAbilityBanner != NULL || PlttTransfer_HasFreeSpace(1, NNS_G2D_VRAM_TYPE_2DMAIN);
+    return sAbilityBanners[0] != NULL || sAbilityBanners[1] != NULL || PlttTransfer_HasFreeSpace(1, NNS_G2D_VRAM_TYPE_2DMAIN);
 }
 
 BOOL AbilityBanner_IsIntroPlaying(void)
 {
-    AbilityBanner *banner = sAbilityBanner;
+    BOOL banners = FALSE;
 
-    if (banner == NULL) {
-        return FALSE;
+    for (int i = 0; i < 2; i++) {
+        AbilityBanner *banner = sAbilityBanners[i];
+
+        if (banner == NULL) {
+            continue;
+        }
+
+        if (banner->state == ABILITY_BANNER_STATE_SLIDE_IN || banner->timer <= ABILITY_BANNER_FLASH_DELAY + ABILITY_BANNER_FLASH_FRAMES) {
+            return TRUE;
+        }
+
+        banners = TRUE;
     }
 
-    if (banner->state == ABILITY_BANNER_STATE_SLIDE_IN || banner->timer <= ABILITY_BANNER_FLASH_DELAY + ABILITY_BANNER_FLASH_FRAMES) {
-        return TRUE;
+    if (banners == FALSE) {
+        return FALSE;
     }
 
     return AbilityBanner_AreSoundsLoaded() && (Sound_IsEffectPlaying(SEQ_SE_WB_SHOOTER_sseq) || Sound_IsEffectPlaying(SEQ_SE_WB_DECIDE2_sseq));
@@ -574,15 +627,23 @@ static void AbilityBanner_Free(AbilityBanner *banner)
     SpriteManager *spriteMan = BattleSystem_GetSpriteManager(banner->battleSys);
 
     Sprite_DeleteAndFreeResources(banner->sprite);
-    SpriteManager_UnloadCharObjById(spriteMan, ABILITY_BANNER_RESID_CHAR);
-    SpriteManager_UnloadPlttObjById(spriteMan, ABILITY_BANNER_RESID_PLTT);
-    SpriteManager_UnloadCellObjById(spriteMan, ABILITY_BANNER_RESID_CELL);
-    SpriteManager_UnloadAnimObjById(spriteMan, ABILITY_BANNER_RESID_ANIM);
+    SpriteManager_UnloadCharObjById(spriteMan, ABILITY_BANNER_RESID_CHAR(banner->side));
+    SpriteManager_UnloadPlttObjById(spriteMan, ABILITY_BANNER_RESID_PLTT(banner->side));
+    SpriteManager_UnloadCellObjById(spriteMan, ABILITY_BANNER_RESID_CELL(banner->side));
+    SpriteManager_UnloadAnimObjById(spriteMan, ABILITY_BANNER_RESID_ANIM(banner->side));
     SysTask_Done(banner->task);
-    AbilityBanner_FreeSounds();
 
-    if (sAbilityBanner == banner) {
-        sAbilityBanner = NULL;
+    if (sAbilityBanners[banner->side] == banner) {
+        sAbilityBanners[banner->side] = NULL;
+    }
+
+    if (sLastBanner == banner) {
+        sLastBanner = NULL;
+    }
+
+    // The sounds stay for the other banner
+    if (sAbilityBanners[0] == NULL && sAbilityBanners[1] == NULL) {
+        AbilityBanner_FreeSounds();
     }
 
     Heap_Free(banner);

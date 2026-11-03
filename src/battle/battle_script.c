@@ -2899,7 +2899,14 @@ static BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSys, BattleContext *battl
                     result = 1;
                 } else if (Battler_IgnorableAbility(battleCtx, battleCtx->attacker, battleCtx->sideEffectMon, ABILITY_CLEAR_BODY) == TRUE
                     || Battler_IgnorableAbility(battleCtx, battleCtx->attacker, battleCtx->sideEffectMon, ABILITY_WHITE_SMOKE) == TRUE) {
-                    if (battleCtx->sideEffectType == SIDE_EFFECT_TYPE_ABILITY) {
+                    if (AbilityBanner_CanShow()) {
+                        // Sour Platinum: the banner names the ability, the message only says what it did. The tags are
+                        // the ones with the ability, which is what brings in the banner.
+                        battleCtx->msgBuffer.id = BattleStrings_Text_PokemonsStatsWereNotLowered_Ally; // "{0}'s stats were not lowered!"
+                        battleCtx->msgBuffer.tags = TAG_NICKNAME_ABILITY;
+                        battleCtx->msgBuffer.params[0] = BattleSystem_NicknameTag(battleCtx, battleCtx->sideEffectMon);
+                        battleCtx->msgBuffer.params[1] = battleCtx->battleMons[battleCtx->sideEffectMon].ability;
+                    } else if (battleCtx->sideEffectType == SIDE_EFFECT_TYPE_ABILITY) {
                         SetupNicknameAbilityNicknameAbilityMsg(battleCtx, BattleStrings_Text_PokemonsAbilitySuppressedPokemonsAbility_AllyAlly); // "{0}'s {1} suppressed {2}'s {3}!"
                     } else {
                         battleCtx->msgBuffer.id = BattleStrings_Text_PokemonsAbilityPreventsStatLoss_Ally; // "{0}'s {1} prevents stat loss!"
@@ -2911,7 +2918,14 @@ static BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSys, BattleContext *battl
                     result = 1;
                 } else if (AbilityBlocksSpecificStatReduction(battleCtx, statOffset, ABILITY_KEEN_EYE, BATTLE_STAT_ACCURACY)
                     || AbilityBlocksSpecificStatReduction(battleCtx, statOffset, ABILITY_HYPER_CUTTER, BATTLE_STAT_ATTACK)) {
-                    if (battleCtx->sideEffectType == SIDE_EFFECT_TYPE_ABILITY) {
+                    if (AbilityBanner_CanShow()) {
+                        // Sour Platinum: see above
+                        battleCtx->msgBuffer.id = statOffset == 0 ? BattleStrings_Text_PokemonsAttackWasNotLowered_Ally // "{0}'s Attack was not lowered!"
+                                                                  : BattleStrings_Text_PokemonsAccuracyWasNotLowered_Ally; // "{0}'s accuracy was not lowered!"
+                        battleCtx->msgBuffer.tags = TAG_NICKNAME_ABILITY;
+                        battleCtx->msgBuffer.params[0] = BattleSystem_NicknameTag(battleCtx, battleCtx->sideEffectMon);
+                        battleCtx->msgBuffer.params[1] = battleCtx->battleMons[battleCtx->sideEffectMon].ability;
+                    } else if (battleCtx->sideEffectType == SIDE_EFFECT_TYPE_ABILITY) {
                         SetupNicknameAbilityNicknameAbilityMsg(battleCtx, BattleStrings_Text_PokemonsAbilitySuppressedPokemonsAbility_AllyAlly); // "{0}'s {1} suppressed {2}'s {3}!"
                     } else {
                         SetupNicknameAbilityStatMsg(battleCtx, BattleStrings_Text_PokemonsAbilityPreventsBufferStatLoss, statOffset); // "{0}'s {1} prevents {2} loss!"
@@ -2970,7 +2984,9 @@ static BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSys, BattleContext *battl
         }
 
         if (battleCtx->sideEffectType == SIDE_EFFECT_TYPE_ABILITY) {
-            battleCtx->msgBuffer.id = BattleStrings_Text_PokemonsAbilityCutsPokemonsStat_AllyAlly; // "{0}'s {1} cuts {2}'s {3}!"
+            // Sour Platinum: the banner names the ability, so the message only says that the stat fell
+            battleCtx->msgBuffer.id = AbilityBanner_CanShow() ? BattleStrings_Text_PokemonsStatFellFromAbility_AllyAlly // "{2}'s {3} fell!"
+                                                              : BattleStrings_Text_PokemonsAbilityCutsPokemonsStat_AllyAlly; // "{0}'s {1} cuts {2}'s {3}!"
             battleCtx->msgBuffer.tags = TAG_NICKNAME_ABILITY_NICKNAME_STAT;
             battleCtx->msgBuffer.params[0] = BattleSystem_NicknameTag(battleCtx, battleCtx->attacker);
             battleCtx->msgBuffer.params[1] = battleCtx->battleMons[battleCtx->attacker].ability;

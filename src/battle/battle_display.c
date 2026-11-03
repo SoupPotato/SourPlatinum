@@ -1011,8 +1011,6 @@ void BattleDisplay_PrintMessage(BattleSystem *battleSys, BattlerData *battlerDat
 {
     MessageLoader *msgLoader = BattleSystem_GetMessageLoader(battleSys);
 
-    AbilityBanner_OnMessage(battleMsg);
-
     if (AbilityBanner_IsBannerOnlyMessage(battleMsg) == FALSE && AbilityBanner_MessageNamesAbility(battleMsg)) {
         AbilityBannerMessageTask *bannerTask = Heap_Alloc(HEAP_ID_BATTLE, sizeof(AbilityBannerMessageTask));
 

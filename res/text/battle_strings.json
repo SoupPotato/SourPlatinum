@@ -8505,6 +8505,136 @@
         "The effects of weather\n",
         "disappeared."
       ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatsWereNotLowered_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0}’s stats\n",
+        "were not lowered!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatsWereNotLowered_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}’s\n",
+        "stats were not lowered!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatsWereNotLowered_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}’s\n",
+        "stats were not lowered!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsAttackWasNotLowered_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0}’s Attack\n",
+        "was not lowered!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsAttackWasNotLowered_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}’s\n",
+        "Attack was not lowered!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsAttackWasNotLowered_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}’s\n",
+        "Attack was not lowered!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsAccuracyWasNotLowered_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0}’s accuracy\n",
+        "was not lowered!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsAccuracyWasNotLowered_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}’s\n",
+        "accuracy was not lowered!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsAccuracyWasNotLowered_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}’s\n",
+        "accuracy was not lowered!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatFellFromAbility_AllyAlly",
+      "en_US": [
+        "{STRVAR_1 1, 2, 0}’s {STRVAR_1 13, 3, 0}\n",
+        "fell!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatFellFromAbility_AllyWild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 2, 0}’s {STRVAR_1 13, 3, 0}\n",
+        "fell!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatFellFromAbility_AllyFoe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 2, 0}’s {STRVAR_1 13, 3, 0}\n",
+        "fell!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatFellFromAbility_WildAlly",
+      "en_US": [
+        "{STRVAR_1 1, 2, 0}’s {STRVAR_1 13, 3, 0}\n",
+        "fell!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatFellFromAbility_WildWild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 2, 0}’s {STRVAR_1 13, 3, 0}\n",
+        "fell!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatFellFromAbility_FoeAlly",
+      "en_US": [
+        "{STRVAR_1 1, 2, 0}’s {STRVAR_1 13, 3, 0}\n",
+        "fell!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatFellFromAbility_FoeFoe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 2, 0}’s {STRVAR_1 13, 3, 0}\n",
+        "fell!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonIsHurt_Ally",
+      "en_US": "{STRVAR_1 1, 0, 0} is hurt!"
+    },
+    {
+      "id": "BattleStrings_Text_PokemonIsHurt_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}\n",
+        "is hurt!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonIsHurt_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}\n",
+        "is hurt!"
+      ]
     }
   ]
 }
