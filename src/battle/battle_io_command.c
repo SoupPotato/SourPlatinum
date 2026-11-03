@@ -10,6 +10,7 @@
 #include "struct_defs/battler_data.h"
 #include "struct_defs/move_animation.h"
 
+#include "battle/ability_banner.h"
 #include "battle/battle_context.h"
 #include "battle/battle_controller.h"
 #include "battle/battle_display.h"
@@ -954,6 +955,7 @@ static void BtlIOCmd_ClearMessageBox(BattleSystem *battleSys, BattlerData *battl
 
     Window_FillTilemap(window, 0xFF);
     Window_LoadTiles(window);
+    AbilityBanner_OnMessageBoxCleared();
 
     BattleController_EmitClearCommand(battleSys, battlerData->battler, BATTLE_COMMAND_CLEAR_MESSAGE_BOX);
     ZeroDataBuffer(battlerData);

@@ -69,8 +69,17 @@ _141:
     PrintAttackMessage 
     Wait 
     WaitButtonABTime 30
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    ShowAbilityBanner BTLSCR_SIDE_EFFECT_MON
+    Wait
+    CheckAbilityBannerAvailable _PrintDoesntAffect
     // {0}’s {1} prevents confusion!
     PrintMessage BattleStrings_Text_PokemonsAbilityPreventsConfusion_Ally, TAG_NICKNAME_ABILITY, BTLSCR_SIDE_EFFECT_MON, BTLSCR_SIDE_EFFECT_MON
+    GoTo _178
+
+_PrintDoesntAffect:
+    // It doesn’t affect {0}...
+    PrintMessage BattleStrings_Text_ItDoesntAffectPokemon_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
     GoTo _178
 
 _167:

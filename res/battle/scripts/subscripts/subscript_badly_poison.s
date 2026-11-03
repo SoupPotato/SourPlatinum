@@ -99,8 +99,17 @@ _249:
 
 _266:
     WaitButtonABTime 30
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    ShowAbilityBanner BTLSCR_SIDE_EFFECT_MON
+    Wait
+    CheckAbilityBannerAvailable _PrintDoesntAffect
     // {0}’s {1} prevents poisoning!
     PrintMessage BattleStrings_Text_PokemonsAbilityPreventsPoisoning_Ally, TAG_NICKNAME_ABILITY, BTLSCR_SIDE_EFFECT_MON, BTLSCR_SIDE_EFFECT_MON
+    GoTo _348
+
+_PrintDoesntAffect:
+    // It doesn’t affect {0}...
+    PrintMessage BattleStrings_Text_ItDoesntAffectPokemon_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
     GoTo _348
 
 _275:

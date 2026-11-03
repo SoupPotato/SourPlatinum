@@ -65,11 +65,15 @@ _AbilityBannerShown:
     UpdateMonData OPCODE_FLAG_ON, BTLSCR_SIDE_EFFECT_MON, BATTLEMON_STATUS, MON_CONDITION_BURN
     CompareVarToValue OPCODE_EQU, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_ABILITY, _177
     CompareVarToValue OPCODE_EQU, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_HELD_ITEM, _185
+
+_PrintBurned:
     // {0} was burned!
     PrintMessage BattleStrings_Text_PokemonWasBurned_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
     GoTo _190
 
 _177:
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _PrintBurned
     // {0}’s {1} burned {2}!
     PrintMessage BattleStrings_Text_PokemonsAbilityBurnedPokemon_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP, BTLSCR_SIDE_EFFECT_MON
     GoTo _190
@@ -121,8 +125,17 @@ _264:
     PrintAttackMessage 
     Wait 
     WaitButtonABTime 30
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    ShowAbilityBanner BTLSCR_SIDE_EFFECT_MON
+    Wait
+    CheckAbilityBannerAvailable _PrintDoesntAffect
     // {0}’s {1} prevents burns!
     PrintMessage BattleStrings_Text_PokemonsAbilityPreventsBurns_Ally, TAG_NICKNAME_ABILITY, BTLSCR_SIDE_EFFECT_MON, BTLSCR_SIDE_EFFECT_MON
+    GoTo _305
+
+_PrintDoesntAffect:
+    // It doesn’t affect {0}...
+    PrintMessage BattleStrings_Text_ItDoesntAffectPokemon_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
     GoTo _305
     // {0}’s {1} suppressed {2}’s {3}!
     PrintMessage BattleStrings_Text_PokemonsAbilitySuppressedPokemonsAbility_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME_ABILITY, BTLSCR_SIDE_EFFECT_MON, BTLSCR_SIDE_EFFECT_MON, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP

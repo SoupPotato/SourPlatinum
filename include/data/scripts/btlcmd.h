@@ -230,6 +230,7 @@ ScriptCommand(BTLCMD_REFRESHMONDATA,              BtlCmd_RefreshMonData)
 ScriptCommand(BTLCMD_END,                         BtlCmd_End)
 ScriptCommand(BTLCMD_SHOWABILITYBANNER,           BtlCmd_ShowAbilityBanner)
 ScriptCommand(BTLCMD_SHOWBUFFEREDABILITYBANNER,   BtlCmd_ShowBufferedAbilityBanner)
+ScriptCommand(BTLCMD_CHECKABILITYBANNERAVAILABLE, BtlCmd_CheckAbilityBannerAvailable)
 
 // clang-format on
 

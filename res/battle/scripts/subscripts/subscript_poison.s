@@ -54,11 +54,15 @@ _AbilityBannerShown:
     Wait 
     UpdateMonData OPCODE_FLAG_ON, BTLSCR_SIDE_EFFECT_MON, BATTLEMON_STATUS, MON_CONDITION_POISON
     CompareVarToValue OPCODE_EQU, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_ABILITY, _150
+
+_PrintPoisoned:
     // {0} was poisoned!
     PrintMessage BattleStrings_Text_PokemonWasPoisoned_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
     GoTo _156
 
 _150:
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _PrintPoisoned
     // {0}’s {1} poisoned {2}!
     PrintMessage BattleStrings_Text_PokemonsAbilityPoisonedPokemon_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP, BTLSCR_SIDE_EFFECT_MON
 
@@ -84,8 +88,17 @@ _177:
     WaitButtonABTime 30
 
 _201:
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    ShowAbilityBanner BTLSCR_SIDE_EFFECT_MON
+    Wait
+    CheckAbilityBannerAvailable _PrintDoesntAffect
     // {0}’s {1} prevents poisoning!
     PrintMessage BattleStrings_Text_PokemonsAbilityPreventsPoisoning_Ally, TAG_NICKNAME_ABILITY, BTLSCR_SIDE_EFFECT_MON, BTLSCR_SIDE_EFFECT_MON
+    GoTo _315
+
+_PrintDoesntAffect:
+    // It doesn’t affect {0}...
+    PrintMessage BattleStrings_Text_ItDoesntAffectPokemon_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
     GoTo _315
     // {0}’s {1} suppressed {2}’s {3}!
     PrintMessage BattleStrings_Text_PokemonsAbilitySuppressedPokemonsAbility_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME_ABILITY, BTLSCR_SIDE_EFFECT_MON, BTLSCR_SIDE_EFFECT_MON, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP

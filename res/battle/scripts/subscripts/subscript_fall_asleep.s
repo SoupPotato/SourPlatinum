@@ -64,11 +64,15 @@ _AbilityBannerShown:
     Random 3, 2
     UpdateMonDataFromVar OPCODE_FLAG_ON, BTLSCR_SIDE_EFFECT_MON, BATTLEMON_STATUS, BTLVAR_CALC_TEMP
     CompareVarToValue OPCODE_EQU, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_ABILITY, _170
+
+_PrintFellAsleep:
     // {0} fell asleep!
     PrintMessage BattleStrings_Text_PokemonFellAsleep_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
     GoTo _176
 
 _170:
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _PrintFellAsleep
     // {0}’s {1} made {2} fall asleep!
     PrintMessage BattleStrings_Text_PokemonsAbilityMadePokemonFallAsleep_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP, BTLSCR_SIDE_EFFECT_MON
 
@@ -98,8 +102,17 @@ _202:
     WaitButtonABTime 30
 
 _221:
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    ShowAbilityBanner BTLSCR_SIDE_EFFECT_MON
+    Wait
+    CheckAbilityBannerAvailable _PrintDoesntAffect
     // {0} stayed awake because of its {1}!
     PrintMessage BattleStrings_Text_PokemonStayedAwakeBecauseOfItsAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_SIDE_EFFECT_MON, BTLSCR_SIDE_EFFECT_MON
+    GoTo _330
+
+_PrintDoesntAffect:
+    // It doesn’t affect {0}...
+    PrintMessage BattleStrings_Text_ItDoesntAffectPokemon_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
     GoTo _330
     // {0}’s {1} suppressed {2}’s {3}!
     PrintMessage BattleStrings_Text_PokemonsAbilitySuppressedPokemonsAbility_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME_ABILITY, BTLSCR_SIDE_EFFECT_MON, BTLSCR_SIDE_EFFECT_MON, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP

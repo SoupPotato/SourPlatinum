@@ -310,6 +310,7 @@ static BOOL BtlCmd_RefreshMonData(BattleSystem *battleSys, BattleContext *battle
 static BOOL BtlCmd_End(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BtlCmd_ShowAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BtlCmd_ShowBufferedAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
+static BOOL BtlCmd_CheckAbilityBannerAvailable(BattleSystem *battleSys, BattleContext *battleCtx);
 
 static int BattleScript_Read(BattleContext *battleCtx);
 static void BattleScript_Iter(BattleContext *battleCtx, int i);
@@ -9467,6 +9468,31 @@ static BOOL BtlCmd_ShowBufferedAbilityBanner(BattleSystem *battleSys, BattleCont
         BattleMessage msg = battleCtx->msgBuffer;
         msg.id = BattleStrings_Text_AbilityBanner;
         BattleController_EmitPrintMessage(battleSys, battleCtx, &msg);
+    }
+
+    return FALSE;
+}
+
+/**
+ * @brief Sour Platinum: GoTo ahead a certain distance if the ability banner can be shown.
+ *
+ * Messages of abilities use the plain message of their effect ("{0} was burned!") when the banner names the ability, and
+ * name the ability themselves when there is no banner.
+ *
+ * Inputs:
+ * 1. The distance to jump if the banner is available.
+ *
+ * @param battleSys
+ * @param battleCtx
+ * @return FALSE
+ */
+static BOOL BtlCmd_CheckAbilityBannerAvailable(BattleSystem *battleSys, BattleContext *battleCtx)
+{
+    BattleScript_Iter(battleCtx, 1);
+    int jumpIfAvailable = BattleScript_Read(battleCtx);
+
+    if (AbilityBanner_CanShow()) {
+        BattleScript_Iter(battleCtx, jumpIfAvailable);
     }
 
     return FALSE;

@@ -148,6 +148,7 @@ static void Task_FadeOut(SysTask *task, void *data);
 static void Task_ToggleVanish(SysTask *task, void *data);
 static void Task_PlayLevelUpAnimation(SysTask *task, void *data);
 static void Task_WaitForBattleMessagePrint(SysTask *task, void *data);
+static void Task_PrintMessageAfterAbilityBanner(SysTask *task, void *data);
 static void Task_WaitForAlertMessagePrint(SysTask *task, void *data);
 static void SysTask_SetupUI(SysTask *task, void *data);
 static void Task_ForgetMove(SysTask *task, void *data);
@@ -998,9 +999,33 @@ void BattleDisplay_PrintAttackMessage(BattleSystem *battleSys, BattlerData *batt
     SysTask_Start(Task_WaitForBattleMessagePrint, waitTask, 0);
 }
 
+// Sour Platinum: a message that names an ability is printed once its banner is done sliding in, flashing and playing its sounds
+typedef struct AbilityBannerMessageTask {
+    BattleSystem *battleSys;
+    BattleMessage battleMsg;
+    u8 command;
+    u8 battler;
+} AbilityBannerMessageTask;
+
 void BattleDisplay_PrintMessage(BattleSystem *battleSys, BattlerData *battlerData, BattleMessage *battleMsg)
 {
     MessageLoader *msgLoader = BattleSystem_GetMessageLoader(battleSys);
+
+    AbilityBanner_OnMessage(battleMsg);
+
+    if (AbilityBanner_IsBannerOnlyMessage(battleMsg) == FALSE && AbilityBanner_MessageNamesAbility(battleMsg)) {
+        AbilityBannerMessageTask *bannerTask = Heap_Alloc(HEAP_ID_BATTLE, sizeof(AbilityBannerMessageTask));
+
+        bannerTask->battleSys = battleSys;
+        bannerTask->battleMsg = *battleMsg;
+        bannerTask->command = battlerData->data[0];
+        bannerTask->battler = battlerData->battler;
+
+        AbilityBanner_TryShow(battleSys, battleMsg, ABILITY_BANNER_NO_MESSAGE);
+        SysTask_Start(Task_PrintMessageAfterAbilityBanner, bannerTask, 0);
+        return;
+    }
+
     BattleMessageWaitTask *waitTask = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleMessageWaitTask));
 
     waitTask->battleSys = battleSys;
@@ -1017,6 +1042,7 @@ void BattleDisplay_PrintMessage(BattleSystem *battleSys, BattlerData *battlerDat
 
         // Sour Platinum: show the ability banner for messages that name an ability
         AbilityBanner_TryShow(battleSys, battleMsg, waitTask->msgIdx);
+        AbilityBanner_AttachMessage(waitTask->msgIdx);
     }
 
     SysTask_Start(Task_WaitForBattleMessagePrint, waitTask, 0);
@@ -5278,6 +5304,33 @@ static void Task_WaitForBattleMessagePrint(SysTask *task, void *data)
         Heap_Free(data);
         SysTask_Done(task);
     }
+}
+
+static void Task_PrintMessageAfterAbilityBanner(SysTask *task, void *data)
+{
+    AbilityBannerMessageTask *bannerTask = data;
+
+    if (AbilityBanner_IsIntroPlaying()) {
+        // The banner stays while it waits for its message
+        AbilityBanner_TryShow(bannerTask->battleSys, &bannerTask->battleMsg, ABILITY_BANNER_NO_MESSAGE);
+        return;
+    }
+
+    BattleMessageWaitTask *waitTask = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleMessageWaitTask));
+
+    waitTask->battleSys = bannerTask->battleSys;
+    waitTask->command = bannerTask->command;
+    waitTask->battler = bannerTask->battler;
+
+    // Printing changes the ID of the message for the side of the battler, which the banner needs to find the owner
+    BattleMessage banneredMsg = bannerTask->battleMsg;
+
+    waitTask->msgIdx = BattleMessage_Print(bannerTask->battleSys, BattleSystem_GetMessageLoader(bannerTask->battleSys), &bannerTask->battleMsg, BattleSystem_GetTextSpeed(bannerTask->battleSys));
+    AbilityBanner_TryShow(bannerTask->battleSys, &banneredMsg, waitTask->msgIdx);
+    SysTask_Start(Task_WaitForBattleMessagePrint, waitTask, 0);
+
+    Heap_Free(bannerTask);
+    SysTask_Done(task);
 }
 
 static void Task_WaitForAlertMessagePrint(SysTask *task, void *data)
