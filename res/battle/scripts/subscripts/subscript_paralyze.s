@@ -41,11 +41,15 @@ _AbilityBannerShown:
     Wait 
     UpdateMonData OPCODE_FLAG_ON, BTLSCR_SIDE_EFFECT_MON, BATTLEMON_STATUS, MON_CONDITION_PARALYSIS
     CompareVarToValue OPCODE_EQU, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_ABILITY, _096
+
+_PrintParalyzed:
     // {0} is paralyzed! It may be unable to move!
     PrintMessage BattleStrings_Text_PokemonIsParalyzedItMayBeUnableToMove_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
     GoTo _102
 
 _096:
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _PrintParalyzed
     // {0}’s {1} paralyzed {2}! It may be unable to move!
     PrintMessage BattleStrings_Text_PokemonsAbilityParalyzedPokemon_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP, BTLSCR_SIDE_EFFECT_MON
 
@@ -87,8 +91,17 @@ _170:
     PrintAttackMessage 
     Wait 
     WaitButtonABTime 30
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    ShowAbilityBanner BTLSCR_SIDE_EFFECT_MON
+    Wait
+    CheckAbilityBannerAvailable _PrintDoesntAffect
     // {0}’s {1} prevents paralysis!
     PrintMessage BattleStrings_Text_PokemonsAbilityPreventsParalysis_Ally, TAG_NICKNAME_ABILITY, BTLSCR_SIDE_EFFECT_MON, BTLSCR_SIDE_EFFECT_MON
+    GoTo _211
+
+_PrintDoesntAffect:
+    // It doesn’t affect {0}...
+    PrintMessage BattleStrings_Text_ItDoesntAffectPokemon_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
     GoTo _211
     // {0}’s {1} suppressed {2}’s {3}!
     PrintMessage BattleStrings_Text_PokemonsAbilitySuppressedPokemonsAbility_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME_ABILITY, BTLSCR_SIDE_EFFECT_MON, BTLSCR_SIDE_EFFECT_MON, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP

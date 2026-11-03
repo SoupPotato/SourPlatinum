@@ -8,11 +8,20 @@ _000:
     Call BATTLE_SUBSCRIPT_ATTACK_MESSAGE_AND_ANIMATION
     CompareVarToValue OPCODE_EQU, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_ABILITY, _029
     CompareVarToValue OPCODE_EQU, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_HELD_ITEM, _037
+
+_PrintFellInLove:
     // {0} fell in love!
     PrintMessage BattleStrings_Text_PokemonFellInLove_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
     GoTo _047
 
 _029:
+    // Sour Platinum: the banner comes in before the effect, like the other abilities that cause a status
+    ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
+    Wait 
+    PlayBattleAnimation BTLSCR_SIDE_EFFECT_MON, BATTLE_ANIMATION_INFATUATED
+    Wait 
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _PrintFellInLove
     // {0}’s {1} infatuated {2}!
     PrintMessage BattleStrings_Text_PokemonsAbilityInfatuatedPokemon_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP, BTLSCR_SIDE_EFFECT_MON
     GoTo _047
@@ -35,8 +44,19 @@ _055:
     PrintAttackMessage 
     Wait 
     WaitButtonABTime 30
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    ShowAbilityBanner BTLSCR_SIDE_EFFECT_MON
+    Wait 
+    CheckAbilityBannerAvailable _PrintDoesntAffect
     // {0}’s {1} prevents romance!
     PrintMessage BattleStrings_Text_PokemonsAbilityPreventsRomance_Ally, TAG_NICKNAME_ABILITY, BTLSCR_SIDE_EFFECT_MON, BTLSCR_SIDE_EFFECT_MON
+    GoTo _PrintedPreventsRomance
+
+_PrintDoesntAffect:
+    // It doesn’t affect {0}...
+    PrintMessage BattleStrings_Text_ItDoesntAffectPokemon_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
+
+_PrintedPreventsRomance:
     Wait 
     WaitButtonABTime 30
     UpdateVar OPCODE_FLAG_ON, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_NO_MORE_WORK

@@ -67,6 +67,7 @@
 // A banner that is shown before the effect of an ability (see BattleStrings_Text_AbilityBanner) waits for the message
 // of the ability, however long the effect takes. If none comes at all, it goes away after this long.
 #define ABILITY_BANNER_WAIT_FOR_MESSAGE_FRAMES 600
+#define ABILITY_BANNER_LINGER_FRAMES           300 // the longest that the banner stays after its message is printed
 
 // Palette indexes of banner.png
 #define ABILITY_BANNER_COLOR_TEXT        1
@@ -96,6 +97,8 @@ typedef struct AbilityBanner {
     u8 msgIdx; // the banner stays until this text printer is done, or ABILITY_BANNER_NO_MESSAGE
     u8 paletteSlot;
     u16 timeout; // frames until the banner goes away when it has no message
+    u16 lingerFrames; // frames since the message was printed; the banner stays while the message is on the screen
+    u8 messageGone; // the message was replaced or cleared
     int owner; // battler and party slot of the Pokemon, as in the message tags; -1 for other banners
     s16 restX;
     s16 x;
@@ -501,13 +504,54 @@ static void AbilityBanner_Task(SysTask *task, void *data)
                 return;
             }
         } else if (banner->timer >= ABILITY_BANNER_HOLD_FRAMES && Text_IsPrinterActive(banner->msgIdx) == FALSE) {
-            AbilityBanner_Free(banner);
-            return;
+            // The message is printed. The banner stays while it is on the screen, until the next message or the
+            // clearing of the message box, or after a while if neither comes.
+            if (banner->messageGone || ++banner->lingerFrames >= ABILITY_BANNER_LINGER_FRAMES) {
+                AbilityBanner_Free(banner);
+                return;
+            }
         }
         break;
     }
 
     ManagedSprite_SetPositionXY(banner->sprite, banner->x, y);
+}
+
+void AbilityBanner_OnMessage(const BattleMessage *battleMsg)
+{
+    int owner, ability;
+
+    if (sAbilityBanner == NULL || sAbilityBanner->msgIdx == ABILITY_BANNER_NO_MESSAGE) {
+        return;
+    }
+
+    // The next message about the same ability keeps the banner
+    if (AbilityBanner_GetOwnerAndAbility(battleMsg, &owner, &ability) && sAbilityBanner->owner == (owner & 0xFFFF)) {
+        sAbilityBanner->lingerFrames = 0;
+        return;
+    }
+
+    sAbilityBanner->messageGone = TRUE;
+}
+
+void AbilityBanner_OnMessageBoxCleared(void)
+{
+    if (sAbilityBanner != NULL && sAbilityBanner->msgIdx != ABILITY_BANNER_NO_MESSAGE) {
+        sAbilityBanner->messageGone = TRUE;
+    }
+}
+
+void AbilityBanner_AttachMessage(u8 msgIdx)
+{
+    if (sAbilityBanner != NULL && sAbilityBanner->msgIdx == ABILITY_BANNER_NO_MESSAGE) {
+        sAbilityBanner->msgIdx = msgIdx;
+    }
+}
+
+BOOL AbilityBanner_CanShow(void)
+{
+    // A banner that is already up is replaced by the next one, which needs the palette of the old one
+    return sAbilityBanner != NULL || PlttTransfer_HasFreeSpace(1, NNS_G2D_VRAM_TYPE_2DMAIN);
 }
 
 BOOL AbilityBanner_IsIntroPlaying(void)

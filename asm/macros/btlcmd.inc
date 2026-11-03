@@ -1241,6 +1241,12 @@
     .long \battler
     .endm
 
+    // Sour Platinum: jumps if the ability banner can be shown
+    .macro CheckAbilityBannerAvailable jump
+    .long BTLCMD_CHECKABILITYBANNERAVAILABLE
+    .long (\jump-.) / 4 - 1
+    .endm
+
     // Sour Platinum: brings in the ability banner for the buffered message, if it names an ability
     .macro ShowBufferedAbilityBanner
     .long BTLCMD_SHOWBUFFEREDABILITYBANNER

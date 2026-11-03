@@ -26,6 +26,18 @@ BOOL AbilityBanner_IsBannerOnlyMessage(const BattleMessage *battleMsg);
 // TRUE if the message names the ability of a Pokemon (and would show the banner)
 BOOL AbilityBanner_MessageNamesAbility(const BattleMessage *battleMsg);
 
+// A message is about to be printed: the banner of the previous message goes away, unless it is about the same ability
+void AbilityBanner_OnMessage(const BattleMessage *battleMsg);
+
+// The message box was cleared: the banner goes away
+void AbilityBanner_OnMessageBoxCleared(void);
+
+// A message that doesn't name an ability is printed while a banner waits for its message: the banner stays until it is done
+void AbilityBanner_AttachMessage(u8 msgIdx);
+
+// TRUE if a banner can be shown, so that messages needn't name the ability that the banner shows
+BOOL AbilityBanner_CanShow(void);
+
 // TRUE while the banner slides in, flashes and plays its sounds. Battle messages don't report that they are done until
 // this is over, so the effect of the ability comes after it, like in Black and White.
 BOOL AbilityBanner_IsIntroPlaying(void);
