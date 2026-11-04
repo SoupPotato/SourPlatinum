@@ -138,6 +138,7 @@ Basic_ScoreMoveEffect:
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_DEF_UP, Basic_CheckHighStatStage_Defense
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SPEED_UP, Basic_CheckHighStatStage_Speed
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SP_ATK_UP, Basic_CheckHighStatStage_SpAttack
+    IfCurrentMoveEffectEqualTo BATTLE_EFFECT_ATK_SP_ATK_UP, Basic_CheckGrowth
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SP_DEF_UP, Basic_CheckHighStatStage_SpDefense
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_ACC_UP, Basic_CheckHighStatStage_Accuracy
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_EVA_UP, Basic_CheckHighStatStage_Evasion
@@ -165,6 +166,7 @@ Basic_ScoreMoveEffect:
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_DEF_UP_2, Basic_CheckHighStatStage_Defense
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SPEED_UP_2, Basic_CheckHighStatStage_Speed
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SP_ATK_UP_2, Basic_CheckHighStatStage_SpAttack
+    IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SP_ATK_UP_3, Basic_CheckHighStatStage_SpAttack
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SP_DEF_UP_2, Basic_CheckHighStatStage_SpDefense
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_ACC_UP_2, Basic_CheckHighStatStage_Accuracy
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_EVA_UP_2, Basic_CheckHighStatStage_Evasion
@@ -962,6 +964,14 @@ Basic_CheckCosmicPower_NoSimple:
     IfStatStageEqualTo AI_BATTLER_ATTACKER, BATTLE_STAT_SP_DEFENSE, 12, ScoreMinus8
     PopOrEnd 
 
+Basic_CheckGrowth:
+    // Sour Platinum: the same checks as Growth in Pokemon Black.
+    // If the attacker's Attack is already at +6, score -10.
+    // If the attacker's SpAttack is already at +6, score -8.
+    IfStatStageEqualTo AI_BATTLER_ATTACKER, BATTLE_STAT_ATTACK, 12, ScoreMinus10
+    IfStatStageEqualTo AI_BATTLER_ATTACKER, BATTLE_STAT_SP_ATTACK, 12, ScoreMinus8
+    PopOrEnd 
+
 Basic_CheckBulkUp:
     // If the attacker's ability is Simple and either Attack or Defense are already at
     // +3, score -10.
@@ -1634,6 +1644,7 @@ Expert_Main:
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_DEF_UP, Expert_StatusDefenseUp
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SPEED_UP, Expert_StatusSpeedUp
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SP_ATK_UP, Expert_StatusSpAttackUp
+    IfCurrentMoveEffectEqualTo BATTLE_EFFECT_ATK_SP_ATK_UP, Expert_Growth
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SP_DEF_UP, Expert_StatusSpDefenseUp
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_ACC_UP, Expert_StatusAccuracyUp
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_EVA_UP, Expert_StatusEvasionUp
@@ -1664,6 +1675,7 @@ Expert_Main:
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_DEF_UP_2, Expert_StatusDefenseUp
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SPEED_UP_2, Expert_StatusSpeedUp
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SP_ATK_UP_2, Expert_StatusSpAttackUp
+    IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SP_ATK_UP_3, Expert_StatusSpAttackUp
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_SP_DEF_UP_2, Expert_StatusSpDefenseUp
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_ACC_UP_2, Expert_StatusAccuracyUp
     IfCurrentMoveEffectEqualTo BATTLE_EFFECT_EVA_UP_2, Expert_StatusEvasionUp
@@ -2107,6 +2119,19 @@ Expert_StatusSpAttackUp_ScoreMinus2:
     AddToMoveScore -2
 
 Expert_StatusSpAttackUp_End:
+    PopOrEnd 
+
+Expert_Growth:
+    // Sour Platinum: the same score changes as Growth in Pokemon Black.
+    //
+    // If the attacker's HP is > 70%, no score changes.
+    //
+    // Otherwise, ~80.5% chance of score -1.
+    IfHPPercentGreaterThan AI_BATTLER_ATTACKER, 70, Expert_Growth_End
+    IfRandomLessThan 50, Expert_Growth_End
+    AddToMoveScore -1
+
+Expert_Growth_End:
     PopOrEnd 
 
 Expert_StatusSpDefenseUp:
@@ -3205,6 +3230,7 @@ Expert_Encore_EncouragedMoveEffects:
     TableEntry BATTLE_EFFECT_DEF_UP
     TableEntry BATTLE_EFFECT_SPEED_UP
     TableEntry BATTLE_EFFECT_SP_ATK_UP
+    TableEntry BATTLE_EFFECT_ATK_SP_ATK_UP
     TableEntry BATTLE_EFFECT_RESET_STAT_CHANGES
     TableEntry BATTLE_EFFECT_FORCE_SWITCH
     TableEntry BATTLE_EFFECT_CONVERSION
@@ -6437,6 +6463,7 @@ SetupFirstTurn_SetupEffects:
     TableEntry BATTLE_EFFECT_DEF_UP
     TableEntry BATTLE_EFFECT_SPEED_UP
     TableEntry BATTLE_EFFECT_SP_ATK_UP
+    TableEntry BATTLE_EFFECT_ATK_SP_ATK_UP
     TableEntry BATTLE_EFFECT_SP_DEF_UP
     TableEntry BATTLE_EFFECT_ACC_UP
     TableEntry BATTLE_EFFECT_EVA_UP
@@ -6456,6 +6483,7 @@ SetupFirstTurn_SetupEffects:
     TableEntry BATTLE_EFFECT_DEF_UP_2
     TableEntry BATTLE_EFFECT_SPEED_UP_2
     TableEntry BATTLE_EFFECT_SP_ATK_UP_2
+    TableEntry BATTLE_EFFECT_SP_ATK_UP_3
     TableEntry BATTLE_EFFECT_SP_DEF_UP_2
     TableEntry BATTLE_EFFECT_ACC_UP_2
     TableEntry BATTLE_EFFECT_EVA_UP_2
@@ -7766,6 +7794,7 @@ CheckHP_DiscourageAtMediumHP:
     TableEntry BATTLE_EFFECT_DEF_UP
     TableEntry BATTLE_EFFECT_SPEED_UP
     TableEntry BATTLE_EFFECT_SP_ATK_UP
+    TableEntry BATTLE_EFFECT_ATK_SP_ATK_UP
     TableEntry BATTLE_EFFECT_SP_DEF_UP
     TableEntry BATTLE_EFFECT_ACC_UP
     TableEntry BATTLE_EFFECT_EVA_UP
@@ -7785,6 +7814,7 @@ CheckHP_DiscourageAtMediumHP:
     TableEntry BATTLE_EFFECT_DEF_UP_2
     TableEntry BATTLE_EFFECT_SPEED_UP_2
     TableEntry BATTLE_EFFECT_SP_ATK_UP_2
+    TableEntry BATTLE_EFFECT_SP_ATK_UP_3
     TableEntry BATTLE_EFFECT_SP_DEF_UP_2
     TableEntry BATTLE_EFFECT_ACC_UP_2
     TableEntry BATTLE_EFFECT_EVA_UP_2
@@ -7814,6 +7844,7 @@ CheckHP_DiscourageAtLowHP:
     TableEntry BATTLE_EFFECT_DEF_UP
     TableEntry BATTLE_EFFECT_SPEED_UP
     TableEntry BATTLE_EFFECT_SP_ATK_UP
+    TableEntry BATTLE_EFFECT_ATK_SP_ATK_UP
     TableEntry BATTLE_EFFECT_SP_DEF_UP
     TableEntry BATTLE_EFFECT_ACC_UP
     TableEntry BATTLE_EFFECT_EVA_UP
@@ -7833,6 +7864,7 @@ CheckHP_DiscourageAtLowHP:
     TableEntry BATTLE_EFFECT_DEF_UP_2
     TableEntry BATTLE_EFFECT_SPEED_UP_2
     TableEntry BATTLE_EFFECT_SP_ATK_UP_2
+    TableEntry BATTLE_EFFECT_SP_ATK_UP_3
     TableEntry BATTLE_EFFECT_SP_DEF_UP_2
     TableEntry BATTLE_EFFECT_ACC_UP_2
     TableEntry BATTLE_EFFECT_EVA_UP_2
@@ -7871,6 +7903,7 @@ CheckHP_Target_DiscourageAtMediumHP:
     TableEntry BATTLE_EFFECT_DEF_UP
     TableEntry BATTLE_EFFECT_SPEED_UP
     TableEntry BATTLE_EFFECT_SP_ATK_UP
+    TableEntry BATTLE_EFFECT_ATK_SP_ATK_UP
     TableEntry BATTLE_EFFECT_SP_DEF_UP
     TableEntry BATTLE_EFFECT_ACC_UP
     TableEntry BATTLE_EFFECT_EVA_UP
@@ -7887,6 +7920,7 @@ CheckHP_Target_DiscourageAtMediumHP:
     TableEntry BATTLE_EFFECT_DEF_UP_2
     TableEntry BATTLE_EFFECT_SPEED_UP_2
     TableEntry BATTLE_EFFECT_SP_ATK_UP_2
+    TableEntry BATTLE_EFFECT_SP_ATK_UP_3
     TableEntry BATTLE_EFFECT_SP_DEF_UP_2
     TableEntry BATTLE_EFFECT_ACC_UP_2
     TableEntry BATTLE_EFFECT_EVA_UP_2
@@ -7918,6 +7952,7 @@ CheckHP_Target_DiscourageAtLowHP:
     TableEntry BATTLE_EFFECT_DEF_UP
     TableEntry BATTLE_EFFECT_SPEED_UP
     TableEntry BATTLE_EFFECT_SP_ATK_UP
+    TableEntry BATTLE_EFFECT_ATK_SP_ATK_UP
     TableEntry BATTLE_EFFECT_SP_DEF_UP
     TableEntry BATTLE_EFFECT_ACC_UP
     TableEntry BATTLE_EFFECT_EVA_UP
@@ -7942,6 +7977,7 @@ CheckHP_Target_DiscourageAtLowHP:
     TableEntry BATTLE_EFFECT_DEF_UP_2
     TableEntry BATTLE_EFFECT_SPEED_UP_2
     TableEntry BATTLE_EFFECT_SP_ATK_UP_2
+    TableEntry BATTLE_EFFECT_SP_ATK_UP_3
     TableEntry BATTLE_EFFECT_SP_DEF_UP_2
     TableEntry BATTLE_EFFECT_ACC_UP_2
     TableEntry BATTLE_EFFECT_EVA_UP_2

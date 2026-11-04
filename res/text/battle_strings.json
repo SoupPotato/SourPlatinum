@@ -8635,6 +8635,27 @@
         "The foe’s {STRVAR_1 1, 0, 0}\n",
         "is hurt!"
       ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatRoseDrastically_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0}’s {STRVAR_1 13, 1, 0}\n",
+        "rose drastically!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatRoseDrastically_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}’s {STRVAR_1 13, 1, 0}\n",
+        "rose drastically!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatRoseDrastically_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}’s {STRVAR_1 13, 1, 0}\n",
+        "rose drastically!"
+      ]
     }
   ]
 }

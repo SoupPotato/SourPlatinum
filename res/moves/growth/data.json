@@ -1,10 +1,10 @@
 {
     "name": "Growth",
     "description": [
-        "The user’s body is\n",
-        "forced to grow all at\n",
-        "once. It raises the\n",
-        "Sp. Atk stat.\n"
+        "The user’s body grows\n",
+        "all at once, raising\n",
+        "the Attack and\n",
+        "Sp. Atk stats."
     ],
     "class": "CLASS_STATUS",
     "type": "TYPE_NORMAL",
@@ -12,7 +12,7 @@
     "accuracy": 0,
     "pp": 20,
     "effect": {
-        "type": "BATTLE_EFFECT_SP_ATK_UP",
+        "type": "BATTLE_EFFECT_ATK_SP_ATK_UP",
         "chance": 0
     },
     "range": "RANGE_USER",

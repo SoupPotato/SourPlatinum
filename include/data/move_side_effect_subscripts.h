@@ -149,5 +149,7 @@ static const int sSideEffectSubscripts[] = {
     [MOVE_SUBSCRIPT_PTR_CHATTER]                          = subscript_chatter,
     [MOVE_SUBSCRIPT_PTR_LUNAR_DANCE]                      = subscript_lunar_dance,
     [MOVE_SUBSCRIPT_PTR_GIVE_TARGET_OWN_STATUS]           = subscript_give_target_own_status,
+    [MOVE_SUBSCRIPT_PTR_USER_ATK_AND_SPATK_UP]            = subscript_user_atk_and_spatk_up,
+    [MOVE_SUBSCRIPT_PTR_SP_ATTACK_UP_3_STAGES]            = subscript_update_stat_stage,
 };
 // clang-format on
