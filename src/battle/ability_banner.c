@@ -582,6 +582,26 @@ void AbilityBanner_AttachMessage(u8 msgIdx)
     }
 }
 
+BOOL AbilityBanner_IsHideMessage(const BattleMessage *battleMsg)
+{
+    return battleMsg->id == BattleStrings_Text_AbilityBannerHide;
+}
+
+void AbilityBanner_Hide(void)
+{
+    for (int i = 0; i < 2; i++) {
+        if (sAbilityBanners[i] == NULL) {
+            continue;
+        }
+
+        if (sAbilityBanners[i]->msgIdx == ABILITY_BANNER_NO_MESSAGE) {
+            sAbilityBanners[i]->timeout = 0;
+        } else {
+            sAbilityBanners[i]->messageGone = TRUE;
+        }
+    }
+}
+
 void AbilityBanner_FreeAll(void)
 {
     for (int i = 0; i < 2; i++) {

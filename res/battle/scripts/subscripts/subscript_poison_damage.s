@@ -7,12 +7,25 @@ _000:
     UpdateMonDataFromVar OPCODE_GET, BTLSCR_MSG_TEMP, BATTLEMON_MAX_HP, BTLVAR_HP_CALC_TEMP
     CompareMonDataToVar OPCODE_EQU, BTLSCR_MSG_TEMP, BATTLEMON_CUR_HP, BTLVAR_HP_CALC_TEMP, _055
     DivideVarByValue BTLVAR_HP_CALC_TEMP, 8
+    // Sour Platinum: the ability banner comes in before the effect
+    ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
+    Wait 
+    PlayBattleAnimation BTLSCR_MSG_TEMP, BATTLE_ANIMATION_RESTORE_HP
+    Wait 
     UpdateVar OPCODE_FLAG_ON, BTLVAR_BATTLE_CTX_STATUS, SYSCTL_SKIP_SPRITE_BLINK
     Call BATTLE_SUBSCRIPT_UPDATE_HP
+    // Sour Platinum: the banner names the ability, and there is no message. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _NoMessage
     // {0} restored HP using its {1}!
     PrintMessage BattleStrings_Text_PokemonRestoredHPUsingItsAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP
     Wait 
     WaitButtonABTime 30
+    End 
+
+_NoMessage:
+    WaitButtonABTime 30
+    HideAbilityBanner 
+    Wait 
     End 
 
 _038:

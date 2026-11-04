@@ -1241,6 +1241,11 @@
     .long \battler
     .endm
 
+    // Sour Platinum: sends away the ability banner of an effect that has no message
+    .macro HideAbilityBanner
+    .long BTLCMD_HIDEABILITYBANNER
+    .endm
+
     // Sour Platinum: jumps if the ability banner can be shown
     .macro CheckAbilityBannerAvailable jump
     .long BTLCMD_CHECKABILITYBANNERAVAILABLE

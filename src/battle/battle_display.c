@@ -1011,6 +1011,19 @@ void BattleDisplay_PrintMessage(BattleSystem *battleSys, BattlerData *battlerDat
 {
     MessageLoader *msgLoader = BattleSystem_GetMessageLoader(battleSys);
 
+    if (AbilityBanner_IsHideMessage(battleMsg)) {
+        BattleMessageWaitTask *hideTask = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleMessageWaitTask));
+
+        hideTask->battleSys = battleSys;
+        hideTask->command = battlerData->data[0];
+        hideTask->battler = battlerData->battler;
+        hideTask->msgIdx = ABILITY_BANNER_NO_MESSAGE;
+
+        AbilityBanner_Hide();
+        SysTask_Start(Task_WaitForBattleMessagePrint, hideTask, 0);
+        return;
+    }
+
     if (AbilityBanner_IsBannerOnlyMessage(battleMsg) == FALSE && AbilityBanner_MessageNamesAbility(battleMsg)) {
         AbilityBannerMessageTask *bannerTask = Heap_Alloc(HEAP_ID_BATTLE, sizeof(AbilityBannerMessageTask));
 

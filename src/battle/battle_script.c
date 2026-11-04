@@ -311,6 +311,7 @@ static BOOL BtlCmd_End(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BtlCmd_ShowAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BtlCmd_ShowBufferedAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BtlCmd_CheckAbilityBannerAvailable(BattleSystem *battleSys, BattleContext *battleCtx);
+static BOOL BtlCmd_HideAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
 
 static int BattleScript_Read(BattleContext *battleCtx);
 static void BattleScript_Iter(BattleContext *battleCtx, int i);
@@ -9516,6 +9517,27 @@ static BOOL BtlCmd_CheckAbilityBannerAvailable(BattleSystem *battleSys, BattleCo
     if (AbilityBanner_CanShow()) {
         BattleScript_Iter(battleCtx, jumpIfAvailable);
     }
+
+    return FALSE;
+}
+
+/**
+ * @brief Sour Platinum: send away the ability banner of an effect that has no message.
+ *
+ * Like ShowAbilityBanner, this goes through a message that is not printed, so that it reaches the clients.
+ *
+ * @param battleSys
+ * @param battleCtx
+ * @return FALSE
+ */
+static BOOL BtlCmd_HideAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx)
+{
+    BattleScript_Iter(battleCtx, 1);
+
+    BattleMessage msg = battleCtx->msgBuffer;
+    msg.id = BattleStrings_Text_AbilityBannerHide;
+    msg.tags = TAG_NONE;
+    BattleController_EmitPrintMessage(battleSys, battleCtx, &msg);
 
     return FALSE;
 }

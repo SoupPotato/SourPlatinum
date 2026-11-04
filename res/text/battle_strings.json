@@ -8656,6 +8656,49 @@
         "The foe’s {STRVAR_1 1, 0, 0}’s {STRVAR_1 13, 1, 0}\n",
         "rose drastically!"
       ]
+    },
+    {
+      "id": "BattleStrings_Text_AbilityBannerHide",
+      "en_US": ""
+    },
+    {
+      "id": "BattleStrings_Text_PokemonIsTormented_Ally",
+      "en_US": "{STRVAR_1 1, 0, 0} is tormented!"
+    },
+    {
+      "id": "BattleStrings_Text_PokemonIsTormented_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}\n",
+        "is tormented!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonIsTormented_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}\n",
+        "is tormented!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonSuckedUpTheLiquidOoze_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0} sucked up\n",
+        "the liquid ooze!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonSuckedUpTheLiquidOoze_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0} sucked up\n",
+        "the liquid ooze!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonSuckedUpTheLiquidOoze_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0} sucked up\n",
+        "the liquid ooze!"
+      ]
     }
   ]
 }

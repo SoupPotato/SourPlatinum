@@ -20,30 +20,65 @@ _009:
     GoTo _062
 
 _045:
+    // Sour Platinum: the ability banner comes in before the effect
+    ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
+    Wait 
+    UpdateVar OPCODE_FLAG_ON, BTLVAR_BATTLE_CTX_STATUS, SYSCTL_SKIP_SPRITE_BLINK
+    // Sour Platinum: the banner names the ability, and there is no message. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _AbilityDamageNoMessage
     CompareVarToValue OPCODE_EQU, BTLVAR_SCRIPT_TEMP, 2, _057
+    Call BATTLE_SUBSCRIPT_UPDATE_HP
     // {0} is hurt by its {1}!
     PrintMessage BattleStrings_Text_PokemonIsHurtByItsAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP
-    GoTo _062
+    GoTo _AbilityDamageDone
 
 _057:
+    Call BATTLE_SUBSCRIPT_UPDATE_HP
     // {0} lost some HP because of its {1}!
     PrintMessage BattleStrings_Text_PokemonLostSomeHPBecauseOfItsAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP
+
+_AbilityDamageDone:
+    Wait 
+    WaitButtonABTime 30
+    GoTo _CheckFainted
+
+_AbilityDamageNoMessage:
+    Call BATTLE_SUBSCRIPT_UPDATE_HP
+    WaitButtonABTime 30
+    HideAbilityBanner 
+    Wait 
+    GoTo _CheckFainted
 
 _062:
     Wait 
     WaitButtonABTime 30
     Call BATTLE_SUBSCRIPT_UPDATE_HP
+
+_CheckFainted:
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_BATTLE_CTX_STATUS, SYSCTL_MON_FAINTED, _090
     Call BATTLE_SUBSCRIPT_FAINT_MON
     GoTo _090
 
 _076:
+    // Sour Platinum: the ability banner comes in before the effect
+    ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
+    Wait 
+    PlayBattleAnimation BTLSCR_MSG_TEMP, BATTLE_ANIMATION_RESTORE_HP
+    Wait 
     UpdateVar OPCODE_FLAG_ON, BTLVAR_BATTLE_CTX_STATUS, SYSCTL_SKIP_SPRITE_BLINK
     Call BATTLE_SUBSCRIPT_UPDATE_HP
+    // Sour Platinum: the banner names the ability, and there is no message. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _AbilityHealNoMessage
     // {0} restored HP using its {1}!
     PrintMessage BattleStrings_Text_PokemonRestoredHPUsingItsAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP
     Wait 
     WaitButtonABTime 30
+    GoTo _090
+
+_AbilityHealNoMessage:
+    WaitButtonABTime 30
+    HideAbilityBanner 
+    Wait 
 
 _090:
     UpdateVar OPCODE_ADD, BTLVAR_BATTLER_SPEED_TEMP, 1
