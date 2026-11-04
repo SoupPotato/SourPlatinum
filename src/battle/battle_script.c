@@ -2837,7 +2837,12 @@ static BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSys, BattleContext *battl
 
     battleCtx->battleStatusMask &= ~SYSCTL_FAIL_STAT_STAGE_CHANGE;
 
-    if (battleCtx->sideEffectParam >= MOVE_SUBSCRIPT_PTR_ATTACK_DOWN_2_STAGES) {
+    if (battleCtx->sideEffectParam == MOVE_SUBSCRIPT_PTR_SP_ATTACK_UP_3_STAGES) {
+        // Sour Platinum: Tail Glow
+        statOffset = MOVE_SUBSCRIPT_PTR_SP_ATTACK_UP_1_STAGE - MOVE_SUBSCRIPT_PTR_ATTACK_UP_1_STAGE;
+        stageChange = 3;
+        battleCtx->scriptTemp = BATTLE_ANIMATION_STAT_BOOST;
+    } else if (battleCtx->sideEffectParam >= MOVE_SUBSCRIPT_PTR_ATTACK_DOWN_2_STAGES) {
         statOffset = battleCtx->sideEffectParam - MOVE_SUBSCRIPT_PTR_ATTACK_DOWN_2_STAGES;
         stageChange = -2;
         battleCtx->scriptTemp = BATTLE_ANIMATION_STAT_DROP;
@@ -2878,7 +2883,8 @@ static BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSys, BattleContext *battl
             } else {
                 SetupNicknameStatMsg(battleCtx,
                     stageChange == 1 ? BattleStrings_Text_PokemonsStatRose_Ally : // "{0}'s {1} rose!"
-                        BattleStrings_Text_PokemonsStatSharplyRose_Ally, // "{0}'s {1} sharply rose!"
+                        stageChange == 2 ? BattleStrings_Text_PokemonsStatSharplyRose_Ally // "{0}'s {1} sharply rose!"
+                                         : BattleStrings_Text_PokemonsStatRoseDrastically_Ally, // "{0}'s {1} rose drastically!"
                     statOffset);
             }
 

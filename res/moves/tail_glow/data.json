@@ -4,8 +4,8 @@
         "The user stares at\n",
         "flashing lights to\n",
         "focus its mind,\n",
-        "sharply raising its\n",
-        "Sp. Atk stat."
+        "drastically raising\n",
+        "its Sp. Atk stat."
     ],
     "class": "CLASS_STATUS",
     "type": "TYPE_BUG",
@@ -13,7 +13,7 @@
     "accuracy": 0,
     "pp": 20,
     "effect": {
-        "type": "BATTLE_EFFECT_SP_ATK_UP_2",
+        "type": "BATTLE_EFFECT_SP_ATK_UP_3",
         "chance": 0
     },
     "range": "RANGE_USER",
