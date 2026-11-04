@@ -63,6 +63,12 @@ _super_done:
 
 _not_very_done:
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED, _endure_done
+    // Sour Platinum: when it was Sturdy, its banner comes in before the message
+    CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED_STURDY, _EnduredBannerShown
+    ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
+    Wait 
+
+_EnduredBannerShown:
     // {0} endured the hit!
     PrintMessage BattleStrings_Text_PokemonEnduredTheHit_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
     Wait
@@ -83,8 +89,20 @@ _116:
     End 
 
 _wonder_guard:
+    // Sour Platinum: the ability banner comes in before the effect
+    ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
+    Wait 
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _PlainByUsingAbility0
     // {0} avoided damage by using {1}!
     PrintMessage BattleStrings_Text_PokemonAvoidedDamageByUsingAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP
+    GoTo _PlainByUsingAbility0Done
+
+_PlainByUsingAbility0:
+    // It doesn’t affect {0}...
+    PrintMessage BattleStrings_Text_ItDoesntAffectPokemon_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
+
+_PlainByUsingAbility0Done:
     Wait
     WaitButtonABTime 30
     End

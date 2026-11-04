@@ -119,6 +119,7 @@ static void BattleControllerPlayer_UpdateFlagsWhenHit(BattleSystem *battleSys, B
 static BOOL BattleControllerPlayer_TriggerAfterMoveHitEffects(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BattleControllerPlayer_CriticalMessage(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BattleControllerPlayer_FollowupMessage(BattleSystem *battleSys, BattleContext *battleCtx);
+static BOOL BattleControllerPlayer_EnduredMessage(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BattleControllerPlayer_RageBuilding(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BattleControllerPlayer_CheckExtraFlinch(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL Move_CanFlinch(int effect);
@@ -3461,6 +3462,11 @@ static void BattleControllerPlayer_UpdateHP(BattleSystem *battleSys, BattleConte
 
             if (DEFENDER_TURN_FLAGS.enduring || sturdy) {
                 battleCtx->moveStatusFlags |= MOVE_STATUS_ENDURED;
+
+                // Sour Platinum: its banner comes in before the message, like in Black. The move Endure has none.
+                if (sturdy) {
+                    battleCtx->moveStatusFlags |= MOVE_STATUS_ENDURED_STURDY;
+                }
             } else {
                 battleCtx->moveStatusFlags |= MOVE_STATUS_ENDURED_ITEM;
             }
@@ -3509,8 +3515,10 @@ static void BattleControllerPlayer_UpdateHP(BattleSystem *battleSys, BattleConte
 enum AfterMoveMessageState {
     AFTER_MOVE_MESSAGE_START = 0,
 
+    // Sour Platinum: critical hit, effectiveness, then having endured the hit. Black has effectiveness first.
     ONE_HIT_CRITICAL = 0,
     ONE_HIT_STATUS,
+    ONE_HIT_ENDURED,
     ONE_HIT_TRIGGER_SECONDARY,
     ONE_HIT_FORM_CHANGE,
     ONE_HIT_RAGE,
@@ -3518,6 +3526,7 @@ enum AfterMoveMessageState {
     ONE_HIT_EXTRA_FLINCH,
 
     MULTI_HIT_CRITICAL = 0,
+    MULTI_HIT_ENDURED,
     MULTI_HIT_TRIGGER_SECONDARY,
     MULTI_HIT_FORM_CHANGE,
     MULTI_HIT_RAGE,
@@ -3540,6 +3549,12 @@ static void BattleControllerPlayer_AfterMoveMessage(BattleSystem *battleSys, Bat
         case ONE_HIT_STATUS:
             battleCtx->afterMoveMessageState++;
             if (BattleControllerPlayer_FollowupMessage(battleSys, battleCtx) == TRUE) {
+                return;
+            }
+
+        case ONE_HIT_ENDURED:
+            battleCtx->afterMoveMessageState++;
+            if (BattleControllerPlayer_EnduredMessage(battleSys, battleCtx) == TRUE) {
                 return;
             }
 
@@ -3600,6 +3615,13 @@ static void BattleControllerPlayer_AfterMoveMessage(BattleSystem *battleSys, Bat
         case MULTI_HIT_CRITICAL:
             battleCtx->afterMoveMessageState++;
             if (BattleControllerPlayer_CriticalMessage(battleSys, battleCtx) == TRUE) {
+                return;
+            }
+
+        // Sour Platinum: on the hit that was endured, which does not have to be the last one
+        case MULTI_HIT_ENDURED:
+            battleCtx->afterMoveMessageState++;
+            if (BattleControllerPlayer_EnduredMessage(battleSys, battleCtx) == TRUE) {
                 return;
             }
 
@@ -4648,6 +4670,26 @@ static BOOL BattleControllerPlayer_FollowupMessage(BattleSystem *battleSys, Batt
     }
 
     return result;
+}
+
+/**
+ * @brief Sour Platinum: load the subroutine for having endured a hit, if the current hit was endured.
+ *
+ * @param battleSys
+ * @param battleCtx
+ * @return TRUE if the subroutine should be executed; FALSE otherwise.
+ */
+static BOOL BattleControllerPlayer_EnduredMessage(BattleSystem *battleSys, BattleContext *battleCtx)
+{
+    if ((battleCtx->moveStatusFlags & (MOVE_STATUS_ENDURED | MOVE_STATUS_ENDURED_ITEM)) == FALSE) {
+        return FALSE;
+    }
+
+    LOAD_SUBSEQ(subscript_move_endured_message);
+    battleCtx->commandNext = battleCtx->command;
+    battleCtx->command = BATTLE_CONTROL_EXEC_SCRIPT;
+
+    return TRUE;
 }
 
 /**

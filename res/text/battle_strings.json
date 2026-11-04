@@ -8699,6 +8699,69 @@
         "The foe’s {STRVAR_1 1, 0, 0} sucked up\n",
         "the liquid ooze!"
       ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatRoseFromAbility_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0}’s {STRVAR_1 13, 2, 0}\n",
+        "rose!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatRoseFromAbility_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}’s {STRVAR_1 13, 2, 0}\n",
+        "rose!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsStatRoseFromAbility_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}’s {STRVAR_1 13, 2, 0}\n",
+        "rose!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonMaxedItsAttack_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0} maxed\n",
+        "its Attack!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonMaxedItsAttack_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0} maxed\n",
+        "its Attack!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonMaxedItsAttack_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0} maxed\n",
+        "its Attack!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonCannotUseMove_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0}\n",
+        "cannot use {STRVAR_1 6, 1, 0}!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonCannotUseMove_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}\n",
+        "cannot use {STRVAR_1 6, 1, 0}!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonCannotUseMove_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}\n",
+        "cannot use {STRVAR_1 6, 1, 0}!"
+      ]
     }
   ]
 }

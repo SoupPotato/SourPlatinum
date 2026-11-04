@@ -300,4 +300,7 @@ subscript_files = files(
     'subscript_giratina_form_change.s',
     'subscript_cloud_nine.s',
     'subscript_user_atk_and_spatk_up.s',
+    'subscript_absorb_and_sp_atk_up_1_stage.s',
+    'subscript_move_endured_message.s',
+    'subscript_anger_point.s',
 )

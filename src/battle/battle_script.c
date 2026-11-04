@@ -2874,7 +2874,8 @@ static BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSys, BattleContext *battl
             }
         } else {
             if (battleCtx->sideEffectType == SIDE_EFFECT_TYPE_ABILITY) {
-                SetupNicknameAbilityStatMsg(battleCtx, BattleStrings_Text_PokemonsAbilityRaisedItsStat_Ally, statOffset); // "{0}'s {1} raised its {2}!"
+                // Sour Platinum: the banner names the ability, so the message only says that the stat rose
+                SetupNicknameAbilityStatMsg(battleCtx, AbilityBanner_CanShow() ? BattleStrings_Text_PokemonsStatRoseFromAbility_Ally : BattleStrings_Text_PokemonsAbilityRaisedItsStat_Ally, statOffset); // "{0}'s {1} raised its {2}!"
             } else if (battleCtx->sideEffectType == SIDE_EFFECT_TYPE_HELD_ITEM) {
                 battleCtx->msgBuffer.id = BattleStrings_Text_TheItemRaisedPokemonsStat_Ally; // "The {0} raised {1}'s {2}!"
                 battleCtx->msgBuffer.tags = TAG_NICKNAME_ITEM_STAT;
@@ -9082,6 +9083,16 @@ static BOOL BtlCmd_CheckHoldOnWith1HP(BattleSystem *battleSys, BattleContext *ba
     int battler = BattleScript_Battler(battleSys, battleCtx, inBattler);
     int itemEffect = Battler_HeldItemEffect(battleCtx, battler);
     int itemPower = Battler_HeldItemPower(battleCtx, battler, ITEM_POWER_CHECK_ALL);
+
+    // Sour Platinum: Generation 5 Sturdy, which works before the items, as it does for a move
+    if (battleCtx->battleMons[battler].curHP == battleCtx->battleMons[battler].maxHP
+        && battleCtx->battleMons[battler].curHP + battleCtx->hpCalcTemp <= 0
+        && Battler_IgnorableAbility(battleCtx, battleCtx->attacker, battler, ABILITY_STURDY) == TRUE) {
+        battleCtx->hpCalcTemp = (battleCtx->battleMons[battler].curHP - 1) * -1;
+        battleCtx->moveStatusFlags |= MOVE_STATUS_ENDURED | MOVE_STATUS_ENDURED_STURDY;
+
+        return FALSE;
+    }
 
     if (itemEffect == HOLD_EFFECT_MAYBE_ENDURE
         && BattleSystem_RandNext(battleSys) % 100 < itemPower) {

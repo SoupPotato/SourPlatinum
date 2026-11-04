@@ -1795,13 +1795,8 @@ BOOL BattleSystem_TriggerRedirectionAbilities(BattleSystem *battleSys, BattleCon
     BOOL result = FALSE;
 
     if ((battleCtx->moveStatusFlags & MOVE_STATUS_NO_EFFECTS) == FALSE && DEFENDER_SELF_TURN_FLAGS.lightningRodActivated) {
+        // Sour Platinum: Lightning Rod absorbs the move, so there is no message about taking it
         battleCtx->selfTurnFlags[battleCtx->defender].lightningRodActivated = FALSE;
-
-        LOAD_SUBSEQ(subscript_lightning_rod_redirected);
-        battleCtx->commandNext = battleCtx->command;
-        battleCtx->command = BATTLE_CONTROL_EXEC_SCRIPT;
-
-        result = TRUE;
     }
 
     if ((battleCtx->moveStatusFlags & MOVE_STATUS_NO_EFFECTS) == FALSE && DEFENDER_SELF_TURN_FLAGS.stormDrainActivated) {
@@ -3639,6 +3634,13 @@ int BattleSystem_TriggerImmunityAbility(BattleContext *battleCtx, int attacker, 
         subscript = subscript_absorb_and_speed_up_1_stage;
     }
 
+    // Sour Platinum: Generation 5, Lightning Rod absorbs Electric moves and raises Sp. Atk
+    if (Battler_IgnorableAbility(battleCtx, attacker, defender, ABILITY_LIGHTNING_ROD) == TRUE
+        && moveType == TYPE_ELECTRIC
+        && attacker != defender) {
+        subscript = subscript_absorb_and_sp_atk_up_1_stage;
+    }
+
     if (Battler_IgnorableAbility(battleCtx, attacker, defender, ABILITY_DRY_SKIN) == TRUE
         && moveType == TYPE_WATER
         && (battleCtx->battleStatusMask & SYSCTL_FIRST_OF_MULTI_TURN) == FALSE
@@ -4338,6 +4340,17 @@ BOOL BattleSystem_TriggerAbilityOnHit(BattleSystem *battleSys, BattleContext *ba
     }
 
     switch (Battler_Ability(battleCtx, battleCtx->defender)) {
+    // Sour Platinum: like in Black, Anger Point reacts after the messages about the hit
+    case ABILITY_ANGER_POINT:
+        if (DEFENDING_MON.curHP
+            && battleCtx->criticalMul > 1
+            && BattleMon_Get(battleCtx, battleCtx->defender, BATTLEMON_ATTACK_STAGE, NULL) < 12
+            && (battleCtx->moveStatusFlags & MOVE_STATUS_NO_EFFECTS) == FALSE) {
+            *subscript = subscript_anger_point;
+            result = TRUE;
+        }
+        break;
+
     case ABILITY_STATIC:
         if (ATTACKING_MON.curHP
             && ATTACKING_MON.status == MON_CONDITION_NONE

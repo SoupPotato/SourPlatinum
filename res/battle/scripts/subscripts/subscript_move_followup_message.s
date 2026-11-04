@@ -9,27 +9,10 @@ _000:
     GoTo _095
 
 _011:
-    CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED_ITEM, _037
-    PlayBattleAnimation BTLSCR_DEFENDER, BATTLE_ANIMATION_HELD_ITEM
-    Wait 
-    // {0} hung on using its {1}!
-    PrintMessage BattleStrings_Text_PokemonHungOnUsingItsItem_Ally, TAG_NICKNAME_ITEM, BTLSCR_DEFENDER, BTLSCR_DEFENDER
-    CheckItemHoldEffect CHECK_NOT_HAVE, BTLSCR_DEFENDER, HOLD_EFFECT_ENDURE, _032
-    RemoveItem BTLSCR_DEFENDER
-
-_032:
-    Wait 
-    WaitButtonABTime 30
-    GoTo _067
-
-_037:
+    // Sour Platinum: having endured the hit comes later, in its own subscript. A one-hit KO that was endured is not one.
+    CompareVarToValue OPCODE_FLAG_SET, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED_ITEM, _067
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED, _057
-    CompareMonDataToValue OPCODE_NEQ, BTLSCR_DEFENDER, BATTLEMON_CUR_HP, 1, _057
-    // {0} endured the hit!
-    PrintMessage BattleStrings_Text_PokemonEnduredTheHit_Ally, TAG_NICKNAME, BTLSCR_DEFENDER
-    Wait 
-    WaitButtonABTime 30
-    GoTo _067
+    CompareMonDataToValue OPCODE_EQU, BTLSCR_DEFENDER, BATTLEMON_CUR_HP, 1, _067
 
 _057:
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ONE_HIT_KO, _067
