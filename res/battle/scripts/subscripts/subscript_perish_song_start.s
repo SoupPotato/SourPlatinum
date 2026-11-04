@@ -15,8 +15,20 @@ _000:
 _021:
     GetMonBySpeedOrder BTLVAR_MSG_BATTLER_TEMP
     CheckIgnorableAbility CHECK_NOT_HAVE, BTLSCR_MSG_TEMP, ABILITY_SOUNDPROOF, _037
+    // Sour Platinum: the ability banner comes in before the effect
+    ShowAbilityBanner BTLSCR_MSG_TEMP
+    Wait 
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _PlainlityBlocksMove0
     // {0}’s {1} blocks {2}!
     PrintMessage BattleStrings_Text_PokemonsAbilityBlocksMove_Ally, TAG_NICKNAME_ABILITY_MOVE, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP
+    GoTo _PlainlityBlocksMove0Done
+
+_PlainlityBlocksMove0:
+    // It doesn’t affect {0}...
+    PrintMessage BattleStrings_Text_ItDoesntAffectPokemon_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
+
+_PlainlityBlocksMove0Done:
     Wait 
     WaitButtonABTime 30
 
