@@ -32,6 +32,12 @@ void AbilityBanner_OnMessage(const BattleMessage *battleMsg);
 // The message box was cleared: the banner goes away
 void AbilityBanner_OnMessageBoxCleared(void);
 
+// TRUE for BattleStrings_Text_AbilityBannerHide, which is not printed
+BOOL AbilityBanner_IsHideMessage(const BattleMessage *battleMsg);
+
+// The effect of the ability is over and it has no message: the banners go away
+void AbilityBanner_Hide(void);
+
 // The battle is ending: the banners use its sprites, so they go away first
 void AbilityBanner_FreeAll(void);
 

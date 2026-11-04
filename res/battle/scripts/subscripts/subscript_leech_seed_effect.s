@@ -40,20 +40,16 @@ _083:
 
 _096:
     CheckAbility CHECK_HAVE, BTLSCR_MSG_ATTACKER, ABILITY_MAGIC_GUARD, _110
+    // Sour Platinum: the ability banner comes in before the effect
+    ShowAbilityBanner BTLSCR_MSG_DEFENDER
+    Wait 
     Call BATTLE_SUBSCRIPT_UPDATE_HP
-    // It sucked up the liquid ooze!
-    PrintMessage BattleStrings_Text_ItSuckedUpTheLiquidOoze, TAG_NONE
+    // {0} sucked up the liquid ooze!
+    PrintMessage BattleStrings_Text_PokemonSuckedUpTheLiquidOoze_Ally, TAG_NICKNAME, BTLSCR_MSG_ATTACKER
     Wait 
     WaitButtonABTime 30
     End 
 
 _110:
-    // It sucked up the liquid ooze!
-    PrintMessage BattleStrings_Text_ItSuckedUpTheLiquidOoze, TAG_NONE
-    Wait 
-    WaitButtonABTime 30
-    // {0}’s {1} suppressed {2}’s {3}!
-    PrintMessage BattleStrings_Text_PokemonsAbilitySuppressedPokemonsAbility_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME_ABILITY, BTLSCR_MSG_ATTACKER, BTLSCR_MSG_ATTACKER, BTLSCR_MSG_DEFENDER, BTLSCR_MSG_DEFENDER
-    Wait 
-    WaitButtonABTime 30
+    // Sour Platinum: Magic Guard stops Liquid Ooze silently, like in Black and White
     End 
