@@ -25,6 +25,7 @@
 #include "sprite_system.h"
 #include "string_gf.h"
 #include "string_template.h"
+#include "system.h"
 #include "sys_task.h"
 #include "sys_task_manager.h"
 #include "text.h"
@@ -58,17 +59,19 @@
 #define ABILITY_BANNER_PLAYER_Y        123
 #define ABILITY_BANNER_ENEMY_X         192
 #define ABILITY_BANNER_ENEMY_Y         59
-#define ABILITY_BANNER_OFFSCREEN_DX    128 // how far from its resting position the banner starts
-#define ABILITY_BANNER_SLIDE_SPEED     16
-#define ABILITY_BANNER_HOLD_FRAMES     45 // the banner stays at least this long
-#define ABILITY_BANNER_FLASH_DELAY     2 // frames between the end of the slide and the flash
-#define ABILITY_BANNER_FLASH_FRAMES    15 // the flash goes from white back to the colors of the banner in 0.5 seconds
+// The timing is the one of Pokemon Black, in VBlanks (60 per second): a slide of 8, then the text wipes in, then the flash
+#define ABILITY_BANNER_OFFSCREEN_DX    144 // how far from its resting position the banner starts
+#define ABILITY_BANNER_SLIDE_SPEED     18
+#define ABILITY_BANNER_WIPE_FRAMES     18 // how long the text takes to wipe in
+#define ABILITY_BANNER_FLASH_DELAY     4 // VBlanks between the end of the wipe and the flash
+#define ABILITY_BANNER_FLASH_FRAMES    8 // the flash goes from white back to the colors of the banner
+#define ABILITY_BANNER_HOLD_FRAMES     (ABILITY_BANNER_FLASH_DELAY + ABILITY_BANNER_FLASH_FRAMES + 1) // the banner stays at least until the flash is over
 #define ABILITY_BANNER_SPRITE_PRIORITY 10
 
 // A banner that is shown before the effect of an ability (see BattleStrings_Text_AbilityBanner) waits for the message
 // of the ability, however long the effect takes. If none comes at all, it goes away after this long.
-#define ABILITY_BANNER_WAIT_FOR_MESSAGE_FRAMES 600
-#define ABILITY_BANNER_LINGER_FRAMES           1200 // a safety net: the banner leaves when its message is replaced or the message box is cleared
+#define ABILITY_BANNER_WAIT_FOR_MESSAGE_FRAMES 1200
+#define ABILITY_BANNER_LINGER_FRAMES           60 // the banner leaves this long after its message is printed: the pause of the message
 
 // Palette indexes of banner.png
 #define ABILITY_BANNER_COLOR_TEXT        1
@@ -86,6 +89,7 @@
 
 enum AbilityBannerState {
     ABILITY_BANNER_STATE_SLIDE_IN = 0,
+    ABILITY_BANNER_STATE_WIPE,
     ABILITY_BANNER_STATE_HOLD,
 };
 
@@ -102,6 +106,10 @@ typedef struct AbilityBanner {
     u8 messageGone; // the message was replaced or cleared
     u8 printed; // the message was seen done printing; its printer is not checked after that, since its number is used again
     u8 side; // 0 for the banner of the player's side, 1 for the enemy's
+    u8 wipeColumn; // the next tile column of the finished banner to show
+    u8 wipeFrames; // how long the text has been wiping in
+    u8 flashStarted; // the second sound was played
+    u8 *tiles; // the finished banner, with the text. The sprite starts with the plain art.
     int owner; // battler and party slot of the Pokemon, as in the message tags; -1 for other banners
     s16 restX;
     s16 x;
@@ -180,7 +188,8 @@ static void AbilityBanner_Task(SysTask *task, void *data);
 static void AbilityBanner_Free(AbilityBanner *banner);
 static BOOL AbilityBanner_GetOwnerAndAbility(const BattleMessage *battleMsg, int *owner, int *ability);
 static AbilityBanner *AbilityBanner_New(BattleSystem *battleSys, const String *line1, const String *line2, BOOL isPlayerSide);
-static void AbilityBanner_Draw(BattleSystem *battleSys, ManagedSprite *sprite, const String *line1, const String *line2, BOOL isPlayerSide);
+static void AbilityBanner_Draw(BattleSystem *battleSys, AbilityBanner *banner, const String *line1, const String *line2, BOOL isPlayerSide);
+static void AbilityBanner_CopyColumn(ManagedSprite *sprite, const u8 *src, int column);
 
 static BOOL AbilityBanner_GetOwnerAndAbility(const BattleMessage *battleMsg, int *owner, int *ability)
 {
@@ -361,18 +370,15 @@ static AbilityBanner *AbilityBanner_New(BattleSystem *battleSys, const String *l
     };
 
     banner->sprite = SpriteSystem_NewSprite(spriteSys, spriteMan, &template);
-    AbilityBanner_Draw(battleSys, banner->sprite, line1, line2, isPlayerSide);
+    AbilityBanner_Draw(battleSys, banner, line1, line2, isPlayerSide);
 
     banner->task = SysTask_Start(AbilityBanner_Task, banner, 0);
+    SysTask_SetTickDiv(banner->task, 1);
     sAbilityBanners[side] = banner;
     sLastBanner = banner;
 
-    // The sounds of the ability window of Black and White: one as it slides in, one as it flashes
+    // The sounds of the ability window of Black and White: one as the text wipes in, one as it flashes
     AbilityBanner_LoadSounds();
-
-    if (sSoundsLoaded) {
-        Sound_PlayEffect(SEQ_SE_WB_SHOOTER_sseq);
-    }
 
     return banner;
 }
@@ -389,7 +395,23 @@ static void SetPixel(u8 *tiles, int x, int y, u8 color)
     *byte = (x & 1) ? ((*byte & 0x0F) | (color << 4)) : ((*byte & 0xF0) | color);
 }
 
-static void AbilityBanner_Draw(BattleSystem *battleSys, ManagedSprite *sprite, const String *line1, const String *line2, BOOL isPlayerSide)
+// src has its tiles in rows of 16, the sprite is two parts of 8x4 tiles
+static void AbilityBanner_CopyColumn(ManagedSprite *sprite, const u8 *src, int column)
+{
+    NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(sprite->sprite);
+    u8 *dst = (u8 *)G2_GetOBJCharPtr() + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN];
+    int partTiles = ABILITY_BANNER_WIDTH_TILES / 2;
+    int part = column / partTiles;
+
+    for (int row = 0; row < ABILITY_BANNER_HEIGHT_TILES; row++) {
+        MI_CpuCopy16(
+            &src[(row * ABILITY_BANNER_WIDTH_TILES + column) * ABILITY_BANNER_TILE_SIZE],
+            &dst[(part * partTiles * ABILITY_BANNER_HEIGHT_TILES + row * partTiles + column % partTiles) * ABILITY_BANNER_TILE_SIZE],
+            ABILITY_BANNER_TILE_SIZE);
+    }
+}
+
+static void AbilityBanner_Draw(BattleSystem *battleSys, AbilityBanner *banner, const String *line1, const String *line2, BOOL isPlayerSide)
 {
     BgConfig *bgConfig = BattleSystem_GetBgConfig(battleSys);
     Window window, textWindow;
@@ -424,34 +446,36 @@ static void AbilityBanner_Draw(BattleSystem *battleSys, ManagedSprite *sprite, c
     int line1X = blockStart;
     int line2X = blockStart + blockWidth - line2Width;
 
-    Text_AddPrinterWithParamsColorAndSpacing(&textWindow, FONT_BANNER, line1, line1X, ABILITY_BANNER_LINE_1_Y, TEXT_SPEED_NO_TRANSFER, textColor, 0, 0, NULL);
-    Text_AddPrinterWithParamsColorAndSpacing(&textWindow, FONT_BANNER, line2, line2X, ABILITY_BANNER_LINE_2_Y, TEXT_SPEED_NO_TRANSFER, textColor, 0, 0, NULL);
+    // One line at a time: the cells of the glyphs are taller than the lines are apart, and the background of a glyph
+    // (the whole cell of a space) would erase the line above
+    for (int line = 0; line < 2; line++) {
+        Window_FillTilemap(&textWindow, ABILITY_BANNER_COLOR_KEY);
 
-    Font_Free(FONT_BANNER);
+        if (line == 0) {
+            Text_AddPrinterWithParamsColorAndSpacing(&textWindow, FONT_BANNER, line1, line1X, ABILITY_BANNER_LINE_1_Y, TEXT_SPEED_NO_TRANSFER, textColor, 0, 0, NULL);
+        } else {
+            Text_AddPrinterWithParamsColorAndSpacing(&textWindow, FONT_BANNER, line2, line2X, ABILITY_BANNER_LINE_2_Y, TEXT_SPEED_NO_TRANSFER, textColor, 0, 0, NULL);
+        }
 
-    for (int y = 0; y < ABILITY_BANNER_HEIGHT; y++) {
-        for (int x = 0; x < ABILITY_BANNER_WIDTH; x++) {
-            u8 color = GetPixel(textWindow.pixels, x, y);
+        for (int y = 0; y < ABILITY_BANNER_HEIGHT; y++) {
+            for (int x = 0; x < ABILITY_BANNER_WIDTH; x++) {
+                u8 color = GetPixel(textWindow.pixels, x, y);
 
-            if (color != ABILITY_BANNER_COLOR_KEY) {
-                SetPixel(window.pixels, x, y, color);
+                if (color != ABILITY_BANNER_COLOR_KEY) {
+                    SetPixel(window.pixels, x, y, color);
+                }
             }
         }
     }
 
-    // The window has its tiles in rows of 16, the sprite is two parts of 8x4 tiles
-    NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(sprite->sprite);
-    u8 *dst = (u8 *)G2_GetOBJCharPtr() + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN];
-    u8 *src = window.pixels;
-    int partTiles = ABILITY_BANNER_WIDTH_TILES / 2;
+    Font_Free(FONT_BANNER);
 
-    for (int part = 0; part < 2; part++) {
-        for (int row = 0; row < ABILITY_BANNER_HEIGHT_TILES; row++) {
-            MI_CpuCopy16(
-                &src[(row * ABILITY_BANNER_WIDTH_TILES + part * partTiles) * ABILITY_BANNER_TILE_SIZE],
-                &dst[(part * partTiles * ABILITY_BANNER_HEIGHT_TILES + row * partTiles) * ABILITY_BANNER_TILE_SIZE],
-                partTiles * ABILITY_BANNER_TILE_SIZE);
-        }
+    // The text wipes in after the slide: for now the sprite only has the art
+    banner->tiles = Heap_Alloc(HEAP_ID_BATTLE, ABILITY_BANNER_BYTES);
+    MI_CpuCopy16(window.pixels, banner->tiles, ABILITY_BANNER_BYTES);
+
+    for (int column = 0; column < ABILITY_BANNER_WIDTH_TILES; column++) {
+        AbilityBanner_CopyColumn(banner->sprite, art, column);
     }
 
     Window_Remove(&textWindow);
@@ -484,21 +508,47 @@ static void AbilityBanner_Task(SysTask *task, void *data)
     AbilityBanner *banner = data;
     s16 x, y;
 
+    // The task runs on every VBlank; without the 60 fps mode that is every other one
+    int step = gSystem.fps60 ? 1 : 2;
+
     ManagedSprite_GetPositionXY(banner->sprite, &x, &y);
 
     switch (banner->state) {
     case ABILITY_BANNER_STATE_SLIDE_IN:
-        banner->x += banner->direction * ABILITY_BANNER_SLIDE_SPEED;
+        banner->x += banner->direction * ABILITY_BANNER_SLIDE_SPEED * step;
 
         if ((banner->direction > 0 && banner->x >= banner->restX) || (banner->direction < 0 && banner->x <= banner->restX)) {
             banner->x = banner->restX;
+            banner->state = ABILITY_BANNER_STATE_WIPE;
+            banner->wipeColumn = 0;
+            banner->wipeFrames = 0;
+
+            if (AbilityBanner_AreSoundsLoaded()) {
+                Sound_PlayEffect(SEQ_SE_WB_SHOOTER_sseq);
+            }
+        }
+        break;
+    case ABILITY_BANNER_STATE_WIPE:
+        // The columns of the finished banner, from the left
+        banner->wipeFrames += step;
+
+        while (banner->wipeColumn < ABILITY_BANNER_WIDTH_TILES && banner->wipeColumn < banner->wipeFrames * ABILITY_BANNER_WIDTH_TILES / ABILITY_BANNER_WIPE_FRAMES) {
+            AbilityBanner_CopyColumn(banner->sprite, banner->tiles, banner->wipeColumn);
+            banner->wipeColumn++;
+        }
+
+        if (banner->wipeFrames >= ABILITY_BANNER_WIPE_FRAMES) {
             banner->state = ABILITY_BANNER_STATE_HOLD;
             banner->timer = 0;
         }
         break;
     case ABILITY_BANNER_STATE_HOLD:
-        if (banner->timer == ABILITY_BANNER_FLASH_DELAY && AbilityBanner_AreSoundsLoaded()) {
-            Sound_PlayEffect(SEQ_SE_WB_DECIDE2_sseq);
+        if (banner->flashStarted == FALSE && banner->timer >= ABILITY_BANNER_FLASH_DELAY) {
+            banner->flashStarted = TRUE;
+
+            if (AbilityBanner_AreSoundsLoaded()) {
+                Sound_PlayEffect(SEQ_SE_WB_DECIDE2_sseq);
+            }
         }
 
         if (banner->timer >= ABILITY_BANNER_FLASH_DELAY && banner->timer <= ABILITY_BANNER_FLASH_DELAY + ABILITY_BANNER_FLASH_FRAMES) {
@@ -506,14 +556,12 @@ static void AbilityBanner_Task(SysTask *task, void *data)
         }
 
         if (banner->timer < ABILITY_BANNER_HOLD_FRAMES) {
-            banner->timer++;
+            banner->timer += step;
         }
 
         // Once its message is done the banner disappears. A banner without a message waits for one for a while.
         if (banner->msgIdx == ABILITY_BANNER_NO_MESSAGE) {
-            if (banner->timeout > 0) {
-                banner->timeout--;
-            }
+            banner->timeout = banner->timeout > step ? banner->timeout - step : 0;
 
             if (banner->timeout == 0 && banner->timer >= ABILITY_BANNER_HOLD_FRAMES) {
                 AbilityBanner_Free(banner);
@@ -524,9 +572,11 @@ static void AbilityBanner_Task(SysTask *task, void *data)
         }
 
         if (banner->msgIdx != ABILITY_BANNER_NO_MESSAGE && banner->printed && banner->timer >= ABILITY_BANNER_HOLD_FRAMES) {
-            // The message is printed. The banner stays while it is on the screen, until the next message or the
-            // clearing of the message box, or after a while if neither comes.
-            if (banner->messageGone || ++banner->lingerFrames >= ABILITY_BANNER_LINGER_FRAMES) {
+            // The message is printed. Like in Black, the banner leaves after the pause of the message, or earlier if
+            // the next message comes or the message box is cleared.
+            banner->lingerFrames += step;
+
+            if (banner->messageGone || banner->lingerFrames >= ABILITY_BANNER_LINGER_FRAMES) {
                 // The banners of the abilities that were suppressed go away with it
                 for (int i = 0; i < 2; i++) {
                     if (sAbilityBanners[i] != NULL && sAbilityBanners[i] != banner && sAbilityBanners[i]->msgIdx == ABILITY_BANNER_NO_MESSAGE) {
@@ -628,7 +678,7 @@ BOOL AbilityBanner_IsIntroPlaying(void)
             continue;
         }
 
-        if (banner->state == ABILITY_BANNER_STATE_SLIDE_IN || banner->timer <= ABILITY_BANNER_FLASH_DELAY + ABILITY_BANNER_FLASH_FRAMES) {
+        if (banner->state != ABILITY_BANNER_STATE_HOLD || banner->timer <= ABILITY_BANNER_FLASH_DELAY + ABILITY_BANNER_FLASH_FRAMES) {
             return TRUE;
         }
 
@@ -647,6 +697,7 @@ static void AbilityBanner_Free(AbilityBanner *banner)
     SpriteManager *spriteMan = BattleSystem_GetSpriteManager(banner->battleSys);
 
     Sprite_DeleteAndFreeResources(banner->sprite);
+    Heap_Free(banner->tiles);
     SpriteManager_UnloadCharObjById(spriteMan, ABILITY_BANNER_RESID_CHAR(banner->side));
     SpriteManager_UnloadPlttObjById(spriteMan, ABILITY_BANNER_RESID_PLTT(banner->side));
     SpriteManager_UnloadCellObjById(spriteMan, ABILITY_BANNER_RESID_CELL(banner->side));
