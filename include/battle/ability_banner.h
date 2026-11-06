@@ -44,6 +44,13 @@ void AbilityBanner_FreeAll(void);
 // A message that doesn't name an ability is printed while a banner waits for its message: the banner stays until it is done
 void AbilityBanner_AttachMessage(u8 msgIdx);
 
+// TRUE for BattleStrings_Text_AbilityBannerChange, which is not printed
+BOOL AbilityBanner_IsChangeMessage(const BattleMessage *battleMsg);
+
+// The ability of a Pokemon changed (the message has the Pokemon and its new ability): its banner, which was brought in
+// before the change, pixelates into the new ability with the sound of Black. Its message waits for it.
+void AbilityBanner_StartChange(BattleSystem *battleSys, const BattleMessage *battleMsg);
+
 // TRUE if a banner can be shown, so that messages needn't name the ability that the banner shows
 BOOL AbilityBanner_CanShow(void);
 

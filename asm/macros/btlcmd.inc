@@ -1252,6 +1252,12 @@
     .long (\jump-.) / 4 - 1
     .endm
 
+    // Sour Platinum: the ability of a battler changed: its banner, brought in before, pixelates into the new one
+    .macro ChangeAbilityBanner battler
+    .long BTLCMD_CHANGEABILITYBANNER
+    .long \battler
+    .endm
+
     // Sour Platinum: brings in the ability banner for the buffered message, if it names an ability
     .macro ShowBufferedAbilityBanner
     .long BTLCMD_SHOWBUFFEREDABILITYBANNER

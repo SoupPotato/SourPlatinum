@@ -10359,6 +10359,14 @@
 			"channelPriority":	114,
 			"playerPriority":	64,
 			"player":	"PLAYER_SE_1"
+		}, {
+			"name":	"SEQ_SE_WB_DECIDE3",
+			"fileName":	"SEQ_SE_WB_DECIDE3.sseq",
+			"bank":	"BANK_SE_WB_DECIDE3",
+			"volume":	105,
+			"channelPriority":	114,
+			"playerPriority":	64,
+			"player":	"PLAYER_SE_1"
 		}],
 	"seqarcInfo":	[],
 	"bankInfo":	[{
@@ -12953,6 +12961,10 @@
 			"name":	"BANK_SE_WB_DECIDE2",
 			"fileName":	"BANK_SE_WB_DECIDE2.sbnk",
 			"waves":	["WAVE_ARC_SE_WB_DECIDE2", "", "", ""]
+		}, {
+			"name":	"BANK_SE_WB_DECIDE3",
+			"fileName":	"BANK_SE_WB_DECIDE3.sbnk",
+			"waves":	["WAVE_ARC_SE_WB_DECIDE3", "", "", ""]
 		}],
 	"wavarcInfo":	[{
 			"name":	""
@@ -15023,6 +15035,9 @@
 		}, {
 			"name":	"WAVE_ARC_SE_WB_DECIDE2",
 			"fileName":	"WAVE_ARC_SE_WB_DECIDE2.swar"
+		}, {
+			"name":	"WAVE_ARC_SE_WB_DECIDE3",
+			"fileName":	"WAVE_ARC_SE_WB_DECIDE3.swar"
 		}],
 	"playerInfo":	[{
 			"name":	"PLAYER_PV",

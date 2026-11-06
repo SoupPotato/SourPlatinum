@@ -312,6 +312,7 @@ static BOOL BtlCmd_ShowAbilityBanner(BattleSystem *battleSys, BattleContext *bat
 static BOOL BtlCmd_ShowBufferedAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BtlCmd_CheckAbilityBannerAvailable(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BtlCmd_HideAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
+static BOOL BtlCmd_ChangeAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
 
 static int BattleScript_Read(BattleContext *battleCtx);
 static void BattleScript_Iter(BattleContext *battleCtx, int i);
@@ -9554,6 +9555,37 @@ static BOOL BtlCmd_HideAbilityBanner(BattleSystem *battleSys, BattleContext *bat
     BattleMessage msg = battleCtx->msgBuffer;
     msg.id = BattleStrings_Text_AbilityBannerHide;
     msg.tags = TAG_NONE;
+    BattleController_EmitPrintMessage(battleSys, battleCtx, &msg);
+
+    return FALSE;
+}
+
+/**
+ * @brief Sour Platinum: the ability of a battler changed, and its banner pixelates into the new ability.
+ *
+ * The banner has to be shown with ShowAbilityBanner before the ability changes. This prints an empty message tagged
+ * with the battler and its new ability, which is not shown.
+ *
+ * Inputs:
+ * 1. The battler whose ability changed.
+ *
+ * @param battleSys
+ * @param battleCtx
+ * @return FALSE
+ */
+static BOOL BtlCmd_ChangeAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx)
+{
+    BattleScript_Iter(battleCtx, 1);
+    int inBattler = BattleScript_Read(battleCtx);
+
+    BattleMessageParams msgParams;
+    msgParams.id = BattleStrings_Text_AbilityBannerChange;
+    msgParams.tags = TAG_NICKNAME_ABILITY;
+    msgParams.params[0] = inBattler;
+    msgParams.params[1] = inBattler;
+
+    BattleMessage msg;
+    BattleMessage_Make(battleSys, battleCtx, &msgParams, &msg);
     BattleController_EmitPrintMessage(battleSys, battleCtx, &msg);
 
     return FALSE;

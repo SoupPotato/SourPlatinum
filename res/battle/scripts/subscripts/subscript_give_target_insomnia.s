@@ -8,7 +8,12 @@ _000:
     CompareMonDataToValue OPCODE_EQU, BTLSCR_DEFENDER, BATTLEMON_ABILITY, ABILITY_MULTITYPE, _041
     CompareMonDataToValue OPCODE_EQU, BTLSCR_DEFENDER, BATTLEMON_HELD_ITEM, ITEM_GRISEOUS_ORB, _041
     Call BATTLE_SUBSCRIPT_ATTACK_MESSAGE_AND_ANIMATION
+    // Sour Platinum: like in Black, the banner comes in with the old ability and pixelates into the new one
+    ShowAbilityBanner BTLSCR_DEFENDER
+    Wait 
     UpdateMonData OPCODE_SET, BTLSCR_DEFENDER, BATTLEMON_ABILITY, ABILITY_INSOMNIA
+    ChangeAbilityBanner BTLSCR_DEFENDER
+    Wait 
     // {0} acquired {1}!
     PrintMessage BattleStrings_Text_PokemonAcquiredAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_DEFENDER, BTLSCR_DEFENDER
     Wait 

@@ -87,10 +87,23 @@
 #define ABILITY_BANNER_LINE_1_Y    8
 #define ABILITY_BANNER_LINE_2_Y    19
 
+// When the ability of a Pokemon changes (Worry Seed, Skill Swap, Role Play, Trace), its banner pixelates into the new
+// ability like in Black: the mosaic grows by one every 2 VBlanks up to 15, the banner is redrawn, and it shrinks back
+#define ABILITY_BANNER_MOSAIC_MAX        15
+#define ABILITY_BANNER_MOSAIC_STEP_TIME  2
+
 enum AbilityBannerState {
     ABILITY_BANNER_STATE_SLIDE_IN = 0,
     ABILITY_BANNER_STATE_WIPE,
     ABILITY_BANNER_STATE_HOLD,
+    ABILITY_BANNER_STATE_CHANGE,
+};
+
+enum AbilityBannerChangePhase {
+    ABILITY_BANNER_CHANGE_PIXELATE = 0,
+    ABILITY_BANNER_CHANGE_REDRAW,
+    ABILITY_BANNER_CHANGE_UNPIXELATE,
+    ABILITY_BANNER_CHANGE_WAIT_SOUND,
 };
 
 typedef struct AbilityBanner {
@@ -109,6 +122,11 @@ typedef struct AbilityBanner {
     u8 wipeColumn; // the next tile column of the finished banner to show
     u8 wipeFrames; // how long the text has been wiping in
     u8 flashStarted; // the second sound was played
+    u8 changePending; // the ability changed: the banner pixelates into the new one once it is done coming in
+    u8 changePhase;
+    u8 changeTimer;
+    u8 mosaic; // the size of the mosaic while the banner changes, 0 to ABILITY_BANNER_MOSAIC_MAX
+    u16 changeAbility; // the ability that the banner changes into
     u8 *tiles; // the finished banner, with the text. The sprite starts with the plain art.
     int owner; // battler and party slot of the Pokemon, as in the message tags; -1 for other banners
     s16 restX;
@@ -123,17 +141,29 @@ static AbilityBanner *sAbilityBanners[2] = { NULL, NULL };
 static AbilityBanner *sLastBanner = NULL; // the last banner that came in: the one that gets the next message
 
 // The sounds of the banner are loaded into the sound heap while it is showing and freed after it, so that they don't
-// take room from the battle music (the trainer music does not fit next to them)
+// take room from the battle music (the trainer music does not fit next to them). Only one set is loaded at a time: the
+// two of a banner coming in, or the one of a banner changing into a new ability, which replaces them for the change.
+enum AbilityBannerSounds {
+    ABILITY_BANNER_SOUNDS_INTRO = 0,
+    ABILITY_BANNER_SOUNDS_CHANGE,
+};
+
 static BOOL sSoundsLoaded = FALSE;
+static u8 sSoundSet;
 static int sSoundHeapState;
 static u32 sSoundHeapFreeSize;
 
 static BOOL AbilityBanner_AreSoundsLoaded(void);
+static void AbilityBanner_FreeSounds(void);
 
-static void AbilityBanner_LoadSounds(void)
+static void AbilityBanner_LoadSounds(enum AbilityBannerSounds set)
 {
     if (AbilityBanner_AreSoundsLoaded()) {
-        return;
+        if (sSoundSet == set) {
+            return;
+        }
+
+        AbilityBanner_FreeSounds();
     }
 
     NNSSndHeapHandle heap = SoundSystem_Get()->heap;
@@ -145,13 +175,22 @@ static void AbilityBanner_LoadSounds(void)
         return;
     }
 
+    BOOL loaded;
+
+    if (set == ABILITY_BANNER_SOUNDS_INTRO) {
+        loaded = SoundSystem_LoadSequenceEx(SEQ_SE_WB_SHOOTER_sseq, flags) && SoundSystem_LoadSequenceEx(SEQ_SE_WB_DECIDE2_sseq, flags);
+    } else {
+        loaded = SoundSystem_LoadSequenceEx(SEQ_SE_WB_DECIDE3_sseq, flags);
+    }
+
     // Without room the banner is silent
-    if (SoundSystem_LoadSequenceEx(SEQ_SE_WB_SHOOTER_sseq, flags) == FALSE || SoundSystem_LoadSequenceEx(SEQ_SE_WB_DECIDE2_sseq, flags) == FALSE) {
+    if (loaded == FALSE) {
         SoundSystem_LoadHeapState(sSoundHeapState - 1);
         return;
     }
 
     sSoundHeapFreeSize = NNS_SndHeapGetFreeSize(heap);
+    sSoundSet = set;
     sSoundsLoaded = TRUE;
 }
 
@@ -165,6 +204,11 @@ static BOOL AbilityBanner_AreSoundsLoaded(void)
     return sSoundsLoaded;
 }
 
+static BOOL AbilityBanner_AreSoundsLoadedFor(enum AbilityBannerSounds set)
+{
+    return AbilityBanner_AreSoundsLoaded() && sSoundSet == set;
+}
+
 static void AbilityBanner_FreeSounds(void)
 {
     if (!AbilityBanner_AreSoundsLoaded()) {
@@ -173,8 +217,12 @@ static void AbilityBanner_FreeSounds(void)
 
     NNSSndHeapHandle heap = SoundSystem_Get()->heap;
 
-    Sound_StopEffect(SEQ_SE_WB_SHOOTER_sseq, 0);
-    Sound_StopEffect(SEQ_SE_WB_DECIDE2_sseq, 0);
+    if (sSoundSet == ABILITY_BANNER_SOUNDS_INTRO) {
+        Sound_StopEffect(SEQ_SE_WB_SHOOTER_sseq, 0);
+        Sound_StopEffect(SEQ_SE_WB_DECIDE2_sseq, 0);
+    } else {
+        Sound_StopEffect(SEQ_SE_WB_DECIDE3_sseq, 0);
+    }
 
     // Only when nothing was loaded after them; otherwise they stay until the heap is reset at the end of the battle
     if (NNS_SndHeapGetCurrentLevel(heap) == sSoundHeapState && NNS_SndHeapGetFreeSize(heap) == sSoundHeapFreeSize) {
@@ -190,6 +238,8 @@ static BOOL AbilityBanner_GetOwnerAndAbility(const BattleMessage *battleMsg, int
 static AbilityBanner *AbilityBanner_New(BattleSystem *battleSys, const String *line1, const String *line2, BOOL isPlayerSide);
 static void AbilityBanner_Draw(BattleSystem *battleSys, AbilityBanner *banner, const String *line1, const String *line2, BOOL isPlayerSide);
 static void AbilityBanner_CopyColumn(ManagedSprite *sprite, const u8 *src, int column);
+static BOOL AbilityBanner_MakeLines(BattleSystem *battleSys, int owner, int ability, String **line1, String **line2);
+static void AbilityBanner_Compose(BattleSystem *battleSys, u8 *out, const String *line1, const String *line2, BOOL isPlayerSide);
 
 static BOOL AbilityBanner_GetOwnerAndAbility(const BattleMessage *battleMsg, int *owner, int *ability)
 {
@@ -212,10 +262,8 @@ static BOOL AbilityBanner_GetOwnerAndAbility(const BattleMessage *battleMsg, int
         *ability = battleMsg->params[0];
         *owner = battleMsg->params[1];
         return TRUE;
-    case TAG_NICKNAME_NICKNAME_ABILITY:
-        *owner = battleMsg->params[1];
-        *ability = battleMsg->params[2];
-        return TRUE;
+    // Not TAG_NICKNAME_NICKNAME_ABILITY: Trace and Role Play name the ability of the other Pokemon, but like in Black the
+    // banner is that of the Pokemon that gets it, which their scripts bring in and change
     }
 
     return FALSE;
@@ -259,26 +307,11 @@ void AbilityBanner_TryShow(BattleSystem *battleSys, const BattleMessage *battleM
         return;
     }
 
-    int partySlot = (owner >> 8) & 0xFF;
-    Pokemon *mon = BattleSystem_GetPartyPokemon(battleSys, battler, partySlot);
+    String *ownerString, *abilityString;
 
-    if (mon == NULL) {
+    if (AbilityBanner_MakeLines(battleSys, owner, ability, &ownerString, &abilityString) == FALSE) {
         return;
     }
-
-    MessageLoader *msgLoader = BattleSystem_GetMessageLoader(battleSys);
-    StringTemplate *strFormatter = BattleSystem_GetStringTemplate(battleSys);
-
-    StringTemplate_SetNickname(strFormatter, 0, Pokemon_GetBoxPokemon(mon));
-    StringTemplate_SetAbilityName(strFormatter, 1, ability);
-
-    String *ownerString = String_Init(MON_NAME_LEN + 12, HEAP_ID_BATTLE);
-    String *abilityString = String_Init(MON_NAME_LEN + 12, HEAP_ID_BATTLE);
-    String *ownerTemplate = MessageLoader_GetNewString(msgLoader, BattleStrings_Text_AbilityBannerOwner);
-    String *abilityTemplate = MessageLoader_GetNewString(msgLoader, BattleStrings_Text_AbilityBannerAbility);
-
-    StringTemplate_Format(strFormatter, ownerString, ownerTemplate);
-    StringTemplate_Format(strFormatter, abilityString, abilityTemplate);
 
     AbilityBanner *banner = AbilityBanner_New(battleSys, ownerString, abilityString, BattleSystem_GetBattlerSide(battleSys, battler) == 0);
 
@@ -293,10 +326,63 @@ void AbilityBanner_TryShow(BattleSystem *battleSys, const BattleMessage *battleM
         }
     }
 
-    String_Free(ownerTemplate);
-    String_Free(abilityTemplate);
     String_Free(ownerString);
     String_Free(abilityString);
+}
+
+// The two lines of the banner: the name of the Pokemon and its ability. FALSE if the Pokemon is not found.
+static BOOL AbilityBanner_MakeLines(BattleSystem *battleSys, int owner, int ability, String **line1, String **line2)
+{
+    Pokemon *mon = BattleSystem_GetPartyPokemon(battleSys, owner & 0xFF, (owner >> 8) & 0xFF);
+
+    if (mon == NULL) {
+        return FALSE;
+    }
+
+    MessageLoader *msgLoader = BattleSystem_GetMessageLoader(battleSys);
+    StringTemplate *strFormatter = BattleSystem_GetStringTemplate(battleSys);
+
+    StringTemplate_SetNickname(strFormatter, 0, Pokemon_GetBoxPokemon(mon));
+    StringTemplate_SetAbilityName(strFormatter, 1, ability);
+
+    *line1 = String_Init(MON_NAME_LEN + 12, HEAP_ID_BATTLE);
+    *line2 = String_Init(MON_NAME_LEN + 12, HEAP_ID_BATTLE);
+    String *ownerTemplate = MessageLoader_GetNewString(msgLoader, BattleStrings_Text_AbilityBannerOwner);
+    String *abilityTemplate = MessageLoader_GetNewString(msgLoader, BattleStrings_Text_AbilityBannerAbility);
+
+    StringTemplate_Format(strFormatter, *line1, ownerTemplate);
+    StringTemplate_Format(strFormatter, *line2, abilityTemplate);
+
+    String_Free(ownerTemplate);
+    String_Free(abilityTemplate);
+    return TRUE;
+}
+
+BOOL AbilityBanner_IsChangeMessage(const BattleMessage *battleMsg)
+{
+    return battleMsg->id == BattleStrings_Text_AbilityBannerChange;
+}
+
+void AbilityBanner_StartChange(BattleSystem *battleSys, const BattleMessage *battleMsg)
+{
+    int owner, ability;
+
+    if (AbilityBanner_GetOwnerAndAbility(battleMsg, &owner, &ability) == FALSE || ability <= 0) {
+        return;
+    }
+
+    AbilityBanner *banner = sAbilityBanners[BattleSystem_GetBattlerSide(battleSys, owner & 0xFF) == 0 ? 0 : 1];
+
+    // Only the banner that is showing for the Pokemon changes; without one the message says enough
+    if (banner == NULL || banner->owner != (owner & 0xFFFF)) {
+        return;
+    }
+
+    banner->changePending = TRUE;
+    banner->changeAbility = ability;
+
+    // Their sounds are over by now: the one of the change replaces them
+    AbilityBanner_LoadSounds(ABILITY_BANNER_SOUNDS_CHANGE);
 }
 
 static AbilityBanner *AbilityBanner_New(BattleSystem *battleSys, const String *line1, const String *line2, BOOL isPlayerSide)
@@ -378,7 +464,7 @@ static AbilityBanner *AbilityBanner_New(BattleSystem *battleSys, const String *l
     sLastBanner = banner;
 
     // The sounds of the ability window of Black and White: one as the text wipes in, one as it flashes
-    AbilityBanner_LoadSounds();
+    AbilityBanner_LoadSounds(ABILITY_BANNER_SOUNDS_INTRO);
 
     return banner;
 }
@@ -412,6 +498,20 @@ static void AbilityBanner_CopyColumn(ManagedSprite *sprite, const u8 *src, int c
 }
 
 static void AbilityBanner_Draw(BattleSystem *battleSys, AbilityBanner *banner, const String *line1, const String *line2, BOOL isPlayerSide)
+{
+    // The text wipes in after the slide: for now the sprite only has the art
+    banner->tiles = Heap_Alloc(HEAP_ID_BATTLE, ABILITY_BANNER_BYTES);
+    AbilityBanner_Compose(battleSys, banner->tiles, line1, line2, isPlayerSide);
+
+    const u8 *art = &sAbilityBannerBitmap[(isPlayerSide ? ABILITY_BANNER_ART_PLAYER : ABILITY_BANNER_ART_ENEMY) * ABILITY_BANNER_BYTES];
+
+    for (int column = 0; column < ABILITY_BANNER_WIDTH_TILES; column++) {
+        AbilityBanner_CopyColumn(banner->sprite, art, column);
+    }
+}
+
+// The art of the banner with its two lines of text, into out
+static void AbilityBanner_Compose(BattleSystem *battleSys, u8 *out, const String *line1, const String *line2, BOOL isPlayerSide)
 {
     BgConfig *bgConfig = BattleSystem_GetBgConfig(battleSys);
     Window window, textWindow;
@@ -470,13 +570,7 @@ static void AbilityBanner_Draw(BattleSystem *battleSys, AbilityBanner *banner, c
 
     Font_Free(FONT_BANNER);
 
-    // The text wipes in after the slide: for now the sprite only has the art
-    banner->tiles = Heap_Alloc(HEAP_ID_BATTLE, ABILITY_BANNER_BYTES);
-    MI_CpuCopy16(window.pixels, banner->tiles, ABILITY_BANNER_BYTES);
-
-    for (int column = 0; column < ABILITY_BANNER_WIDTH_TILES; column++) {
-        AbilityBanner_CopyColumn(banner->sprite, art, column);
-    }
+    MI_CpuCopy16(window.pixels, out, ABILITY_BANNER_BYTES);
 
     Window_Remove(&textWindow);
     Window_Remove(&window);
@@ -503,6 +597,104 @@ static void AbilityBanner_SetFlash(AbilityBanner *banner, int fraction)
     PaletteData_LoadBuffer(BattleSystem_GetPaletteData(banner->battleSys), colors, PLTTBUF_MAIN_OBJ, PLTT_DEST(banner->paletteSlot), sizeof(colors));
 }
 
+// Shows the finished banner in blocks of mosaic + 1 pixels, like the mosaic of the hardware. It is done here rather than
+// with the mosaic of the sprites, whose blocks are aligned on the screen: on the rows above the top of the banner they
+// read the tiles in front of it, which showed as garbage.
+static void AbilityBanner_DrawMosaic(AbilityBanner *banner)
+{
+    int block = banner->mosaic + 1;
+    u8 *pixelated = Heap_Alloc(HEAP_ID_BATTLE, ABILITY_BANNER_BYTES);
+
+    for (int y = 0; y < ABILITY_BANNER_HEIGHT; y++) {
+        for (int x = 0; x < ABILITY_BANNER_WIDTH; x++) {
+            SetPixel(pixelated, x, y, GetPixel(banner->tiles, x - x % block, y - y % block));
+        }
+    }
+
+    for (int column = 0; column < ABILITY_BANNER_WIDTH_TILES; column++) {
+        AbilityBanner_CopyColumn(banner->sprite, pixelated, column);
+    }
+
+    Heap_Free(pixelated);
+}
+
+static BOOL AbilityBanner_IsChanging(void)
+{
+    for (int i = 0; i < 2; i++) {
+        if (sAbilityBanners[i] != NULL && (sAbilityBanners[i]->changePending || sAbilityBanners[i]->state == ABILITY_BANNER_STATE_CHANGE)) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+// Returns TRUE when the banner has changed into its new ability
+static BOOL AbilityBanner_UpdateChange(AbilityBanner *banner, int step)
+{
+    switch (banner->changePhase) {
+    case ABILITY_BANNER_CHANGE_PIXELATE: {
+        int mosaic = banner->mosaic;
+        banner->changeTimer += step;
+
+        while (banner->changeTimer >= ABILITY_BANNER_MOSAIC_STEP_TIME && banner->mosaic < ABILITY_BANNER_MOSAIC_MAX) {
+            banner->changeTimer -= ABILITY_BANNER_MOSAIC_STEP_TIME;
+            banner->mosaic++;
+        }
+
+        if (banner->mosaic != mosaic) {
+            AbilityBanner_DrawMosaic(banner);
+        }
+
+        if (banner->mosaic >= ABILITY_BANNER_MOSAIC_MAX) {
+            banner->changePhase = ABILITY_BANNER_CHANGE_REDRAW;
+        }
+        break;
+    }
+    case ABILITY_BANNER_CHANGE_REDRAW: {
+        // At the largest blocks, the banner becomes the one of the new ability
+        String *line1, *line2;
+
+        if (AbilityBanner_MakeLines(banner->battleSys, banner->owner, banner->changeAbility, &line1, &line2)) {
+            AbilityBanner_Compose(banner->battleSys, banner->tiles, line1, line2, banner->side == 0);
+            String_Free(line1);
+            String_Free(line2);
+        }
+
+        AbilityBanner_DrawMosaic(banner);
+        banner->changeTimer = 0;
+        banner->changePhase = ABILITY_BANNER_CHANGE_UNPIXELATE;
+        break;
+    }
+    case ABILITY_BANNER_CHANGE_UNPIXELATE: {
+        int mosaic = banner->mosaic;
+        banner->changeTimer += step;
+
+        while (banner->changeTimer >= ABILITY_BANNER_MOSAIC_STEP_TIME && banner->mosaic > 0) {
+            banner->changeTimer -= ABILITY_BANNER_MOSAIC_STEP_TIME;
+            banner->mosaic--;
+        }
+
+        // At 0 this draws the banner as it is
+        if (banner->mosaic != mosaic) {
+            AbilityBanner_DrawMosaic(banner);
+        }
+
+        if (banner->mosaic == 0) {
+            banner->changePhase = ABILITY_BANNER_CHANGE_WAIT_SOUND;
+        }
+        break;
+    }
+    case ABILITY_BANNER_CHANGE_WAIT_SOUND:
+        if (AbilityBanner_AreSoundsLoadedFor(ABILITY_BANNER_SOUNDS_CHANGE) == FALSE || Sound_IsEffectPlaying(SEQ_SE_WB_DECIDE3_sseq) == FALSE) {
+            return TRUE;
+        }
+        break;
+    }
+
+    return FALSE;
+}
+
 static void AbilityBanner_Task(SysTask *task, void *data)
 {
     AbilityBanner *banner = data;
@@ -523,7 +715,7 @@ static void AbilityBanner_Task(SysTask *task, void *data)
             banner->wipeColumn = 0;
             banner->wipeFrames = 0;
 
-            if (AbilityBanner_AreSoundsLoaded()) {
+            if (AbilityBanner_AreSoundsLoadedFor(ABILITY_BANNER_SOUNDS_INTRO)) {
                 Sound_PlayEffect(SEQ_SE_WB_SHOOTER_sseq);
             }
         }
@@ -542,11 +734,33 @@ static void AbilityBanner_Task(SysTask *task, void *data)
             banner->timer = 0;
         }
         break;
+    case ABILITY_BANNER_STATE_CHANGE:
+        if (AbilityBanner_UpdateChange(banner, step)) {
+            // Back to waiting for its message, now that of the new ability
+            banner->state = ABILITY_BANNER_STATE_HOLD;
+            banner->timeout = ABILITY_BANNER_WAIT_FOR_MESSAGE_FRAMES;
+            banner->lingerFrames = 0;
+        }
+        break;
     case ABILITY_BANNER_STATE_HOLD:
+        // The ability changed: once the banner is done coming in, it pixelates into the new one
+        if (banner->changePending && banner->timer >= ABILITY_BANNER_HOLD_FRAMES) {
+            banner->changePending = FALSE;
+            banner->state = ABILITY_BANNER_STATE_CHANGE;
+            banner->changePhase = ABILITY_BANNER_CHANGE_PIXELATE;
+            banner->changeTimer = 0;
+            banner->mosaic = 0;
+
+            if (AbilityBanner_AreSoundsLoadedFor(ABILITY_BANNER_SOUNDS_CHANGE)) {
+                Sound_PlayEffect(SEQ_SE_WB_DECIDE3_sseq);
+            }
+            break;
+        }
+
         if (banner->flashStarted == FALSE && banner->timer >= ABILITY_BANNER_FLASH_DELAY) {
             banner->flashStarted = TRUE;
 
-            if (AbilityBanner_AreSoundsLoaded()) {
+            if (AbilityBanner_AreSoundsLoadedFor(ABILITY_BANNER_SOUNDS_INTRO)) {
                 Sound_PlayEffect(SEQ_SE_WB_DECIDE2_sseq);
             }
         }
@@ -671,6 +885,11 @@ BOOL AbilityBanner_IsIntroPlaying(void)
 {
     BOOL banners = FALSE;
 
+    // Changing into a new ability counts too: its message comes after it
+    if (AbilityBanner_IsChanging()) {
+        return TRUE;
+    }
+
     for (int i = 0; i < 2; i++) {
         AbilityBanner *banner = sAbilityBanners[i];
 
@@ -689,7 +908,7 @@ BOOL AbilityBanner_IsIntroPlaying(void)
         return FALSE;
     }
 
-    return AbilityBanner_AreSoundsLoaded() && (Sound_IsEffectPlaying(SEQ_SE_WB_SHOOTER_sseq) || Sound_IsEffectPlaying(SEQ_SE_WB_DECIDE2_sseq));
+    return AbilityBanner_AreSoundsLoadedFor(ABILITY_BANNER_SOUNDS_INTRO) && (Sound_IsEffectPlaying(SEQ_SE_WB_SHOOTER_sseq) || Sound_IsEffectPlaying(SEQ_SE_WB_DECIDE2_sseq));
 }
 
 static void AbilityBanner_Free(AbilityBanner *banner)
