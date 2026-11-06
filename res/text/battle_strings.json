@@ -8762,6 +8762,237 @@
         "The foe’s {STRVAR_1 1, 0, 0}\n",
         "cannot use {STRVAR_1 6, 1, 0}!"
       ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsItemCannotBeRemoved_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0}’s item\n",
+        "cannot be removed!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsItemCannotBeRemoved_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}’s item\n",
+        "cannot be removed!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsItemCannotBeRemoved_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}’s item\n",
+        "cannot be removed!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonAnchorsItself_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0}\n",
+        "anchors itself!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonAnchorsItself_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}\n",
+        "anchors itself!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonAnchorsItself_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}\n",
+        "anchors itself!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonStaysAwake_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0}\n",
+        "stays awake!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonStaysAwake_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}\n",
+        "stays awake!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonStaysAwake_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}\n",
+        "stays awake!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonWasCuredOfItsPoisoningAbility_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0} was cured of\n",
+        "its poisoning."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonWasCuredOfItsPoisoningAbility_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0} was cured of\n",
+        "its poisoning."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonWasCuredOfItsPoisoningAbility_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0} was cured of\n",
+        "its poisoning."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonWasCuredOfParalysisAbility_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0} was cured\n",
+        "of paralysis."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonWasCuredOfParalysisAbility_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0} was cured\n",
+        "of paralysis."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonWasCuredOfParalysisAbility_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0} was cured\n",
+        "of paralysis."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsBurnWasHealedAbility_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0}’s burn\n",
+        "was healed."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsBurnWasHealedAbility_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}’s burn\n",
+        "was healed."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonsBurnWasHealedAbility_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}’s burn\n",
+        "was healed."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonIsExertingItsPressure_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0} is exerting\n",
+        "its pressure!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonIsExertingItsPressure_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0} is exerting\n",
+        "its pressure!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonIsExertingItsPressure_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0} is exerting\n",
+        "its pressure!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonBreaksTheMold_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0}\n",
+        "breaks the mold!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonBreaksTheMold_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}\n",
+        "breaks the mold!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonBreaksTheMold_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}\n",
+        "breaks the mold!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonShuddered_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 1, 0}\n",
+        "shuddered!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonShuddered_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 1, 0}\n",
+        "shuddered!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonShuddered_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 1, 0}\n",
+        "shuddered!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_ItWasAlertedToPokemonsMove_Ally",
+      "en_US": [
+        "It was alerted to {STRVAR_1 1, 0, 0}’s\n",
+        "{STRVAR_1 6, 1, 0}!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_ItWasAlertedToPokemonsMove_Wild",
+      "en_US": [
+        "It was alerted to the wild {STRVAR_1 1, 0, 0}’s\n",
+        "{STRVAR_1 6, 1, 0}!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_ItWasAlertedToPokemonsMove_Foe",
+      "en_US": [
+        "It was alerted to the foe’s {STRVAR_1 1, 0, 0}’s\n",
+        "{STRVAR_1 6, 1, 0}!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonCantGetItGoing_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0}\n",
+        "can’t get it going!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonCantGetItGoing_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0}\n",
+        "can’t get it going!"
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonCantGetItGoing_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0}\n",
+        "can’t get it going!"
+      ]
     }
   ]
 }

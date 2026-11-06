@@ -6622,6 +6622,12 @@ static BOOL BtlCmd_TryKnockOff(BattleSystem *battleSys, BattleContext *battleCtx
         battleCtx->msgBuffer.params[0] = BattleSystem_NicknameTag(battleCtx, battleCtx->defender);
         battleCtx->msgBuffer.params[1] = DEFENDING_MON.ability;
         battleCtx->msgBuffer.params[2] = battleCtx->moveCur;
+
+        // Sour Platinum: the banner names the ability, so its message is the plain one
+        if (AbilityBanner_CanShow()) {
+            battleCtx->msgBuffer.id = BattleStrings_Text_PokemonsItemCannotBeRemoved_Ally; // "{0}'s item cannot be removed!"
+            battleCtx->msgBuffer.tags = TAG_NICKNAME_ABILITY;
+        }
     } else if (DEFENDING_MON.heldItem) {
         battleCtx->msgBuffer.id = BattleStrings_Text_PokemonKnockedOffPokemonsItem_AllyAlly; // "{0} knocked off {1}'s {2}!"
         battleCtx->msgBuffer.tags = TAG_NICKNAME_NICKNAME_ITEM;

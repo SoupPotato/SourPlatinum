@@ -25,8 +25,19 @@ _048:
     PrintAttackMessage 
     Wait 
     WaitButtonABTime 15
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _PlainoveIneffective
     // {0}’s {1} made {2} ineffective!
     PrintMessage BattleStrings_Text_PokemonsAbilityMadeMoveIneffective_Ally, TAG_NICKNAME_ABILITY_MOVE, BTLSCR_DEFENDER, BTLSCR_DEFENDER, BTLSCR_ATTACKER
+    GoTo _PlainoveIneffectiveDone
+
+_PlainoveIneffective:
+    ShowAbilityBanner BTLSCR_DEFENDER
+    Wait 
+    // It doesn’t affect {0}...
+    PrintMessage BattleStrings_Text_ItDoesntAffectPokemon_Ally, TAG_NICKNAME, BTLSCR_DEFENDER
+
+_PlainoveIneffectiveDone:
     Wait 
     WaitButtonABTime 30
     UpdateVar OPCODE_FLAG_ON, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_NO_MORE_WORK

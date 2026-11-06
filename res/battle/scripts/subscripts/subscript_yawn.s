@@ -31,8 +31,19 @@ _066:
     PrintAttackMessage 
     Wait 
     WaitButtonABTime 30
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _PlaineItIneffective
     // {0}’s {1} made it ineffective!
     PrintMessage BattleStrings_Text_PokemonsAbilityMadeItIneffective_Ally, TAG_NICKNAME_ABILITY, BTLSCR_SIDE_EFFECT_MON, BTLSCR_SIDE_EFFECT_MON
+    GoTo _PlaineItIneffectiveDone
+
+_PlaineItIneffective:
+    ShowAbilityBanner BTLSCR_SIDE_EFFECT_MON
+    Wait 
+    // It doesn’t affect {0}...
+    PrintMessage BattleStrings_Text_ItDoesntAffectPokemon_Ally, TAG_NICKNAME, BTLSCR_SIDE_EFFECT_MON
+
+_PlaineItIneffectiveDone:
     GoTo _089
 
 _077:
