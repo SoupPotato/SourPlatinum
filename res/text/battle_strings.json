@@ -8993,6 +8993,10 @@
         "The foe’s {STRVAR_1 1, 0, 0}\n",
         "can’t get it going!"
       ]
+    },
+    {
+      "id": "BattleStrings_Text_AbilityBannerChange",
+      "en_US": ""
     }
   ]
 }

@@ -1024,6 +1024,19 @@ void BattleDisplay_PrintMessage(BattleSystem *battleSys, BattlerData *battlerDat
         return;
     }
 
+    if (AbilityBanner_IsChangeMessage(battleMsg)) {
+        BattleMessageWaitTask *changeTask = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleMessageWaitTask));
+
+        changeTask->battleSys = battleSys;
+        changeTask->command = battlerData->data[0];
+        changeTask->battler = battlerData->battler;
+        changeTask->msgIdx = ABILITY_BANNER_NO_MESSAGE;
+
+        AbilityBanner_StartChange(battleSys, battleMsg);
+        SysTask_Start(Task_WaitForBattleMessagePrint, changeTask, 0);
+        return;
+    }
+
     if (AbilityBanner_IsBannerOnlyMessage(battleMsg) == FALSE && AbilityBanner_MessageNamesAbility(battleMsg)) {
         AbilityBannerMessageTask *bannerTask = Heap_Alloc(HEAP_ID_BATTLE, sizeof(AbilityBannerMessageTask));
 

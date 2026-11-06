@@ -359,6 +359,7 @@ sound_sequence_files = files([
     'SEQ_SE_DP_DENSI16.mid',
     'SEQ_SE_DP_DODON.mid',
     'SEQ_SE_WB_DECIDE2.mid',
+    'SEQ_SE_WB_DECIDE3.mid',
     'SEQ_SE_WB_SHOOTER.mid',
     'SEQ_SE_DP_DOKU2.mid',
     'SEQ_SE_DP_DOOR10.mid',

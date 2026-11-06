@@ -14,6 +14,11 @@ _000:
 
 _052:
     Call BATTLE_SUBSCRIPT_ATTACK_MESSAGE_AND_ANIMATION
+    // Sour Platinum: like in Black, both banners come in with the old abilities and pixelate into the new ones, one
+    // after the other
+    ShowAbilityBanner BTLSCR_ATTACKER
+    ShowAbilityBanner BTLSCR_DEFENDER
+    Wait 
     UpdateVarFromVar OPCODE_SET, BTLVAR_SCRIPT_TEMP, BTLVAR_TOTAL_TURNS
     UpdateVar OPCODE_BITWISE_AND, BTLVAR_SCRIPT_TEMP, 1
     UpdateMonDataFromVar OPCODE_SET, BTLSCR_ATTACKER, BATTLEMON_TRUANT, BTLVAR_SCRIPT_TEMP
@@ -22,6 +27,11 @@ _052:
     UpdateMonDataFromVar OPCODE_GET, BTLSCR_DEFENDER, BATTLEMON_ABILITY, BTLVAR_SCRIPT_TEMP
     UpdateMonDataFromVar OPCODE_SET, BTLSCR_ATTACKER, BATTLEMON_ABILITY, BTLVAR_SCRIPT_TEMP
     UpdateMonDataFromVar OPCODE_SET, BTLSCR_DEFENDER, BATTLEMON_ABILITY, BTLVAR_CALC_TEMP
+    // Like in Black, the banner of the user changes first, then that of the target
+    ChangeAbilityBanner BTLSCR_ATTACKER
+    Wait 
+    ChangeAbilityBanner BTLSCR_DEFENDER
+    Wait 
     CompareVarToValue OPCODE_NEQ, BTLVAR_SCRIPT_TEMP, 112, _120
     UpdateVarFromVar OPCODE_SET, BTLVAR_SCRIPT_TEMP, BTLVAR_TOTAL_TURNS
     UpdateVar OPCODE_ADD, BTLVAR_SCRIPT_TEMP, 1
