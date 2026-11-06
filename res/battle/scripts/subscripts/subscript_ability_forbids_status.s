@@ -4,8 +4,22 @@
 _000:
     // Sour Platinum: Oblivious shaking off a taunt
     CompareVarToValue OPCODE_EQU, BTLVAR_MSG_TEMP, 7, _taunt
+    // Sour Platinum: with a banner, a Pokemon that gains Insomnia or Vital Spirit while asleep just wakes up, like in Black
+    CompareVarToValue OPCODE_NEQ, BTLVAR_MSG_TEMP, 0, _CuredWithAbility
+    CheckAbilityBannerAvailable _PlainWokeUp
+
+_CuredWithAbility:
     // {0} cured its {2} status with its {1}!
     PrintMessage BattleStrings_Text_PokemonCuredItsStatusWithItsAbility_Ally, TAG_NICKNAME_ABILITY_STATUS, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP
+    GoTo _CuredMessageDone
+
+_PlainWokeUp:
+    ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
+    Wait 
+    // {0} woke up!
+    PrintMessage BattleStrings_Text_PokemonWokeUp_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
+
+_CuredMessageDone:
     Wait 
     SetHealthBoxStatusIcon BTLSCR_MSG_TEMP, BATTLE_ANIMATION_NONE
     WaitButtonABTime 30

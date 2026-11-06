@@ -40,8 +40,19 @@ _065:
 
 _098:
     WaitButtonABTime 30
+    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
+    CheckAbilityBannerAvailable _PlainseOfItsAbility
     // {0} stayed awake because of its {1}!
     PrintMessage BattleStrings_Text_PokemonStayedAwakeBecauseOfItsAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_ATTACKER, BTLSCR_ATTACKER
+    GoTo _PlainseOfItsAbilityDone
+
+_PlainseOfItsAbility:
+    ShowAbilityBanner BTLSCR_ATTACKER
+    Wait 
+    // {0} stays awake!
+    PrintMessage BattleStrings_Text_PokemonStaysAwake_Ally, TAG_NICKNAME, BTLSCR_ATTACKER
+
+_PlainseOfItsAbilityDone:
     GoTo _143
 
 _107:

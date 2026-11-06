@@ -4078,6 +4078,18 @@ int BattleSystem_TriggerEffectOnSwitch(BattleSystem *battleSys, BattleContext *b
                     if (maxPower) {
                         battleCtx->msgBattlerTemp = battler;
 
+                        // Sour Platinum: the message names the Pokemon that has the move
+                        for (j = 0; j < maxBattlers; j++) {
+                            if (BattleSystem_GetBattlerSide(battleSys, battler) != BattleSystem_GetBattlerSide(battleSys, j)
+                                && battleCtx->battleMons[j].curHP) {
+                                for (k = 0; k < LEARNED_MOVES_MAX; k++) {
+                                    if (battleCtx->battleMons[j].moves[k] == battleCtx->msgMoveTemp) {
+                                        battleCtx->msgAttacker = j;
+                                    }
+                                }
+                            }
+                        }
+
                         subscript = subscript_forewarn;
                         result = SWITCH_IN_CHECK_RESULT_BREAK;
                     } else if (sumEnemyHP) {
@@ -4086,6 +4098,7 @@ int BattleSystem_TriggerEffectOnSwitch(BattleSystem *battleSys, BattleContext *b
 
                         battleCtx->msgMoveTemp = battleCtx->battleMons[j].moves[BattleSystem_RandNext(battleSys) % k];
                         battleCtx->msgBattlerTemp = battler;
+                        battleCtx->msgAttacker = j; // Sour Platinum: the message names the Pokemon that has the move
 
                         subscript = subscript_forewarn;
                         result = SWITCH_IN_CHECK_RESULT_BREAK;
