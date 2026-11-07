@@ -8999,6 +8999,48 @@
       "en_US": ""
     },
     {
+      "id": "BattleStrings_Text_PokemonSnappedOutOfItsConfusionAbility_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0} snapped out\n",
+        "of its confusion."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonSnappedOutOfItsConfusionAbility_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0} snapped out\n",
+        "of its confusion."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonSnappedOutOfItsConfusionAbility_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0} snapped out\n",
+        "of its confusion."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonGotOverItsInfatuationAbility_Ally",
+      "en_US": [
+        "{STRVAR_1 1, 0, 0} got over\n",
+        "its infatuation."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonGotOverItsInfatuationAbility_Wild",
+      "en_US": [
+        "The wild {STRVAR_1 1, 0, 0} got over\n",
+        "its infatuation."
+      ]
+    },
+    {
+      "id": "BattleStrings_Text_PokemonGotOverItsInfatuationAbility_Foe",
+      "en_US": [
+        "The foe’s {STRVAR_1 1, 0, 0} got over\n",
+        "its infatuation."
+      ]
+    },
+    {
       "id": "BattleStrings_Text_AbilityBannerReshow",
       "en_US": ""
     }

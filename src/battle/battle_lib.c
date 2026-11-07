@@ -1800,13 +1800,8 @@ BOOL BattleSystem_TriggerRedirectionAbilities(BattleSystem *battleSys, BattleCon
     }
 
     if ((battleCtx->moveStatusFlags & MOVE_STATUS_NO_EFFECTS) == FALSE && DEFENDER_SELF_TURN_FLAGS.stormDrainActivated) {
+        // Sour Platinum: Storm Drain absorbs the move, so there is no message about taking it
         battleCtx->selfTurnFlags[battleCtx->defender].stormDrainActivated = FALSE;
-
-        LOAD_SUBSEQ(subscript_lightning_rod_redirected);
-        battleCtx->commandNext = battleCtx->command;
-        battleCtx->command = BATTLE_CONTROL_EXEC_SCRIPT;
-
-        result = TRUE;
     }
 
     return result;
@@ -3641,6 +3636,13 @@ int BattleSystem_TriggerImmunityAbility(BattleContext *battleCtx, int attacker, 
         subscript = subscript_absorb_and_sp_atk_up_1_stage;
     }
 
+    // Sour Platinum: Generation 5, Storm Drain absorbs Water moves and raises Sp. Atk
+    if (Battler_IgnorableAbility(battleCtx, attacker, defender, ABILITY_STORM_DRAIN) == TRUE
+        && moveType == TYPE_WATER
+        && attacker != defender) {
+        subscript = subscript_absorb_and_sp_atk_up_1_stage;
+    }
+
     if (Battler_IgnorableAbility(battleCtx, attacker, defender, ABILITY_DRY_SKIN) == TRUE
         && moveType == TYPE_WATER
         && (battleCtx->battleStatusMask & SYSCTL_FIRST_OF_MULTI_TURN) == FALSE
@@ -4233,14 +4235,14 @@ int BattleSystem_TriggerEffectOnSwitch(BattleSystem *battleSys, BattleContext *b
             break;
 
         case SWITCH_IN_CHECK_STATE_CLOUD_NINE:
-            // Sour Platinum: Generation 5, a Pokemon with Cloud Nine says that the effects of weather disappeared when it
-            // is brought out
+            // Sour Platinum: Generation 5, a Pokemon with Cloud Nine or Air Lock says that the effects of weather
+            // disappeared when it is brought out
             for (i = 0; i < maxBattlers; i++) {
                 battler = battleCtx->monSpeedOrder[i];
 
                 if (battleCtx->battleMons[battler].cloudNineAnnounced == FALSE
                     && battleCtx->battleMons[battler].curHP
-                    && Battler_Ability(battleCtx, battler) == ABILITY_CLOUD_NINE) {
+                    && (Battler_Ability(battleCtx, battler) == ABILITY_CLOUD_NINE || Battler_Ability(battleCtx, battler) == ABILITY_AIR_LOCK)) {
                     battleCtx->battleMons[battler].cloudNineAnnounced = TRUE;
                     battleCtx->msgBattlerTemp = battler;
                     subscript = subscript_cloud_nine;
