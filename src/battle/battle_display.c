@@ -142,6 +142,7 @@ static void Task_UpdateHPGauge(SysTask *task, void *data);
 static void Task_DrawItemHPBar(SysTask *task, void *data);
 
 static BOOL sItemHPBarDone; // Sour Platinum: set by Task_DrawItemHPBar when the HP bar has filled
+static u8 sFlickerNotStarted; // Sour Platinum: a bit per battler whose damage flash has yet to begin, which its HP bar waits for
 static void Task_UpdateExpGauge(SysTask *task, void *data);
 static void Task_PlayFaintingSequence(SysTask *task, void *data);
 static void Task_FadeOut(SysTask *task, void *data);
@@ -1129,6 +1130,8 @@ void BattleDisplay_InitTaskFlickerBattler(BattleSystem *battleSys, BattlerData *
     flickerBattlerData->monSprite = battlerData->monSprite;
     flickerBattlerData->battler = battlerData->battler;
     flickerBattlerData->delay = 0;
+
+    sFlickerNotStarted |= 1 << battlerData->battler;
 
     SysTask_Start(Task_FlickerBattler, flickerBattlerData, 0);
 }
@@ -4961,6 +4964,7 @@ static void Task_FlickerBattler(SysTask *task, void *data)
             hide = PokemonSprite_GetAttribute(flickerBattlerData->monSprite, MON_SPRITE_HIDE);
             hide ^= 1;
             PokemonSprite_SetAttribute(flickerBattlerData->monSprite, MON_SPRITE_HIDE, hide);
+            sFlickerNotStarted &= ~(1 << flickerBattlerData->battler);
         } else {
             flickerBattlerData->delay--;
         }
@@ -5024,6 +5028,11 @@ static void Task_UpdateHPGaugeStep(SysTask *task, HealthBox *healthbox)
 
     switch (healthbox->state) {
     case 0:
+        // Sour Platinum: this task runs on every tick and the flash on every other one, so it can get here first
+        if (sFlickerNotStarted & (1 << healthbox->battler)) {
+            return;
+        }
+
         HealthBox_CalcHP(healthbox, healthbox->damage);
         healthbox->state++;
     case 1:
