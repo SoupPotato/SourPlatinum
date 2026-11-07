@@ -530,6 +530,12 @@ class Text:
         }
 
     @staticmethod
+    def same(a, b):
+        """Message equality; an empty message is spelled both "en_US": "" and "garbage": 0 in the source."""
+        empty = lambda m: m in ({'en_US': ''}, {'en_US': []}, {'garbage': 0})
+        return a == b or (empty(a) and empty(b))
+
+    @staticmethod
     def field_value(bank, message):
         """A generated bank's message as its source field stores it."""
         value = message.get('en_US')
@@ -572,9 +578,9 @@ class Text:
             if path[1] < len(msgs):
                 entry = msgs[path[1]]
                 current = {k: v for k, v in entry.items() if k != 'id'}
-                if current == message:
+                if self.same(current, message):
                     return True
-                if current != old_message:
+                if not self.same(current, old_message):
                     return False
                 for k in ('en_US', 'garbage'):
                     entry.pop(k, None)
@@ -608,7 +614,7 @@ class Text:
             if len(new) < len(old):
                 ctx.not_written.append(f'text bank {bank}: removed messages (scripts refer to them by ID, so remove them in source)')
             for n, message in enumerate(new):
-                if n < len(old) and message == old[n]:
+                if n < len(old) and self.same(message, old[n]):
                     continue
                 try:
                     rel, path = self.target(bank, n, len(new))
@@ -639,7 +645,7 @@ class Text:
                     src, message = data, self.field_value(bank, message)
                     if isinstance(src, list) and isinstance(message, str):
                         message = [message]
-                if src != message:
+                if not (self.same(src, message) if path[0] == 'messages' else src == message):
                     bad += 1
                     if bad <= 5:
                         print(f'  {bank} message {n} ({rel}): source {json.dumps(src, ensure_ascii=False)[:70]}'
