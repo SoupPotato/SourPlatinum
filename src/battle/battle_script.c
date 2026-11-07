@@ -313,6 +313,7 @@ static BOOL BtlCmd_ShowBufferedAbilityBanner(BattleSystem *battleSys, BattleCont
 static BOOL BtlCmd_CheckAbilityBannerAvailable(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BtlCmd_HideAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
 static BOOL BtlCmd_ChangeAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
+static BOOL BtlCmd_ReshowAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx);
 
 static int BattleScript_Read(BattleContext *battleCtx);
 static void BattleScript_Iter(BattleContext *battleCtx, int i);
@@ -9573,6 +9574,35 @@ static BOOL BtlCmd_HideAbilityBanner(BattleSystem *battleSys, BattleContext *bat
  * @param battleCtx
  * @return FALSE
  */
+/**
+ * @brief Sour Platinum: like ShowAbilityBanner, but a banner that is still up for the battler comes in again, like in
+ * Black for a new effect of the ability after its message (Insomnia waking up the Pokemon after Worry Seed).
+ *
+ * Inputs:
+ * 1. The battler whose banner comes in.
+ *
+ * @param battleSys
+ * @param battleCtx
+ * @return FALSE
+ */
+static BOOL BtlCmd_ReshowAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx)
+{
+    BattleScript_Iter(battleCtx, 1);
+    int inBattler = BattleScript_Read(battleCtx);
+
+    BattleMessageParams msgParams;
+    msgParams.id = BattleStrings_Text_AbilityBannerReshow;
+    msgParams.tags = TAG_NICKNAME_ABILITY;
+    msgParams.params[0] = inBattler;
+    msgParams.params[1] = inBattler;
+
+    BattleMessage msg;
+    BattleMessage_Make(battleSys, battleCtx, &msgParams, &msg);
+    BattleController_EmitPrintMessage(battleSys, battleCtx, &msg);
+
+    return FALSE;
+}
+
 static BOOL BtlCmd_ChangeAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx)
 {
     BattleScript_Iter(battleCtx, 1);

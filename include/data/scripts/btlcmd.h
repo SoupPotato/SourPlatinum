@@ -233,6 +233,7 @@ ScriptCommand(BTLCMD_SHOWBUFFEREDABILITYBANNER,   BtlCmd_ShowBufferedAbilityBann
 ScriptCommand(BTLCMD_CHECKABILITYBANNERAVAILABLE, BtlCmd_CheckAbilityBannerAvailable)
 ScriptCommand(BTLCMD_HIDEABILITYBANNER,           BtlCmd_HideAbilityBanner)
 ScriptCommand(BTLCMD_CHANGEABILITYBANNER,         BtlCmd_ChangeAbilityBanner)
+ScriptCommand(BTLCMD_RESHOWABILITYBANNER,         BtlCmd_ReshowAbilityBanner)
 
 // clang-format on
 
