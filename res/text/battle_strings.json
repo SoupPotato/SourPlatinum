@@ -8997,6 +8997,10 @@
     {
       "id": "BattleStrings_Text_AbilityBannerChange",
       "en_US": ""
+    },
+    {
+      "id": "BattleStrings_Text_AbilityBannerReshow",
+      "en_US": ""
     }
   ]
 }

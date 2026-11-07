@@ -1258,6 +1258,12 @@
     .long \battler
     .endm
 
+    // Sour Platinum: brings in the ability banner of a battler again, even if it is still up
+    .macro ReshowAbilityBanner battler
+    .long BTLCMD_RESHOWABILITYBANNER
+    .long \battler
+    .endm
+
     // Sour Platinum: brings in the ability banner for the buffered message, if it names an ability
     .macro ShowBufferedAbilityBanner
     .long BTLCMD_SHOWBUFFEREDABILITYBANNER
