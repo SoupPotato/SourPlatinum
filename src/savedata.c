@@ -10,6 +10,7 @@
 #include "heap.h"
 #include "inlines.h"
 #include "math_util.h"
+#include "play_time_manager.h"
 #include "savedata_misc.h"
 #include "system.h"
 #include "unk_0209A74C.h"
@@ -35,6 +36,27 @@ static void SaveDataExtra_SetSaveKey(SaveData *saveData, int extraSaveID, u32 ne
 
 static SaveData *sSaveDataPtr = NULL;
 static BOOL sSaveComplete;
+
+// Sour Platinum: like in Pokemon Black, a save reads back what is on the cartridge a page at a time and only writes the
+// pages that differ, a few pages per frame so the game keeps running. Both copies get the new save one after the other,
+// so they stay the same: the pages that changed in the first copy are the ones that change in the second.
+#define SAVE_COMPARE_PAGE_SIZE 256
+#define SAVE_COMPARE_BUDGET    0x1000
+#define SAVE_WRITE_RUN_MAX     0x8000
+#define SAVE_DIRTY_PAGES_MAX   (SAVE_SECTOR_SIZE * SAVE_PAGE_MAX / SAVE_COMPARE_PAGE_SIZE + SAVE_BLOCK_ID_MAX)
+
+enum SaveSequence {
+    SAVE_SEQ_BLOCK_START = 0,
+    SAVE_SEQ_COMPARE,
+    SAVE_SEQ_WRITE_WAIT,
+    SAVE_SEQ_FOOTER_CHECK,
+    SAVE_SEQ_FOOTER,
+    SAVE_SEQ_BLOCK_DONE,
+};
+
+static u32 sComparePage[SAVE_COMPARE_PAGE_SIZE / sizeof(u32)];
+static u8 sDirtyPages[(SAVE_DIRTY_PAGES_MAX + 7) / 8];
+static BOOL sSlotsInSync[SAVE_BLOCK_ID_MAX]; // both copies of the block on the cartridge are the same
 
 SaveData *SaveData_Init(void)
 {
@@ -136,6 +158,10 @@ BOOL SaveData_Erase(SaveData *saveData)
     Heap_Free(saveBuffer);
     SaveData_Clear(saveData);
 
+    for (int i = 0; i < SAVE_BLOCK_ID_MAX; i++) {
+        sSlotsInSync[i] = TRUE;
+    }
+
     saveData->dataExists = FALSE;
     SleepUnlock(SLEEP_TYPE_SAVE_DATA);
 
@@ -162,12 +188,8 @@ BOOL SaveData_Load(SaveData *saveData)
     return FALSE;
 }
 
-int SaveData_Save(SaveData *saveData)
+static void SaveData_EraseForNewGame(SaveData *saveData)
 {
-    if (!saveData->backupExists) {
-        return SAVE_RESULT_CORRUPT;
-    }
-
     if (saveData->isNewGameData) {
         SleepLock(SLEEP_TYPE_SAVE_DATA);
 
@@ -176,8 +198,21 @@ int SaveData_Save(SaveData *saveData)
         SaveBlockFooter_Erase(saveData, SAVE_BLOCK_ID_NORMAL, saveData->blockOffsets[SAVE_BLOCK_ID_NORMAL]);
         SaveBlockFooter_Erase(saveData, SAVE_BLOCK_ID_BOXES, saveData->blockOffsets[SAVE_BLOCK_ID_BOXES]);
 
+        for (int i = 0; i < SAVE_BLOCK_ID_MAX; i++) {
+            sSlotsInSync[i] = FALSE;
+        }
+
         SleepUnlock(SLEEP_TYPE_SAVE_DATA);
     }
+}
+
+int SaveData_Save(SaveData *saveData)
+{
+    if (!saveData->backupExists) {
+        return SAVE_RESULT_CORRUPT;
+    }
+
+    SaveData_EraseForNewGame(saveData);
 
     int saveResult = SaveDataState_Save(saveData);
 
@@ -277,6 +312,24 @@ int SaveData_SaveStateMain(SaveData *saveData)
 void SaveData_SaveStateCancel(SaveData *saveData)
 {
     SaveDataState_Cancel(saveData, &saveData->state);
+}
+
+/**
+ * @brief Sour Platinum: starts saving the game a little each frame, like Pokemon Black. SaveData_SaveStateMain runs it
+ * until it returns SAVE_RESULT_OK or SAVE_RESULT_CORRUPT.
+ *
+ * @return FALSE if the game can't be saved
+ */
+BOOL SaveData_SaveAsync_Start(SaveData *saveData)
+{
+    if (!saveData->backupExists) {
+        return FALSE;
+    }
+
+    SaveData_EraseForNewGame(saveData);
+    SaveData_SaveStateInit(saveData, SAVE_BLOCK_ID_MAX);
+
+    return TRUE;
 }
 
 static void SaveData_CheckInfoInit(SaveCheckInfo *checkInfo)
@@ -462,6 +515,11 @@ static int SaveData_LoadCheck(SaveData *saveData)
         SaveData_CheckInfoInit(&boxInfo[SECTOR_ID_BACKUP]);
     }
 
+    for (int i = 0; i < SAVE_BLOCK_ID_MAX; i++) {
+        const SaveBlockInfo *blockInfo = &saveData->blockInfo[i];
+        sSlotsInSync[i] = memcmp(primaryBuffer + blockInfo->offset, backupBuffer + blockInfo->offset, blockInfo->size) == 0;
+    }
+
     Heap_Free(primaryBuffer);
     Heap_Free(backupBuffer);
 
@@ -599,36 +657,52 @@ static BOOL SaveDataState_Load(SaveData *saveData)
     return TRUE;
 }
 
-static s32 SaveDataState_InitBlock(SaveData *saveData, int blockID, u8 sectorID)
+static BOOL SaveData_CardRead(u32 address, void *data, u32 size)
 {
-    const SaveBlockInfo *blockInfo = &saveData->blockInfo[blockID];
+    s32 lockID = OS_GetLockID();
+    GF_ASSERT(lockID != OS_LOCK_ID_ERROR);
 
-    SaveBlockFooter_Set(saveData, (u32)saveData->body.data, blockID);
+    CARD_LockBackup(lockID);
+    BOOL result = CARD_ReadFlash(address, data, size);
+    CARD_UnlockBackup(lockID);
+    OS_ReleaseLockID(lockID);
 
-    u32 saveOffset = SaveData_SaveOffset(sectorID, blockInfo);
-    u8 *bodyOffset = saveData->body.data + blockInfo->offset;
-
-    return SaveData_CardSave_Init(saveOffset, bodyOffset, blockInfo->size - sizeof(SaveBlockFooter));
+    return result;
 }
 
-static s32 SaveDataState_InitFooter(SaveData *saveData, int blockID, u8 sectorID)
+// The first pass writes the copy that is not the current one, so the current one is still whole if the power goes out
+static int SaveDataState_Slot(const SaveData *saveData, const SaveDataState *state, int blockID)
 {
-    const SaveBlockInfo *blockInfo = &saveData->blockInfo[blockID];
-
-    u32 saveOffset = SaveData_SaveOffset(sectorID, blockInfo) + blockInfo->size - sizeof(SaveBlockFooter);
-    u8 *bodyOffset = saveData->body.data + blockInfo->offset + blockInfo->size - sizeof(SaveBlockFooter);
-
-    return SaveData_CardSave_Init(saveOffset, bodyOffset, sizeof(SaveBlockFooter));
+    return state->pass == 0 ? !saveData->blockOffsets[blockID] : saveData->blockOffsets[blockID];
 }
 
-static s32 SaveDataState_InitFooter_Secondary(SaveData *saveData, int blockID, u8 sectorID)
+static u32 SaveBlock_PageBase(const SaveData *saveData, int blockID)
 {
-    const SaveBlockInfo *blockInfo = &saveData->blockInfo[blockID];
+    u32 base = 0;
 
-    u32 saveOffset = SaveData_SaveOffset(sectorID, blockInfo) + blockInfo->size - sizeof(SaveBlockFooter) + SECONDARY_FOOTER_SIZE;
-    u8 *bodyOffset = saveData->body.data + blockInfo->offset + blockInfo->size - sizeof(SaveBlockFooter) + SECONDARY_FOOTER_SIZE;
+    for (int i = 0; i < blockID; i++) {
+        base += (saveData->blockInfo[i].size + SAVE_COMPARE_PAGE_SIZE - 1) / SAVE_COMPARE_PAGE_SIZE;
+    }
 
-    return SaveData_CardSave_Init(saveOffset, bodyOffset, SECONDARY_FOOTER_SIZE);
+    return base;
+}
+
+static void SaveBlock_ClearDirtyPages(const SaveData *saveData, int blockID)
+{
+    u32 base = SaveBlock_PageBase(saveData, blockID);
+    u32 count = (saveData->blockInfo[blockID].size + SAVE_COMPARE_PAGE_SIZE - 1) / SAVE_COMPARE_PAGE_SIZE;
+
+    for (u32 i = base; i < base + count; i++) {
+        sDirtyPages[i / 8] &= ~(1 << (i % 8));
+    }
+}
+
+static void SaveDataState_StartWrite(SaveDataState *state, u32 address, void *data, u32 size, int nextSequence)
+{
+    state->lockID = SaveData_CardSave_Init(address, data, size);
+    state->locked = TRUE;
+    state->nextSequence = nextSequence;
+    state->mainSequence = SAVE_SEQ_WRITE_WAIT;
 }
 
 static void SaveDataState_Init(SaveData *saveData, SaveDataState *state, int blockID)
@@ -638,9 +712,18 @@ static void SaveDataState_Init(SaveData *saveData, SaveDataState *state, int blo
         saveData->blockCounters[i]++;
     }
 
-    state->mainSequence = 0;
+    state->mainSequence = SAVE_SEQ_BLOCK_START;
     state->fullSaveMode = FALSE;
     state->locked = FALSE;
+    state->pass = 0;
+    state->pos = 0;
+    state->runStart = 0;
+    state->runEnd = 0;
+    state->finalSent = FALSE;
+    state->restarted = 0;
+    state->unsynced = 0;
+    // Nothing on the cartridge matches the first save of a new game, so it writes everything without reading it back
+    state->writeAll = saveData->isNewGameData;
 
     if (blockID == SAVE_BLOCK_ID_MAX) {
         if (saveData->fullSaveRequired) {
@@ -663,75 +746,158 @@ static void SaveDataState_Init(SaveData *saveData, SaveDataState *state, int blo
     }
 
     SleepLock(SLEEP_TYPE_SAVE_DATA);
+    PlayTime_SetPaused(TRUE);
 }
 
 static int SaveDataState_Main(SaveData *saveData, SaveDataState *state)
 {
+    u32 budget = SAVE_COMPARE_BUDGET;
     BOOL saveResult;
 
-    switch (state->mainSequence) {
-    case 0:
-        state->lockID = SaveDataState_InitBlock(saveData, state->currentBlock, !saveData->blockOffsets[state->currentBlock]);
-        state->locked = TRUE;
-        state->mainSequence++;
-    case 1:
-        if (SaveData_CardSave_Main(state->lockID, state->locked, &saveResult) == FALSE) {
+    while (TRUE) {
+        int block = state->currentBlock;
+        const SaveBlockInfo *blockInfo = &saveData->blockInfo[block];
+        u32 bodySize = blockInfo->size - sizeof(SaveBlockFooter);
+        u32 slotAddress = SaveData_SaveOffset(SaveDataState_Slot(saveData, state, block), blockInfo);
+        u8 *body = saveData->body.data + blockInfo->offset;
+
+        switch (state->mainSequence) {
+        case SAVE_SEQ_BLOCK_START:
+            if (state->pass == 0) {
+                SaveBlockFooter_Set(saveData, (u32)saveData->body.data, block);
+                SaveBlock_ClearDirtyPages(saveData, block);
+            }
+
+            state->pos = 0;
+            state->runStart = 0;
+            state->runEnd = 0;
+            state->mainSequence = SAVE_SEQ_COMPARE;
+            break;
+
+        case SAVE_SEQ_COMPARE: {
+            // When both copies were the same, the second one needs the pages that changed in the first
+            BOOL reuse = state->pass == 1 && sSlotsInSync[block] && !(state->restarted & (1 << block));
+            u32 pageBase = SaveBlock_PageBase(saveData, block);
+
+            while (state->pos < bodySize) {
+                u32 size = bodySize - state->pos;
+                u32 page = pageBase + state->pos / SAVE_COMPARE_PAGE_SIZE;
+                BOOL differs;
+
+                if (size > SAVE_COMPARE_PAGE_SIZE) {
+                    size = SAVE_COMPARE_PAGE_SIZE;
+                }
+
+                if (state->writeAll) {
+                    differs = TRUE;
+                } else if (reuse) {
+                    differs = (sDirtyPages[page / 8] >> (page % 8)) & 1;
+                } else {
+                    if (budget < size) {
+                        return SAVE_RESULT_PROCEED;
+                    }
+
+                    budget -= size;
+                    differs = !SaveData_CardRead(slotAddress + state->pos, sComparePage, size)
+                        || memcmp(sComparePage, body + state->pos, size) != 0;
+
+                    if (differs && state->pass == 0) {
+                        sDirtyPages[page / 8] |= 1 << (page % 8);
+                    }
+                }
+
+                if (differs) {
+                    if (state->runEnd == state->runStart) {
+                        state->runStart = state->pos;
+                    }
+
+                    state->pos += size;
+                    state->runEnd = state->pos;
+
+                    if (state->runEnd - state->runStart >= SAVE_WRITE_RUN_MAX) {
+                        SaveDataState_StartWrite(state, slotAddress + state->runStart, body + state->runStart, state->runEnd - state->runStart, SAVE_SEQ_COMPARE);
+                        return SAVE_RESULT_PROCEED;
+                    }
+                } else {
+                    state->pos += size;
+
+                    if (state->runEnd != state->runStart) {
+                        SaveDataState_StartWrite(state, slotAddress + state->runStart, body + state->runStart, state->runEnd - state->runStart, SAVE_SEQ_COMPARE);
+                        return SAVE_RESULT_PROCEED;
+                    }
+                }
+            }
+
+            if (state->runEnd != state->runStart) {
+                SaveDataState_StartWrite(state, slotAddress + state->runStart, body + state->runStart, state->runEnd - state->runStart, SAVE_SEQ_COMPARE);
+                return SAVE_RESULT_PROCEED;
+            }
+
+            state->mainSequence = SAVE_SEQ_FOOTER_CHECK;
             break;
         }
 
-        state->locked = FALSE;
+        case SAVE_SEQ_WRITE_WAIT:
+            if (SaveData_CardSave_Main(state->lockID, state->locked, &saveResult) == FALSE) {
+                return SAVE_RESULT_PROCEED;
+            }
 
-        if (!saveResult) {
-            return SAVE_RESULT_CORRUPT;
-        }
+            state->locked = FALSE;
 
-        state->mainSequence++;
-    case 2:
-        state->lockID = SaveDataState_InitFooter_Secondary(saveData, state->currentBlock, !saveData->blockOffsets[state->currentBlock]);
-        state->locked = TRUE;
-        state->mainSequence++;
-    case 3:
-        if (SaveData_CardSave_Main(state->lockID, state->locked, &saveResult) == FALSE) {
+            if (!saveResult) {
+                return SAVE_RESULT_CORRUPT;
+            }
+
+            state->runStart = 0;
+            state->runEnd = 0;
+            state->mainSequence = state->nextSequence;
+            break;
+
+        case SAVE_SEQ_FOOTER_CHECK:
+            // The game keeps running while it saves, so if something changed the block meanwhile, it goes through
+            // the block again with a new checksum before the footer makes the copy count
+            if (SaveBlockFooter_Ptr(saveData, (u32)saveData->body.data, block)->checksum != SaveData_CalculateFooterChecksum(saveData, body, blockInfo->size)) {
+                SaveBlockFooter_Set(saveData, (u32)saveData->body.data, block);
+                state->restarted |= 1 << block;
+
+                if (state->pass == 1) {
+                    state->unsynced |= 1 << block;
+                }
+
+                state->pos = 0;
+                state->mainSequence = SAVE_SEQ_COMPARE;
+                break;
+            }
+
+            state->mainSequence = SAVE_SEQ_FOOTER;
+
+            // Like before, the caller hears just before the footer that makes the new save count
+            if (state->pass == 0 && block + 1 == state->endBlock && !state->finalSent) {
+                state->finalSent = TRUE;
+                return SAVE_RESULT_PROCEED_FINAL;
+            }
+            break;
+
+        case SAVE_SEQ_FOOTER:
+            SaveDataState_StartWrite(state, slotAddress + bodySize, body + bodySize, sizeof(SaveBlockFooter), SAVE_SEQ_BLOCK_DONE);
+            return SAVE_RESULT_PROCEED;
+
+        case SAVE_SEQ_BLOCK_DONE:
+            state->currentBlock++;
+
+            if (state->currentBlock == state->endBlock) {
+                if (state->pass == 1) {
+                    return SAVE_RESULT_OK;
+                }
+
+                state->pass = 1;
+                state->currentBlock = state->startBlock;
+            }
+
+            state->mainSequence = SAVE_SEQ_BLOCK_START;
             break;
         }
-
-        state->locked = FALSE;
-
-        if (!saveResult) {
-            return SAVE_RESULT_CORRUPT;
-        }
-
-        state->mainSequence++;
-
-        if (state->currentBlock + 1 == state->endBlock) {
-            return SAVE_RESULT_PROCEED_FINAL;
-        }
-    case 4:
-        state->lockID = SaveDataState_InitFooter(saveData, state->currentBlock, !saveData->blockOffsets[state->currentBlock]);
-        state->locked = TRUE;
-        state->mainSequence++;
-    case 5:
-        if (SaveData_CardSave_Main(state->lockID, state->locked, &saveResult) == FALSE) {
-            break;
-        }
-
-        state->locked = FALSE;
-
-        if (!saveResult) {
-            return SAVE_RESULT_CORRUPT;
-        }
-
-        state->currentBlock++;
-
-        if (state->currentBlock == state->endBlock) {
-            return SAVE_RESULT_OK;
-        }
-
-        state->mainSequence = 0;
-        break;
     }
-
-    return 0;
 }
 
 static void SaveDataState_End(SaveData *saveData, SaveDataState *state, int saveResult)
@@ -746,9 +912,14 @@ static void SaveDataState_End(SaveData *saveData, SaveDataState *state, int save
         for (i = 0; i < SAVE_BLOCK_ID_MAX; i++) {
             saveData->blockCounters[i] = state->blockCounterBackup[i];
         }
+
+        for (i = state->startBlock; i < state->endBlock; i++) {
+            sSlotsInSync[i] = FALSE;
+        }
     } else {
         for (i = state->startBlock; i < state->endBlock; i++) {
             saveData->blockOffsets[i] = !saveData->blockOffsets[i];
+            sSlotsInSync[i] = !(state->unsynced & (1 << i));
         }
 
         saveData->dataExists = TRUE;
@@ -757,6 +928,7 @@ static void SaveDataState_End(SaveData *saveData, SaveDataState *state, int save
     }
 
     SleepUnlock(SLEEP_TYPE_SAVE_DATA);
+    PlayTime_SetPaused(FALSE);
 }
 
 static void SaveDataState_Cancel(SaveData *saveData, SaveDataState *state)
@@ -771,6 +943,10 @@ static void SaveDataState_Cancel(SaveData *saveData, SaveDataState *state)
         saveData->blockCounters[i] = state->blockCounterBackup[i];
     }
 
+    for (i = state->startBlock; i < state->endBlock; i++) {
+        sSlotsInSync[i] = FALSE;
+    }
+
     if (!CARD_TryWaitBackupAsync()) {
         CARD_CancelBackupAsync();
     }
@@ -782,6 +958,7 @@ static void SaveDataState_Cancel(SaveData *saveData, SaveDataState *state)
     }
 
     SleepUnlock(SLEEP_TYPE_SAVE_DATA);
+    PlayTime_SetPaused(FALSE);
 }
 
 BOOL SaveDataState_Save(SaveData *saveData)

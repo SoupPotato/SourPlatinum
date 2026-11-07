@@ -4126,13 +4126,32 @@ static BOOL ScrCmd_CheckSaveType(ScriptContext *ctx)
     return FALSE;
 }
 
+// Sour Platinum: the game keeps running while it saves, like in Pokemon Black
+static BOOL ScriptContext_WaitForSave(ScriptContext *ctx)
+{
+    int saveResult = SaveData_SaveStateMain(ctx->fieldSystem->saveData);
+
+    if (saveResult == SAVE_RESULT_PROCEED || saveResult == SAVE_RESULT_PROCEED_FINAL) {
+        return FALSE;
+    }
+
+    *FieldSystem_GetVarPointer(ctx->fieldSystem, ctx->data[0]) = saveResult == SAVE_RESULT_OK;
+    return TRUE;
+}
+
 static BOOL ScrCmd_TrySaveGame(ScriptContext *ctx)
 {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    u16 *destVar = ScriptContext_GetVarPointer(ctx);
+    u16 destVarID = ScriptContext_ReadHalfWord(ctx);
 
-    *destVar = FieldSystem_Save(fieldSystem);
-    return FALSE;
+    if (!FieldSystem_StartSave(fieldSystem)) {
+        *FieldSystem_GetVarPointer(fieldSystem, destVarID) = FALSE;
+        return FALSE;
+    }
+
+    ctx->data[0] = destVarID;
+    ScriptContext_Pause(ctx, ScriptContext_WaitForSave);
+    return TRUE;
 }
 
 static BOOL ScrCmd_SaveExtraData(ScriptContext *ctx)

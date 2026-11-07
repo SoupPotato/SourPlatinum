@@ -52,6 +52,7 @@ void SaveInfoWindow_Draw(SaveInfoWindow *saveInfoWin);
 void SaveInfoWindow_Erase(SaveInfoWindow *saveInfoWin);
 SaveInfoWindow *SaveInfoWindow_New(FieldSystem *fieldSystem, enum HeapID heapID, u8 bgLayer);
 void SaveInfoWindow_Free(SaveInfoWindow *saveInfoWin);
+BOOL FieldSystem_StartSave(FieldSystem *fieldSystem);
 BOOL FieldSystem_Save(FieldSystem *fieldSystem);
 void FieldSystem_SaveStateIfCommunicationOff(FieldSystem *fieldSystem);
 
