@@ -2321,6 +2321,12 @@ static void BoxAppMan_CheckShouldMonReturn(BoxApplicationManager *boxAppMan)
 
     releaseMon->boxMon = boxAppMan->boxApp.pcMonPreview.mon;
 
+    // Sour Platinum: the Poketch's Hidden Moves app does Surf, Rock Climb and Waterfall without a Pokemon that knows
+    // them, so the last Pokemon with one of these moves can be released too
+    releaseMon->checkedCanReleaseMon = TRUE;
+    releaseMon->canReleaseMon = TRUE;
+    return;
+
     for (i = 0, releaseBlockingMovesCount = 0; i < (NUM_RELEASE_BLOCKING_MOVES); i++) {
         releaseMon->hasReleaseBlockingMove[i] = BoxPokemon_HasMove(releaseMon->boxMon, sReleaseBlockingMoves[i]);
 
