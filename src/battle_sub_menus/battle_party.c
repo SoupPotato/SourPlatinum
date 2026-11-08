@@ -146,9 +146,6 @@ static u8 UpdateSelectedPartyIndex(BattleParty *battleParty, s32 selectedPartyIn
 static void DrawXPBar(BattleParty *battleParty, enum BattlePartyScreen screen);
 static void DrawXPBarSegment(BattleParty *battleParty, u16 fillVal, u16 x, u16 y);
 static void DrawMoveContestStats(BattleParty *battleParty, enum BattlePartyScreen screen);
-static BOOL CheckSelectedMoveIsHM(BattleParty *battleParty);
-static void ClearMoveStats(BattleParty *battleParty);
-static void ClearMoveContestStats(BattleParty *battleParty);
 static u8 CheckSelectedPokemonIsEgg(BattleParty *battleParty);
 static void UseBagItem(BattleSystem *battleSys, u16 item, u16 category, enum HeapID heapID);
 
@@ -715,20 +712,8 @@ static u8 BattlePartyTask_ConfirmLearnMoveScreen(BattleParty *battleParty)
             BattlePartyButtons_PressButton(battleParty, BATTLE_CONFIRM_LEARN_MOVE_SCREEN_BUTTON_OFFSET + 1);
         }
 
-        if (CheckSelectedMoveIsHM(battleParty) == TRUE) {
-            BattlePartyText_PrintHMMovesCantBeForgottenText(battleParty);
-
-            if (battleParty->displayingContestStats == FALSE) {
-                ClearMoveStats(battleParty);
-            } else {
-                ClearMoveContestStats(battleParty);
-            }
-
-            battleParty->queuedState = TASK_STATE_CONFIRM_LEARN_MOVE_SCREEN;
-        } else {
-            battleParty->queuedState = TASK_STATE_EXIT;
-        }
-
+        // Sour Platinum: the Poketch's Hidden Moves app does the HM moves, so HM moves can be forgotten like any other
+        battleParty->queuedState = TASK_STATE_EXIT;
         return TASK_STATE_SCREEN_TRANSITION;
     case BATTLE_CONFIRM_LEARN_MOVE_SCREEN_BUTTON_CONTEST_STATS:
         if (battleParty->hasVisitedContestHall == FALSE) {
@@ -1719,33 +1704,6 @@ BOOL BattlePartyTask_CheckIfSwitchingWithPartnersPokemon(BattleParty *battlePart
     }
 
     return FALSE;
-}
-
-static BOOL CheckSelectedMoveIsHM(BattleParty *battleParty)
-{
-    u16 move;
-
-    if (battleParty->context->selectedMoveSlot == MOVE_TO_LEARN_SLOT) {
-        move = battleParty->context->moveToLearn;
-    } else {
-        move = battleParty->partyPokemon[battleParty->context->selectedPartyIndex].moves[battleParty->context->selectedMoveSlot].move;
-    }
-
-    return Item_IsHMMove(move);
-}
-
-static void ClearMoveStats(BattleParty *battleParty)
-{
-    ManagedSprite_SetDrawFlag(battleParty->sprites[26], FALSE);
-    Window_ClearAndScheduleCopyToVRAM(&battleParty->windows[10]);
-    Window_ClearAndScheduleCopyToVRAM(&battleParty->windows[6]);
-    Window_ClearAndScheduleCopyToVRAM(&battleParty->windows[7]);
-}
-
-static void ClearMoveContestStats(BattleParty *battleParty)
-{
-    DrawEmptyAppealPts(battleParty);
-    Bg_ScheduleTilemapTransfer(battleParty->background, BG_LAYER_SUB_3);
 }
 
 static void UseBagItem(BattleSystem *battleSys, u16 item, u16 category, enum HeapID heapID)

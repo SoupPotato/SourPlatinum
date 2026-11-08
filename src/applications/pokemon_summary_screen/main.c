@@ -836,15 +836,7 @@ static int HandleInput_SelectMove(PokemonSummaryScreen *summaryScreen)
     if (JOY_NEW(PAD_BUTTON_A)) {
         Sound_PlayEffect(SEQ_SE_DP_DECIDE_sseq);
 
-        if (summaryScreen->cursor != LEARNED_MOVES_MAX) {
-            if (Item_IsHMMove(summaryScreen->monData.moves[summaryScreen->cursor]) == TRUE && summaryScreen->data->move != MOVE_NONE) {
-                Sprite_SetDrawFlag2(summaryScreen->sprites[SUMMARY_SPRITE_MOVE_CATEGORY_ICON], FALSE);
-                DrawEmptyHearts(summaryScreen);
-                PokemonSummaryScreen_PrintHMMovesCantBeForgotten(summaryScreen);
-                return SUMMARY_STATE_WAIT_HM_MSG_INPUT;
-            }
-        }
-
+        // Sour Platinum: the Poketch's Hidden Moves app does the HM moves, so HM moves can be forgotten like any other
         summaryScreen->data->selectedMoveSlot = summaryScreen->cursor;
         summaryScreen->data->returnMode = SUMMARY_RETURN_SELECT;
         return SUMMARY_STATE_TRANSITION_OUT;
