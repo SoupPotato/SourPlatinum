@@ -75,14 +75,17 @@ typedef struct Sprite {
     enum NNS_G2D_VRAM_TYPE vramType;
     struct Sprite *prev;
     struct Sprite *next;
-
-    // Sour Platinum 60 fps mode: what was drawn on the last in-between tick. On the original-rate tick the
-    // sprite is drawn halfway between this and its current state.
-    VecFx32 lastFinalPos;
-    VecFx32 lastFinalScale;
-    u16 lastFinalRotation;
-    u8 lastFinalValid;
 } Sprite;
+
+// Sour Platinum 60 fps mode: what a sprite was drawn with on the last in-between tick. On the original-rate tick the
+// sprite is drawn halfway between this and its current state. Kept apart from Sprite so that sprites stay their
+// original size outside of 60 fps mode (the field heap has no room to spare).
+typedef struct SpriteBlendState {
+    VecFx32 pos;
+    VecFx32 scale;
+    u16 rotation;
+    u8 valid;
+} SpriteBlendState;
 
 struct SpriteList {
     Sprite *sprites;
@@ -94,6 +97,9 @@ struct SpriteList {
     void *rawAnimData;
     NNSG2dCellAnimBankData *defaultAnimBank;
     BOOL active;
+    // Sour Platinum 60 fps mode: one entry per sprite, allocated the first time the list is drawn in 60 fps mode
+    SpriteBlendState *blend;
+    enum HeapID heapID;
 };
 
 typedef struct SpriteListParams {

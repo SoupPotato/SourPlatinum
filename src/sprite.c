@@ -65,6 +65,7 @@ SpriteList *SpriteList_New(const SpriteListParams *params)
     list->sprites = Heap_Alloc(params->heapID, sizeof(Sprite) * params->maxElements);
     GF_ASSERT(list->sprites);
     list->capacity = params->maxElements;
+    list->heapID = params->heapID;
 
     list->freeSprites = Heap_Alloc(params->heapID, sizeof(Sprite *) * params->maxElements);
     GF_ASSERT(list->freeSprites);
@@ -99,6 +100,10 @@ BOOL SpriteList_Delete(SpriteList *list)
     Heap_Free(list->rawAnimData);
     Heap_Free(list->freeSprites);
     Heap_Free(list->sprites);
+
+    if (list->blend != NULL) {
+        Heap_Free(list->blend);
+    }
 
     SpriteList_Reset(list);
     Heap_Free(list);
@@ -160,6 +165,12 @@ void SpriteList_Update(const SpriteList *list)
         return;
     }
 
+    // Sour Platinum 60 fps mode: every list drawn on a logic tick is drawn again on the tick after it, so screens
+    // that update their own sprite list (like the Pokedex entry after a catch) don't flicker
+    if (gSystem.fps60 && gSystem.logicTick) {
+        SpriteList_LogDraw(list);
+    }
+
     Sprite *sprite = list->sentinelData.next;
 
     sDrawMode = (SP_DEBUG_BLEND_OAM && gSystem.fps60 && gSystem.logicTick) ? SPRITE_DRAW_BLEND : SPRITE_DRAW_NORMAL;
@@ -186,13 +197,21 @@ void SpriteList_DrawOnly(const SpriteList *list)
         return;
     }
 
+    if (list->blend == NULL) {
+        SpriteList *mutableList = (SpriteList *)list;
+
+        mutableList->blend = Heap_Alloc(list->heapID, sizeof(SpriteBlendState) * list->capacity);
+        GF_ASSERT(mutableList->blend);
+        MI_CpuClear8(mutableList->blend, sizeof(SpriteBlendState) * list->capacity);
+    }
+
     sDrawMode = SPRITE_DRAW_FINAL;
 
     for (Sprite *sprite = list->sentinelData.next; sprite != &list->sentinelData; sprite = sprite->next) {
         if (sprite->draw) {
             SpriteList_DrawSprite(list, sprite);
         } else {
-            sprite->lastFinalValid = FALSE;
+            list->blend[sprite - list->sprites].valid = FALSE;
         }
     }
 
@@ -201,6 +220,12 @@ void SpriteList_DrawOnly(const SpriteList *list)
 
 void SpriteList_LogDraw(const SpriteList *list)
 {
+    for (int i = 0; i < sDrawLogCount; i++) {
+        if (sDrawLog[i] == list) {
+            return;
+        }
+    }
+
     if (sDrawLogCount < DRAW_LOG_MAX) {
         sDrawLog[sDrawLogCount++] = list;
     }
@@ -236,6 +261,7 @@ static void SpriteList_Reset(SpriteList *list)
     list->freeSprites = NULL;
     list->freeSpriteHead = 0;
     list->renderer = NULL;
+    list->blend = NULL;
 
     Sprite_Reset(&list->sentinelData);
     list->active = FALSE;
@@ -867,24 +893,26 @@ static void SpriteList_DrawSprite(const SpriteList *list, Sprite *sprite)
     VecFx32 affineScale = sprite->affineScale;
     u16 affineRotation = sprite->affineZRotation;
 
-    if (sDrawMode == SPRITE_DRAW_BLEND) {
-        if (sprite->lastFinalValid
-            && SpriteBlend_Abs(pos.x - sprite->lastFinalPos.x) <= SPRITE_BLEND_MAX_MOVE
-            && SpriteBlend_Abs(pos.y - sprite->lastFinalPos.y) <= SPRITE_BLEND_MAX_MOVE
-            && SpriteBlend_Abs(affineScale.x - sprite->lastFinalScale.x) <= SPRITE_BLEND_MAX_SCALE
-            && SpriteBlend_Abs(affineScale.y - sprite->lastFinalScale.y) <= SPRITE_BLEND_MAX_SCALE
-            && SpriteBlend_Abs((s16)(affineRotation - sprite->lastFinalRotation)) <= SPRITE_BLEND_MAX_ROT) {
-            pos.x = sprite->lastFinalPos.x + (pos.x - sprite->lastFinalPos.x) / 2;
-            pos.y = sprite->lastFinalPos.y + (pos.y - sprite->lastFinalPos.y) / 2;
-            affineScale.x = sprite->lastFinalScale.x + (affineScale.x - sprite->lastFinalScale.x) / 2;
-            affineScale.y = sprite->lastFinalScale.y + (affineScale.y - sprite->lastFinalScale.y) / 2;
-            affineRotation = sprite->lastFinalRotation + (s16)(affineRotation - sprite->lastFinalRotation) / 2;
+    SpriteBlendState *blend = list->blend != NULL ? &list->blend[sprite - list->sprites] : NULL;
+
+    if (sDrawMode == SPRITE_DRAW_BLEND && blend != NULL) {
+        if (blend->valid
+            && SpriteBlend_Abs(pos.x - blend->pos.x) <= SPRITE_BLEND_MAX_MOVE
+            && SpriteBlend_Abs(pos.y - blend->pos.y) <= SPRITE_BLEND_MAX_MOVE
+            && SpriteBlend_Abs(affineScale.x - blend->scale.x) <= SPRITE_BLEND_MAX_SCALE
+            && SpriteBlend_Abs(affineScale.y - blend->scale.y) <= SPRITE_BLEND_MAX_SCALE
+            && SpriteBlend_Abs((s16)(affineRotation - blend->rotation)) <= SPRITE_BLEND_MAX_ROT) {
+            pos.x = blend->pos.x + (pos.x - blend->pos.x) / 2;
+            pos.y = blend->pos.y + (pos.y - blend->pos.y) / 2;
+            affineScale.x = blend->scale.x + (affineScale.x - blend->scale.x) / 2;
+            affineScale.y = blend->scale.y + (affineScale.y - blend->scale.y) / 2;
+            affineRotation = blend->rotation + (s16)(affineRotation - blend->rotation) / 2;
         }
-    } else if (sDrawMode == SPRITE_DRAW_FINAL) {
-        sprite->lastFinalPos = pos;
-        sprite->lastFinalScale = affineScale;
-        sprite->lastFinalRotation = affineRotation;
-        sprite->lastFinalValid = TRUE;
+    } else if (sDrawMode == SPRITE_DRAW_FINAL && blend != NULL) {
+        blend->pos = pos;
+        blend->scale = affineScale;
+        blend->rotation = affineRotation;
+        blend->valid = TRUE;
     }
 
     NNS_G2dSetRendererImageProxy(list->renderer, &sprite->imageProxy, &sprite->paletteProxy);
@@ -1023,6 +1051,10 @@ static BOOL SpriteList_FreeSprite(SpriteList *list, Sprite *sprite)
     }
 
     Sprite_Reset(sprite);
+
+    if (list->blend != NULL) {
+        list->blend[sprite - list->sprites].valid = FALSE;
+    }
 
     list->freeSpriteHead--;
     list->freeSprites[list->freeSpriteHead] = sprite;
