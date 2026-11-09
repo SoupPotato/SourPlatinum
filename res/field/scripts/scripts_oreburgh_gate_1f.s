@@ -27,12 +27,18 @@ OreburghGate1F_Hiker:
 
 OreburghGate1F_HikerGiveHM:
     GoToIfSet FLAG_RECEIVED_HM06, OreburghGate1F_ThatHMContainsRockSmash
+    Call OreburghGate1F_GiveHM06
+    GoTo OreburghGate1F_ThatHMContainsRockSmash
+
+OreburghGate1F_GiveHM06:
     Message OreburghGate1F_Text_MakeAGiftOfThisHM
     SetVar VAR_0x8004, ITEM_HM06
     SetVar VAR_0x8005, 1
     Common_GiveItemQuantity
-    Call OreburghGate1F_SetFlagReceivedHM06
-    GoTo OreburghGate1F_ThatHMContainsRockSmash
+    Common_HiddenMovesAppNewMove
+    SetFlag FLAG_RECEIVED_HM06
+    SetVar VAR_OREBURGH_GATE_1F_HIKER_STATE, 2
+    Return
 
 OreburghGate1F_ThatHMContainsRockSmash:
     Message OreburghGate1F_Text_ThatHMContainsRockSmash
@@ -44,21 +50,18 @@ OreburghGate1F_ThatHMContainsRockSmash:
 
 OreburghGate1F_GiveHiddenMovesApp:
     CheckPoketchAppRegistered POKETCH_APPID_FIELDMOVES, VAR_RESULT
-    GoToIfEq VAR_RESULT, TRUE, OreburghGate1F_HiddenMovesAppAlreadyGiven
+    GoToIfEq VAR_RESULT, FALSE, OreburghGate1F_InstallHiddenMovesApp
+    Return
+
+OreburghGate1F_InstallHiddenMovesApp:
     PlaySE SE_CONFIRM_sseq_3
     Message OreburghGate1F_Text_HiddenMovesAppIntro
     SetVar VAR_0x8004, POKETCH_APPID_FIELDMOVES
     Common_GivePoketchApp
+    SetVar VAR_0x8004, ITEM_HM06
+    Common_HiddenMovesAppNewMove
     Message OreburghGate1F_Text_HiddenMovesAppExplain
     WaitButton
-    Return
-
-OreburghGate1F_HiddenMovesAppAlreadyGiven:
-    Return
-
-OreburghGate1F_SetFlagReceivedHM06:
-    SetFlag FLAG_RECEIVED_HM06
-    SetVar VAR_OREBURGH_GATE_1F_HIKER_STATE, 2
     Return
 
 OreburghGate1F_CoordEvent_Hiker:
@@ -66,17 +69,8 @@ OreburghGate1F_CoordEvent_Hiker:
     ApplyMovement LOCALID_HIKER, OreburghGate1F_Movement_HikerWalkToPlayer
     ApplyMovement LOCALID_PLAYER, OreburghGate1F_Movement_PlayerFaceHiker
     WaitMovement
-    Message OreburghGate1F_Text_MakeAGiftOfThisHM
-    SetVar VAR_0x8004, ITEM_HM06
-    SetVar VAR_0x8005, 1
-    Common_GiveItemQuantity
-    Call OreburghGate1F_SetFlagReceivedHM06
-    Message OreburghGate1F_Text_ThatHMContainsRockSmash
-    WaitButton
-    Call OreburghGate1F_GiveHiddenMovesApp
-    CloseMessage
-    ReleaseAll
-    End
+    Call OreburghGate1F_GiveHM06
+    GoTo OreburghGate1F_ThatHMContainsRockSmash
 
     .balign 4, 0
 OreburghGate1F_Movement_PlayerFaceHiker:
