@@ -405,7 +405,6 @@ void *PokemonSpriteManager_New(enum HeapID heapID)
 
     monSpriteMan->heapID = heapID;
     monSpriteMan->dummy330 = 0;
-    // Sour Platinum: this was never initialised, and Heap_Alloc does not clear memory. Leftover data with bit 0 set hid every shadow.
     monSpriteMan->hideShadows = 0;
     monSpriteMan->charBaseAddr = 0;
     monSpriteMan->charSize = MON_SPRITE_CHAR_BUF_SIZE;
@@ -454,9 +453,6 @@ void *PokemonSpriteManager_New(enum HeapID heapID)
     return monSpriteMan;
 }
 
-// Sour Platinum 60 fps mode
-// Largest per-logic-frame jump (in pixels) that is still treated as continuous motion.
-// Anything bigger is a teleport and is not blended.
 #define MON_BLEND_MAX_MOVE  48
 #define MON_BLEND_MAX_SCALE 0x100
 #define MON_BLEND_MAX_ROT   0x4000
@@ -476,8 +472,6 @@ static int BlendMid(int last, int cur)
     return last + (cur - last) / 2;
 }
 
-// Replaces the sprite's transforms with the halfway point between what was shown on the last in-between tick
-// and the current transforms. The caller restores the real transforms afterwards.
 static void PokemonSprite_BlendTransforms(PokemonSprite *sprite)
 {
     PokemonSpriteTransforms *cur = &sprite->transforms;
@@ -547,7 +541,6 @@ void PokemonSpriteManager_ReplayDrawLog(void)
 void PokemonSpriteManager_DrawSprites(PokemonSpriteManager *monSpriteMan)
 {
     if (gSystem.fps60 && gSystem.logicTick && sDrawLogCount < DRAW_LOG_MAX) {
-        // Remember this manager so that it is drawn again on the in-between ticks.
         sDrawLog[sDrawLogCount++] = monSpriteMan;
     }
 
@@ -624,9 +617,6 @@ void PokemonSpriteManager_DrawSpritesPass(PokemonSpriteManager *monSpriteMan, en
                 width = (MON_SPRITE_FRAME_WIDTH * monSpriteMan->sprites[i].transforms.scaleX) >> MON_AFFINE_SHIFT;
                 height = (MON_SPRITE_FRAME_HEIGHT * monSpriteMan->sprites[i].transforms.scaleY) >> MON_AFFINE_SHIFT;
 
-                // Sour Platinum: a scaled sprite is drawn at an even size. With an odd size the half size is rounded
-                // down, so the sprite sat half a pixel off its center on every other step of a scale animation (Growth)
-                // and shimmered. At an even size both edges move together and the center stays put.
                 width = (width + 1) & ~1;
                 height = (height + 1) & ~1;
 

@@ -185,7 +185,6 @@ void SaveInfoWindow_Free(SaveInfoWindow *saveInfoWin)
     Heap_Free(saveInfoWin);
 }
 
-// Sour Platinum: gets the save ready and starts saving a little each frame, like Pokemon Black
 BOOL FieldSystem_StartSave(FieldSystem *fieldSystem)
 {
     FieldSystem_SaveObjectsAndLocation(fieldSystem);

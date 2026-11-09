@@ -1114,7 +1114,6 @@ static void TeachMove(PartyMenuApplication *application, Pokemon *mon, u32 moveS
     Pokemon_SetValue(mon, MON_DATA_MOVE1_PP + moveSlot, &tempVar);
 
     if (application->partyMenu->usedItemID != ITEM_NONE) {
-        // TMs are reusable, so teaching a move never consumes the item.
         Pokemon_UpdateFriendship(mon, FRIENDSHIP_EVENT_LEARN_TMHM, (u16)GetCurrentMapLabel(application));
     }
 }

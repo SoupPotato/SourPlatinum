@@ -1466,7 +1466,6 @@ static void BattleControllerPlayer_CheckMonConditions(BattleSystem *battleSys, B
                 battleCtx->battleMons[battler].statusVolatile -= (1 << VOLATILE_CONDITION_BIND_SHIFT);
 
                 if (battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_BIND) {
-                    // Sour Platinum: 1/8 of the max HP each turn, like Generation 6 onwards (1/16 originally)
                     battleCtx->hpCalcTemp = BattleSystem_Divide(battleCtx->battleMons[battler].maxHP * -1, 8);
                     LOAD_SUBSEQ(subscript_bind_effect);
                 } else {
@@ -1509,8 +1508,6 @@ static void BattleControllerPlayer_CheckMonConditions(BattleSystem *battleSys, B
             if (battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_UPROAR) {
                 u8 j;
                 for (j = 0; j < maxBattlers; j++) {
-                    // Sour Platinum: Generation 5, only the turn the uproar starts wakes the Pokemon that are asleep (Soundproof
-                    // included). Later on none can fall asleep.
                     if ((battleCtx->battleMons[j].status & MON_CONDITION_SLEEP)
                         && battleCtx->battleMons[j].curHP
                         && Battle_UproarJustStarted(battleCtx)) {
@@ -1761,7 +1758,6 @@ static void BattleControllerPlayer_CheckSideConditions(BattleSystem *battleSys, 
     int battler;
     switch (battleCtx->sideConditionCheckState) {
     case SIDE_COND_CHECK_STATE_FUTURE_SIGHT:
-        // Sour Platinum: Color Change of a Pokemon that was just hit by Future Sight or Doom Desire
         for (battler = 0; battler < maxBattlers; battler++) {
             if (battleCtx->fieldConditions.futureSightColorChange[battler]) {
                 battleCtx->msgTemp = battleCtx->fieldConditions.futureSightColorChange[battler] - 1;
@@ -1787,7 +1783,6 @@ static void BattleControllerPlayer_CheckSideConditions(BattleSystem *battleSys, 
                 && battleCtx->battleMons[battler].curHP) {
                 battleCtx->sideConditionsMask[BattleSystem_GetBattlerSide(battleSys, battler)] &= ~SIDE_CONDITION_FUTURE_SIGHT;
 
-                // Sour Platinum: Generation 5 Future Sight, the damage is worked out now
                 int damage;
                 u32 moveStatusMask;
 
@@ -1795,7 +1790,6 @@ static void BattleControllerPlayer_CheckSideConditions(BattleSystem *battleSys, 
                     continue;
                 }
 
-                // Endure now protects from it too
                 if (battleCtx->turnFlags[battler].enduring
                     && (battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_SUBSTITUTE) == FALSE
                     && battleCtx->battleMons[battler].curHP + damage <= 0) {
@@ -3410,7 +3404,6 @@ static void BattleControllerPlayer_UpdateHP(BattleSystem *battleSys, BattleConte
 
         battleCtx->lastHitByBattler[battleCtx->defender] = battleCtx->attacker;
 
-        // Sour Platinum: Generation 5, Uproar hits a Pokemon behind a Substitute
         if ((DEFENDING_MON.statusVolatile & VOLATILE_CONDITION_SUBSTITUTE) && battleCtx->damage < 0
             && CURRENT_MOVE_DATA.effect != BATTLE_EFFECT_UPROAR) {
             if (DEFENDING_MON.moveEffectsData.substituteHP + battleCtx->damage <= 0) {
@@ -3439,8 +3432,6 @@ static void BattleControllerPlayer_UpdateHP(BattleSystem *battleSys, BattleConte
             battleCtx->damage = (DEFENDING_MON.curHP - 1) * -1;
         }
 
-        // Sour Platinum: Generation 5 Sturdy, a Pokemon with full HP is left with 1 HP by a hit that would have knocked it
-        // out. It works before a Focus Sash (which is then not used) and Mold Breaker ignores it.
         BOOL sturdy = (DEFENDER_TURN_FLAGS.enduring == 0
             && DEFENDING_MON.curHP == DEFENDING_MON.maxHP
             && DEFENDING_MON.curHP + battleCtx->damage <= 0
@@ -3463,7 +3454,6 @@ static void BattleControllerPlayer_UpdateHP(BattleSystem *battleSys, BattleConte
             if (DEFENDER_TURN_FLAGS.enduring || sturdy) {
                 battleCtx->moveStatusFlags |= MOVE_STATUS_ENDURED;
 
-                // Sour Platinum: its banner comes in before the message, like in Black. The move Endure has none.
                 if (sturdy) {
                     battleCtx->moveStatusFlags |= MOVE_STATUS_ENDURED_STURDY;
                 }
@@ -3515,7 +3505,6 @@ static void BattleControllerPlayer_UpdateHP(BattleSystem *battleSys, BattleConte
 enum AfterMoveMessageState {
     AFTER_MOVE_MESSAGE_START = 0,
 
-    // Sour Platinum: critical hit, effectiveness, then having endured the hit. Black has effectiveness first.
     ONE_HIT_CRITICAL = 0,
     ONE_HIT_STATUS,
     ONE_HIT_ENDURED,
@@ -3618,7 +3607,6 @@ static void BattleControllerPlayer_AfterMoveMessage(BattleSystem *battleSys, Bat
                 return;
             }
 
-        // Sour Platinum: on the hit that was endured, which does not have to be the last one
         case MULTI_HIT_ENDURED:
             battleCtx->afterMoveMessageState++;
             if (BattleControllerPlayer_EnduredMessage(battleSys, battleCtx) == TRUE) {
@@ -4672,13 +4660,6 @@ static BOOL BattleControllerPlayer_FollowupMessage(BattleSystem *battleSys, Batt
     return result;
 }
 
-/**
- * @brief Sour Platinum: load the subroutine for having endured a hit, if the current hit was endured.
- *
- * @param battleSys
- * @param battleCtx
- * @return TRUE if the subroutine should be executed; FALSE otherwise.
- */
 static BOOL BattleControllerPlayer_EnduredMessage(BattleSystem *battleSys, BattleContext *battleCtx)
 {
     if ((battleCtx->moveStatusFlags & (MOVE_STATUS_ENDURED | MOVE_STATUS_ENDURED_ITEM)) == FALSE) {
@@ -4723,7 +4704,6 @@ static BOOL BattleControllerPlayer_RageBuilding(BattleSystem *battleSys, BattleC
     return result;
 }
 
-// Sour Platinum: TRUE for the move effects that already have a chance to make the target flinch
 static BOOL Move_CanFlinch(int effect)
 {
     switch (effect) {
@@ -4755,8 +4735,6 @@ static BOOL BattleControllerPlayer_CheckExtraFlinch(BattleSystem *battleSys, Bat
     int itemEffect = Battler_HeldItemEffect(battleCtx, battleCtx->attacker);
     int itemPower = Battler_HeldItemPower(battleCtx, battleCtx->attacker, 0);
 
-    // Sour Platinum: Generation 5 Stench, a damaging move has a 10% chance of making the target flinch (on every hit of a
-    // multi-hit move). It does not stack with King's Rock or Razor Fang, nor with moves that can already flinch.
     BOOL kingsRock = (itemEffect == HOLD_EFFECT_SOMETIMES_FLINCH);
     BOOL stench = (kingsRock == FALSE
         && Battler_Ability(battleCtx, battleCtx->attacker) == ABILITY_STENCH

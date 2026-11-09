@@ -2,7 +2,6 @@
 
 
 _000:
-    // Sour Platinum: Generation 6-7, Oblivious prevents Taunt (Mold Breaker ignores it)
     CheckIgnorableAbility CHECK_HAVE, BTLSCR_DEFENDER, ABILITY_OBLIVIOUS, _blocked
     CompareMonDataToValue OPCODE_NEQ, BTLSCR_DEFENDER, BATTLEMON_TAUNTED_TURNS, 0, _028
     CompareVarToValue OPCODE_FLAG_SET, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_MISSED|MOVE_STATUS_SEMI_INVULNERABLE, _028
@@ -23,7 +22,6 @@ _blocked:
     PrintAttackMessage
     Wait
     WaitButtonABTime 30
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainoveIneffective
     // {0}’s {1} made {2} ineffective!
     PrintMessage BattleStrings_Text_PokemonsAbilityMadeMoveIneffective_Ally, TAG_NICKNAME_ABILITY_MOVE, BTLSCR_DEFENDER, BTLSCR_DEFENDER, BTLSCR_ATTACKER

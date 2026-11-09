@@ -42,8 +42,6 @@ void MoveTable_Load(void *buf);
  */
 u32 MoveTable_LoadParam(int move, enum MoveAttribute param);
 
-// Sour Platinum: the type a move is shown with. Hidden Power shows the type it has for the Pokemon using it
-// (hiddenPowerType, see Pokemon_GetHiddenPowerType); every other move shows its own type.
 u32 MoveTable_LoadDisplayType(int move, u8 hiddenPowerType);
 
 /**

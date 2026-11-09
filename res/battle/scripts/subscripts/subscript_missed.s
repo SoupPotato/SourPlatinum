@@ -33,10 +33,8 @@ _063:
 
 _069:
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_LEVITATED, _081
-    // Sour Platinum: the ability banner comes in before the effect
     ShowAbilityBanner BTLSCR_DEFENDER
     Wait 
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainLevitate
     // {0} makes Ground moves miss by using {1}!
     PrintMessage BattleStrings_Text_PokemonMakesGroundMovesMissByUsingAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_DEFENDER, BTLSCR_DEFENDER
@@ -64,10 +62,8 @@ _097:
 
 _107:
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_WONDER_GUARD, _119
-    // Sour Platinum: the ability banner comes in before the effect
     ShowAbilityBanner BTLSCR_DEFENDER
     Wait 
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainWonderGuard
     // {0} avoided damage by using {1}!
     PrintMessage BattleStrings_Text_PokemonAvoidedDamageByUsingAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_DEFENDER, BTLSCR_DEFENDER
@@ -89,10 +85,8 @@ _119:
 
 _134:
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_STURDY, _146
-    // Sour Platinum: the ability banner comes in before the effect
     ShowAbilityBanner BTLSCR_DEFENDER
     Wait 
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainectedByAbility0
     // {0} was protected by {1}!
     PrintMessage BattleStrings_Text_PokemonWasProtectedByAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_DEFENDER, BTLSCR_DEFENDER

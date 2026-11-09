@@ -26,7 +26,6 @@ VeilstoneCityPrizeExchange_TryBuyPrize:
     GoToIfEq VAR_RESULT, MENU_CANCEL, VeilstoneCityPrizeExchange_DontBuyAPrize
     GoToIfEq VAR_RESULT, VAR_MAP_LOCAL_0x01, VeilstoneCityPrizeExchange_DontBuyAPrize
     GetGameCornerPrizeData VAR_RESULT, VAR_0x8000, VAR_0x8001
-    // The Linking Cord's item ID is past ITEM_TM01, so it must skip the TM check below.
     CallIfEq VAR_0x8000, ITEM_LINKING_CORD, VeilstoneCityPrizeExchange_IsYourChoiceThisItem
     GoToIfEq VAR_0x8000, ITEM_LINKING_CORD, VeilstoneCityPrizeExchange_ConfirmPrize
     CallIfLt VAR_0x8000, ITEM_TM01, VeilstoneCityPrizeExchange_IsYourChoiceThisItem

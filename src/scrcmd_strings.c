@@ -586,7 +586,6 @@ BOOL ScrCmd_CapitalizeFirstLetter(ScriptContext *ctx)
     return FALSE;
 }
 
-// Also works for the slot codes of the Hidden Moves app helper Pokemon
 BOOL ScrCmd_BufferPartyMonSpeciesNameWithArticle(ScriptContext *ctx)
 {
     FieldSystem *fieldSystem = ctx->fieldSystem;

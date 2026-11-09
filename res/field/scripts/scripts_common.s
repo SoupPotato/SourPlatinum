@@ -1695,8 +1695,6 @@ CommonScript_GriseousOrbCouldNotBeRemoved:
     ReturnCommonScript
     End
 
-// Sour Platinum: tells the player that a new HM can be used from the Hidden Moves app. VAR_0x8004 is the HM item. Does
-// nothing for other items, or if the player doesn't have the app.
 CommonScript_HiddenMovesAppNewMove:
     CheckPoketchAppRegistered POKETCH_APPID_FIELDMOVES, VAR_RESULT
     GoToIfEq VAR_RESULT, FALSE, CommonScript_HiddenMovesAppNewMoveEnd

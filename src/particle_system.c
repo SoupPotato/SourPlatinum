@@ -472,8 +472,6 @@ int ParticleSystem_UpdateAll(void)
         ParticleSystem *particleSystem = sParticleSystems[i];
 
         if (particleSystem != NULL) {
-            // Sour Platinum: a system is updated more or less than once per call to change how fast its
-            // effects play. The speed is the speed of the system times the speed of the whole animation.
             u32 percent = particleSystem->speedPercent != 0 ? particleSystem->speedPercent : 100;
             percent = percent * gBattleAnimSpeedPercent / 100;
 

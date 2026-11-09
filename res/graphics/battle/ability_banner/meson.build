@@ -29,7 +29,6 @@ battle_sprites += [
   ),
 ]
 
-# The art itself is copied into the sprite at run time, with the text drawn over it
 ability_banner_embed = custom_target(
   'banner.4bpp.h',
   output: [

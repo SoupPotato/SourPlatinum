@@ -1,7 +1,6 @@
 #include "macros/btlcmd.inc"
 
 
-// Sour Platinum: Black shows this after the critical hit message, and for each hit of a multi-hit move
 _000:
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED_ITEM, _037
     PlayBattleAnimation BTLSCR_DEFENDER, BATTLE_ANIMATION_HELD_ITEM
@@ -19,7 +18,6 @@ _032:
 _037:
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED, _end
     CompareMonDataToValue OPCODE_NEQ, BTLSCR_DEFENDER, BATTLEMON_CUR_HP, 1, _end
-    // Sour Platinum: when it was Sturdy, its banner comes in before the message
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED_STURDY, _EnduredBannerShown
     ShowAbilityBanner BTLSCR_DEFENDER
     Wait 

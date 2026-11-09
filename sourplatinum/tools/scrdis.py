@@ -1,6 +1,3 @@
-# Field script disassembler driven by asm/macros/scrcmd.inc. Needs REPO=<repo root> and a built tree
-# (build/generated, build/res/text/bank). Script(bytes).canon(entry) gives a layout-independent form for comparing scripts;
-# emit() prints primitive macros. Run with python3 -I and REPO set.
 import sys,os,re,struct
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 import scrmacros
@@ -23,7 +20,6 @@ SZ={'byte':1,'short':2,'long':4}
 class Script:
     def __init__(s,data):
         s.d=data; s.entries=[]; o=0
-        # the entry table ends with 0xFD13 (ScriptEntryEnd), or without it where the first entry's code starts
         while not (s.entries and o>=min(s.entries)) and struct.unpack_from('<H',data,o)[0]!=0xFD13:
             v=struct.unpack_from('<i',data,o)[0]; s.entries.append(o+4+v); o+=4
         s.hdr_end=o+2 if o<len(data)-1 and struct.unpack_from('<H',data,o)[0]==0xFD13 else o
@@ -58,7 +54,6 @@ class Script:
             s.mov[t]=(acts,p)
         for e in s.entries: s.labels[e]=None
     def canon(s, start):
-        # canonical form of everything reachable from start (labels renumbered in visit order)
         seen={}; out=[]; work=[start]
         def lab(t):
             if t not in seen: seen[t]=len(seen); work.append(t)
@@ -102,7 +97,6 @@ def fmtarg(pn,v,msgs):
     if 'species' in l and v in SPECIES: return SPECIES[v]
     return str(v)
 def emit(sc, starts, names, msgs):
-    # emit all code/mov reachable from starts, in address order, with labels from names (addr->label)
     reach=set(); work=list(starts); movs=set()
     while work:
         a=work.pop()

@@ -1,5 +1,3 @@
-# Gen 4 text bank (de)cryption: raw() -> list of u16 char lists, build() re-encrypts, fix_dup() repairs the
-# "FFFE FF00 FF00" control-code artifact written by the original hack tool.
 import struct
 def raw(data):
     n,seed=struct.unpack_from('<HH',data,0); out=[]
@@ -22,7 +20,6 @@ def build(strings, seed):
     return bytes(hdr+body)
 def seed(data): return struct.unpack_from('<H',data,2)[0]
 def fix_dup(cs):
-    # repair "FFFE FF00 FF00 nparams" artifact -> "FFFE FF00 nparams"
     out=[];i=0;fixed=0
     while i<len(cs):
         if cs[i]==0xFFFE and i+2<len(cs) and cs[i+1]==cs[i+2] and cs[i+1]>=0xFF00:

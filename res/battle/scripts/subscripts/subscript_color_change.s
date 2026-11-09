@@ -2,7 +2,6 @@
 
 
 _000:
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainlityMadeItType
     // {0}’s {1} made it the {2} type!
     PrintMessage BattleStrings_Text_PokemonsAbilityMadeItType_Ally, TAG_NICKNAME_ABILITY_TYPE, BTLSCR_DEFENDER, BTLSCR_DEFENDER, BTLSCR_MSG_TEMP

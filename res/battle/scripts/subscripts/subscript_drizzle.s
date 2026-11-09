@@ -2,12 +2,10 @@
 
 
 _000:
-    // Sour Platinum: the ability banner comes in before the effect
     ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
     Wait 
     PlayBattleAnimation BTLSCR_PLAYER, BATTLE_ANIMATION_WEATHER_RAIN
     Wait 
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PrintPlainMessage
     // {0}’s {1} made it rain!
     PrintMessage BattleStrings_Text_PokemonsAbilityMadeItRain_Ally, TAG_NICKNAME_ABILITY, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP

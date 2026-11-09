@@ -106,7 +106,6 @@ void SysTaskManager_ExecuteTasks(SysTaskManager *sysTaskMgr)
         sysTaskMgr->nextTask = sysTaskMgr->currentTask->nextTask;
 
         if (sysTaskMgr->currentTask->tickDiv > 1 && !gSystem.logicTick) {
-            // Sour Platinum 60 fps mode: this task keeps its original 30 Hz pace.
         } else if (sysTaskMgr->currentTask->state == TASK_STATE_ACTIVE) {
             if (sysTaskMgr->currentTask->callback != NULL) {
                 u8 savedTickDiv = gSystem.execTickDiv;
@@ -143,7 +142,6 @@ static SysTask *SysTaskManager_InternalAddTask(SysTaskManager *sysTaskMgr, SysTa
     task->priority = priority;
     task->param = param;
     task->callback = callback;
-    // The VBlank interrupt tasks and the print queue (text printers) already ran twice per original frame.
     task->tickDiv = (sysTaskMgr == gSystem.vBlankTaskMgr || sysTaskMgr == gSystem.printTaskMgr) ? 1 : 2;
 
     if (sysTaskMgr->currentTask->callback != NULL) {

@@ -632,7 +632,6 @@ void Bg_ToggleLayer(u8 bgLayer, u8 enable)
 #define BG_BLEND_MAX_MOVE 64
 #define BG_BLEND_MAX_CONFIGS 8
 
-// BgConfigs that had an offset set on the current original-rate tick.
 static BgConfig *sTouchedConfigs[BG_BLEND_MAX_CONFIGS];
 static int sTouchedConfigCount = 0;
 
@@ -668,11 +667,7 @@ void Bg_SetOffset(BgConfig *bgConfig, u8 bgLayer, u8 bgUpdateOffsetOp, int val)
     int hOffset = bgConfig->bgs[bgLayer].xOffset;
     int vOffset = bgConfig->bgs[bgLayer].yOffset;
 
-    // Tasks that run on every tick (including the VBlank interrupt tasks, which run at 60 Hz in the original game)
-    // already move things smoothly, so only code that runs at the original rate is blended.
     if (gSystem.fps60 && gSystem.logicTick && gSystem.execTickDiv != 1) {
-        // Sour Platinum 60 fps mode: show the point halfway between what was shown last and the new offset now,
-        // and the real offset on the next tick (see Bg_ApplyFinalOffsets).
         Background *bg = &bgConfig->bgs[bgLayer];
 
         BgBlend_Touch(bgConfig);

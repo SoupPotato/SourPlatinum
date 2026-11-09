@@ -42,14 +42,12 @@ _074:
     End 
 
 _079:
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainAnchors
     // {0} anchors itself with {1}!
     BufferMessage BattleStrings_Text_PokemonAnchorsItselfWithAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_DEFENDER, BTLSCR_DEFENDER
     GoTo _090
 
 _PlainAnchors:
-    // {0} anchors itself!
     BufferMessage BattleStrings_Text_PokemonAnchorsItself_Ally, TAG_NICKNAME_ABILITY, BTLSCR_DEFENDER, BTLSCR_DEFENDER
     GoTo _090
 

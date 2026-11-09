@@ -1795,12 +1795,10 @@ BOOL BattleSystem_TriggerRedirectionAbilities(BattleSystem *battleSys, BattleCon
     BOOL result = FALSE;
 
     if ((battleCtx->moveStatusFlags & MOVE_STATUS_NO_EFFECTS) == FALSE && DEFENDER_SELF_TURN_FLAGS.lightningRodActivated) {
-        // Sour Platinum: Lightning Rod absorbs the move, so there is no message about taking it
         battleCtx->selfTurnFlags[battleCtx->defender].lightningRodActivated = FALSE;
     }
 
     if ((battleCtx->moveStatusFlags & MOVE_STATUS_NO_EFFECTS) == FALSE && DEFENDER_SELF_TURN_FLAGS.stormDrainActivated) {
-        // Sour Platinum: Storm Drain absorbs the move, so there is no message about taking it
         battleCtx->selfTurnFlags[battleCtx->defender].stormDrainActivated = FALSE;
     }
 
@@ -2669,15 +2667,6 @@ int BattleSystem_ApplyTypeChart(BattleSystem *battleSys, BattleContext *battleCt
     return damage;
 }
 
-/**
- * Sour Platinum: Future Sight and Doom Desire work like Generation 5. The damage is worked out when the attack hits,
- * like a normal hit of the move's type: with the user's Special Attack and the target's Special Defense at that time,
- * STAB, type effectiveness (Wonder Guard can block it) and critical hits. If the user is not on the field any more,
- * its stats from the party are used without stat changes, ability or held item.
- *
- * Returns FALSE if the attack disappears without a word (it would hit the user itself).
- * damage is negative, like hpCalcTemp. moveStatusMask gets the effectiveness and critical hit flags.
- */
 BOOL BattleSystem_CalcFutureSightDamage(BattleSystem *battleSys, BattleContext *battleCtx, int defender, int *damage, u32 *moveStatusMask)
 {
     int attacker = battleCtx->fieldConditions.futureSightAttacker[defender];
@@ -2716,7 +2705,6 @@ BOOL BattleSystem_CalcFutureSightDamage(BattleSystem *battleSys, BattleContext *
         }
     }
 
-    // The flags left behind by the last move used this turn must not change how this hit works
     u32 savedStatusMask = battleCtx->battleStatusMask;
     battleCtx->battleStatusMask &= ~(SYSCTL_IGNORE_TYPE_CHECKS | SYSCTL_IGNORE_IMMUNITIES);
 
@@ -2758,8 +2746,6 @@ u8 BattleSystem_GetHiddenPowerType(BattleContext *battleCtx, int battler)
     return type;
 }
 
-// Sour Platinum: TRUE during the turn an uproar was started (its counter still has the starting value of 3, see
-// subscript_uproar.s)
 BOOL Battle_UproarJustStarted(BattleContext *battleCtx)
 {
     for (int i = 0; i < MAX_BATTLERS; i++) {
@@ -3629,14 +3615,12 @@ int BattleSystem_TriggerImmunityAbility(BattleContext *battleCtx, int attacker, 
         subscript = subscript_absorb_and_speed_up_1_stage;
     }
 
-    // Sour Platinum: Generation 5, Lightning Rod absorbs Electric moves and raises Sp. Atk
     if (Battler_IgnorableAbility(battleCtx, attacker, defender, ABILITY_LIGHTNING_ROD) == TRUE
         && moveType == TYPE_ELECTRIC
         && attacker != defender) {
         subscript = subscript_absorb_and_sp_atk_up_1_stage;
     }
 
-    // Sour Platinum: Generation 5, Storm Drain absorbs Water moves and raises Sp. Atk
     if (Battler_IgnorableAbility(battleCtx, attacker, defender, ABILITY_STORM_DRAIN) == TRUE
         && moveType == TYPE_WATER
         && attacker != defender) {
@@ -4080,7 +4064,6 @@ int BattleSystem_TriggerEffectOnSwitch(BattleSystem *battleSys, BattleContext *b
                     if (maxPower) {
                         battleCtx->msgBattlerTemp = battler;
 
-                        // Sour Platinum: the message names the Pokemon that has the move
                         for (j = 0; j < maxBattlers; j++) {
                             if (BattleSystem_GetBattlerSide(battleSys, battler) != BattleSystem_GetBattlerSide(battleSys, j)
                                 && battleCtx->battleMons[j].curHP) {
@@ -4100,7 +4083,7 @@ int BattleSystem_TriggerEffectOnSwitch(BattleSystem *battleSys, BattleContext *b
 
                         battleCtx->msgMoveTemp = battleCtx->battleMons[j].moves[BattleSystem_RandNext(battleSys) % k];
                         battleCtx->msgBattlerTemp = battler;
-                        battleCtx->msgAttacker = j; // Sour Platinum: the message names the Pokemon that has the move
+                        battleCtx->msgAttacker = j;
 
                         subscript = subscript_forewarn;
                         result = SWITCH_IN_CHECK_RESULT_BREAK;
@@ -4235,8 +4218,6 @@ int BattleSystem_TriggerEffectOnSwitch(BattleSystem *battleSys, BattleContext *b
             break;
 
         case SWITCH_IN_CHECK_STATE_CLOUD_NINE:
-            // Sour Platinum: Generation 5, a Pokemon with Cloud Nine or Air Lock says that the effects of weather
-            // disappeared when it is brought out
             for (i = 0; i < maxBattlers; i++) {
                 battler = battleCtx->monSpeedOrder[i];
 
@@ -4355,7 +4336,6 @@ BOOL BattleSystem_TriggerAbilityOnHit(BattleSystem *battleSys, BattleContext *ba
     }
 
     switch (Battler_Ability(battleCtx, battleCtx->defender)) {
-    // Sour Platinum: like in Black, Anger Point reacts after the messages about the hit
     case ABILITY_ANGER_POINT:
         if (DEFENDING_MON.curHP
             && battleCtx->criticalMul > 1
@@ -4395,7 +4375,6 @@ BOOL BattleSystem_TriggerAbilityOnHit(BattleSystem *battleSys, BattleContext *ba
             moveType = CURRENT_MOVE_DATA.type;
         }
 
-        // Sour Platinum: Generation 5, with a multi-hit move Color Change only activates after the last hit
         if (DEFENDING_MON.curHP
             && (battleCtx->moveStatusFlags & MOVE_STATUS_NO_EFFECTS) == FALSE
             && battleCtx->moveCur != MOVE_STRUGGLE
@@ -4581,8 +4560,6 @@ BOOL BattleSystem_RecoverStatusByAbility(BattleSystem *battleSys, BattleContext 
         break;
 
     case ABILITY_OBLIVIOUS:
-        // Sour Platinum: a Mental Herb is used first (Generation 5), and Oblivious also shakes off a taunt
-        // (Generation 6-7)
         if ((battleCtx->battleMons[battler].statusVolatile & VOLATILE_CONDITION_ATTRACT)
             && Battler_HeldItemEffect(battleCtx, battler) != HOLD_EFFECT_HEAL_INFATUATION) {
             battleCtx->msgTemp = MSGCOND_INFATUATION;

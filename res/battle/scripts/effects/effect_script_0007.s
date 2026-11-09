@@ -22,17 +22,14 @@ _038:
     PrintAttackMessage 
     Wait 
     WaitButtonABTime 30
-    // Sour Platinum: the ability banner comes in before the effect
     ShowAbilityBanner BTLSCR_ABILITY_MON
     Wait 
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainnFromUsingMove0
     // {0}’s {1} prevents {2} from using {3}!
     PrintMessage BattleStrings_Text_PokemonsAbilityPreventsPokemonFromUsingMove_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME_MOVE, BTLSCR_ABILITY_MON, BTLSCR_ABILITY_MON, BTLSCR_ATTACKER, BTLSCR_ATTACKER
     GoTo _PlainnFromUsingMove0Done
 
 _PlainnFromUsingMove0:
-    // {0} cannot use {1}!
     PrintMessage BattleStrings_Text_PokemonCannotUseMove_Ally, TAG_NICKNAME_MOVE, BTLSCR_ATTACKER, BTLSCR_ATTACKER
 
 _PlainnFromUsingMove0Done:

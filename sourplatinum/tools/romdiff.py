@@ -1,5 +1,3 @@
-# Byte-level diff of two ROMs: arm9/overlays and every filesystem file, listing changed NARC members.
-# usage: python3 romdiff.py A.nds B.nds
 import sys, ndspy.rom, ndspy.narc, ndspy.lz10 as lz
 a=ndspy.rom.NintendoDSRom.fromFile(sys.argv[1]); b=ndspy.rom.NintendoDSRom.fromFile(sys.argv[2])
 print('arm9', len(a.arm9), len(b.arm9), a.arm9==b.arm9)

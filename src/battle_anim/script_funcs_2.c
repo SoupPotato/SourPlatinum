@@ -145,9 +145,9 @@ enum KinesisSpriteState {
 #define KINESIS_SPRITE_BG_START_ALPHA       31
 #define KINESIS_SPRITE_SPOON_END_ALPHA      31
 #define KINESIS_SPRITE_ALPHA_SCALE          10
-#define KINESIS_SPRITE_BEND_SKIP_FRAMES     22 // Sour Platinum: frames of the straight spoon that are skipped before it bends
-#define KINESIS_SPRITE_MAX_SOUND_WAIT       90 // frames to wait for the fade in sound at the most
-#define KINESIS_SPRITE_FADE_SPEED           2 // Sour Platinum: the fade in and fade out take half as long (the bend plays twice as fast too)
+#define KINESIS_SPRITE_BEND_SKIP_FRAMES     22
+#define KINESIS_SPRITE_MAX_SOUND_WAIT       90
+#define KINESIS_SPRITE_FADE_SPEED           2
 #define KINESIS_SPRITE_SPOON_STAGGER_FRAMES 8
 
 // -------------------------------------------------------------------
@@ -581,7 +581,7 @@ enum ForesightSpriteState {
 #define FORESIGHT_SPRITE_MOVE_FRAMES       8
 #define FORESIGHT_SPRITE_SEGMENT_COUNT     4
 #define FORESIGHT_SPRITE_PATH_HALF_WIDTH   32
-#define FORESIGHT_SPRITE_PATH_DROP         27 // 64 * tan(22.5 degrees), so 3 passes span the original 80 pixels of height
+#define FORESIGHT_SPRITE_PATH_DROP         27
 #define FORESIGHT_SPRITE_START_X           (-FORESIGHT_SPRITE_PATH_HALF_WIDTH)
 #define FORESIGHT_SPRITE_START_Y           (-40)
 #define FORESIGHT_SPRITE_START_DELAY       4
@@ -830,7 +830,7 @@ enum VitalThrowState {
 };
 
 #define VITAL_THROW_REVOLUTION_COUNT  1
-#define VITAL_THROW_REVOLUTION_FRAMES 44 // 64 in the original game, Sour Platinum spins about 45% faster
+#define VITAL_THROW_REVOLUTION_FRAMES 44
 #define VITAL_THROW_MOVE_OFFSET_X     32
 #define VITAL_THROW_MOVE_FRAMES       2
 #define VITAL_THROW_MOVE_BACK_FRAMES  8
@@ -1288,8 +1288,6 @@ static void BattleAnimTask_QuickAttack(SysTask *task, void *param)
     transformsActive[1] = Afterimage_Update(&ctx->afterImageCtx);
     transformsActive[2] = FALSE;
 
-    // Sour Platinum: like the sprite (see below), an afterimage on the last step of its turn is put on the exact start
-    // position. The rounded step size made it end 1 pixel left of the sprite.
     for (int i = 0; i < ctx->afterImageCtx.activeCount; i++) {
         if (ctx->afterImageCtx.transforms[i].data[XY_PARAM_REV_STEPS] == 0) {
             ManagedSprite_SetPositionXY(ctx->afterimageSprites[i], ctx->afterImageCtx.x, ctx->afterImageCtx.y + (REVOLUTION_CONTEXT_OVAL_RADIUS_Y >> FX32_SHIFT));
@@ -1297,8 +1295,6 @@ static void BattleAnimTask_QuickAttack(SysTask *task, void *param)
     }
 
     if (transformsActive[0] == FALSE) {
-        // Sour Platinum: the oval does not always end exactly on its start (the step size is rounded), which left
-        // the sprite 1 pixel off while the afterimages finished. Rest at the exact original position.
         PokemonSprite_SetAttribute(ctx->attackerSprite, MON_SPRITE_X_CENTER, ctx->attackerX);
         PokemonSprite_SetAttribute(ctx->attackerSprite, MON_SPRITE_Y_CENTER, ctx->attackerY + (REVOLUTION_CONTEXT_OVAL_RADIUS_Y >> FX32_SHIFT));
     }
@@ -1329,7 +1325,7 @@ void BattleAnimScriptFunc_QuickAttack(BattleAnimSystem *system)
     ctx->attackerShadowHeight = PokemonSprite_GetAttribute(ctx->attackerSprite, MON_SPRITE_SHADOW_HEIGHT);
     ctx->attackerY -= REVOLUTION_CONTEXT_OVAL_RADIUS_Y >> FX32_SHIFT;
 
-    int revolutions = BattleAnimSystem_GetScriptVar(system, 0); // number of spins, 0 = 1
+    int revolutions = BattleAnimSystem_GetScriptVar(system, 0);
 
     if (revolutions < 1) {
         revolutions = 1;
@@ -1550,7 +1546,6 @@ static void BattleAnimTask_KinesisSprite(SysTask *task, void *param)
     case KINESIS_SPRITE_STATE_FADE_IN_SPOONS:
         ctx->spoonAlpha += KINESIS_SPRITE_FADE_SPEED * KINESIS_SPRITE_ALPHA_SCALE;
 
-        // The alpha must stay in range (an alpha of 32 made the spoon disappear for a frame)
         if (ctx->spoonAlpha > KINESIS_SPRITE_SPOON_END_ALPHA * KINESIS_SPRITE_ALPHA_SCALE) {
             ctx->spoonAlpha = KINESIS_SPRITE_SPOON_END_ALPHA * KINESIS_SPRITE_ALPHA_SCALE;
         }
@@ -1568,7 +1563,6 @@ static void BattleAnimTask_KinesisSprite(SysTask *task, void *param)
     case KINESIS_SPRITE_STATE_FIX_ALPHA:
         G2_ChangeBlendAlpha(BATTLE_ANIM_DEFAULT_ALPHA, BATTLE_ANIM_DEFAULT_ALPHA);
 
-        // Sour Platinum: the spoons start orbiting when the sound of the fade in has finished
         if (Sound_IsEffectPlaying(SEQ_SE_DP_W060_sseq) && ++ctx->soundWait < KINESIS_SPRITE_MAX_SOUND_WAIT) {
             break;
         }
@@ -1605,7 +1599,6 @@ static void BattleAnimTask_KinesisSprite(SysTask *task, void *param)
     }
     case KINESIS_SPRITE_STATE_ANIMATE_SPOON:
         if (ctx->bendStarted == FALSE) {
-            // The spoon waits a long time (44 frames) before it bends, cut that short
             Sprite_UpdateAnim(ctx->spoon.sprite->sprite, FX32_CONST(KINESIS_SPRITE_BEND_SKIP_FRAMES));
             ctx->bendStarted = TRUE;
         }
@@ -1615,8 +1608,6 @@ static void BattleAnimTask_KinesisSprite(SysTask *task, void *param)
         if (Sprite_IsAnimated(ctx->spoon.sprite->sprite) == FALSE) {
             ManagedSprite_SetExplicitOamMode(ctx->spoon.sprite, GX_OAM_MODE_XLU);
 
-            // The spoon is translucent from now on, so the blending has to be at its full strength already or the spoon
-            // would be hidden for a frame before the fade out starts
             G2_ChangeBlendAlpha(KINESIS_SPRITE_SPOON_END_ALPHA, KINESIS_SPRITE_BG_START_ALPHA - KINESIS_SPRITE_SPOON_END_ALPHA);
             ctx->state++;
         }
@@ -1973,7 +1964,7 @@ void BattleAnimScriptFunc_AcidArmor(BattleAnimSystem *system)
 
     PosLerpContext_Init(&ctx->pos, 0, ACID_ARMOR_MOVE_X, 0, ACID_ARMOR_MOVE_Y, ACID_ARMOR_MOVE_FRAMES);
     ctx->pos.data[XY_PARAM_STEP_SIZE_X] *= dir;
-    ctx->pos.data[XY_PARAM_END_X] *= dir; // Sour Platinum: the 60 fps end position (the movement starts at 0)
+    ctx->pos.data[XY_PARAM_END_X] *= dir;
 
     int battlerType = BattleAnimUtil_GetBattlerType(ctx->battleAnimSys, BattleAnimSystem_GetAttacker(system));
     if (battlerType == BATTLER_TYPE_ENEMY_SIDE_SLOT_1 || battlerType == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
@@ -2816,8 +2807,6 @@ static void BattleAnimTask_FaintAttack(SysTask *task, void *param)
                 ctx->attackerY - ctx->attackerShadowHeight,
                 ctx->sprite)
             == FALSE) {
-            // Sour Platinum: the oval does not always end exactly on its start (the step size is rounded), which left
-            // the sprite 1 pixel off while it faded back in. Rest at the exact original position.
             ManagedSprite_SetPositionXY(ctx->sprite, ctx->attackerX, ctx->attackerY - ctx->attackerShadowHeight + REVOLUTION_CONTEXT_OVAL_RADIUS_Y_INT);
             ctx->state++;
             ctx->delay = FAINT_ATTACK_FADE_IN_DELAY;
@@ -3031,9 +3020,6 @@ void BattleAnimSpriteFunc_ScaryFace(BattleAnimSystem *system, SpriteSystem *spri
     BattleAnimSystem_StartAnimTask(ctx->battleAnimSys, BattleAnimTask_ScaryFaceSprite, ctx);
 }
 
-// Sets up the offset lerp for the current path segment. Sour Platinum: the reticle starts at the top left, zig-zags
-// down over the defender at a shallow angle (22.5 degrees from horizontal, 67.5 from vertical) and finishes in the
-// center. The start point is the top left corner of the path, see FORESIGHT_SPRITE_START_X/Y.
 static void ForesightSprite_InitMoveSegment(ForesightSpriteContext *ctx)
 {
     switch (ctx->segment) {
@@ -4966,19 +4952,19 @@ static void ExtrasensoryContext_SetParameters(ExtrasensoryContext *ctx)
         ctx->baseAngle = EXTRASENSORY_DISTORTION_1_ANGLE;
         ctx->amplitudeStep = EXTRASENSORY_DISTORTION_1_STEP;
         ctx->baseAmplitude = EXTRASENSORY_DISTORTION_1_AMPLITUDE;
-        ctx->delay = BattleTime_ScaleBySpeed(EXTRASENSORY_DISTORTION_1_FRAMES); // Sour Platinum: follows SetAnimSpeed
+        ctx->delay = BattleTime_ScaleBySpeed(EXTRASENSORY_DISTORTION_1_FRAMES);
         break;
     case 1:
         ctx->baseAngle = EXTRASENSORY_DISTORTION_2_ANGLE;
         ctx->amplitudeStep = EXTRASENSORY_DISTORTION_2_STEP;
         ctx->baseAmplitude = EXTRASENSORY_DISTORTION_2_AMPLITUDE;
-        ctx->delay = BattleTime_ScaleBySpeed(EXTRASENSORY_DISTORTION_2_FRAMES); // Sour Platinum: follows SetAnimSpeed
+        ctx->delay = BattleTime_ScaleBySpeed(EXTRASENSORY_DISTORTION_2_FRAMES);
         break;
     case 2:
         ctx->baseAngle = EXTRASENSORY_DISTORTION_3_ANGLE;
         ctx->amplitudeStep = EXTRASENSORY_DISTORTION_3_STEP;
         ctx->baseAmplitude = EXTRASENSORY_DISTORTION_3_AMPLITUDE;
-        ctx->delay = BattleTime_ScaleBySpeed(EXTRASENSORY_DISTORTION_3_FRAMES); // Sour Platinum: follows SetAnimSpeed
+        ctx->delay = BattleTime_ScaleBySpeed(EXTRASENSORY_DISTORTION_3_FRAMES);
         break;
     }
 }

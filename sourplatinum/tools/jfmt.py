@@ -1,4 +1,3 @@
-# JSON serializer that reproduces the repo's hand-formatted JSON styles (see CLAUDE.md, "JSON formatting").
 import json
 def _scalar(v): return json.dumps(v, ensure_ascii=False)
 def dumps(obj, inline_pred, indent=4, empty_list={}, empty='[  ]'):

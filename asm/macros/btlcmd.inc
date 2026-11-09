@@ -1235,36 +1235,30 @@
     .long BTLCMD_END
     .endm
 
-    // Sour Platinum: brings in the ability banner of a battler before the effect of its ability
     .macro ShowAbilityBanner battler
     .long BTLCMD_SHOWABILITYBANNER
     .long \battler
     .endm
 
-    // Sour Platinum: sends away the ability banner of an effect that has no message
     .macro HideAbilityBanner
     .long BTLCMD_HIDEABILITYBANNER
     .endm
 
-    // Sour Platinum: jumps if the ability banner can be shown
     .macro CheckAbilityBannerAvailable jump
     .long BTLCMD_CHECKABILITYBANNERAVAILABLE
     .long (\jump-.) / 4 - 1
     .endm
 
-    // Sour Platinum: the ability of a battler changed: its banner, brought in before, pixelates into the new one
     .macro ChangeAbilityBanner battler
     .long BTLCMD_CHANGEABILITYBANNER
     .long \battler
     .endm
 
-    // Sour Platinum: brings in the ability banner of a battler again, even if it is still up
     .macro ReshowAbilityBanner battler
     .long BTLCMD_RESHOWABILITYBANNER
     .long \battler
     .endm
 
-    // Sour Platinum: brings in the ability banner for the buffered message, if it names an ability
     .macro ShowBufferedAbilityBanner
     .long BTLCMD_SHOWBUFFEREDABILITYBANNER
     .endm

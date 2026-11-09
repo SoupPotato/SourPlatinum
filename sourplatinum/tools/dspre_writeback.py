@@ -1,17 +1,3 @@
-# Write edits made in the DSPRE fork back into this tree's source files.
-# usage (in WSL, from the Windows tree): python3 sourplatinum/tools/dspre_writeback.py CONTENTS_DIR
-#     [--baseline build/dspre/sourplatinum.baseline.nds] [--clone ~/SourPlatinum] [--dry-run] [--report OUT.json]
-#   or: python3 sourplatinum/tools/dspre_writeback.py --self-test
-# CONTENTS_DIR is DSPRE's <rom>_DSPRE_contents folder for build/dspre/sourplatinum.nds (Windows paths are accepted).
-#
-# Every NARC member DSPRE unpacked is compared with the same member in the baseline ROM that dspre_build.py published.
-# Changed members of a supported kind (trainers, wild encounters, species stats/learnsets/evolutions, items, text, icons,
-# Pokémon battle sprites) are
-# decoded, diffed field by field against the baseline and only the changed fields are written into the matching
-# source file, so untouched fields keep their exact text. Anything else that changed (other NARCs, ARM9, overlays) is
-# listed as not written back; it is lost on the next build.
-# --self-test decodes every member of the baseline and checks it against the source files, which proves the decoders
-# still match the build tools after either side changes.
 import argparse, hashlib, json, os, re, struct, subprocess, sys, tempfile
 import ndspy.codeCompression, ndspy.narc, ndspy.rom
 
@@ -21,7 +7,6 @@ sys.path.insert(0, TOOLS)
 from dspre_offsets import load_rom
 import jfmt
 
-# DSPRE's Platinum folder names (RomInfo.SetNarcDirs) -> NARC path in the ROM
 NARCS = {
     'personalPokeData': 'poketool/personal/pl_personal.narc', 'pokemonBattleSprites': 'poketool/pokegra/pl_pokegra.narc',
     'otherPokemonBattleSprites': 'poketool/pokegra/pl_otherpoke.narc', 'pokemonSpriteOffsets': 'poketool/poke_edit/pl_poke_data.narc',
@@ -50,8 +35,6 @@ def to_wsl(path):
 
 def lines(rel):
     return [l.strip() for l in open(os.path.join(REPO, rel)) if l.strip()]
-
-# --- JSON formatting per directory (see CLAUDE.md, "JSON formatting") -------------------------------------------------
 
 def species_inline(path, v):
     if path[-1:] in (('types',), ('egg_groups',), ('abilities',)):
@@ -131,7 +114,6 @@ class Ctx:
             self._packed[dirname] = ndspy.narc.NARC(open(path, 'rb').read()).files if path and os.path.exists(path) else None
         return self._packed[dirname]
 
-    # members
     def old(self, dirname, i):
         if dirname not in self._narcs:
             self._narcs[dirname] = ndspy.narc.NARC(self.rom.getFileByName(NARCS[dirname])).files
@@ -165,12 +147,10 @@ class Ctx:
                 if not f.isdigit():
                     continue
                 old, new = self.old(dirname, int(f)), open(os.path.join(d, f), 'rb').read()
-                # DSPRE's Pokémon editor saves an absent female height (an empty file) as a single 0 byte
                 if old != new and not (dirname == 'pokeHeight' and old == b'' and new == b'\0'):
                     out.append(int(f))
         return sorted(out)
 
-    # value <-> name
     def enum(self, module):
         """{value: name} from build/generated/<module>.py in the clone (written by metang)."""
         if module not in self._enums:
@@ -200,7 +180,6 @@ class Ctx:
         except KeyError:
             raise ValueError(f'{value} is not a known {module} value')
 
-    # source files
     def json(self, rel):
         if rel not in self._json:
             text = open(os.path.join(REPO, rel), encoding='utf-8', newline='').read()
@@ -215,8 +194,6 @@ class Ctx:
                     with open(os.path.join(REPO, rel), 'w', encoding='utf-8', newline='\n') as f:
                         f.write(out)
                 self.written.append(rel)
-
-# --- record kinds: one NARC member (or one member per NARC) <-> one source JSON file ----------------------------------
 
 class Kind:
     dirs = ()
@@ -310,8 +287,6 @@ class Trainers(Kind):
         return out
 
     def apply(self, rel, old, new, conflicts):
-        # a party format change (first mon gains/loses items or moves) shows up as item/moves changing on every mon,
-        # so the field merge below covers it
         data = self.ctx.json(rel)
         party_old, party_new = old.pop('party'), new.pop('party')
         apply_changes(data, old, new, conflicts)
@@ -359,7 +334,7 @@ class Encounters(Kind):
 
 ALT_FORMS = ['deoxys/forms/attack', 'deoxys/forms/defense', 'deoxys/forms/speed', 'wormadam/forms/sandy',
              'wormadam/forms/trash', 'giratina/forms/origin', 'shaymin/forms/sky', 'rotom/forms/heat', 'rotom/forms/wash',
-             'rotom/forms/frost', 'rotom/forms/fan', 'rotom/forms/mow']   # speciesproc.c alt_forms_with_data, in order
+             'rotom/forms/frost', 'rotom/forms/fan', 'rotom/forms/mow']
 NUM_TMS = 92
 EVO_NO_PARAM = {'EVO_NONE', 'EVO_LEVEL_HAPPINESS', 'EVO_LEVEL_HAPPINESS_DAY', 'EVO_LEVEL_HAPPINESS_NIGHT', 'EVO_TRADE',
                 'EVO_LEVEL_MAGNETIC_FIELD', 'EVO_LEVEL_MOSS_ROCK', 'EVO_LEVEL_ICE_ROCK'}
@@ -481,7 +456,7 @@ class Items(Kind):
                     params[key] = p[byte] >> shift & mask
             for key, byte, signed in ITEM_BYTES:
                 v = struct.unpack_from('<b' if signed else '<B', p, byte)[0]
-                if key == 'ppRestored':   # stored in 7 bits, so the source's -1 ("all PP") comes back as 127
+                if key == 'ppRestored':
                     v = -1 if v & 0x7F == 0x7F else v & 0x7F
                 if v:
                     params[key] = v
@@ -492,7 +467,6 @@ class Items(Kind):
 
     def apply(self, rel, old, new, conflicts):
         data = self.ctx.json(rel)
-        # itemUseParams is a set of non-default keys, so a changed set replaces the whole object
         nv, ov = new.pop('itemUseParams', MISSING), old.pop('itemUseParams', MISSING)
         sv = data.get('itemUseParams', MISSING)
         if nv != ov and sv != nv:
@@ -501,8 +475,6 @@ class Items(Kind):
             else:
                 conflicts.append('.itemUseParams')
         apply_changes(data, old, new, conflicts)
-
-# --- text banks: decoded with the repo's own msgenc -------------------------------------------------------------------
 
 class Text:
     def __init__(self, ctx):
@@ -514,7 +486,6 @@ class Text:
         species = species_dirs()
         item_rel = lambda i: f'res/items/data/{items[i][len("ITEM_"):].lower()}.json'
         move_rel = lambda i: f'res/moves/{moves[i][len("MOVE_"):].lower()}/data.json'
-        # generated banks: message i -> (source file, key path), for the ones DSPRE's editors change
         def species_rel(i):
             if i == 0:
                 raise LookupError('SPECIES_NONE\'s name is fixed by speciesproc')
@@ -540,7 +511,7 @@ class Text:
         """A generated bank's message as its source field stores it."""
         value = message.get('en_US')
         if bank == 'npc_trainer_names' and isinstance(value, str):
-            value = value.replace('{TRNAME}', '', 1)   # msgenc marks the compressed trainer-name encoding this way
+            value = value.replace('{TRNAME}', '', 1)
         return value
 
     def decode(self, data):
@@ -653,15 +624,12 @@ class Text:
         print(f'Text: {bad} message(s) disagree with the build')
         return bad
 
-# --- Pokémon icons: res/pokemon/**/icon.png <- pl_poke_icon.narc, palettes <- sPokemonIconPaletteIndex in ARM9 -------
-
 class Icons:
-    SHARED = 7   # pl_poke_icon.narc members before the first icon: shared palettes, cells and animations
+    SHARED = 7
 
     def __init__(self, ctx):
         self.ctx = ctx
         species = [n[len('SPECIES_'):].lower() for n in lines('generated/species.txt')]
-        # species icons up to the egg (bad_egg has none), then the form icons in res/pokemon/meson.build order
         self.icons = [(s, None) for s in species[:species.index('egg') + 1]]
         form_vars = {}
         for s in species:
@@ -672,8 +640,6 @@ class Icons:
         block = re.search(r'poke_icon_files \+= \[(.*?)\]', open(os.path.join(REPO, 'res', 'pokemon', 'meson.build')).read(), re.S)
         self.icons += [form_vars[v] for v in re.findall(r'(\w+_icon)', block.group(1))]
         _, (_, self.arm9_old), _, _ = load_rom(ctx.baseline)
-        # The table is found through the offsets file published with the baseline (same build), never through the
-        # clone's current map, which may already be from a later build.
         self.table = None
         offsets = re.sub(r'\.baseline\.nds$', '.dspre_offsets.json', ctx.baseline)
         if offsets != ctx.baseline and os.path.exists(offsets):
@@ -750,7 +716,6 @@ class Icons:
             try:
                 if pal is None or pal > 2:
                     raise ValueError(f'icon palette {pal} is not one of the three shared palettes')
-                # three-way, like the JSON kinds: skip what the source already has, keep what it changed since the build
                 if k in palettes:
                     slot = self.palette_slot(k)
                     if slot is None:
@@ -804,9 +769,6 @@ class Icons:
                     print(f'  {rel}: ' + '; '.join(problems))
         print(f'Icons: {bad} of {len(self.icons)} icon(s) disagree with the build')
         return bad
-
-# --- Pokémon battle sprites: res/pokemon/<species>/{female,male}_{back,front}.png(.key), normal.pal, shiny.pal <- pl_pokegra.narc ---
-# pl_pokegra.narc has six members per species: female back, male back, female front, male front, normal and shiny palette.
 
 class Sprites:
     DIR = 'pokemonBattleSprites'
@@ -941,8 +903,6 @@ class Sprites:
         print(f'Sprites: {bad} species disagree with the build ({total} sprites checked)')
         return bad
 
-# --- field scripts: res/field/scripts/<file>.s, patched by dspre_scripts.py -------------------------------------------
-
 class Scripts:
     def __init__(self, ctx):
         self.ctx = ctx
@@ -971,7 +931,7 @@ class Scripts:
                 patched = self.patcher.patch(here.replace('\r\n', '\n'), ctx.old('scripts', i), ctx.new('scripts', i))
             except self.Unsupported as e:
                 ctx.not_written.append(f'{rel}: {e}'); continue
-            except Exception as e:   # DSPRE wrote something the disassembler can't read
+            except Exception as e:
                 ctx.not_written.append(f'{rel}: {type(e).__name__}: {e}'); continue
             if '\r\n' in here:
                 patched = patched.replace('\n', '\r\n')
@@ -994,7 +954,7 @@ class Scripts:
             except self.Unsupported as e:
                 unsupported.append(f'{name} ({e})')
             except Exception as e:
-                if 'no primitive' in str(e):   # a command whose macro scrdis can't express (conditional fields)
+                if 'no primitive' in str(e):
                     unsupported.append(f'{name} ({str(e).split(" at ")[0]})'); continue
                 bad += 1
                 if bad <= 8:
@@ -1002,8 +962,6 @@ class Scripts:
         print(f'Scripts: {bad} file(s) disagree with the build; edit in source only: {level} level scripts and',
               f'{len(unsupported)} others', *('    ' + u for u in unsupported), sep='\n' if unsupported else ' ')
         return bad
-
-# ---------------------------------------------------------------------------------------------------------------------
 
 KINDS = [Trainers, Encounters, Species, Items]
 HANDLED_DIRS = {d for k in KINDS for d in k.dirs} | {'textArchives', 'scripts', 'monIcons', 'pokemonBattleSprites'}
@@ -1015,7 +973,6 @@ def code_changes(ctx, baseline, handled_arm9=range(0)):
     _, (_, arm9), overlays, _ = load_rom(baseline)
     path = next((p for p in ('arm9/arm9.bin', 'arm9.bin') if os.path.exists(os.path.join(ctx.contents, p))), None)
     if path:
-        # ds-rom projects keep ITCM/DTCM out of arm9.bin, so only the part DSPRE has is compared
         mine = open(os.path.join(ctx.contents, path), 'rb').read()
         if any(a != b and i not in handled_arm9 for i, (a, b) in enumerate(zip(arm9, mine))):
             out.append('ARM9 (tables such as the spawn point, fly destinations, item data index, TM list)')
@@ -1056,7 +1013,7 @@ def main():
     contents = to_wsl(args.contents)
     if not os.path.isdir(os.path.join(contents, 'unpacked')):
         report_error(args, f'{contents} is not a DSPRE contents folder')
-    stamp = os.path.join(contents, 'dspre_repo_baseline.sha1')   # written by DSPRE when it opened the repo build
+    stamp = os.path.join(contents, 'dspre_repo_baseline.sha1')
     if os.path.exists(stamp):
         if hashlib.sha1(open(baseline, 'rb').read()).hexdigest() != open(stamp).read().strip():
             report_error(args, f'{baseline} is from a later build than the one DSPRE opened, so DSPRE\'s edits can\'t be '

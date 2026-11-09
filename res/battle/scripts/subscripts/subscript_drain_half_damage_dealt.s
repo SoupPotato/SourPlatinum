@@ -36,11 +36,9 @@ _064:
 
 _077:
     CheckAbility CHECK_HAVE, BTLSCR_ATTACKER, ABILITY_MAGIC_GUARD, _090
-    // Sour Platinum: the ability banner comes in before the effect
     ShowAbilityBanner BTLSCR_DEFENDER
     Wait 
     Call BATTLE_SUBSCRIPT_UPDATE_HP
-    // {0} sucked up the liquid ooze!
     PrintMessage BattleStrings_Text_PokemonSuckedUpTheLiquidOoze_Ally, TAG_NICKNAME, BTLSCR_ATTACKER
     Wait 
     WaitButtonABTime 30

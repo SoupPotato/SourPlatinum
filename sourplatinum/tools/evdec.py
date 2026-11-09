@@ -1,4 +1,3 @@
-# Decodes a zone_event.narc member (bg/object/warp/coord events) into dicts.
 import struct
 def dec(b):
     o=0

@@ -31,9 +31,9 @@ typedef struct FieldConditions {
     u8 wishTurns[MAX_BATTLERS];
     u16 futureSightMove[MAX_BATTLERS];
     int futureSightAttacker[MAX_BATTLERS];
-    s32 futureSightAttackerSlot[MAX_BATTLERS]; // Sour Platinum: the user's party slot (was the damage, worked out on use)
+    s32 futureSightAttackerSlot[MAX_BATTLERS];
     u8 wishTarget[MAX_BATTLERS];
-    u8 futureSightColorChange[MAX_BATTLERS]; // Sour Platinum: Color Change to run after a Future Sight hit, type + 1 (0 = none)
+    u8 futureSightColorChange[MAX_BATTLERS];
 } FieldConditions;
 
 typedef struct SideConditions {

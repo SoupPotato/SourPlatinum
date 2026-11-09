@@ -141,8 +141,8 @@ static void Task_FlickerBattler(SysTask *task, void *data);
 static void Task_UpdateHPGauge(SysTask *task, void *data);
 static void Task_DrawItemHPBar(SysTask *task, void *data);
 
-static BOOL sItemHPBarDone; // Sour Platinum: set by Task_DrawItemHPBar when the HP bar has filled
-static u8 sFlickerNotStarted; // Sour Platinum: a bit per battler whose damage flash has yet to begin, which its HP bar waits for
+static BOOL sItemHPBarDone;
+static u8 sFlickerNotStarted;
 static void Task_UpdateExpGauge(SysTask *task, void *data);
 static void Task_PlayFaintingSequence(SysTask *task, void *data);
 static void Task_FadeOut(SysTask *task, void *data);
@@ -1000,7 +1000,6 @@ void BattleDisplay_PrintAttackMessage(BattleSystem *battleSys, BattlerData *batt
     SysTask_Start(Task_WaitForBattleMessagePrint, waitTask, 0);
 }
 
-// Sour Platinum: a message that names an ability is printed once its banner is done sliding in, flashing and playing its sounds
 typedef struct AbilityBannerMessageTask {
     BattleSystem *battleSys;
     BattleMessage battleMsg;
@@ -1057,15 +1056,12 @@ void BattleDisplay_PrintMessage(BattleSystem *battleSys, BattlerData *battlerDat
     waitTask->command = battlerData->data[0];
     waitTask->battler = battlerData->battler;
 
-    // Sour Platinum: a message that only brings in the ability banner (before the effect of the ability) is not printed.
-    // This has to be checked before printing, which changes the ID of the message for the side of the battler.
     if (AbilityBanner_IsBannerOnlyMessage(battleMsg)) {
         waitTask->msgIdx = ABILITY_BANNER_NO_MESSAGE;
         AbilityBanner_TryShow(battleSys, battleMsg, ABILITY_BANNER_NO_MESSAGE);
     } else {
         waitTask->msgIdx = BattleMessage_Print(battleSys, msgLoader, battleMsg, BattleSystem_GetTextSpeed(battleSys));
 
-        // Sour Platinum: show the ability banner for messages that name an ability
         AbilityBanner_TryShow(battleSys, battleMsg, waitTask->msgIdx);
         AbilityBanner_AttachMessage(waitTask->msgIdx);
     }
@@ -4242,8 +4238,6 @@ static void Task_PlayerShowBagMenu(SysTask *task, void *data)
 
         HealthBox_CalcHP(healthbox, healthbox->damage);
 
-        // Sour Platinum: the bar is drawn by a task that runs on every tick, so that it fills at 60 fps like the HP
-        // bar of a move does (this task runs at the original rate)
         sItemHPBarDone = FALSE;
         SysTask *barTask = SysTask_Start(Task_DrawItemHPBar, healthbox, 1000);
         SysTask_SetTickDiv(barTask, 1);
@@ -4977,14 +4971,11 @@ static void Task_FlickerBattler(SysTask *task, void *data)
     }
 }
 
-// Sour Platinum 60 fps mode: the gauge tasks run on every tick. The gauges move at a constant number of
-// pixels per second (see SP_BAR_*_PIXELS_PER_SECOND), so one step per call is all that is needed.
 static int Healthbox_GaugeSteps(HealthBox *healthbox)
 {
     return 1;
 }
 
-// The EXP sound plays for 8 original frames after the gauge starts moving.
 static u8 Healthbox_ExpSoundFrames(void)
 {
     return 8 * BattleTime_TicksPerFrame();
@@ -4993,7 +4984,6 @@ static u8 Healthbox_ExpSoundFrames(void)
 static void Task_UpdateHPGaugeStep(SysTask *task, HealthBox *healthbox);
 static void Task_UpdateExpGaugeStep(SysTask *task, HealthBox *healthbox);
 
-// Sour Platinum: the HP bar after a healing item is used from the bag (see the bag menu task)
 static void Task_DrawItemHPBar(SysTask *task, void *data)
 {
     HealthBox *healthbox = data;
@@ -5028,7 +5018,6 @@ static void Task_UpdateHPGaugeStep(SysTask *task, HealthBox *healthbox)
 
     switch (healthbox->state) {
     case 0:
-        // Sour Platinum: this task runs on every tick and the flash on every other one, so it can get here first
         if (sFlickerNotStarted & (1 << healthbox->battler)) {
             return;
         }
@@ -5331,7 +5320,6 @@ static void Task_WaitForBattleMessagePrint(SysTask *task, void *data)
         BattleSystem_SetWaitDial(waitTask->battleSys, NULL);
     }
 
-    // Sour Platinum: the effect of an ability waits for its banner
     if ((waitTask->msgIdx == ABILITY_BANNER_NO_MESSAGE || Text_IsPrinterActive(waitTask->msgIdx) == FALSE) && AbilityBanner_IsIntroPlaying() == FALSE) {
         BattleController_EmitClearCommand(waitTask->battleSys, waitTask->battler, waitTask->command);
         Heap_Free(data);
@@ -5344,7 +5332,6 @@ static void Task_PrintMessageAfterAbilityBanner(SysTask *task, void *data)
     AbilityBannerMessageTask *bannerTask = data;
 
     if (AbilityBanner_IsIntroPlaying()) {
-        // The banner stays while it waits for its message
         AbilityBanner_TryShow(bannerTask->battleSys, &bannerTask->battleMsg, ABILITY_BANNER_NO_MESSAGE);
         return;
     }
@@ -5355,7 +5342,6 @@ static void Task_PrintMessageAfterAbilityBanner(SysTask *task, void *data)
     waitTask->command = bannerTask->command;
     waitTask->battler = bannerTask->battler;
 
-    // Printing changes the ID of the message for the side of the battler, which the banner needs to find the owner
     BattleMessage banneredMsg = bannerTask->battleMsg;
 
     waitTask->msgIdx = BattleMessage_Print(bannerTask->battleSys, BattleSystem_GetMessageLoader(bannerTask->battleSys), &bannerTask->battleMsg, BattleSystem_GetTextSpeed(bannerTask->battleSys));

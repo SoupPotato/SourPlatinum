@@ -1,4 +1,3 @@
-# Resolve addresses to symbols: sym.py build/main.nef.xMAP 0x2086590 ...
 import re,sys
 syms=[]
 for l in open(sys.argv[1],encoding='latin1'):

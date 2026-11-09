@@ -74,7 +74,7 @@
 #define MOVE_STATUS_LOST_FOCUS          (1 << 17)
 #define MOVE_STATUS_WONDER_GUARD        (1 << 18)
 #define MOVE_STATUS_STURDY              (1 << 19)
-#define MOVE_STATUS_ENDURED_STURDY      (1 << 21) // Sour Platinum: the move status was MOVE_STATUS_ENDURED because of Sturdy
+#define MOVE_STATUS_ENDURED_STURDY      (1 << 21)
 #define MOVE_STATUS_MAGNET_RISE         (1 << 20)
 
 #define MOVE_STATUS_NO_MORE_WORK (1 << 31)

@@ -3,7 +3,6 @@
 
 _000:
     WaitButtonABTime 15
-    // Sour Platinum: like in Black, the banner comes in with the old ability and pixelates into the new one
     ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
     Wait 
     UpdateMonDataFromVar OPCODE_GET, BTLSCR_MSG_DEFENDER, BATTLEMON_ABILITY, BTLVAR_CALC_TEMP

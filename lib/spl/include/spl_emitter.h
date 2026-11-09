@@ -39,12 +39,7 @@ typedef struct SPLEmitter {
     VecFx32 velocity;
     VecFx32 particleInitVelocity;
     u16 age;
-    // Sour Platinum: number of update calls that make up one original (30 Hz) frame.
-    // 1 = original behavior. 2 = the emitter is updated at 60 Hz and everything that is measured in
-    // frames (lifetimes, intervals) or per frame (velocity, acceleration, rotation) is scaled to match.
     u8 timeScale;
-    // Sour Platinum: if set (and timeScale > 1), child particles that are emitted every frame are emitted on every
-    // update instead, so that trails and children that carry the visible effect move at 60 Hz too.
     u8 smoothChildren;
     fx16 emissionCountFractional; // fractional part of the number of particles to emit (doesn't seem to be used)
     VecFx16 axis;
@@ -87,10 +82,8 @@ typedef struct SPLEmitterList {
     SPLEmitter *last;
 } SPLEmitterList;
 
-// Emitters created from now on use this time scale (see SPLEmitter::timeScale).
 void SPL_SetDefaultTimeScale(int timeScale);
 
-// Emitters created from now on use this setting (see SPLEmitter::smoothChildren).
 void SPL_SetDefaultSmoothChildren(BOOL smooth);
 
 static inline void SPLEmitter_SetPos(SPLEmitter *emtr, const VecFx32 *position)

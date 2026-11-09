@@ -133,11 +133,10 @@ typedef struct Background {
     int xCenter;
     int yCenter;
 
-    // Sour Platinum 60 fps mode: offset that was written to the hardware on the last in-between tick.
     int lastFinalX;
     int lastFinalY;
     u8 lastFinalValid;
-    u8 blendPending; // an offset was blended on the original-rate tick and still has to be finished
+    u8 blendPending;
 } Background;
 
 typedef struct BgConfig {
@@ -188,7 +187,6 @@ void Bg_FreeTilemapBuffer(BgConfig *bgConfig, u8 bgLayer);
 void Bg_SetPriority(u8 bgLayer, u8 priority);
 void Bg_ToggleLayer(u8 bgLayer, u8 enable);
 void Bg_SetOffset(BgConfig *bgConfig, u8 bgLayer, u8 bgOffsetUpdateOp, int val);
-// Sour Platinum 60 fps mode: writes the real offsets to the hardware on the in-between ticks.
 void Bg_ApplyFinalOffsets(void);
 void Bg_ClearBlendRegistry(void);
 int Bg_GetXOffset(BgConfig *bgConfig, enum BgLayer bgLayer);

@@ -733,40 +733,22 @@
     .long 84
     .endm
 
-    // Sour Platinum: changes the speed of the rest of this move animation.
-    // percent: 100 is normal speed, 150 is 50% faster, 50 is half speed.
-    // It speeds up the particle effects and scales the lengths of Delay and of the looped and delayed sound
-    // effects. It resets automatically when the animation ends.
     .macro SetAnimSpeed percent:req
     .long BTLANIMCMD_SETANIMSPEED
     .long \percent
     .endm
 
-    // Sour Platinum: stops every emitter of a particle system from emitting new particles. The particles
-    // that are already out finish their lives, so combined with Delay this shortens how long an effect lasts
-    // without changing how fast its particles move.
-    // particleSystem: Index of the particle system.
     .macro StopEmitters particleSystem:req
     .long BTLANIMCMD_STOPEMITTERS
     .long \particleSystem
     .endm
 
-    // Sour Platinum: changes how fast the effects of one particle system play. Unlike SetAnimSpeed it does not
-    // affect anything else, so a move can speed up one set of particles (the draining orbs) while another one
-    // (the healing sparkles) keeps its pace. The speed of a system is reset when it is created.
-    // particleSystem: Index of the particle system.
-    // percent: 100 is normal speed, 150 is 50% faster.
     .macro SetParticleSpeed particleSystem:req, percent:req
     .long BTLANIMCMD_SETPARTICLESPEED
     .long \particleSystem
     .long \percent
     .endm
 
-    // Sour Platinum: in 60 fps mode, particles that are made of child particles that are created every frame (trails, rings
-    // that hop from place to place) are created on every 60 Hz update instead, so that they move smoothly. Applies to the
-    // emitters created after it; it is reset when the animation starts and ends. It makes the trail denser, so only some
-    // moves use it.
-    // enabled: 1 to turn it on, 0 to turn it off.
     .macro SetSmoothChildren enabled:req
     .long BTLANIMCMD_SETSMOOTHCHILDREN
     .long \enabled

@@ -13,7 +13,6 @@ _010:
     Wait 
 
 _018:
-    // Sour Platinum: when the stat change comes from an ability, its banner comes in before the effect
     CompareVarToValue OPCODE_NEQ, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_ABILITY, _AbilityBannerShown
     ShowBufferedAbilityBanner 
     Wait 
@@ -38,8 +37,6 @@ _041:
 
 _048:
     CompareVarToValue OPCODE_FLAG_SET, BTLVAR_BATTLE_CTX_STATUS, SYSCTL_TURN_OFF_MESSAGES, _059
-    // Sour Platinum: when an ability was suppressed (Intimidate against Clear Body), its banner comes in before the one of
-    // the ability that suppressed it, which has the message
     CompareVarToValue OPCODE_NEQ, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_ABILITY, _WaitBeforeMessage
     CheckAbilityBannerAvailable _ShowSuppressedBanner
 

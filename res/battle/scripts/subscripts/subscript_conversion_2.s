@@ -3,8 +3,6 @@
 
 _000:
     TryConversion2 _012
-    // Sour Platinum: Conversion 2 targets the user, so its animation took the type from the user instead of from the
-    // battler whose move is copied (set by TryConversion2)
     PrintAttackMessage 
     Wait 
     PlayMoveAnimationOnMons BTLSCR_ATTACKER, BTLSCR_ATTACKER, BTLSCR_MSG_BATTLER_TEMP

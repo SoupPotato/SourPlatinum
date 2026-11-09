@@ -37,9 +37,6 @@ static void SaveDataExtra_SetSaveKey(SaveData *saveData, int extraSaveID, u32 ne
 static SaveData *sSaveDataPtr = NULL;
 static BOOL sSaveComplete;
 
-// Sour Platinum: like in Pokemon Black, a save reads back what is on the cartridge a page at a time and only writes the
-// pages that differ, a few pages per frame so the game keeps running. Both copies get the new save one after the other,
-// so they stay the same: the pages that changed in the first copy are the ones that change in the second.
 #define SAVE_COMPARE_PAGE_SIZE 256
 #define SAVE_COMPARE_BUDGET    0x1000
 #define SAVE_WRITE_RUN_MAX     0x8000
@@ -56,7 +53,7 @@ enum SaveSequence {
 
 static u32 sComparePage[SAVE_COMPARE_PAGE_SIZE / sizeof(u32)];
 static u8 sDirtyPages[(SAVE_DIRTY_PAGES_MAX + 7) / 8];
-static BOOL sSlotsInSync[SAVE_BLOCK_ID_MAX]; // both copies of the block on the cartridge are the same
+static BOOL sSlotsInSync[SAVE_BLOCK_ID_MAX];
 
 SaveData *SaveData_Init(void)
 {
@@ -314,12 +311,6 @@ void SaveData_SaveStateCancel(SaveData *saveData)
     SaveDataState_Cancel(saveData, &saveData->state);
 }
 
-/**
- * @brief Sour Platinum: starts saving the game a little each frame, like Pokemon Black. SaveData_SaveStateMain runs it
- * until it returns SAVE_RESULT_OK or SAVE_RESULT_CORRUPT.
- *
- * @return FALSE if the game can't be saved
- */
 BOOL SaveData_SaveAsync_Start(SaveData *saveData)
 {
     if (!saveData->backupExists) {
@@ -670,7 +661,6 @@ static BOOL SaveData_CardRead(u32 address, void *data, u32 size)
     return result;
 }
 
-// The first pass writes the copy that is not the current one, so the current one is still whole if the power goes out
 static int SaveDataState_Slot(const SaveData *saveData, const SaveDataState *state, int blockID)
 {
     return state->pass == 0 ? !saveData->blockOffsets[blockID] : saveData->blockOffsets[blockID];
@@ -722,7 +712,6 @@ static void SaveDataState_Init(SaveData *saveData, SaveDataState *state, int blo
     state->finalSent = FALSE;
     state->restarted = 0;
     state->unsynced = 0;
-    // Nothing on the cartridge matches the first save of a new game, so it writes everything without reading it back
     state->writeAll = saveData->isNewGameData;
 
     if (blockID == SAVE_BLOCK_ID_MAX) {
@@ -775,7 +764,6 @@ static int SaveDataState_Main(SaveData *saveData, SaveDataState *state)
             break;
 
         case SAVE_SEQ_COMPARE: {
-            // When both copies were the same, the second one needs the pages that changed in the first
             BOOL reuse = state->pass == 1 && sSlotsInSync[block] && !(state->restarted & (1 << block));
             u32 pageBase = SaveBlock_PageBase(saveData, block);
 
@@ -854,8 +842,6 @@ static int SaveDataState_Main(SaveData *saveData, SaveDataState *state)
             break;
 
         case SAVE_SEQ_FOOTER_CHECK:
-            // The game keeps running while it saves, so if something changed the block meanwhile, it goes through
-            // the block again with a new checksum before the footer makes the copy count
             if (SaveBlockFooter_Ptr(saveData, (u32)saveData->body.data, block)->checksum != SaveData_CalculateFooterChecksum(saveData, body, blockInfo->size)) {
                 SaveBlockFooter_Set(saveData, (u32)saveData->body.data, block);
                 state->restarted |= 1 << block;
@@ -871,7 +857,6 @@ static int SaveDataState_Main(SaveData *saveData, SaveDataState *state)
 
             state->mainSequence = SAVE_SEQ_FOOTER;
 
-            // Like before, the caller hears just before the footer that makes the new save count
             if (state->pass == 0 && block + 1 == state->endBlock && !state->finalSent) {
                 state->finalSent = TRUE;
                 return SAVE_RESULT_PROCEED_FINAL;

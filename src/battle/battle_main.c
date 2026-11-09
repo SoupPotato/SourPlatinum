@@ -1542,15 +1542,10 @@ static void SysTask_DrawSprites(SysTask *task, void *inBattleSys)
     if (battleSys->renderMode == 0 || battleSys->renderMode == 3) {
 #if SP_BATTLE_60FPS
         if (gSystem.fps60 && !gSystem.logicTick) {
-            // 60 fps tick in between two logic ticks: the original-rate logic does not advance, but the
-            // 3D scene has to be submitted again. Particles are simulated at 60 Hz (see
-            // SPL_SetDefaultTimeScale), so they are drawn and updated on every tick.
-            // The 2D sprites are covered by SpriteList_ReplayDrawLog.
 #if !SP_DEBUG_REDRAW_3D
             return;
 #endif
 
-            // 3D drawn by other tasks (move animation Pokemon sprites) comes first, like on the logic tick.
             PokemonSpriteManager_ReplayDrawLog();
 
             if (battleSys->renderMode == 0) {
@@ -1571,7 +1566,6 @@ static void SysTask_DrawSprites(SysTask *task, void *inBattleSys)
             ParticleHelper_DrawParticleSystems();
         }
 
-        // Not PokemonSpriteManager_DrawSprites: this manager is redrawn explicitly on the in-between ticks.
         PokemonSpriteManager_DrawSpritesPass(battleSys->monSpriteMan, MON_SPRITE_DRAW_NORMAL);
         SpriteSystem_DrawSprites(battleSys->spriteMan);
         SpriteSystem_UpdateTransfer();

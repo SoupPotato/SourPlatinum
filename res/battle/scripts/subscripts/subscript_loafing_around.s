@@ -2,7 +2,6 @@
 
 
 _000:
-    // Sour Platinum: like in Black, the ability banner comes in with the message
     ShowAbilityBanner BTLSCR_ATTACKER
     Wait 
     // {0} is loafing around!

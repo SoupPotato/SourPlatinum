@@ -851,7 +851,7 @@ static void BattleAnimTask_Camouflage(SysTask *task, void *param)
             CAMOUFLAGE_BG_SCROLL_END_Y,
             CAMOUFLAGE_BG_SCROLL_ANGLE_STEP,
             CAMOUFLAGE_BG_SCROLL_AMPLITUDE,
-            CAMOUFLAGE_BG_SCROLL_SPEED * gBattleAnimSpeedPercent / 100, // Sour Platinum: follows SetAnimSpeed
+            CAMOUFLAGE_BG_SCROLL_SPEED * gBattleAnimSpeedPercent / 100,
             BattleAnimSystem_GetBgID(ctx->common.battleAnimSys, BATTLE_ANIM_BG_BASE),
             0,
             BattleAnimUtil_MakeBgOffsetValue(0, 0),
@@ -860,7 +860,6 @@ static void BattleAnimTask_Camouflage(SysTask *task, void *param)
         break;
     case CAMOUFLAGE_STATE_SCROLL:
         ctx->timer++;
-        // Sour Platinum: the length of the ripple follows SetAnimSpeed (the fades already do)
         if (ctx->timer < (int)BattleTime_ScaleBySpeed(CAMOUFLAGE_BG_SCROLL_FRAMES)) {
             break;
         }

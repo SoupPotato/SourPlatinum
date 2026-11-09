@@ -1,8 +1,3 @@
-# Write the dspre_offsets.json that lets the custom DSPRE (branch sourplatinum-offsets) edit a SourPlatinum build.
-# DSPRE hardcodes retail Platinum offsets; this finds each table in the build's link map and checks it in the ROM.
-# usage: dspre_offsets.py [--map build/main.nef.xMAP] [--rom build/pokeplatinum.us.nds] [-o OUT.json]
-# OUT defaults to the ROM path with .dspre_offsets.json, which DSPRE picks up when it sits next to the ROM.
-# The map must come from the same build as the ROM (debug and release builds lay out differently).
 import argparse, hashlib, json, re, struct, sys
 
 def blz_decompress(data):
@@ -29,7 +24,7 @@ def load_rom(path):
     fat_off, = struct.unpack_from('<I', rom, 0x48)
     ovt_off, ovt_size = struct.unpack_from('<II', rom, 0x50)
     arm9 = rom[arm9_off:arm9_off + arm9_size]
-    mp = arm9.find(struct.pack('<II', 0xDEC00621, 0x2106C0DE)) - 0x1C   # module params
+    mp = arm9.find(struct.pack('<II', 0xDEC00621, 0x2106C0DE)) - 0x1C
     comp_end = struct.unpack_from('<I', arm9, mp + 0x14)[0] if mp >= 0 else 0
     if comp_end:
         n = comp_end - arm9_ram
@@ -61,7 +56,6 @@ class Build:
         self.game_code, self.arm9, self.overlays, self.sha1 = load_rom(rom_path)
         secs = load_map(map_path)
         names = list(secs)
-        # overlay sections follow ARM9 in overlay ID order, from dummy1 up to the first non-overlay section
         first = names.index('dummy1')
         ovs = [n for n in names[first:] if not n.endswith('.bss')]
         ovs = ovs[:next(i for i, n in enumerate(ovs) if '.' in n)]
@@ -92,10 +86,6 @@ class Build:
             raise LookupError(f'0x{addr:08X} is outside the file')
         return addr - base
 
-# Each entry: DSPRE key, where it lives ('main' = ARM9, or an overlay ID), how to find it, and the symbol(s).
-#   data:    the table's own offset
-#   literal: offset of the literal-pool word inside FUNC that points at the table
-#   code:    a fixed spot inside FUNC, checked by CHECK so an edited function is caught instead of misread
 def u16(d, o): return struct.unpack_from('<H', d, o)[0]
 def u32(d, o): return struct.unpack_from('<I', d, o)[0]
 
@@ -130,7 +120,6 @@ SPECS = [
         lambda d, o: all(1 <= u32(d, o + 4 * i) <= 493 for i in range(3)), 'three species IDs'),
 ]
 
-# DSPRE keeps these overlay IDs fixed (some are not even overridable), so the build must keep them too.
 EXPECTED_OVERLAYS = {'OWTableOffset': 5, 'eggMoveTableOffset': 5, 'griseousOrbScriptIdOffset': 9}
 
 def resolve(b, spec):
@@ -178,7 +167,6 @@ def main():
         result[key] = [f'0x{off:X}'] if key == 'cameraTblOffsetsToRAMaddress' else f'0x{off:X}'
         print(f'{key:40} {"ARM9" if where == "main" else f"ov{where}":5} 0x{off:X}')
 
-        # table sizes DSPRE assumes for retail
         _, data = b.file(where)
         if key == 'flyTableOffset':
             if size % 16: errors.append(f'sSpawnLocations is 0x{size:X} bytes, not whole 16-byte entries')

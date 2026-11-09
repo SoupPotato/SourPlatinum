@@ -1,5 +1,3 @@
-# Compare every text bank in two ROMs after decryption (ignores per-bank key differences).
-# usage: python3 cmptext.py BUILT.nds TARGET.nds build/res/text/text_banks.order
 import sys,os; sys.path.insert(0,os.path.dirname(os.path.abspath(__file__))); import gen4msg, ndspy.rom, ndspy.narc
 a=ndspy.narc.NARC(ndspy.rom.NintendoDSRom.fromFile(sys.argv[1]).getFileByName('msgdata/pl_msg.narc')).files
 b=ndspy.narc.NARC(ndspy.rom.NintendoDSRom.fromFile(sys.argv[2]).getFileByName('msgdata/pl_msg.narc')).files

@@ -17,10 +17,8 @@ _013:
     WaitButtonABTime 30
     CompareVarToValue OPCODE_EQU, BTLVAR_CURRENT_MOVE, MOVE_AROMATHERAPY, _049
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_CALC_TEMP, 0x00000001, _035
-    // Sour Platinum: the ability banner comes in before the effect
     ShowAbilityBanner BTLSCR_ATTACKER
     Wait 
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainlityBlocksMove0
     // {0}’s {1} blocks {2}!
     PrintMessage BattleStrings_Text_PokemonsAbilityBlocksMove_Ally, TAG_NICKNAME_ABILITY_MOVE, BTLSCR_ATTACKER, BTLSCR_ATTACKER, BTLSCR_MSG_TEMP
@@ -36,10 +34,8 @@ _PlainlityBlocksMove0Done:
 
 _035:
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_CALC_TEMP, 0x00000002, _049
-    // Sour Platinum: the ability banner comes in before the effect
     ShowAbilityBanner BTLSCR_ATTACKER_PARTNER
     Wait 
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainlityBlocksMove1
     // {0}’s {1} blocks {2}!
     PrintMessage BattleStrings_Text_PokemonsAbilityBlocksMove_Ally, TAG_NICKNAME_ABILITY_MOVE, BTLSCR_ATTACKER_PARTNER, BTLSCR_ATTACKER_PARTNER, BTLSCR_MSG_TEMP

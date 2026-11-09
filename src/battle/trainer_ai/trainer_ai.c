@@ -2978,7 +2978,6 @@ static s32 TrainerAI_CalcDamage(BattleSystem *battleSys, BattleContext *battleCt
             | ((ivs[STAT_SPECIAL_ATTACK] & 1) << 4)
             | ((ivs[STAT_SPECIAL_DEFENSE] & 1) << 5);
 
-        // Hidden Power always has a base power of 60 in Sour Platinum.
         power = 60;
         type = (type * 15 / 63) + 1;
 

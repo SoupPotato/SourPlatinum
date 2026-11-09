@@ -712,7 +712,6 @@ static u8 BattlePartyTask_ConfirmLearnMoveScreen(BattleParty *battleParty)
             BattlePartyButtons_PressButton(battleParty, BATTLE_CONFIRM_LEARN_MOVE_SCREEN_BUTTON_OFFSET + 1);
         }
 
-        // Sour Platinum: the Poketch's Hidden Moves app does the HM moves, so HM moves can be forgotten like any other
         battleParty->queuedState = TASK_STATE_EXIT;
         return TASK_STATE_SCREEN_TRANSITION;
     case BATTLE_CONFIRM_LEARN_MOVE_SCREEN_BUTTON_CONTEST_STATS:

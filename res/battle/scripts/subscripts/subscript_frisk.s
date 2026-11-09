@@ -3,7 +3,6 @@
 
 _000:
     WaitButtonABTime 15
-    // Sour Platinum: like in Black, the ability banner comes in with the message
     ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
     Wait 
     // {0} frisked its foe and found one {1}!

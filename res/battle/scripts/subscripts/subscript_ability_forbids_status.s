@@ -2,17 +2,13 @@
 
 
 _000:
-    // Sour Platinum: Oblivious shaking off a taunt
     CompareVarToValue OPCODE_EQU, BTLVAR_MSG_TEMP, 7, _taunt
-    // Sour Platinum: with a banner, a Pokemon that gains an ability that cures its status gets the plain message of the
-    // status, like in Black
     CheckAbilityBannerAvailable _PlainCured
     // {0} cured its {2} status with its {1}!
     PrintMessage BattleStrings_Text_PokemonCuredItsStatusWithItsAbility_Ally, TAG_NICKNAME_ABILITY_STATUS, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP
     GoTo _CuredMessageDone
 
 _PlainCured:
-    // A banner still up from the change of ability (Worry Seed, Skill Swap) comes in again, like in Black
     ReshowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
     Wait 
     CompareVarToValue OPCODE_EQU, BTLVAR_MSG_TEMP, 1, _CuredPoison
@@ -26,17 +22,14 @@ _PlainCured:
     GoTo _CuredMessageDone
 
 _CuredPoison:
-    // {0} was cured of its poisoning.
     PrintMessage BattleStrings_Text_PokemonWasCuredOfItsPoisoningAbility_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
     GoTo _CuredMessageDone
 
 _CuredBurn:
-    // {0}’s burn was healed.
     PrintMessage BattleStrings_Text_PokemonsBurnWasHealedAbility_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
     GoTo _CuredMessageDone
 
 _CuredParalysis:
-    // {0} was cured of paralysis.
     PrintMessage BattleStrings_Text_PokemonWasCuredOfParalysisAbility_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
     GoTo _CuredMessageDone
 
@@ -46,12 +39,10 @@ _CuredFreeze:
     GoTo _CuredMessageDone
 
 _CuredConfusion:
-    // {0} snapped out of its confusion.
     PrintMessage BattleStrings_Text_PokemonSnappedOutOfItsConfusionAbility_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
     GoTo _CuredMessageDone
 
 _CuredInfatuation:
-    // {0} got over its infatuation.
     PrintMessage BattleStrings_Text_PokemonGotOverItsInfatuationAbility_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
 
 _CuredMessageDone:

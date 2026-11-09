@@ -37,8 +37,8 @@ static BOOL SpriteList_FreeSprite(SpriteList *list, Sprite *sprite);
 
 enum SpriteDrawMode {
     SPRITE_DRAW_NORMAL = 0,
-    SPRITE_DRAW_BLEND, // 60 fps mode, original-rate tick: draw halfway between the last shown state and the current one
-    SPRITE_DRAW_FINAL, // 60 fps mode, in-between tick: draw the current state and remember it
+    SPRITE_DRAW_BLEND,
+    SPRITE_DRAW_FINAL,
 };
 
 static enum SpriteDrawMode sDrawMode = SPRITE_DRAW_NORMAL;
@@ -165,8 +165,6 @@ void SpriteList_Update(const SpriteList *list)
         return;
     }
 
-    // Sour Platinum 60 fps mode: every list drawn on a logic tick is drawn again on the tick after it, so screens
-    // that update their own sprite list (like the Pokedex entry after a catch) don't flicker
     if (gSystem.fps60 && gSystem.logicTick) {
         SpriteList_LogDraw(list);
     }

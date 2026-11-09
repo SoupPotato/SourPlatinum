@@ -24,14 +24,11 @@
 
 #include "res/graphics/poketch/poketch.naix"
 
-// The app screen is a 24x20 tile window that starts at tile (2, 2) of the Poketch screen.
 #define WINDOW_TILE_X      2
 #define WINDOW_TILE_Y      2
 #define WINDOW_WIDTH_TILES 24
 #define WINDOW_HEIGHT_TILES 20
 
-// Layout (in pixels, relative to the window): a title with a dotted line below it, then the available moves in two
-// columns of plain text. The hit areas are a bit larger than the text.
 #define TITLE_Y           12
 #define TITLE_LINE_Y      29
 #define TITLE_LINE_LEFT   39
@@ -42,16 +39,14 @@
 #define FRAME_HEIGHT      22
 #define FRAME_COLUMN_0_X  6
 #define FRAME_COLUMN_1_X  98
-#define FRAME_TOP_OFFSET  3 // the frame starts this many pixels above the row
+#define FRAME_TOP_OFFSET  3
 #define FRAME_BORDER      2
 
-// Palette indexes of the Poketch screen
 #define COLOR_DARKEST 1
 #define COLOR_DARK    8
 #define COLOR_MEDIUM  15
 #define COLOR_LIGHT   4
 
-// The order is row by row, left column first
 static const struct {
     u16 fieldMove;
     u16 moveID;
@@ -216,7 +211,6 @@ static void DrawButtons(FieldMovesGraphics *graphics)
 {
     Window_FillTilemap(&graphics->window, COLOR_LIGHT);
 
-    // Title and the dotted line under it
     MessageLoader_GetString(graphics->appNameLoader, POKETCH_APPID_FIELDMOVES, graphics->string);
 
     u32 titleX = (WINDOW_WIDTH_TILES * TILE_WIDTH_PIXELS - Font_CalcStringWidth(FONT_SYSTEM, graphics->string, 0)) / 2;
@@ -241,7 +235,6 @@ static void DrawButton(FieldMovesGraphics *graphics, int button)
     int y = FrameY(button);
     BOOL pressed = (graphics->data->pressedButton == button);
 
-    // The frame; a pressed button is filled with the dark color and its text is inverted and moved a pixel
     Window_FillRectWithColor(&graphics->window, COLOR_DARKEST, x, y, FRAME_WIDTH, FRAME_HEIGHT);
     Window_FillRectWithColor(&graphics->window, pressed ? COLOR_DARK : COLOR_MEDIUM, x + FRAME_BORDER, y + FRAME_BORDER, FRAME_WIDTH - 2 * FRAME_BORDER, FRAME_HEIGHT - 2 * FRAME_BORDER);
 

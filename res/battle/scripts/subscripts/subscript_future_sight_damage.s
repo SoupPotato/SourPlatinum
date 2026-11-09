@@ -5,8 +5,6 @@ _000:
     PrintBufferedMessage 
     Wait 
     WaitButtonABTime 30
-    // Sour Platinum: Generation 5, the attack has a type, so it can fail to affect the target (checked before the
-    // accuracy check, which would otherwise call it a failure)
     CompareVarToValue OPCODE_FLAG_SET, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_WONDER_GUARD, _wonder_guard
     CompareVarToValue OPCODE_FLAG_SET, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_INEFFECTIVE, _no_effect
     CheckMoveHit BTLSCR_MSG_ATTACKER, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP, _117
@@ -63,7 +61,6 @@ _super_done:
 
 _not_very_done:
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED, _endure_done
-    // Sour Platinum: when it was Sturdy, its banner comes in before the message
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED_STURDY, _EnduredBannerShown
     ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
     Wait 
@@ -89,10 +86,8 @@ _116:
     End 
 
 _wonder_guard:
-    // Sour Platinum: the ability banner comes in before the effect
     ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
     Wait 
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainByUsingAbility0
     // {0} avoided damage by using {1}!
     PrintMessage BattleStrings_Text_PokemonAvoidedDamageByUsingAbility_Ally, TAG_NICKNAME_ABILITY, BTLSCR_MSG_TEMP, BTLSCR_MSG_TEMP

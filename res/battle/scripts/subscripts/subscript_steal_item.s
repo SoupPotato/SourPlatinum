@@ -17,14 +17,12 @@ _000:
     GoTo _048
 
 _039:
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainoveIneffective
     // {0}’s {1} made {2} ineffective!
     PrintMessage BattleStrings_Text_PokemonsAbilityMadeMoveIneffective_Ally, TAG_NICKNAME_ABILITY_MOVE, BTLSCR_DEFENDER, BTLSCR_DEFENDER, BTLSCR_ATTACKER
     GoTo _PlainoveIneffectiveDone
 
 _PlainoveIneffective:
-    // {0}’s item cannot be removed!
     PrintMessage BattleStrings_Text_PokemonsItemCannotBeRemoved_Ally, TAG_NICKNAME_ABILITY, BTLSCR_DEFENDER, BTLSCR_DEFENDER
 
 _PlainoveIneffectiveDone:

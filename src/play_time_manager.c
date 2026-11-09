@@ -11,7 +11,7 @@ static u64 sDummy = 0;
 static u64 sLastTimestamp = 0;
 static u64 sCurrentTimestamp = 0;
 static PlayTime *sPlayTime = NULL;
-static BOOL sPaused = FALSE; // Sour Platinum: the play time is in the save, so it holds still while the game saves
+static BOOL sPaused = FALSE;
 
 void PlayTime_FlagNotStarted()
 {
@@ -27,7 +27,6 @@ void PlayTime_Start(PlayTime *playTime)
     sCurrentTimestamp = Timer_GetCurrentTimestamp();
 }
 
-// Sour Platinum: the seconds that pass while paused are added once it is unpaused
 void PlayTime_SetPaused(BOOL paused)
 {
     sPaused = paused;

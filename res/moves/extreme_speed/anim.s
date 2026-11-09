@@ -4,7 +4,6 @@ L_0:
     SetAnimSpeed 200
     LoadParticleResource 1, pound_spa
     LoadParticleResource 0, extreme_speed_spa
-    // The speed streaks get their own particle system so they keep their original speed
     LoadParticleResource 2, extreme_speed_spa
     SetParticleSpeed 2, 50
     SetVar BATTLE_ANIM_VAR_BG_MOVE_STEP_X, -32

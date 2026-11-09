@@ -648,8 +648,6 @@ void ConvertPathToSdat(int argc, char **argv)
     WriteU32_LE(sdatHeader + offset+12, fatBlockSize);
     uint32_t fileOffset = 0x40 + symbBlockSize + infoBlockSize + fatBlockSize;
     WriteU32_LE(sdatHeader + offset+16, fileOffset);
-    // Sour Platinum: the file data starts after the 0x0C byte FILE header, padded to 0x20. The padding has to be
-    // measured from there, and the FAT has to include it, or every file is read from the wrong place.
     filePackage->size += PADDINGSIZE(fileOffset + 0x0C, 0x20);
     WriteU32_LE(sdatHeader + offset+20, filePackage->size);
     uint32_t sdatSize = fileOffset + filePackage->size;

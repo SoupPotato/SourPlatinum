@@ -125,9 +125,6 @@ void NitroMain(void)
         CheckHeapCanary();
         HandleConsoleFold();
 
-        // In 60 fps mode the loop runs once per VBlank. Everything written for the original
-        // 30 Hz loop only runs on "logic ticks" (every other VBlank), so it keeps its pace.
-        // Tasks that have been made native (tickDiv 1) also run on the ticks in between.
         gSystem.logicTick = !gSystem.fps60 || (gSystem.vblankIsrCounter & 1) == 0;
 
         if (gSystem.logicTick) {
@@ -167,21 +164,16 @@ void NitroMain(void)
             PlayTime_IncrementTimer();
             sub_020241CC();
 
-            // The original loop runs the print queue (text) twice per iteration, once on each side of the
-            // VBlank wait. In 60 fps mode the second run happens on the next tick instead.
             if (!gSystem.fps60) {
                 SysTaskManager_ExecuteTasks(gSystem.printTaskMgr);
             }
         } else {
-            // Executes the pending 3D buffer swap (G3_RequestSwapBuffers only sets a flag).
-            // Without this the 3D scene submitted on the in-between ticks piles up with the next one.
             sub_020241CC();
             SysTaskManager_ExecuteTasks(gSystem.printTaskMgr);
             Bg_ApplyFinalOffsets();
         }
 
         if (!gSystem.logicTick && gSystem.vblankCallbackEveryTick) {
-            // Sprites that weren't redrawn by the original-rate logic still need to be sent to OAM.
             SpriteList_ReplayDrawLog();
         }
 

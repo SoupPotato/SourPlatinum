@@ -22,8 +22,8 @@ typedef struct PoketchFieldMoves {
     u8 state;
     u8 subState;
     u8 shouldExit;
-    s16 pendingMove; //!< The move to use once the released button has been drawn again, or -1
-    s8 eventButton; //!< The last button event from the button manager (see ButtonCallback)
+    s16 pendingMove;
+    s8 eventButton;
     u8 eventState;
     u8 needRedraw;
     PoketchButtonManager *buttonManager;
@@ -87,7 +87,6 @@ static BOOL Init(PoketchFieldMoves *appData, PoketchSystem *poketchSys, BgConfig
 
         Bag *bag = SaveData_GetBag(PoketchSystem_GetSaveData(poketchSys));
 
-        // A move is only shown when the player has its HM
         for (int button = 0; button < FIELD_MOVES_BUTTON_COUNT; button++) {
             appData->data.moveAvailable[button] = Bag_CanRemoveItem(bag, PoketchFieldMovesGraphics_GetButtonItem(button), 1, HEAP_ID_POKETCH_APP);
             PoketchFieldMovesGraphics_GetButtonRect(button, &appData->buttonRects[button]);
@@ -180,9 +179,6 @@ static BOOL State_UpdateApp(PoketchFieldMoves *appData)
         return FALSE;
     }
 
-    // Like the pedometer: a button is drawn pressed while the stylus is on it and as normal again when it is released.
-    // The move is started when the button has been drawn as normal again, so that the field message (if the move
-    // can't be used here) doesn't appear while the button is still being drawn.
     if (appData->eventState != BUTTON_MANAGER_STATE_NULL) {
         int button = appData->eventButton;
         u32 event = appData->eventState;
@@ -199,7 +195,6 @@ static BOOL State_UpdateApp(PoketchFieldMoves *appData)
                 appData->pendingMove = PoketchFieldMovesGraphics_GetButtonMove(button);
                 appData->needRedraw = TRUE;
             } else if (event != BUTTON_MANAGER_STATE_TOUCH && appData->data.pressedButton == button) {
-                // The stylus moved off the button
                 appData->data.pressedButton = FIELD_MOVES_NO_BUTTON;
                 appData->needRedraw = TRUE;
             }

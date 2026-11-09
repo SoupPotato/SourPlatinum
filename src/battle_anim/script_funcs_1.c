@@ -82,9 +82,7 @@ typedef struct FrenzyPlantSpriteContext {
 } FrenzyPlantSpriteContext;
 
 #define FRENZY_PLANT_ROOT_MOVE_DELAY 32 // Frames before a root starts animating
-// Sour Platinum: 112 (160 originally), so the roots start vanishing as soon as the target stops shaking (frame 80:
-// Delay 40 + 10 shakes of 4 frames in the script) instead of at frame 128
-#define FRENZY_PLANT_ROOT_LIFETIME   112 // Frames before a root disappears
+#define FRENZY_PLANT_ROOT_LIFETIME   112
 
 // -------------------------------------------------------------------
 // Role Play

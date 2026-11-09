@@ -3656,7 +3656,6 @@ static BOOL ScrCmd_UseFly(ScriptContext *ctx)
     return TRUE;
 }
 
-// Sour Platinum: the Fly cut-in and the flight of the Hidden Moves app, after its message
 static BOOL ScrCmd_UseFlyFromApp(ScriptContext *ctx)
 {
     u16 slot = ScriptContext_GetVar(ctx);
@@ -4126,7 +4125,6 @@ static BOOL ScrCmd_CheckSaveType(ScriptContext *ctx)
     return FALSE;
 }
 
-// Sour Platinum: the game keeps running while it saves, like in Pokemon Black
 static BOOL ScriptContext_WaitForSave(ScriptContext *ctx)
 {
     int saveResult = SaveData_SaveStateMain(ctx->fieldSystem->saveData);

@@ -253,7 +253,6 @@ static const PoketchTask sCalculatorTasks[] = {
 void PoketchCalculatorGraphics_StartTask(CalculatorGraphics *graphics, enum CalculatorGraphicsTask taskID)
 {
 #if SP_DEBUG_WILD_MODIFIER
-    // Sour Platinum: remember the number that is shown, for the wild Pokemon modifier
     switch (taskID) {
     case CALCULATOR_GRAPHICS_OPERAND_1:
         gDebugCalcValue = CalculatorValue_GetSignedInt(graphics->calcData->operand1);

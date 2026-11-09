@@ -77,9 +77,6 @@ typedef struct Sprite {
     struct Sprite *next;
 } Sprite;
 
-// Sour Platinum 60 fps mode: what a sprite was drawn with on the last in-between tick. On the original-rate tick the
-// sprite is drawn halfway between this and its current state. Kept apart from Sprite so that sprites stay their
-// original size outside of 60 fps mode (the field heap has no room to spare).
 typedef struct SpriteBlendState {
     VecFx32 pos;
     VecFx32 scale;
@@ -97,7 +94,6 @@ struct SpriteList {
     void *rawAnimData;
     NNSG2dCellAnimBankData *defaultAnimBank;
     BOOL active;
-    // Sour Platinum 60 fps mode: one entry per sprite, allocated the first time the list is drawn in 60 fps mode
     SpriteBlendState *blend;
     enum HeapID heapID;
 };
@@ -158,8 +154,6 @@ BOOL SpriteList_Delete(SpriteList *collection);
 BOOL SpriteList_SetActive(SpriteList *collection, u8 active);
 BOOL SpriteList_DeleteAll(SpriteList *collection);
 void SpriteList_Update(const SpriteList *collection);
-// Sour Platinum 60 fps mode: draw a list into the OAM buffer without advancing its animations.
-// Lists updated on a logic tick are logged so that they can be drawn again on the ticks in between.
 void SpriteList_DrawOnly(const SpriteList *collection);
 void SpriteList_LogDraw(const SpriteList *collection);
 void SpriteList_ResetDrawLog(void);

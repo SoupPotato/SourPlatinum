@@ -24,8 +24,6 @@ ParticleSystem *ParticleHelper_CreateParticleSystem(enum HeapID heapID)
 
 ParticleSystem *ov11_0221F888(enum HeapID heapID)
 {
-    // Sour Platinum: 0x4800 like ParticleHelper_CreateParticleSystem. The original 0x4200 had too little room left
-    // once SPLEmitter got bigger, and the overflow corrupted memory (the ball seal effects froze the game).
     void *heap = Heap_Alloc(heapID, 0x4800);
     if (heap == NULL) {
         return NULL;
@@ -66,7 +64,6 @@ void ParticleHelper_DrawParticleSystems(void)
     ParticleSystem_UpdateAll();
 }
 
-// Sour Platinum: draw without advancing the particle simulation.
 void ParticleHelper_DrawParticleSystemsNoUpdate(void)
 {
     G3_ResetG3X();

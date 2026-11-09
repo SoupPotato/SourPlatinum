@@ -1,8 +1,6 @@
 #include "macros/btlanimcmd.inc"
 
 L_0:
-    // Sour Platinum: each squash takes 4+4 frames (was 5+5) so that it is done before the next one starts 8 frames
-    // later; when they overlapped, the end of one reset the size in the middle of the next
     LoadParticleResource 0, facade_spa
     CreateEmitter 0, 1, EMITTER_CB_SET_POS_TO_ATTACKER
     CreateEmitter 0, 2, EMITTER_CB_SET_POS_TO_ATTACKER

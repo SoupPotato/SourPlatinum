@@ -15,12 +15,10 @@ _PrintFellInLove:
     GoTo _047
 
 _029:
-    // Sour Platinum: the banner comes in before the effect, like the other abilities that cause a status
     ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
     Wait 
     PlayBattleAnimation BTLSCR_SIDE_EFFECT_MON, BATTLE_ANIMATION_INFATUATED
     Wait 
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PrintFellInLove
     // {0}’s {1} infatuated {2}!
     PrintMessage BattleStrings_Text_PokemonsAbilityInfatuatedPokemon_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP, BTLSCR_SIDE_EFFECT_MON
@@ -44,7 +42,6 @@ _055:
     PrintAttackMessage 
     Wait 
     WaitButtonABTime 30
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     ShowAbilityBanner BTLSCR_SIDE_EFFECT_MON
     Wait 
     CheckAbilityBannerAvailable _PrintDoesntAffect

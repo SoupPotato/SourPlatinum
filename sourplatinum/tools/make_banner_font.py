@@ -22,7 +22,7 @@ ROOT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file
 FONTS = os.path.join(ROOT, 'res', 'fonts')
 
 CELL = 16
-CELL_TOP = 4  # the top of the 9 pixel high glyphs inside the 16 pixel cell, so that the text sits in the middle of the line
+CELL_TOP = 4
 BACKGROUND = (0, 186, 243)
 OUTLINE = (33, 33, 33)
 GLYPH_HEIGHT = 9
@@ -59,8 +59,6 @@ def segments(top):
 
 
 def put_char(char, top, span):
-    # Glyph number n is the glyph of character code n + 1 (the codes start at the ideographic space), in the sheet of
-    # glyphs and in the table of widths
     glyph = charmap[char] - 1
     x0, x1 = span
     width = x1 - x0 + 1
@@ -92,17 +90,14 @@ for i in range(26):
     put_char(chr(ord('A') + i), 12, upper[i])
     put_char(chr(ord('a') + i), 22, lower[i])
 
-# The hyphen and the full stop are at the start of the fifth row, which sits one pixel lower than the others
 punctuation = segments(43)
 put_char('-', 43, punctuation[0])
 put_char('.', 43, punctuation[1])
 
-# The apostrophe is the eleventh glyph of the fourth row, the one before the parentheses
 punctuation = segments(32)
 put_char('’', 32, punctuation[10])
 put_char('‘', 32, punctuation[10])
 
-# A space is 2 pixels wide
 widths[charmap[' '] - 1] = SPACE_WIDTH
 
 out.save(os.path.join(FONTS, 'font_banner.png'))

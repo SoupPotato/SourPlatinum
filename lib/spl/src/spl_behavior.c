@@ -37,7 +37,6 @@ void SPLBehavior_ApplySpin(const void *obj, SPLParticle *ptcl, VecFx32 *acc, SPL
     SPLSpinBehavior *spin = (SPLSpinBehavior *)obj;
     MtxFx33 rot;
 
-    // Sour Platinum: this runs on every update, so each update turns by its share of the original angle
     u16 angle = (s16)spin->angle / emtr->timeScale;
 
     switch (spin->axis) {
@@ -93,7 +92,6 @@ void SPLBehavior_ApplyConvergence(const void *obj, SPLParticle *ptcl, VecFx32 *a
 {
     SPLConvergenceBehavior *conv = (SPLConvergenceBehavior *)obj;
 
-    // Sour Platinum: this runs on every update, so each update moves by its share of the original step
     ptcl->position.x += FX32_CAST(FX_MUL(conv->force, (conv->target.x - ptcl->position.x))) / emtr->timeScale;
     ptcl->position.y += FX32_CAST(FX_MUL(conv->force, (conv->target.y - ptcl->position.y))) / emtr->timeScale;
     ptcl->position.z += FX32_CAST(FX_MUL(conv->force, (conv->target.z - ptcl->position.z))) / emtr->timeScale;

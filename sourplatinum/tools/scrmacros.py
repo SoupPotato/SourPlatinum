@@ -1,4 +1,3 @@
-# Parses scrcmd.inc / movement.inc macro definitions and the opcode table for scrdis.py.
 import re,os
 def parse_macros(path):
     txt=open(path).read(); M={}
@@ -23,10 +22,9 @@ def primitives(macros, ops):
             cc=re.match(r'\.(byte|short|long)\s+(-?\d+|0x[0-9a-fA-F]+)\s*(//.*)?$', l)
             if mm and mm.group(2) in params:
                 fields.append((mm.group(1), mm.group(2), bool(mm.group(3))))
-            elif cc: fields.append((cc.group(1), None, False))   # constant field, e.g. Warp's unused short
+            elif cc: fields.append((cc.group(1), None, False))
             else: ok=False; break
         if ok:
-            # prefer the macro named closest to the opcode (first seen otherwise)
             if op not in prim: prim[op]=(name,params,fields)
         else: complex_.append((name,m.group(1)))
     return prim, complex_

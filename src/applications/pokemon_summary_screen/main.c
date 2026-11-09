@@ -205,7 +205,6 @@ BOOL PokemonSummaryScreen_ShowContestData(SaveData *saveData)
 
 static SysTask *sRedraw3DTask = NULL;
 
-// Sour Platinum: runs on every 60 fps tick; on the ticks between two logic ticks it submits the 3D scene again
 static void SysTask_Redraw3D(SysTask *task, void *data)
 {
     if (gSystem.fps60 && !gSystem.logicTick) {
@@ -836,7 +835,6 @@ static int HandleInput_SelectMove(PokemonSummaryScreen *summaryScreen)
     if (JOY_NEW(PAD_BUTTON_A)) {
         Sound_PlayEffect(SEQ_SE_DP_DECIDE_sseq);
 
-        // Sour Platinum: the Poketch's Hidden Moves app does the HM moves, so HM moves can be forgotten like any other
         summaryScreen->data->selectedMoveSlot = summaryScreen->cursor;
         summaryScreen->data->returnMode = SUMMARY_RETURN_SELECT;
         return SUMMARY_STATE_TRANSITION_OUT;

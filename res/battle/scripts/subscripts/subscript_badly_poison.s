@@ -99,7 +99,6 @@ _249:
 
 _266:
     WaitButtonABTime 30
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     ShowAbilityBanner BTLSCR_SIDE_EFFECT_MON
     Wait
     CheckAbilityBannerAvailable _PrintDoesntAffect

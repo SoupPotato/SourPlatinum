@@ -18,8 +18,6 @@ typedef struct SysTask {
     void *param;
     SysTaskFunc callback;
     enum TaskState state;
-    // Sour Platinum: 1 = run on every main loop tick, 2 = run only on original-rate logic ticks.
-    // Only matters while gSystem.fps60 is set. New tasks default to 2 (VBlank tasks to 1).
     u8 tickDiv;
 } SysTask;
 

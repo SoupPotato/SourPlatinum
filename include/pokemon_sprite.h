@@ -104,16 +104,14 @@ struct PokemonSprite {
     PokemonSpriteShadow shadow;
     PokemonSpriteShadow shadowBackup;
     SpriteAnimFrame animFrames[MAX_ANIMATION_FRAMES];
-    // Sour Platinum 60 fps mode: transforms that were drawn on the last in-between tick. The sprite is drawn
-    // halfway between these and the current transforms on the original-rate tick. Not used if noBlend is set.
     PokemonSpriteTransforms lastFinal;
     u8 lastFinalValid;
-    u8 noBlend; // set while a native (every tick) task moves this sprite
+    u8 noBlend;
 };
 
 enum PokemonSpriteDrawPass {
-    MON_SPRITE_DRAW_NORMAL = 0, // run callbacks and animations, then draw
-    MON_SPRITE_DRAW_REDRAW, // 60 fps ticks in between: draw the current transforms only
+    MON_SPRITE_DRAW_NORMAL = 0,
+    MON_SPRITE_DRAW_REDRAW,
 };
 
 typedef struct PokemonSpriteManager {

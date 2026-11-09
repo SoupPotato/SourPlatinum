@@ -1465,10 +1465,6 @@ static void DrawGauge(HealthBox *healthbox, u8 gaugeType)
 /**
  * @brief Move a gauge towards its target value.
  *
- * Sour Platinum: the gauge always moves at the same visual speed, in pixels per second, however
- * large the value it represents is. Internally the displayed value is kept as a fixed-point number
- * with 8 fractional bits, so the gauge can move by a fraction of a point per call.
- *
  * @param max               Max value of the gauge
  * @param cur               Current value of the gauge
  * @param diff              Change to be applied to the current value
@@ -1499,7 +1495,6 @@ static s32 UpdateGauge(s32 max, s32 cur, s32 diff, s32 *temp, u8 size, u16 pixel
         return -1;
     }
 
-    // How many gauge points one pixel is worth (8.8 fixed point), and how many pixels to move per call.
     s32 pointsPerPixel = (max << 8) / pixels;
     s32 pixelsPerCall = (pixelsPerSecond * SP_PACE_BARS_PERCENT / 100) * 256 / (BattleTime_IsNativeContext() ? 60 : 30);
     s32 step = (pointsPerPixel / 256) * pixelsPerCall + ((pointsPerPixel % 256) * pixelsPerCall) / 256;

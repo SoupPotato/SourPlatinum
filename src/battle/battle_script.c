@@ -1388,7 +1388,6 @@ static BOOL BtlCmd_CalcDamage(BattleSystem *battleSys, BattleContext *battleCtx)
 {
     BattleScript_Iter(battleCtx, 1);
 
-    // Sour Platinum: like Stomp, Body Slam and Dragon Rush do double damage to a Pokemon that used Minimize
     if ((battleCtx->moveCur == MOVE_BODY_SLAM || battleCtx->moveCur == MOVE_DRAGON_RUSH)
         && (DEFENDING_MON.moveEffectsMask & MOVE_EFFECT_MINIMIZE)) {
         battleCtx->powerMul = 20;
@@ -2655,8 +2654,6 @@ static BOOL BtlCmd_SetMultiHit(BattleSystem *battleSys, BattleContext *battleCtx
             if (Battler_Ability(battleCtx, battleCtx->attacker) == ABILITY_SKILL_LINK) {
                 hits = 5;
             } else {
-                // Sour Platinum: Generation 5 odds, 2 and 3 hits 35% each, 4 and 5 hits 15% each
-                // (originally 37.5% and 12.5%)
                 int roll = BattleSystem_RandNext(battleSys) % 20;
 
                 if (roll < 7) {
@@ -2841,7 +2838,6 @@ static BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSys, BattleContext *battl
     battleCtx->battleStatusMask &= ~SYSCTL_FAIL_STAT_STAGE_CHANGE;
 
     if (battleCtx->sideEffectParam == MOVE_SUBSCRIPT_PTR_SP_ATTACK_UP_3_STAGES) {
-        // Sour Platinum: Tail Glow
         statOffset = MOVE_SUBSCRIPT_PTR_SP_ATTACK_UP_1_STAGE - MOVE_SUBSCRIPT_PTR_ATTACK_UP_1_STAGE;
         stageChange = 3;
         battleCtx->scriptTemp = BATTLE_ANIMATION_STAT_BOOST;
@@ -2876,7 +2872,6 @@ static BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSys, BattleContext *battl
             }
         } else {
             if (battleCtx->sideEffectType == SIDE_EFFECT_TYPE_ABILITY) {
-                // Sour Platinum: the banner names the ability, so the message only says that the stat rose
                 SetupNicknameAbilityStatMsg(battleCtx, AbilityBanner_CanShow() ? BattleStrings_Text_PokemonsStatRoseFromAbility_Ally : BattleStrings_Text_PokemonsAbilityRaisedItsStat_Ally, statOffset); // "{0}'s {1} raised its {2}!"
             } else if (battleCtx->sideEffectType == SIDE_EFFECT_TYPE_HELD_ITEM) {
                 battleCtx->msgBuffer.id = BattleStrings_Text_TheItemRaisedPokemonsStat_Ally; // "The {0} raised {1}'s {2}!"
@@ -2888,7 +2883,7 @@ static BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSys, BattleContext *battl
                 SetupNicknameStatMsg(battleCtx,
                     stageChange == 1 ? BattleStrings_Text_PokemonsStatRose_Ally : // "{0}'s {1} rose!"
                         stageChange == 2 ? BattleStrings_Text_PokemonsStatSharplyRose_Ally // "{0}'s {1} sharply rose!"
-                                         : BattleStrings_Text_PokemonsStatRoseDrastically_Ally, // "{0}'s {1} rose drastically!"
+                                         : BattleStrings_Text_PokemonsStatRoseDrastically_Ally,
                     statOffset);
             }
 
@@ -2910,9 +2905,7 @@ static BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSys, BattleContext *battl
                 } else if (Battler_IgnorableAbility(battleCtx, battleCtx->attacker, battleCtx->sideEffectMon, ABILITY_CLEAR_BODY) == TRUE
                     || Battler_IgnorableAbility(battleCtx, battleCtx->attacker, battleCtx->sideEffectMon, ABILITY_WHITE_SMOKE) == TRUE) {
                     if (AbilityBanner_CanShow()) {
-                        // Sour Platinum: the banner names the ability, the message only says what it did. The tags are
-                        // the ones with the ability, which is what brings in the banner.
-                        battleCtx->msgBuffer.id = BattleStrings_Text_PokemonsStatsWereNotLowered_Ally; // "{0}'s stats were not lowered!"
+                        battleCtx->msgBuffer.id = BattleStrings_Text_PokemonsStatsWereNotLowered_Ally;
                         battleCtx->msgBuffer.tags = TAG_NICKNAME_ABILITY;
                         battleCtx->msgBuffer.params[0] = BattleSystem_NicknameTag(battleCtx, battleCtx->sideEffectMon);
                         battleCtx->msgBuffer.params[1] = battleCtx->battleMons[battleCtx->sideEffectMon].ability;
@@ -2929,9 +2922,8 @@ static BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSys, BattleContext *battl
                 } else if (AbilityBlocksSpecificStatReduction(battleCtx, statOffset, ABILITY_KEEN_EYE, BATTLE_STAT_ACCURACY)
                     || AbilityBlocksSpecificStatReduction(battleCtx, statOffset, ABILITY_HYPER_CUTTER, BATTLE_STAT_ATTACK)) {
                     if (AbilityBanner_CanShow()) {
-                        // Sour Platinum: see above
-                        battleCtx->msgBuffer.id = statOffset == 0 ? BattleStrings_Text_PokemonsAttackWasNotLowered_Ally // "{0}'s Attack was not lowered!"
-                                                                  : BattleStrings_Text_PokemonsAccuracyWasNotLowered_Ally; // "{0}'s accuracy was not lowered!"
+                        battleCtx->msgBuffer.id = statOffset == 0 ? BattleStrings_Text_PokemonsAttackWasNotLowered_Ally
+                                                                  : BattleStrings_Text_PokemonsAccuracyWasNotLowered_Ally;
                         battleCtx->msgBuffer.tags = TAG_NICKNAME_ABILITY;
                         battleCtx->msgBuffer.params[0] = BattleSystem_NicknameTag(battleCtx, battleCtx->sideEffectMon);
                         battleCtx->msgBuffer.params[1] = battleCtx->battleMons[battleCtx->sideEffectMon].ability;
@@ -2994,8 +2986,7 @@ static BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSys, BattleContext *battl
         }
 
         if (battleCtx->sideEffectType == SIDE_EFFECT_TYPE_ABILITY) {
-            // Sour Platinum: the banner names the ability, so the message only says that the stat fell
-            battleCtx->msgBuffer.id = AbilityBanner_CanShow() ? BattleStrings_Text_PokemonsStatFellFromAbility_AllyAlly // "{2}'s {3} fell!"
+            battleCtx->msgBuffer.id = AbilityBanner_CanShow() ? BattleStrings_Text_PokemonsStatFellFromAbility_AllyAlly
                                                               : BattleStrings_Text_PokemonsAbilityCutsPokemonsStat_AllyAlly; // "{0}'s {1} cuts {2}'s {3}!"
             battleCtx->msgBuffer.tags = TAG_NICKNAME_ABILITY_NICKNAME_STAT;
             battleCtx->msgBuffer.params[0] = BattleSystem_NicknameTag(battleCtx, battleCtx->attacker);
@@ -4838,7 +4829,6 @@ static BOOL BtlCmd_TryConversion2(BattleSystem *battleSys, BattleContext *battle
                 ATTACKING_MON.type1 = defType;
                 ATTACKING_MON.type2 = defType;
                 battleCtx->msgTemp = defType;
-                // Sour Platinum: the animation plays on the battler whose move is copied
                 battleCtx->msgBattlerTemp = battleCtx->conversion2Battler[battleCtx->attacker];
                 return FALSE;
             }
@@ -4853,7 +4843,6 @@ static BOOL BtlCmd_TryConversion2(BattleSystem *battleSys, BattleContext *battle
                 ATTACKING_MON.type1 = defType;
                 ATTACKING_MON.type2 = defType;
                 battleCtx->msgTemp = defType;
-                // Sour Platinum: the animation plays on the battler whose move is copied
                 battleCtx->msgBattlerTemp = battleCtx->conversion2Battler[battleCtx->attacker];
                 return FALSE;
             }
@@ -5154,13 +5143,9 @@ static BOOL BtlCmd_TryStealItem(BattleSystem *battleSys, BattleContext *battleCt
         BattleScript_Iter(battleCtx, jumpOnFail);
     } else if (DEFENDING_MON.heldItem >= ITEM_FLAME_PLATE && DEFENDING_MON.heldItem <= ITEM_IRON_PLATE
         && (ATTACKING_MON.species == SPECIES_ARCEUS || DEFENDING_MON.species == SPECIES_ARCEUS)) {
-        // Sour Platinum (Generation 5): a Plate cannot be stolen if either battler is Arceus. Multitype used to block
-        // every item.
         BattleScript_Iter(battleCtx, jumpOnFail);
     } else if (DEFENDING_MON.heldItem == ITEM_GRISEOUS_ORB
         && (ATTACKING_MON.species == SPECIES_GIRATINA || DEFENDING_MON.species == SPECIES_GIRATINA)) {
-        // Sour Platinum (Generation 5): a Griseous Orb cannot be stolen if either battler is Giratina. It used to never be
-        // stealable.
         BattleScript_Iter(battleCtx, jumpOnFail);
     } else if (DEFENDING_MON.moveEffectsData.custapBerry || DEFENDING_MON.moveEffectsData.quickClaw) {
         // The defender activated a Custap Berry or a Quick Claw this turn.
@@ -5172,7 +5157,6 @@ static BOOL BtlCmd_TryStealItem(BattleSystem *battleSys, BattleContext *battleCt
         // The attacker has an item, or the defender's item cannot be stolen.
         BattleScript_Iter(battleCtx, jumpOnFail);
     } else {
-        // The item will be stolen; in a trainer battle it is given back when the battle ends
         BattleSystem_MarkStolenItem(battleSys, battleCtx->attacker, battleCtx->selectedPartySlot[battleCtx->attacker]);
     }
 
@@ -6071,7 +6055,6 @@ static BOOL BtlCmd_CalcHiddenPowerParams(BattleSystem *battleSys, BattleContext 
         | ((ATTACKING_MON.spAttackIV & 1) << 4)
         | ((ATTACKING_MON.spDefenseIV & 1) << 5);
 
-    // Hidden Power always has a base power of 60; only its type depends on IVs.
     battleCtx->movePower = 60;
     battleCtx->moveType = battleCtx->moveType * 15 / 63 + 1;
 
@@ -6124,8 +6107,6 @@ static BOOL BtlCmd_TryFutureSight(BattleSystem *battleSys, BattleContext *battle
         battleCtx->fieldConditions.futureSightMove[battleCtx->defender] = battleCtx->moveCur;
         battleCtx->fieldConditions.futureSightAttacker[battleCtx->defender] = battleCtx->attacker;
 
-        // Sour Platinum: like Generation 5, the damage is worked out when the attack hits
-        // (BattleSystem_CalcFutureSightDamage), so only the user's party slot is remembered
         battleCtx->fieldConditions.futureSightAttackerSlot[battleCtx->defender] = battleCtx->selectedPartySlot[battleCtx->attacker];
     } else {
         BattleScript_Iter(battleCtx, jumpOnFail);
@@ -6201,14 +6182,6 @@ static inline BOOL BeatUpEligibleMon(BattleContext *battleCtx, int slot, Pokemon
 /**
  * @brief Set up a single hit of Beat Up.
  *
- * Sour Platinum: works like Generation 5. The hit's power is the party member's base Attack / 10 + 5, and the damage
- * is then calculated like any other move (CalcDamage in the effect script), with the user's Attack, the target's
- * Defense, STAB and type effectiveness. Originally the damage was typeless and used the party member's base Attack
- * against the target's base Defense.
- *
- * The hits are counted on the first hit, so Beat Up runs like any other multi-hit move and ends with
- * "Hit X time(s)!" instead of announcing each party member's attack.
- *
  * @param battleSys
  * @param battleCtx
  * @return FALSE
@@ -6235,14 +6208,12 @@ static BOOL BtlCmd_BeatUp(BattleSystem *battleSys, BattleContext *battleCtx)
         battleCtx->beatUpCounter = 0;
     }
 
-    // Find the party member that makes this hit
     while (battleCtx->beatUpCounter < partyCount
         && BeatUpEligibleMon(battleCtx, battleCtx->beatUpCounter, BattleSystem_GetPartyPokemon(battleSys, battleCtx->attacker, battleCtx->beatUpCounter)) == FALSE) {
         battleCtx->beatUpCounter++;
     }
 
     if (battleCtx->beatUpCounter >= partyCount) {
-        // Should not happen; let the user make the last hit
         battleCtx->beatUpCounter = battleCtx->selectedPartySlot[battleCtx->attacker];
         battleCtx->multiHitCounter = 1;
     }
@@ -6625,9 +6596,8 @@ static BOOL BtlCmd_TryKnockOff(BattleSystem *battleSys, BattleContext *battleCtx
         battleCtx->msgBuffer.params[1] = DEFENDING_MON.ability;
         battleCtx->msgBuffer.params[2] = battleCtx->moveCur;
 
-        // Sour Platinum: the banner names the ability, so its message is the plain one
         if (AbilityBanner_CanShow()) {
-            battleCtx->msgBuffer.id = BattleStrings_Text_PokemonsItemCannotBeRemoved_Ally; // "{0}'s item cannot be removed!"
+            battleCtx->msgBuffer.id = BattleStrings_Text_PokemonsItemCannotBeRemoved_Ally;
             battleCtx->msgBuffer.tags = TAG_NICKNAME_ABILITY;
         }
     } else if (DEFENDING_MON.heldItem) {
@@ -8399,9 +8369,6 @@ static BOOL BtlCmd_CheckEffectActivation(BattleSystem *battleSys, BattleContext 
 /**
  * @brief Check if Chatter's secondary effect should activate.
  *
- * Sour Platinum: Generation 5, Chatter always confuses the target while it is still alive. It used to depend on
- * the volume of Chatot's recorded cry (0%, 10% or 30%).
- *
  * Inputs:
  * 1. The distance to jump ahead if the secondary effect should NOT activate.
  *
@@ -9092,7 +9059,6 @@ static BOOL BtlCmd_CheckHoldOnWith1HP(BattleSystem *battleSys, BattleContext *ba
     int itemEffect = Battler_HeldItemEffect(battleCtx, battler);
     int itemPower = Battler_HeldItemPower(battleCtx, battler, ITEM_POWER_CHECK_ALL);
 
-    // Sour Platinum: Generation 5 Sturdy, which works before the items, as it does for a move
     if (battleCtx->battleMons[battler].curHP == battleCtx->battleMons[battler].maxHP
         && battleCtx->battleMons[battler].curHP + battleCtx->hpCalcTemp <= 0
         && Battler_IgnorableAbility(battleCtx, battleCtx->attacker, battler, ABILITY_STURDY) == TRUE) {
@@ -9143,9 +9109,6 @@ static BOOL BtlCmd_TryRestoreStatusOnSwitch(BattleSystem *battleSys, BattleConte
         Pokemon *mon = BattleSystem_GetPartyPokemon(battleSys, battler, battleCtx->selectedPartySlot[battler]);
         int status = Pokemon_GetValue(mon, MON_DATA_STATUS, NULL);
 
-        // Sour Platinum: Generation 5, a Pokemon whose original Ability forbids its status (Limber with paralysis, Immunity with
-        // poison, Insomnia and Vital Spirit with sleep, Water Veil with burn, Magma Armor with freeze) but whose current Ability
-        // does not (Skill Swap and the like) keeps the status when it is switched out. Only its current Ability counts.
         BOOL forbidsStatus = Ability_ForbidsStatus(battleCtx, battleCtx->battleMons[battler].ability, status);
 
         if (battleCtx->battleMons[battler].ability != ABILITY_NATURAL_CURE
@@ -9462,19 +9425,6 @@ static BOOL BtlCmd_End(BattleSystem *battleSys, BattleContext *battleCtx)
     return BattleSystem_PopScript(battleCtx);
 }
 
-/**
- * @brief Sour Platinum: bring in the ability banner of a battler before the effect of its ability.
- *
- * This prints an empty message tagged with the battler and its ability, which only shows the banner (see
- * battle/ability_banner.h). The banner stays for the message of the ability that follows.
- *
- * Inputs:
- * 1. The battler whose ability is shown.
- *
- * @param battleSys
- * @param battleCtx
- * @return FALSE
- */
 static BOOL BtlCmd_ShowAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx)
 {
     BattleScript_Iter(battleCtx, 1);
@@ -9493,15 +9443,6 @@ static BOOL BtlCmd_ShowAbilityBanner(BattleSystem *battleSys, BattleContext *bat
     return FALSE;
 }
 
-/**
- * @brief Sour Platinum: bring in the ability banner for the buffered message, if it names an ability.
- *
- * Used before stat changes that come from an ability (Intimidate, Download...), whose message is built in code.
- *
- * @param battleSys
- * @param battleCtx
- * @return FALSE
- */
 static BOOL BtlCmd_ShowBufferedAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx)
 {
     BattleScript_Iter(battleCtx, 1);
@@ -9515,19 +9456,6 @@ static BOOL BtlCmd_ShowBufferedAbilityBanner(BattleSystem *battleSys, BattleCont
     return FALSE;
 }
 
-/**
- * @brief Sour Platinum: GoTo ahead a certain distance if the ability banner can be shown.
- *
- * Messages of abilities use the plain message of their effect ("{0} was burned!") when the banner names the ability, and
- * name the ability themselves when there is no banner.
- *
- * Inputs:
- * 1. The distance to jump if the banner is available.
- *
- * @param battleSys
- * @param battleCtx
- * @return FALSE
- */
 static BOOL BtlCmd_CheckAbilityBannerAvailable(BattleSystem *battleSys, BattleContext *battleCtx)
 {
     BattleScript_Iter(battleCtx, 1);
@@ -9540,15 +9468,6 @@ static BOOL BtlCmd_CheckAbilityBannerAvailable(BattleSystem *battleSys, BattleCo
     return FALSE;
 }
 
-/**
- * @brief Sour Platinum: send away the ability banner of an effect that has no message.
- *
- * Like ShowAbilityBanner, this goes through a message that is not printed, so that it reaches the clients.
- *
- * @param battleSys
- * @param battleCtx
- * @return FALSE
- */
 static BOOL BtlCmd_HideAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx)
 {
     BattleScript_Iter(battleCtx, 1);
@@ -9561,30 +9480,6 @@ static BOOL BtlCmd_HideAbilityBanner(BattleSystem *battleSys, BattleContext *bat
     return FALSE;
 }
 
-/**
- * @brief Sour Platinum: the ability of a battler changed, and its banner pixelates into the new ability.
- *
- * The banner has to be shown with ShowAbilityBanner before the ability changes. This prints an empty message tagged
- * with the battler and its new ability, which is not shown.
- *
- * Inputs:
- * 1. The battler whose ability changed.
- *
- * @param battleSys
- * @param battleCtx
- * @return FALSE
- */
-/**
- * @brief Sour Platinum: like ShowAbilityBanner, but a banner that is still up for the battler comes in again, like in
- * Black for a new effect of the ability after its message (Insomnia waking up the Pokemon after Worry Seed).
- *
- * Inputs:
- * 1. The battler whose banner comes in.
- *
- * @param battleSys
- * @param battleCtx
- * @return FALSE
- */
 static BOOL BtlCmd_ReshowAbilityBanner(BattleSystem *battleSys, BattleContext *battleCtx)
 {
     BattleScript_Iter(battleCtx, 1);

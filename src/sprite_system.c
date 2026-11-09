@@ -127,7 +127,6 @@ void SpriteSystem_DrawSprites(SpriteManager *spriteMan)
 
     if (gSystem.fps60) {
         if (!gSystem.logicTick) {
-            // The ticks in between are covered by SpriteList_ReplayDrawLog.
             return;
         }
 

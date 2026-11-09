@@ -78,7 +78,6 @@
     CallFunc 7, \unused
     .endm
 
-    // Sour Platinum: the optional argument is the number of spins (default 1)
     .macro Func_QuickAttack revolutions
     .ifb \revolutions
     CallFunc 8

@@ -213,7 +213,6 @@ void RevolutionContext_InitWithStepSize(XYTransformContext *ctx, u16 sx, u16 ex,
     int steps = BattleTime_Frames(originalSteps, SP_PACE_ANIM_PERCENT);
 
     if (steps != originalSteps && steps != 0) {
-        // Same distance, but spread over the (usually doubled) number of ticks.
         stepSizeSigned = (stepSizeSigned * originalSteps) / steps;
     }
 
@@ -294,8 +293,6 @@ void PosLerpContext_Init(XYTransformContext *ctx, s16 sx, s16 ex, s16 sy, s16 ey
     ctx->data[XY_PARAM_CUR_X] = sx * FX32_ONE;
     ctx->data[XY_PARAM_CUR_Y] = sy * FX32_ONE;
 
-    // Sour Platinum: the rounded step size adds up differently over more steps, so the movement could end a pixel away
-    // from where the original steps ended (a thrown Poke Ball landed 1 pixel low). The last step goes to that spot.
     ctx->data[XY_PARAM_END_VALID] = FALSE;
 
     if (steps != originalSteps && originalSteps != 0) {

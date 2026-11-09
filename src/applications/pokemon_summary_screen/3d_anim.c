@@ -157,8 +157,6 @@ void PokemonSummaryScreen_Update3DGfx(PokemonSummaryScreen *summaryScreen)
     G3_SwapBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);
 }
 
-// Sour Platinum: on the 60 fps ticks between two logic ticks the 3D scene has to be submitted again, without
-// advancing any state (the Pokemon sprite is drawn from the draw log, see PokemonSpriteManager_DrawSprites).
 void PokemonSummaryScreen_Redraw3DGfx(PokemonSummaryScreen *summaryScreen)
 {
     if (summaryScreen->page == SUMMARY_PAGE_CONDITION) {

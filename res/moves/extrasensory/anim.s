@@ -1,7 +1,6 @@
 #include "macros/btlanimcmd.inc"
 
 L_0:
-    // Sour Platinum: 10% faster, and the user stretches 10 frames after the distortion (40 originally)
     SetAnimSpeed 110
     LoadParticleResource 0, extrasensory_spa
     Func_FadeBg FADE_BG_TYPE_BASE, 1, 0, 12, BATTLE_COLOR_BLACK

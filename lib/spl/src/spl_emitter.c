@@ -150,8 +150,6 @@ static BOOL SPLEmitter_IsPositionBehavior(void (*applyFunc)(const void *, struct
         || applyFunc == SPLBehavior_ApplyCollisionPlane;
 }
 
-// The part of a frame's movement that is covered on one update of a frame that is made up of timeScale
-// updates. The parts add up to exactly the full movement.
 static fx32 SPLEmitter_FramePart(fx32 movement, int timeScale, u16 age)
 {
     if (timeScale == 1) {
@@ -239,11 +237,6 @@ void SPLEmitter_Update(SPLManager *mgr, SPLEmitter *emtr)
             animFuncs[i].func(ptcl, res, lifeRates[animFuncs[i].loop]);
         }
 
-        // Sour Platinum: with a time scale above 1 every particle is updated several times per original frame.
-        // The behaviors, the damping and the acceleration still run exactly once per original frame, on the
-        // first update of each frame, so the velocities evolve exactly like they did originally (the small
-        // integer rounding in the damping step is part of how the effects look). The particle then covers
-        // its movement for the frame in equal parts on every update of the frame.
         BOOL frameStart = (timeScale == 1) || (ptcl->age % timeScale) == 0;
 
         if (resFlags.followEmitter) {
@@ -253,8 +246,6 @@ void SPLEmitter_Update(SPLManager *mgr, SPLEmitter *emtr)
         acc.x = acc.y = acc.z = 0;
 
         for (i = 0; i < behaviorCount; i++) {
-            // Behaviors that move the particle's position directly (spin, convergence, collision) run on every
-            // update so that curved movement stays smooth. The ones that change the velocity run once per frame.
             if (timeScale > 1 && SPLEmitter_IsPositionBehavior(res->behaviors[i].applyFunc)) {
                 VecFx32 unusedAcc = { 0, 0, 0 };
                 res->behaviors[i].applyFunc(res->behaviors[i].object, ptcl, &unusedAcc, emtr);
@@ -273,8 +264,6 @@ void SPLEmitter_Update(SPLManager *mgr, SPLEmitter *emtr)
             ptcl->velocity.z += acc.z;
         }
 
-        // The rotation speed is shared out over the updates of a frame. Alternating between rounding down
-        // and up keeps odd values exact on average.
         ptcl->rotation += (ptcl->angularVelocity + (timeScale > 1 ? (ptcl->age % timeScale) : 0)) / timeScale;
 
         ptcl->position.x += SPLEmitter_FramePart(ptcl->velocity.x + emtr->velocity.x, timeScale, ptcl->age);
@@ -287,8 +276,6 @@ void SPLEmitter_Update(SPLManager *mgr, SPLEmitter *emtr)
             // The >> 8 here is a division by 256 because emissionDelay is a fraction of the particle's lifetime represented as a u8
             fx32 diff = ((fx32)ptcl->age * FX32_ONE) - (emissionDelay >> 8);
 
-            // Sour Platinum: a child that lives one original frame (the glow in the middle of an orb) is emitted on
-            // every update and lives one update, so it is always exactly where its parent is drawn.
             BOOL lockstepChild = timeScale > 1 && child->misc.emissionInterval == 1 && (child->lifeTime == 1 || emtr->smoothChildren);
 
             if (diff >= 0 && (lockstepChild || ((diff >> FX32_SHIFT) % (child->misc.emissionInterval * timeScale) == 0))) {

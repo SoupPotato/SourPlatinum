@@ -31,7 +31,6 @@ _041:
     Wait 
 
 _076:
-    // Sour Platinum: when the status comes from an ability, its banner comes in before the effect
     CompareVarToValue OPCODE_NEQ, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_ABILITY, _AbilityBannerShown
     ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
     Wait 
@@ -48,7 +47,6 @@ _PrintParalyzed:
     GoTo _102
 
 _096:
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PrintParalyzed
     // {0}’s {1} paralyzed {2}! It may be unable to move!
     PrintMessage BattleStrings_Text_PokemonsAbilityParalyzedPokemon_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP, BTLSCR_SIDE_EFFECT_MON
@@ -91,7 +89,6 @@ _170:
     PrintAttackMessage 
     Wait 
     WaitButtonABTime 30
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     ShowAbilityBanner BTLSCR_SIDE_EFFECT_MON
     Wait
     CheckAbilityBannerAvailable _PrintDoesntAffect

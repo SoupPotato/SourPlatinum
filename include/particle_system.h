@@ -52,7 +52,6 @@ typedef struct ParticleSystem {
     u8 unused2;
     u8 id;
     u8 cameraProjection;
-    // Sour Platinum: speed of this particle system in percent (0 is treated as 100), see SetParticleSpeed
     u16 speedPercent;
     u16 speedAccumulator;
 } ParticleSystem;

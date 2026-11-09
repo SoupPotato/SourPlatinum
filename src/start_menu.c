@@ -1591,7 +1591,6 @@ BOOL StartMenu_FlyDestinationSelected(FieldTask *fieldTask)
         Heap_FreeExplicit(HEAP_ID_FIELD2, menu->taskData);
 
         if (menu->fromPoketch) {
-            // Sour Platinum: back to the overworld instead of the party menu
             FieldSystem_StartFieldMap(fieldSystem);
             menu->state = START_MENU_STATE_POKETCH_RESTORE;
         } else {
@@ -1607,7 +1606,6 @@ BOOL StartMenu_FlyDestinationSelected(FieldTask *fieldTask)
         Heap_FreeExplicit(HEAP_ID_FIELD2, menu->taskData);
         FieldSystem_StartFieldMap(fieldSystem);
 
-        // Sour Platinum: the app shows its summoning message first
         menu->callback = menu->fromPoketch ? FieldMoves_PoketchFlyScriptTask : FieldMoves_FlyTask;
         menu->taskData = flyCtx;
         menu->state = START_MENU_STATE_NEW_TASK;
@@ -1792,9 +1790,6 @@ static void StartMenu_Evolve(FieldTask *fieldTask)
     }
 }
 
-// Sour Platinum: the Poketch field moves app. It uses the same tasks as the party menu, but the user of the move is a
-// fixed helper Pokemon per move instead of a party member (see FieldMoves_GetPokemonBySlot). The move is stored in
-// menu->cursorPos.
 static int StartMenu_GetPoketchFieldMoveUser(enum FieldMoveList fieldMove)
 {
     return FIELD_MOVE_HELPER_SLOT_BASE + fieldMove;
@@ -1816,7 +1811,6 @@ static BOOL StartMenu_PoketchFieldMove(FieldTask *fieldTask)
         enum FieldMoveError error = check(&menu->fieldMoveContext);
 
         if (error != FIELD_MOVE_ERROR_NONE) {
-            // Shows the same message as the party menu does for this problem
             ScriptManager_Change(fieldTask, SCRIPT_ID(FIELD_MOVES, 16), NULL);
             FieldSystem_SetScriptParameters(fieldSystem, error, 0, 0, 0);
             Heap_Free(menu);
@@ -1826,7 +1820,6 @@ static BOOL StartMenu_PoketchFieldMove(FieldTask *fieldTask)
         MapObjectMan_PauseAllMovement(fieldSystem->mapObjMan);
 
         if (fieldMove == FIELD_MOVE_FLY) {
-            // The town map is a separate application, so the overworld is closed first like in the start menu.
             FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_OUT);
             menu->state = START_MENU_STATE_POKETCH_WAIT_FLY_FADE;
         } else {
@@ -1839,7 +1832,6 @@ static BOOL StartMenu_PoketchFieldMove(FieldTask *fieldTask)
             FieldMoveTask task = (FieldMoveTask)FieldMove_GetTaskOrError(FIELD_MOVE_TASK, fieldMove);
             task(&fieldMoveMon, &menu->fieldMoveContext);
 
-            // The field map is already running, so the move can start at once
             menu->state = START_MENU_STATE_POKETCH_JUMP;
         }
         break;
@@ -1860,7 +1852,6 @@ static BOOL StartMenu_PoketchFieldMove(FieldTask *fieldTask)
         break;
     case START_MENU_STATE_POKETCH_FLY_MAP:
         if (!FieldSystem_IsRunningApplication(fieldSystem)) {
-            // Sets START_MENU_STATE_NEW_TASK when a destination was picked, START_MENU_STATE_POKETCH_RESTORE if not
             StartMenu_FlyDestinationSelected(fieldTask);
         }
         break;
@@ -1911,9 +1902,6 @@ BOOL StartMenu_StartPoketchFieldMove(FieldSystem *fieldSystem, enum FieldMoveLis
     menu->cursorPos = fieldMove;
     menu->state = START_MENU_STATE_POKETCH_INIT;
 
-    // Do what the overworld does when a menu is opened. Above all the map name sign has to be hidden: right after
-    // arriving somewhere it is still showing, and its task kept running after the overworld was closed for Fly, which
-    // crashed the game.
     if (PlayerAvatar_CheckForceStopMovement(fieldSystem->playerAvatar) == 1) {
         PlayerAvatar_ForceStopMovement(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDir(fieldSystem->playerAvatar));
     }

@@ -85,7 +85,6 @@ void SetFps60Mode(BOOL enabled)
     }
 }
 
-// Sour Platinum: 60 fps for menu screens (SP_MENUS_60FPS)
 static BOOL sMenuFps60Owner = FALSE;
 
 void MenuFps60_Begin(void)
@@ -382,7 +381,6 @@ void ReadKeypadAndTouchpad(void)
     gSystem.pressedKeysRepeatable = gSystem.pressedKeysRepeatableRaw;
 
 #if SP_DEBUG_WILD_MODIFIER
-    // Sour Platinum wild Pokemon modifier: L = species, R = level, Select = nature, taken from the calculator.
     if (gSystem.pressedKeysRaw & (PAD_BUTTON_L | PAD_BUTTON_R | PAD_BUTTON_SELECT)) {
         s32 value = gDebugCalcValue;
 

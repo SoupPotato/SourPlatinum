@@ -540,8 +540,6 @@ void PartyMenu_PrepareSwitch(PartyMenuApplication *application)
 
 static BOOL DoSwitchStep(PartyMenuApplication *application);
 
-// Sour Platinum: in 60 fps mode the slide runs on every tick instead of every other one. It moves one tile per tick,
-// which makes it twice as fast as the original (and 60 steps per second instead of 30).
 static void SysTask_DoSwitch(SysTask *task, void *data)
 {
     PartyMenuApplication *application = data;

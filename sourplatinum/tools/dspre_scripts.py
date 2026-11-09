@@ -1,16 +1,7 @@
-# Field-script support for dspre_writeback.py: patch res/field/scripts/<file>.s so it assembles to what DSPRE saved.
-#
-# DSPRE recompiles a whole script file, so its layout never matches the build's. Starting from each ScriptEntry, the
-# straight-line runs of the baseline and DSPRE binaries are aligned with a sequence diff, which pairs up their
-# instructions (and, through matching jumps, the code they lead to) even around inserted or removed instructions.
-# Only source blocks (label to next label) that hold a changed instruction are rewritten, with primitive macros from
-# scrdis and the file's own label, message, flag, var and local-ID names; code DSPRE added gets new
-# <Prefix>_DSPRE_<addr> labels at the end of the file. The patched file is then assembled and checked to behave the
-# same as DSPRE's binary before anything is written.
 import difflib, os, re, subprocess, tempfile
 
 STOP_NAMES = {'End', 'GoTo', 'Return', 'ReturnCommonScript'}
-LOCALID_PLAYER = 0xFF   # include/constants/scrcmd.h
+LOCALID_PLAYER = 0xFF
 
 class Unsupported(Exception):
     pass
@@ -30,18 +21,15 @@ class Names:
 class ScriptPatcher:
     def __init__(self, clone):
         self.clone = clone
-        os.environ['REPO'] = clone   # scrdis reads the macros and generated headers of a built tree
+        os.environ['REPO'] = clone
         import scrdis
         self.scrdis = scrdis
-        # every name a var/flag value has (VAR_RESULT and VAR_0x800C are the same var), to prefer the file's own
         self.aliases = {}
         for f in (os.path.join(clone, 'include', 'constants', 'savedata', 'vars_flags.h'),
                   os.path.join(clone, 'build', 'generated', 'vars_flags.h')):
             if os.path.exists(f):
                 for n, v in re.findall(r'^#define\s+((?:VAR|FLAG)_\w+)\s+\(?\s*(0x[0-9A-Fa-f]+|\d+)\s*\)?\s*$', open(f).read(), re.M):
                     self.aliases.setdefault((n[:4], int(v, 0)), []).append(n)
-
-    # --- assembling, the same way tools/scripts/make_script_bin.sh does --------------------------------------------
 
     def assemble(self, text):
         """(binary, {offset: [label names]}) for a script source."""
@@ -96,8 +84,6 @@ class ScriptPatcher:
                 a = nxt
             out.append((ids[start], 'RUN', tuple(run)))
         return out
-
-    # --- emitting --------------------------------------------------------------------------------------------------
 
     def fmt(self, pn, v, names):
         if pn.lower() in ('localid', 'objectid') and v in names.local_ids:
@@ -174,13 +160,11 @@ class ScriptPatcher:
             mn = self.scrdis.MOVNAME.get(an, (None, None))[0]
             if mn is None:
                 out.append(f'    .short {an}, {n}')
-            elif self.scrdis.MOV[mn][0]:   # macros like WalkNormalNorth take a length (default 1); EndMovement doesn't
+            elif self.scrdis.MOV[mn][0]:
                 out.append(f'    {mn}' + (f' {n}' if n != 1 else ''))
             else:
                 out.append(f'    {mn}')
         return out
-
-    # --- pairing the baseline and DSPRE binaries ---------------------------------------------------------------------
 
     @staticmethod
     def run(script, a):
@@ -223,7 +207,7 @@ class ScriptPatcher:
 
         def link(na, oa):
             if pair.setdefault(na, oa) != oa:
-                changed.add(oa)   # the same DSPRE code stands in for two different source spots
+                changed.add(oa)
                 return
             start_for_old.setdefault(oa, na)
             for x, y in zip(new.code[na][1], old.code[oa][1]):
@@ -256,21 +240,18 @@ class ScriptPatcher:
                     continue
                 changed.update(ro[i1:i2])
                 if i1 < len(ro) and j1 < len(rn):
-                    start_for_old.setdefault(ro[i1], rn[j1])   # an insertion goes in front of the instruction it precedes
+                    start_for_old.setdefault(ro[i1], rn[j1])
                 if i1 == i2:
                     changed.add(ro[i1] if i1 < len(ro) else ro[-1])
                 for k in range(min(i2 - i1, j2 - j1)):
                     if self.kind(old, ro[i1 + k]) == self.kind(new, rn[j1 + k]):
                         link(rn[j1 + k], ro[i1 + k])
-        # an instruction whose jump now lands somewhere else (or on new code) has changed too
         for na, oa in pair.items():
             if na in new.code:
                 for x, y in zip(new.code[na][1], old.code[oa][1]):
                     if x[0] == 'label' and pair.get(self.target(new, x[1])) != self.target(old, y[1]):
                         changed.add(oa)
         return pair, changed, start_for_old
-
-    # --- the patch ---------------------------------------------------------------------------------------------------
 
     def patch(self, text, old_bin, new_bin, sugar=True):
         """The source text, changed so it assembles to new_bin's behaviour. Raises Unsupported if it can't."""
@@ -300,7 +281,6 @@ class ScriptPatcher:
             ot = pair.get(nt)
             if ot in name_at:
                 return name_at[ot]
-            # the source may label a GoTo that leads to this code rather than the code itself
             for o in starts:
                 if self.target(old, o) == ot and o in name_at and ot is not None:
                     return name_at[o]
@@ -328,7 +308,6 @@ class ScriptPatcher:
                     return self.sugar(out, names) if sugar else out
                 a = nxt
 
-        # rewrite changed source blocks in place, keeping the directives (.balign) between blocks
         replacements = []
         for k, s in enumerate(starts):
             e = starts[k + 1] if k + 1 < len(starts) else None
@@ -344,7 +323,6 @@ class ScriptPatcher:
                 last -= 1
             replacements.append((first, last, body))
 
-        # new scripts, then everything DSPRE added that the source has no label for
         extra_entries = []
         for k in range(len(old.entries), len(new.entries)):
             nt = new.entries[k]
@@ -363,7 +341,7 @@ class ScriptPatcher:
             lines[first:last] = body
         if extra_entries:
             end = next((i for i, l in enumerate(lines) if l.strip() == 'ScriptEntryEnd'), None)
-            if end is None:   # some files have no ScriptEntryEnd; their entry list ends at the first blank line after it
+            if end is None:
                 last_entry = max(i for i, l in enumerate(lines) if l.strip().startswith('ScriptEntry '))
                 end = last_entry + 1
             lines[end:end] = extra_entries
@@ -382,7 +360,7 @@ class ScriptPatcher:
                 if self.canon(rebuilt, rebuilt.entries[k]) != self.canon(new, new.entries[k]):
                     raise Unsupported(f'the patched source doesn\'t match DSPRE\'s script {k + 1}; edit it in source instead')
         except Unsupported:
-            if sugar:   # a folded macro can pick a different primitive (CompareVar's var/value check); try without
+            if sugar:
                 return self.patch(text, old_bin, new_bin, sugar=False)
             raise
         return patched

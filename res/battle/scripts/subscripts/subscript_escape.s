@@ -20,7 +20,6 @@ _015:
     GoTo _055
 
 _043:
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainsingItsAbility
     // {0} fled using {1}!
     PrintMessage BattleStrings_Text_PokemonFledUsingItsAbility, TAG_NICKNAME_ABILITY, BTLSCR_ATTACKER, BTLSCR_ATTACKER

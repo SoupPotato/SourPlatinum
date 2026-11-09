@@ -850,7 +850,6 @@ static void BattleAnimScriptCmd_WaitForLRX(BattleAnimSystem *system)
     }
 }
 
-// Scales a length in frames by the speed of the current animation (see SetAnimSpeed).
 static u32 BattleAnimSystem_ScaleFramesBySpeed(u32 frames)
 {
     u32 scaled = (frames * 100 + gBattleAnimSpeedPercent - 1) / gBattleAnimSpeedPercent;

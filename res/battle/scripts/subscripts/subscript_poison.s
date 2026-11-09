@@ -44,7 +44,6 @@ _065:
     Wait 
 
 _130:
-    // Sour Platinum: when the status comes from an ability, its banner comes in before the effect
     CompareVarToValue OPCODE_NEQ, BTLVAR_SIDE_EFFECT_TYPE, SIDE_EFFECT_TYPE_ABILITY, _AbilityBannerShown
     ShowAbilityBanner BTLSCR_MSG_BATTLER_TEMP
     Wait 
@@ -61,7 +60,6 @@ _PrintPoisoned:
     GoTo _156
 
 _150:
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PrintPoisoned
     // {0}’s {1} poisoned {2}!
     PrintMessage BattleStrings_Text_PokemonsAbilityPoisonedPokemon_AllyAlly, TAG_NICKNAME_ABILITY_NICKNAME, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP, BTLSCR_SIDE_EFFECT_MON
@@ -88,7 +86,6 @@ _177:
     WaitButtonABTime 30
 
 _201:
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     ShowAbilityBanner BTLSCR_SIDE_EFFECT_MON
     Wait
     CheckAbilityBannerAvailable _PrintDoesntAffect

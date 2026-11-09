@@ -63,40 +63,28 @@ typedef struct System {
     u8 padding_69[3];
     BOOL showTitleScreenIntro;
     u32 *heapCanary;
-    // Sour Platinum 60 fps mode (used in battle, see sourplatinum_config.h).
-    // When fps60 is set the main loop runs once per VBlank instead of once per two VBlanks.
-    // Everything that was written for the original 30 Hz loop still runs on "logic ticks"
-    // (every other VBlank) so it keeps its original pace; tasks marked as native (tickDiv 1)
-    // run on every tick.
     BOOL fps60;
-    BOOL logicTick; // TRUE if this loop iteration runs original-rate logic (always TRUE when fps60 is off)
-    BOOL vblankCallbackEveryTick; // call vblankCallback on every tick, not just logic ticks
-    u32 vblankIsrCounter; // counts every VBlank, incremented in the VBlank interrupt
-    u8 execTickDiv; // tickDiv of the task that is currently running; 2 outside of tasks
+    BOOL logicTick;
+    BOOL vblankCallbackEveryTick;
+    u32 vblankIsrCounter;
+    u8 execTickDiv;
 } System;
 
 extern System gSystem;
 
-// Sour Platinum: speed of the move animation that is playing, in percent (100 = normal). Set by the
-// SetAnimSpeed animation script command and reset when the animation starts and ends.
 extern u16 gBattleAnimSpeedPercent;
 
-// Sour Platinum: wild Pokemon modifier (see SP_DEBUG_WILD_MODIFIER). gDebugCalcValue is the number that is
-// currently shown on the Poketch calculator; 0 / 0 / -1 mean "no override".
 extern s32 gDebugCalcValue;
 extern u16 gDebugWildSpecies;
 extern u8 gDebugWildLevel;
 extern s8 gDebugWildNature;
-extern u16 gDebugCurMap; // map the player is on
-extern u16 gDebugWildMap; // map the modifier was set on, it is cleared when the player changes map
+extern u16 gDebugCurMap;
+extern u16 gDebugWildMap;
 
 void SetDummyVBlankIntr(void);
 void SetVBlankCallback(Callback cb, void *data);
 void SetFps60Mode(BOOL enabled);
 
-// Sour Platinum: switches a menu screen to 60 ticks per second. Call MenuFps60_Begin right after the screen's VBlank
-// callback has been set (SetVBlankCallback resets it) and MenuFps60_End when the screen exits. If 60 fps mode was
-// already on (a battle), it stays on.
 void MenuFps60_Begin(void);
 void MenuFps60_End(void);
 void DisableHBlank(void);

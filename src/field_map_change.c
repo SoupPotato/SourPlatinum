@@ -253,7 +253,6 @@ void FieldMapChange_UpdateGameData(FieldSystem *fieldSystem, BOOL noWarp)
     FieldOverworldState *fieldState = SaveData_GetFieldOverworldState(fieldSystem->saveData);
 
 #if SP_DEBUG_WILD_MODIFIER
-    // Sour Platinum: the wild Pokemon modifier only lasts for the map it was set on
     gDebugCurMap = mapHeaderID;
 
     if (gDebugWildMap != mapHeaderID) {

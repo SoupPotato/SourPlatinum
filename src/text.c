@@ -236,7 +236,6 @@ static void SysTask_RunTextPrinter(SysTask *task, void *data)
     int steps = 1;
 
     if (gSystem.fps60) {
-        // The print queue runs once per tick in 60 fps mode, which is the original rate. 100% = one step per run.
         static u16 sTextPaceAccum = 0;
 
         sTextPaceAccum += SP_PACE_TEXT_PERCENT;

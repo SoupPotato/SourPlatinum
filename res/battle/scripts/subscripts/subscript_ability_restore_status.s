@@ -4,7 +4,6 @@
 _000:
     UpdateMonData OPCODE_SET, BTLSCR_MSG_TEMP, BATTLEMON_STATUS, MON_CONDITION_NONE
     UpdateMonData OPCODE_FLAG_OFF, BTLSCR_MSG_TEMP, BATTLEMON_VOLATILE_STATUS, VOLATILE_CONDITION_NIGHTMARE
-    // Sour Platinum: the banner names the ability, so its message is the plain one. Without the banner, the ability is named.
     CheckAbilityBannerAvailable _PlainCuredItsStatus
     // {0}’s {1} cured its {2} status!
     PrintMessage BattleStrings_Text_PokemonsAbilityCuredItsStatus_Ally, TAG_NICKNAME_ABILITY_STATUS, BTLSCR_MSG_TEMP, BTLSCR_MSG_BATTLER_TEMP, BTLSCR_MSG_TEMP
@@ -22,17 +21,14 @@ _PlainCuredItsStatus:
     GoTo _PlainCuredItsStatusDone
 
 _CuredPoison:
-    // {0} was cured of its poisoning.
     PrintMessage BattleStrings_Text_PokemonWasCuredOfItsPoisoningAbility_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
     GoTo _PlainCuredItsStatusDone
 
 _CuredBurn:
-    // {0}’s burn was healed.
     PrintMessage BattleStrings_Text_PokemonsBurnWasHealedAbility_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
     GoTo _PlainCuredItsStatusDone
 
 _CuredParalysis:
-    // {0} was cured of paralysis.
     PrintMessage BattleStrings_Text_PokemonWasCuredOfParalysisAbility_Ally, TAG_NICKNAME, BTLSCR_MSG_TEMP
     GoTo _PlainCuredItsStatusDone
 

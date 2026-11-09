@@ -19,7 +19,7 @@ enum Font {
     FONT_MESSAGE,
     FONT_SUBSCREEN,
     FONT_UNOWN,
-    FONT_BANNER, // Sour Platinum: the font of the ability banners
+    FONT_BANNER,
 
     FONT_MAX,
 };

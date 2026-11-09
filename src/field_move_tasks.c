@@ -134,7 +134,6 @@ static const FieldMoveTaskOrError fieldMoveTaskOrError[] = {
     { FieldMoves_SetChatterTask, FieldMoves_CheckChatter },
 };
 
-// Sour Platinum: field moves used from the Poketch app start while the field map is already running
 static inline void FieldMoves_ResumeFieldMap(FieldSystem *fieldSystem)
 {
     if (!FieldSystem_IsRunningFieldMap(fieldSystem)) {
@@ -231,10 +230,8 @@ static const u16 sHelperItems[] = {
     [FIELD_MOVE_ROCK_CLIMB] = ITEM_HM08,
 };
 
-// Whether the Hidden Moves app is installed and the player has the HM and the badge, so the app can do the move
 BOOL FieldMoves_CanUsePoketchApp(FieldSystem *fieldSystem, enum FieldMoveList fieldMove)
 {
-    // The scripts use these slot codes
     SDK_COMPILER_ASSERT(FIELD_MOVE_HELPER_SLOT_CUT == FIELD_MOVE_HELPER_SLOT_BASE + FIELD_MOVE_CUT);
     SDK_COMPILER_ASSERT(FIELD_MOVE_HELPER_SLOT_SURF == FIELD_MOVE_HELPER_SLOT_BASE + FIELD_MOVE_SURF);
     SDK_COMPILER_ASSERT(FIELD_MOVE_HELPER_SLOT_STRENGTH == FIELD_MOVE_HELPER_SLOT_BASE + FIELD_MOVE_STRENGTH);
@@ -253,8 +250,6 @@ u16 FieldMoves_GetHelperSpecies(enum FieldMoveList fieldMove)
     return sHelperSpecies[fieldMove];
 }
 
-// Returns the party Pokemon in the slot, or for a helper slot code a Pokemon of the species that belongs to the move.
-// The helper is only used for its sprite, cry and name, so one shared copy is enough.
 Pokemon *FieldMoves_GetPokemonBySlot(Party *party, int slot)
 {
     static Pokemon sHelperMon;
@@ -263,7 +258,6 @@ Pokemon *FieldMoves_GetPokemonBySlot(Party *party, int slot)
         return Party_GetPokemonBySlotIndex(party, slot);
     }
 
-    // The personality and OT ID are fixed (and not shiny) so that this doesn't use the random number generator
     Pokemon_InitWith(&sHelperMon, sHelperSpecies[slot - FIELD_MOVE_HELPER_SLOT_BASE], 30, 0, TRUE, 0x10, OTID_SET, 0);
 
     return &sHelperMon;
@@ -284,7 +278,6 @@ FlyContext *FlyContext_New(enum HeapID heapID, FieldSystem *fieldSystem, Pokemon
     return ctx;
 }
 
-// Sour Platinum: Fly from the Poketch app. A script shows the summoning message, then starts FieldMoves_FlyTask.
 BOOL FieldMoves_PoketchFlyScriptTask(FieldTask *task)
 {
     FieldSystem *fieldSystem = FieldTask_GetFieldSystem(task);

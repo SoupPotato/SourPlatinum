@@ -9,7 +9,6 @@ _000:
     GoTo _095
 
 _011:
-    // Sour Platinum: having endured the hit comes later, in its own subscript. A one-hit KO that was endured is not one.
     CompareVarToValue OPCODE_FLAG_SET, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED_ITEM, _067
     CompareVarToValue OPCODE_FLAG_NOT, BTLVAR_MOVE_STATUS_FLAGS, MOVE_STATUS_ENDURED, _057
     CompareMonDataToValue OPCODE_EQU, BTLSCR_DEFENDER, BATTLEMON_CUR_HP, 1, _067

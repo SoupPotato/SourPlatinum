@@ -133,11 +133,10 @@ Party *BattleSystem_GetParty(BattleSystem *battleSys, int battler)
     }
 }
 
-// Sour Platinum: like Generation 5, an item stolen from a trainer's Pokemon (Thief, Covet) is only kept for the battle
 void BattleSystem_MarkStolenItem(BattleSystem *battleSys, int battler, int slot)
 {
     if ((battleSys->battleType & BATTLE_TYPE_TRAINER) == FALSE) {
-        return; // items stolen from wild Pokemon are kept
+        return;
     }
 
     for (int i = 0; i < MAX_BATTLERS; i++) {
@@ -148,7 +147,6 @@ void BattleSystem_MarkStolenItem(BattleSystem *battleSys, int battler, int slot)
     }
 }
 
-// Called when the battle ends: the Pokemon that stole an item lose it again
 void BattleSystem_ReturnStolenItems(BattleSystem *battleSys)
 {
     u16 item = ITEM_NONE;
@@ -1687,7 +1685,6 @@ u8 BattleMessage_Print(BattleSystem *battleSys, MessageLoader *msgLoader, Battle
 {
     Window *textWindow = BattleSystem_GetWindow(battleSys, 0);
 
-    // Sour Platinum: this message replaces the one that an ability banner stays up for
     AbilityBanner_OnMessage(battleMsg);
 
     BattleMessage_CheckSide(battleSys, battleMsg);

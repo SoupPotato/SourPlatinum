@@ -8,7 +8,6 @@ _000:
     CompareMonDataToValue OPCODE_EQU, BTLSCR_ATTACKER, BATTLEMON_ABILITY, ABILITY_MULTITYPE, _091
     CompareMonDataToValue OPCODE_EQU, BTLSCR_DEFENDER, BATTLEMON_ABILITY, ABILITY_NONE, _091
     Call BATTLE_SUBSCRIPT_ATTACK_MESSAGE_AND_ANIMATION
-    // Sour Platinum: like in Black, the banner comes in with the old ability and pixelates into the new one
     ShowAbilityBanner BTLSCR_ATTACKER
     Wait 
     UpdateVarFromVar OPCODE_SET, BTLVAR_SCRIPT_TEMP, BTLVAR_TOTAL_TURNS

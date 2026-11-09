@@ -44,8 +44,6 @@ typedef struct SaveDataState {
     u32 globalCounterBackup;
     u32 blockCounterBackup[SAVE_BLOCK_ID_MAX];
     volatile BOOL locked;
-    // Sour Platinum: like in Pokemon Black, a save compares the data with what is on the cartridge and only writes
-    // what changed, to both copies one after the other
     u32 pos;
     u32 runStart;
     u32 runEnd;

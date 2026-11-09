@@ -968,9 +968,7 @@ Basic_CheckCosmicPower_NoSimple:
     PopOrEnd 
 
 Basic_CheckGrowth:
-    // Sour Platinum: the same checks as Growth in Pokemon Black.
     // If the attacker's Attack is already at +6, score -10.
-    // If the attacker's SpAttack is already at +6, score -8.
     IfStatStageEqualTo AI_BATTLER_ATTACKER, BATTLE_STAT_ATTACK, 12, ScoreMinus10
     IfStatStageEqualTo AI_BATTLER_ATTACKER, BATTLE_STAT_SP_ATTACK, 12, ScoreMinus8
     PopOrEnd 
@@ -2125,11 +2123,6 @@ Expert_StatusSpAttackUp_End:
     PopOrEnd 
 
 Expert_Growth:
-    // Sour Platinum: the same score changes as Growth in Pokemon Black.
-    //
-    // If the attacker's HP is > 70%, no score changes.
-    //
-    // Otherwise, ~80.5% chance of score -1.
     IfHPPercentGreaterThan AI_BATTLER_ATTACKER, 70, Expert_Growth_End
     IfRandomLessThan 50, Expert_Growth_End
     AddToMoveScore -1
