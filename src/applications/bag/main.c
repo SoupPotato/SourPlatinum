@@ -13,6 +13,8 @@
 #include "applications/bag/sprites.h"
 #include "applications/bag/windows.h"
 
+#include "generated/vars_flags.h"
+
 #include "bag.h"
 #include "bag_context.h"
 #include "bg_window.h"
@@ -43,6 +45,7 @@
 #include "string_list.h"
 #include "string_template.h"
 #include "system.h"
+#include "vars_flags.h"
 #include "text.h"
 #include "touch_pad.h"
 #include "touch_screen.h"
@@ -2263,6 +2266,7 @@ static String *TryUseRepel(BagController *controller, u16 item)
 
     u32 stepCount = Item_LoadParam(item, ITEM_PARAM_EFFECT_PARAM, HEAP_ID_BAG);
     SetRepelSteps(controller, stepCount);
+    *VarsFlags_GetVarAddress(SaveData_GetVarsFlags(controller->bagCtx->saveData), VAR_LAST_USED_REPEL) = item;
     controller->selectedItemCount = 1;
     Sound_PlayEffect(SEQ_SE_DP_CARD2_sseq);
 

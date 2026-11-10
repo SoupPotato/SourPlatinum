@@ -120,6 +120,7 @@
 #include "great_marsh_lookout.h"
 #include "hall_of_fame_entries.h"
 #include "heap.h"
+#include "item.h"
 #include "inlines.h"
 #include "item_use_pokemon.h"
 #include "items.h"
@@ -408,6 +409,7 @@ static BOOL ScrCmd_UseSurf(ScriptContext *ctx);
 static BOOL ScrCmd_UseWaterfall(ScriptContext *ctx);
 static BOOL ScrCmd_UseFly(ScriptContext *ctx);
 static BOOL ScrCmd_UseFlyFromApp(ScriptContext *ctx);
+static BOOL ScrCmd_UseRepel(ScriptContext *ctx);
 static BOOL ScrCmd_0C3(ScriptContext *ctx);
 static BOOL ScrCmd_0C4(ScriptContext *ctx);
 static BOOL ScrCmd_PlayHMCutIn(ScriptContext *ctx);
@@ -3654,6 +3656,15 @@ static BOOL ScrCmd_UseFly(ScriptContext *ctx)
 
     FieldTask_StartMapChangeFly(ctx->fieldSystem, mapID, -1, x, z, FACE_DOWN);
     return TRUE;
+}
+
+static BOOL ScrCmd_UseRepel(ScriptContext *ctx)
+{
+    u16 item = ScriptContext_GetVar(ctx);
+    u8 *repelSteps = SpecialEncounter_GetRepelSteps(SaveData_GetSpecialEncounters(ctx->fieldSystem->saveData));
+
+    *repelSteps = Item_LoadParam(item, ITEM_PARAM_EFFECT_PARAM, HEAP_ID_FIELD2);
+    return FALSE;
 }
 
 static BOOL ScrCmd_UseFlyFromApp(ScriptContext *ctx)

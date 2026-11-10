@@ -5003,6 +5003,11 @@
     .short \z
     .endm
 
+    .macro UseRepel item
+    .short SCRCMD_USEREPEL
+    .short \item
+    .endm
+
     .macro BufferPartyMonSpeciesNameWithArticle templateArg, partySlot
     .short SCRCMD_BUFFERPARTYMONSPECIESNAMEWITHARTICLE
     .byte \templateArg
