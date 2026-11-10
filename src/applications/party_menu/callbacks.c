@@ -6,6 +6,7 @@
 #include "constants/moves.h"
 #include "constants/pokemon.h"
 #include "constants/string.h"
+#include "generated/items.h"
 #include "generated/moves.h"
 #include "generated/pokemon_data_params.h"
 #include "generated/pokemon_stats.h"
@@ -35,6 +36,7 @@
 #include "render_window.h"
 #include "sound_playback.h"
 #include "species.h"
+#include "sprite.h"
 #include "string_gf.h"
 #include "string_list.h"
 #include "string_template.h"
@@ -45,6 +47,8 @@
 
 static enum PartyMenuState PartyMenuCB_LevelUp(PartyMenuApplication *application);
 static enum PartyMenuState PartyMenuCB_UpdateHPBar(PartyMenuApplication *application);
+static enum PartyMenuState PartyMenuCB_UseItem_WaitThenContinue(PartyMenuApplication *application);
+static enum PartyMenuState PartyMenu_UseItem_Continue(PartyMenuApplication *application);
 static enum PartyMenuState PartyMenuCB_UseItem_Basic(PartyMenuApplication *application);
 static enum PartyMenuState PartyMenuCB_UseItem_SubtractEVs(PartyMenuApplication *application);
 static enum PartyMenuState PartyMenuCB_UseItem_RestoreHP(PartyMenuApplication *application);
@@ -424,6 +428,43 @@ static enum PartyMenuState PartyMenuCB_UseItem_Basic(PartyMenuApplication *appli
     PartyMenu_PrintLongMessage(application, PRINT_MESSAGE_PRELOADED, TRUE);
     Sound_PlayEffect(SEQ_SE_DP_KAIFUKU_sseq);
 
+    application->callback = PartyMenuCB_UseItem_WaitThenContinue;
+    return PARTY_MENU_STATE_EXEC_CALLBACK;
+}
+
+static enum PartyMenuState PartyMenuCB_UseItem_WaitThenContinue(PartyMenuApplication *application)
+{
+    if (Text_IsPrinterActive(application->textPrinterID)) {
+        return PARTY_MENU_STATE_EXEC_CALLBACK;
+    }
+
+    if (JOY_NEW(PAD_BUTTON_A | PAD_BUTTON_B)) {
+        return PartyMenu_UseItem_Continue(application);
+    }
+
+    return PARTY_MENU_STATE_EXEC_CALLBACK;
+}
+
+static enum PartyMenuState PartyMenu_UseItem_Continue(PartyMenuApplication *application)
+{
+    if (application->partyMenu->mode == PARTY_MENU_MODE_LEVEL_MOVE_DONE) {
+        application->partyMenu->mode = PARTY_MENU_MODE_USE_ITEM;
+        application->partyMenu->usedItemID = ITEM_RARE_CANDY;
+    }
+
+    if (Bag_CanRemoveItem(application->partyMenu->bag, application->partyMenu->usedItemID, 1, HEAP_ID_PARTY_MENU)) {
+        Window_EraseMessageBox(&application->windows[PARTY_MENU_WIN_LONG_MESSAGE], TRUE);
+        PartyMenu_PrintShortMessage(application, PartyMenu_Text_UseOnWhichMon, TRUE);
+        Sprite_SetExplicitPalette2(application->sprites[PARTY_MENU_SPRITE_CURSOR_NORMAL], 0);
+        return PARTY_MENU_STATE_USE_ITEM;
+    }
+
+    String *string = MessageLoader_GetNewString(application->messageLoader, PartyMenu_Text_UsedYourLastItem);
+    StringTemplate_SetItemName(application->template, 0, application->partyMenu->usedItemID);
+    StringTemplate_Format(application->template, application->tmpString, string);
+    String_Free(string);
+
+    PartyMenu_PrintLongMessage(application, PRINT_MESSAGE_PRELOADED, TRUE);
     application->callback = PartyMenuCB_PrintThenWaitABPress;
     return PARTY_MENU_STATE_EXEC_CALLBACK;
 }
@@ -472,7 +513,7 @@ static enum PartyMenuState PartyMenuCB_UseItem_SubtractEVs(PartyMenuApplication 
 
     PartyMenu_PrintLongMessage(application, PRINT_MESSAGE_PRELOADED, TRUE);
 
-    application->callback = PartyMenuCB_PrintThenWaitABPress;
+    application->callback = PartyMenuCB_UseItem_WaitThenContinue;
     return PARTY_MENU_STATE_EXEC_CALLBACK;
 }
 
@@ -534,7 +575,7 @@ static enum PartyMenuState PartyMenuCB_UpdateHPBar(PartyMenuApplication *applica
 
     if (application->partyMembers[application->currPartySlot].curHP == curHP) {
         PartyMenu_PrintLongMessage(application, PRINT_MESSAGE_PRELOADED, TRUE);
-        application->callback = PartyMenuCB_PrintThenWaitABPress;
+        application->callback = PartyMenuCB_UseItem_WaitThenContinue;
     }
 
     return PARTY_MENU_STATE_EXEC_CALLBACK;
@@ -823,9 +864,11 @@ static enum PartyMenuState PartyMenuCB_LevelUp(PartyMenuApplication *application
             mapEvoMethod,
             &application->partyMenu->evoType);
 
-        application->partyMenu->menuSelectionResult = application->partyMenu->evoTargetSpecies != SPECIES_NONE
-            ? PARTY_MENU_EXIT_CODE_EVOLVE_BY_LEVEL
-            : PARTY_MENU_EXIT_CODE_DONE;
+        if (application->partyMenu->evoTargetSpecies == SPECIES_NONE) {
+            return PartyMenu_UseItem_Continue(application);
+        }
+
+        application->partyMenu->menuSelectionResult = PARTY_MENU_EXIT_CODE_EVOLVE_BY_LEVEL;
         return PARTY_MENU_STATE_FADE_OUT;
     }
 
@@ -1198,6 +1241,9 @@ int PartyMenu_MoveSelection_HandleInput(PartyMenuApplication *application)
             BufferUsedItemMessage(application, application->partyMenu->usedItemID, Pokemon_GetValue(mon, MON_DATA_MOVE1 + menuAction, NULL));
             Bag_TryRemoveItem(application->partyMenu->bag, application->partyMenu->usedItemID, 1, HEAP_ID_PARTY_MENU);
             Sound_PlayEffect(SEQ_SE_DP_KAIFUKU_sseq);
+            PartyMenu_PrintLongMessage(application, PRINT_MESSAGE_PRELOADED, TRUE);
+            application->callback = PartyMenuCB_UseItem_WaitThenContinue;
+            return PARTY_MENU_STATE_EXEC_CALLBACK;
         } else {
             MessageLoader_GetString(application->messageLoader, PartyMenu_Text_ItWontHaveAnyEffect, application->tmpString);
         }
