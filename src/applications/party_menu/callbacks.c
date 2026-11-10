@@ -34,6 +34,7 @@
 #include "party.h"
 #include "pokemon.h"
 #include "render_window.h"
+#include "sourplatinum_config.h"
 #include "sound_playback.h"
 #include "species.h"
 #include "sprite.h"
@@ -48,6 +49,7 @@
 static enum PartyMenuState PartyMenuCB_LevelUp(PartyMenuApplication *application);
 static enum PartyMenuState PartyMenuCB_UpdateHPBar(PartyMenuApplication *application);
 static enum PartyMenuState PartyMenuCB_UseItem_WaitThenContinue(PartyMenuApplication *application);
+static void PartyMenu_StepHPBar(PartyMenuApplication *application, u8 slot, u32 targetHP);
 static enum PartyMenuState PartyMenu_UseItem_Continue(PartyMenuApplication *application);
 static enum PartyMenuState PartyMenuCB_UseItem_Basic(PartyMenuApplication *application);
 static enum PartyMenuState PartyMenuCB_UseItem_SubtractEVs(PartyMenuApplication *application);
@@ -559,13 +561,43 @@ static enum PartyMenuState PartyMenuCB_UseItem_RestoreHP(PartyMenuApplication *a
     return PARTY_MENU_STATE_EXEC_CALLBACK;
 }
 
+static s32 sHPBarValue = -1;
+static u8 sHPBarSlot;
+
+static void PartyMenu_StepHPBar(PartyMenuApplication *application, u8 slot, u32 targetHP)
+{
+    s32 maxHP = application->partyMembers[slot].maxHP;
+
+    if (sHPBarValue < 0 || sHPBarSlot != slot) {
+        sHPBarValue = application->partyMembers[slot].curHP << 8;
+        sHPBarSlot = slot;
+    }
+
+    s32 pointsPerPixel = (maxHP << 8) / 48;
+    s32 pixelsPerCall = (SP_BAR_HP_PIXELS_PER_SECOND * SP_PACE_BARS_PERCENT / 100) * 256 / 30;
+    s32 step = (pointsPerPixel / 256) * pixelsPerCall + ((pointsPerPixel % 256) * pixelsPerCall) / 256;
+
+    if (step < 1) {
+        step = 1;
+    }
+
+    sHPBarValue += step;
+
+    if (sHPBarValue >= (s32)(targetHP << 8)) {
+        sHPBarValue = -1;
+        application->partyMembers[slot].curHP = targetHP;
+    } else {
+        application->partyMembers[slot].curHP = sHPBarValue >> 8;
+    }
+}
+
 static enum PartyMenuState PartyMenuCB_UpdateHPBar(PartyMenuApplication *application)
 {
     Pokemon *mon = Party_GetPokemonBySlotIndex(application->partyMenu->party, application->currPartySlot);
     u32 curHP = Pokemon_GetValue(mon, MON_DATA_HP, NULL);
 
     if (application->partyMembers[application->currPartySlot].curHP != curHP) {
-        application->partyMembers[application->currPartySlot].curHP++;
+        PartyMenu_StepHPBar(application, application->currPartySlot, curHP);
     }
 
     PartyMenu_ClearMemberHP(application, application->currPartySlot);
@@ -662,7 +694,9 @@ enum PartyMenuState PartyMenuCB_HandleSacredAsh(PartyMenuApplication *applicatio
         mon = Party_GetPokemonBySlotIndex(application->partyMenu->party, application->currPartySlot);
         curHP = Pokemon_GetValue(mon, MON_DATA_HP, NULL);
 
-        application->partyMembers[application->currPartySlot].curHP++;
+        if (application->partyMembers[application->currPartySlot].curHP != curHP) {
+            PartyMenu_StepHPBar(application, application->currPartySlot, curHP);
+        }
 
         PartyMenu_ClearMemberHP(application, application->currPartySlot);
         Window_FillTilemap(&application->windows[PARTY_MENU_WIN_HEALTHBAR_MEMB0 + application->currPartySlot * PARTY_MENU_WIN_NUM_PER_MEMBER], 0);
