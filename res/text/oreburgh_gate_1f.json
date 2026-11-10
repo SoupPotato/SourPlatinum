@@ -20,12 +20,7 @@
         "That Hidden Machine, or HM for short,\n",
         "contains the hidden move Rock Smash.\r",
         "A Pokémon learning Rock Smash can\n",
-        "smash small boulders in the field.\r",
-        "But the Trainer has to have \n",
-        "the Gym Badge from Oreburgh City.\r",
-        "If you don’t have that Badge, you\n",
-        "can’t make a Pokémon use the hidden\f",
-        "move Rock Smash outside of battle."
+        "smash small boulders in the field."
       ]
     },
     {
@@ -48,8 +43,8 @@
       "id": "OreburghGate1F_Text_HiddenMovesAppExplain",
       "en_US": [
         "Use Rock Smash from your Pokétch, and\n",
-        "a wild Pokémon will get rid of\f",
-        "boulders on your path!\r",
+        "a wild Pokémon will get rid of boulders\f",
+        "on your path!\r",
         "But to use this hidden move in the\n",
         "field, you’ll first need the Gym Badge\f",
         "from Oreburgh City.\r",
