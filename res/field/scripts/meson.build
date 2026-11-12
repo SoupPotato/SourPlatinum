@@ -1055,6 +1055,7 @@ scr_seq_files = files(
     'scripts_init_route_226.s',
     'scripts_init_route_226_house.s',
     'scripts_init_route_230.s',
+    'scripts_init_grand_underground_hideaway_1.s',
     'scripts_counterpart_talk.s',
     'scripts_twinleaf_town.s',
     'scripts_twinleaf_town_rival_house_1f.s',
@@ -1128,6 +1129,7 @@ scr_seq_files = files(
     'scripts_route_226.s',
     'scripts_route_226_house.s',
     'scripts_route_230.s',
+    'scripts_grand_underground_hideaway_1.s',
 )
 
 scr_seq_narc = custom_target('scr_seq.narc',

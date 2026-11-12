@@ -76,6 +76,8 @@
 
 #include "res/text/bank/pokemon_center_2f_common.h"
 
+#include "data/underground_arrivals.h"
+
 FS_EXTERN_OVERLAY(underground);
 
 typedef struct MapChangeData {
@@ -170,7 +172,7 @@ static BOOL FieldTask_StartUndergroundMapTransition(FieldTask *task, enum UGMapT
 
 static const MapLoadMode sMapLoadMode[] = {
     { 0x1, FALSE, FALSE, 0x0, FALSE, TRUE, 0x0, 0xC4000 },
-    { 0x2, TRUE, TRUE, 0x1, TRUE, FALSE, 0x10, 0xC4000 },
+    { 0x2, TRUE, TRUE, 0x1, TRUE, FALSE, TERRAIN_ATTRIBUTES_MAX_BLOCK_COUNT, 0xC4000 },
     { 0x3, FALSE, FALSE, 0x0, FALSE, TRUE, 0x0, 0xC4000 },
     { 0x4, TRUE, TRUE, 0x0, TRUE, TRUE, 0x1, 0xC4000 },
     { 0x1, TRUE, TRUE, 0x0, TRUE, TRUE, 0x1, 0xA0000 }
@@ -1090,6 +1092,17 @@ void FieldSystem_StartMapChangeWarpTask(FieldSystem *fieldSystem, int param1, in
     FieldSystem_CreateTask(fieldSystem, FieldTask_MapChangeWarp, mapChangeWarpData);
 }
 
+static enum MapHeaderID sPendingHideawayHeader = MAP_HEADER_INVALID;
+static int sPendingHideawayX;
+static int sPendingHideawayZ;
+
+void FieldMapChange_SetPendingHideaway(enum MapHeaderID mapHeaderID, int x, int z)
+{
+    sPendingHideawayHeader = mapHeaderID;
+    sPendingHideawayX = x;
+    sPendingHideawayZ = z;
+}
+
 MapChangeUndergroundContext *MapChangeUndergroundContext_New(FieldSystem *fieldSystem)
 {
     MapChangeUndergroundContext *ctx;
@@ -1099,7 +1112,13 @@ MapChangeUndergroundContext *MapChangeUndergroundContext_New(FieldSystem *fieldS
     ctx->state = 0;
     ctx->transitionState = 0;
 
-    if (fieldSystem->mapLoadType == MAP_LOAD_TYPE_UNDERGROUND) {
+    if (fieldSystem->mapLoadType == MAP_LOAD_TYPE_UNDERGROUND && sPendingHideawayHeader != MAP_HEADER_INVALID) {
+        ctx->mapHeaderID = sPendingHideawayHeader;
+        ctx->dummy = -1;
+        ctx->destX = sPendingHideawayX;
+        ctx->destZ = sPendingHideawayZ;
+        sPendingHideawayHeader = MAP_HEADER_INVALID;
+    } else if (fieldSystem->mapLoadType == MAP_LOAD_TYPE_UNDERGROUND) {
         ctx->mapHeaderID = location->mapHeaderID;
         ctx->dummy = -1;
         ctx->destX = location->x;
@@ -1122,6 +1141,13 @@ MapChangeUndergroundContext *MapChangeUndergroundContext_New(FieldSystem *fieldS
         matrixZ = matrixZ / 2 + SECRET_BASE_DEPTH * 2 / MAP_TILES_COUNT_Z + 1;
         ctx->destX = matrixX * MAP_TILES_COUNT_X + x;
         ctx->destZ = matrixZ * MAP_TILES_COUNT_Z + z;
+
+        if (matrixX < UNDERGROUND_ARRIVAL_MATRIX_SIZE && matrixZ < UNDERGROUND_ARRIVAL_MATRIX_SIZE) {
+            int sub = (x == 23 ? 1 : 0) | (z == 23 ? 2 : 0);
+
+            ctx->destX = sUndergroundArrivals[matrixZ][matrixX][sub][0];
+            ctx->destZ = sUndergroundArrivals[matrixZ][matrixX][sub][1];
+        }
     }
 
     return ctx;
@@ -1314,6 +1340,20 @@ BOOL FieldTask_MapChangeFromUnderground(FieldTask *task)
     }
 
     return FALSE;
+}
+
+void FieldTask_ReturnToUndergroundFromHideaway(FieldTask *task, int x, int z)
+{
+    MapChangeUndergroundContext *ctx = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(MapChangeUndergroundContext));
+
+    MI_CpuClear8(ctx, sizeof(MapChangeUndergroundContext));
+    ctx->state = ENTER_UNDERGROUND_FADE_OUT_BGM;
+    ctx->mapHeaderID = MAP_HEADER_UNDERGROUND;
+    ctx->dummy = -1;
+    ctx->destX = x;
+    ctx->destZ = z;
+
+    FieldTask_InitCall(task, FieldTask_MapChangeToUnderground, ctx);
 }
 
 FieldTaskFunc FieldMapChange_GetMapChangeUndergroundTask(const FieldSystem *fieldSystem)

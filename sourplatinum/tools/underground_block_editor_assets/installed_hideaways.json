@@ -1,0 +1,35 @@
+{
+ "area_base": 75,
+ "tex_base": 74,
+ "matrix_base": 289,
+ "hideaways": {
+  "hideaway_test": {
+   "biome": "grassland",
+   "matrix": "map_matrix_289",
+   "area_data": "area_data_075",
+   "maps": [
+    [
+     "MAP_726"
+    ]
+   ],
+   "exits": [
+    {
+     "tile": [
+      16,
+      4
+     ],
+     "facing": "N",
+     "arrive": [
+      16,
+      5
+     ],
+     "step_back": "South"
+    }
+   ],
+   "header": "MAP_HEADER_GRAND_UNDERGROUND_HIDEAWAY_1"
+  }
+ },
+ "map_files": [
+  "map_data_726.bin"
+ ]
+}

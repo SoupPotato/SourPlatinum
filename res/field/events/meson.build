@@ -540,6 +540,7 @@ events_files = files(
     'events_iceberg_ruins.json',
     'events_route_228_rock_peak_ruins.json',
     'events_rock_peak_ruins.json',
+    'events_grand_underground_hideaway_1.json',
 )
 
 events_headers = []

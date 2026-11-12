@@ -77,7 +77,8 @@ map_texture_set_files = map_texture_set_gen.process(files(
     'map_texture_set_070.nsbtx',
     'map_texture_set_071.nsbtx',
     'map_texture_set_072.nsbtx',
-    'map_texture_set_073.nsbtx'
+    'map_texture_set_073.nsbtx',
+    'map_texture_set_074.nsbtx'
 ))
 
 map_texture_set_narc = custom_target('map_tex_set.narc',

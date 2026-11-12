@@ -32,8 +32,8 @@ Underground_OnTransition:
     SetObjectEventPos LOCALID_TRAPS_VENDOR_8, 279, 245
     SetObjectEventPos LOCALID_TREASURES_VENDOR_1, 40, 471
     SetObjectEventPos LOCALID_TREASURES_VENDOR_2, 471, 72
-    SetObjectEventPos LOCALID_TREASURES_VENDOR_3, 471, 471
-    SetObjectEventPos LOCALID_TREASURES_VENDOR_4, 40, 72
+    SetObjectEventPos LOCALID_TREASURES_VENDOR_3, 472, 458
+    SetObjectEventPos LOCALID_TREASURES_VENDOR_4, 54, 72
     End
 
 Underground_OnResume:

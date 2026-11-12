@@ -29,7 +29,7 @@ nclrs = nclr_gen.process(pngs + pngs_cell,
 ncers = ncer_gen.process(cells)
 nanrs = nanr_gen.process(anims)
 
-nscrs = copy_gen.process(files('background.NSCR'))
+nscrs = copy_gen.process(files('background.NSCR', 'zoom_map.bin'))
 
 underground_top_screen_narc = custom_target('underground_top_screen.narc',
     output: [

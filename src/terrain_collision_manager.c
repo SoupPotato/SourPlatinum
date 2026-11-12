@@ -192,8 +192,7 @@ static BOOL GetSimpleTileAttributes(const FieldSystem *fieldSystem, const int ti
     u32 mapMatrixIndex = mapMatrixX + mapMatrixZ * mapMatrixWidth;
 
     u32 tileIndex = (tileZ % MAP_TILES_COUNT_Z) * MAP_TILES_COUNT_X + (tileX % MAP_TILES_COUNT_X);
-    u16 const *terrainAttributes = TerrainAttributes_Get(mapMatrixIndex, fieldSystem->terrainAttributes);
-    *attributes = terrainAttributes[tileIndex];
+    *attributes = TerrainAttributes_GetTile(mapMatrixIndex, tileIndex, fieldSystem->terrainAttributes);
 
     return TRUE;
 }

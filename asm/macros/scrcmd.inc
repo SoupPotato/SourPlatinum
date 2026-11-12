@@ -5008,6 +5008,12 @@
     .short \item
     .endm
 
+    .macro ReturnToUnderground x, z
+    .short SCRCMD_RETURNTOUNDERGROUND
+    .short \x
+    .short \z
+    .endm
+
     .macro BufferPartyMonSpeciesNameWithArticle templateArg, partySlot
     .short SCRCMD_BUFFERPARTYMONSPECIESNAMEWITHARTICLE
     .byte \templateArg

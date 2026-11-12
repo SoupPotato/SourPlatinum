@@ -1,0 +1,17 @@
+[
+  {"key": "tree", "label": "Tree", "map": 0, "texture_set": "map_texture_set_000", "materials": ["tree01"], "w": 2, "h": 2},
+  {"key": "tree_round", "label": "Round tree", "map": 56, "texture_set": "map_texture_set_006", "materials": ["tree2_01"], "with": ["tshadow"], "w": 2, "h": 2},
+  {"key": "tree_forest", "label": "Forest tree", "map": 44, "texture_set": "map_texture_set_008", "materials": ["g1_treea", "g1_treeb"]},
+  {"key": "crystal_blue", "label": "Blue crystal", "prop": 366},
+  {"key": "crystal_pink", "label": "Pink crystal", "prop": 367},
+  {"key": "crystal_red", "label": "Red crystal", "prop": 368},
+  {"key": "crystal_orange", "label": "Orange crystal", "prop": 369},
+  {"key": "gem", "label": "Gem", "prop": 380},
+  {"key": "crystal_flame", "label": "Crystal flame", "prop": 579},
+  {"key": "crystal_flame_pink", "label": "Pink crystal flame", "prop": 580},
+  {"key": "pillar", "label": "Pillar", "prop": 508},
+  {"key": "rock_mound", "label": "Rock mound", "prop": 53, "scale": 0.5},
+  {"key": "crater", "label": "Crater", "prop": 72, "walkable": true},
+  {"key": "sand_pit", "label": "Sand pit", "prop": 272, "walkable": true},
+  {"key": "lava_pool", "label": "Lava pool", "prop": 584, "scale": 0.5}
+]

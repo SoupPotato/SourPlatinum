@@ -46,6 +46,8 @@ void FieldTask_ChangeMapByFieldWarp(FieldTask *task, const Location *location, e
 void FieldSystem_StartMapChangeWarpTask(FieldSystem *fieldSystem, int param1, int param2);
 MapChangeUndergroundContext *MapChangeUndergroundContext_New(FieldSystem *fieldSystem);
 void FieldTask_SetUndergroundMapChange(FieldSystem *fieldSystem);
+void FieldMapChange_SetPendingHideaway(enum MapHeaderID mapHeaderID, int x, int z);
+void FieldTask_ReturnToUndergroundFromHideaway(FieldTask *task, int x, int z);
 BOOL FieldTask_MapChangeToUnderground(FieldTask *task);
 BOOL FieldTask_MapChangeFromUnderground(FieldTask *task);
 FieldTaskFunc FieldMapChange_GetMapChangeUndergroundTask(const FieldSystem *fieldSystem);

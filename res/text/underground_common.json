@@ -1015,6 +1015,13 @@
         "Thanks for answering!\r",
         "I hope to see you around!\r"
       ]
+    },
+    {
+      "id": "UndergroundCommon_Text_HideawayEntrance",
+      "en_US": [
+        "There’s a Pokémon Hideaway here.\n",
+        "Would you like to go inside?"
+      ]
     }
   ]
 }

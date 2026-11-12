@@ -1,0 +1,13 @@
+{
+  "dazzling": {"label": "Dazzling Cave", "walls": "068", "floor": "s_land3", "floor2": "dun_floor_grey", "path": "dun_floor_grey", "liquid": "puddle"},
+  "fountainspring": {"label": "Fountainspring Cave", "walls": "052", "floor": "flagstone", "floor2": "beach", "path": "nsand", "liquid": "lake"},
+  "grassland": {"label": "Grassland Cave", "walls": "052", "floor": "ngrass", "floor2": "lgreen", "path": "nsand", "liquid": "lake"},
+  "icy": {"label": "Icy Cave", "walls": "068", "floor": "fice_a", "floor2": "blueglay", "path": "blueglay", "liquid": "lake"},
+  "riverbank": {"label": "Riverbank Cave", "walls": "052", "floor": "ngrass", "floor2": "beach", "path": "nsand", "liquid": "sea_still"},
+  "rocky": {"label": "Rocky Cave", "walls": "052", "floor": "beach", "floor2": "dun_floor_brown", "path": "nsand", "liquid": "lake"},
+  "sandsear": {"label": "Sandsear Cave", "walls": "052", "floor": "beach", "floor2": "dun_floor_brown", "path": "nsand", "liquid": "magma"},
+  "spacious": {"label": "Spacious Cave", "walls": "052", "floor": "s_land", "floor2": "dun_floor_brown", "path": "dun_floor_brown", "liquid": "lake"},
+  "swampy": {"label": "Swampy Cave", "walls": "052", "floor": "numa_c", "floor2": "lgreen", "path": "nsand", "liquid": "numa_a"},
+  "volcanic": {"label": "Volcanic Cave", "walls": "052", "floor": "s_land_att", "floor2": "s_land", "path": "s_land", "liquid": "magma"},
+  "whiteout": {"label": "Whiteout Cave", "walls": "068", "floor": "blueglay", "floor2": "fice_a", "path": "fice_a", "liquid": "puddle"}
+}

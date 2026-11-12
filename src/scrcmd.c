@@ -410,6 +410,7 @@ static BOOL ScrCmd_UseWaterfall(ScriptContext *ctx);
 static BOOL ScrCmd_UseFly(ScriptContext *ctx);
 static BOOL ScrCmd_UseFlyFromApp(ScriptContext *ctx);
 static BOOL ScrCmd_UseRepel(ScriptContext *ctx);
+static BOOL ScrCmd_ReturnToUnderground(ScriptContext *ctx);
 static BOOL ScrCmd_0C3(ScriptContext *ctx);
 static BOOL ScrCmd_0C4(ScriptContext *ctx);
 static BOOL ScrCmd_PlayHMCutIn(ScriptContext *ctx);
@@ -3655,6 +3656,15 @@ static BOOL ScrCmd_UseFly(ScriptContext *ctx)
     u16 z = ScriptContext_GetVar(ctx);
 
     FieldTask_StartMapChangeFly(ctx->fieldSystem, mapID, -1, x, z, FACE_DOWN);
+    return TRUE;
+}
+
+static BOOL ScrCmd_ReturnToUnderground(ScriptContext *ctx)
+{
+    u16 x = ScriptContext_GetVar(ctx);
+    u16 z = ScriptContext_GetVar(ctx);
+
+    FieldTask_ReturnToUndergroundFromHideaway(ctx->task, x, z);
     return TRUE;
 }
 

@@ -15,6 +15,7 @@
 #include "field_message.h"
 #include "graphics.h"
 #include "gx_layers.h"
+#include "heap.h"
 #include "math_util.h"
 #include "narc.h"
 #include "player_avatar.h"
@@ -27,6 +28,7 @@
 #include "string_gf.h"
 #include "sys_task_extensions.h"
 #include "sys_task_manager.h"
+#include "system.h"
 #include "text.h"
 
 #include "res/graphics/trap_effects/trap_effects.naix"
@@ -43,6 +45,17 @@
 #define TEMP_STRING_SIZE 80
 
 #define UG_TOP_SCREEN_RESOURCE_ID 1000
+
+#define MAP_TILE_COUNT    320
+#define MAP_PALETTE_COUNT 10
+
+#define ZOOM_VIEW_X        8
+#define ZOOM_VIEW_Y        0
+#define ZOOM_VIEW_WIDTH    240
+#define ZOOM_VIEW_HEIGHT   144
+#define ZOOM_MAP_TILES     60
+#define ZOOM_MAP_PIXELS    (ZOOM_MAP_TILES * TILE_WIDTH_PIXELS)
+#define ZOOM_TOGGLE_BUTTON PAD_BUTTON_R
 
 enum TopScreenState {
     TOP_SCREEN_STATE_INIT = 0,
@@ -103,6 +116,12 @@ struct UndergroundTopScreenContext_t {
     int messageState;
     int messageTimer;
     MessageQueue messageQueue;
+    u16 *zoomMap;
+    BOOL zoomed;
+    int scrollX;
+    int scrollZ;
+    int zoomTileX;
+    int zoomTileZ;
 };
 
 static int positionsDummy[MAX_CONNECTED_PLAYERS][2];
@@ -111,7 +130,7 @@ static void UndergroundTopScreen_InitBackgrounds(BgConfig *bgConfig, Window *win
 static void UndergroundMap_InitSpriteResources(UndergroundTopScreenContext *ctx);
 static void UndergroundMap_FetchPlayerPositions(PlayerAvatar *const playerAvatar, CoordinatesInt playerCoords[], PlayerMarkerData markerData[]);
 static void UndergroundMap_InitPlayerPositions(CoordinatesInt playerCoords[], PlayerMarkerData markerData[]);
-static void UndergroundMap_DrawPlayerMarkers(PlayerMarkerData markerData[], Sprite *sprites[]);
+static void UndergroundMap_DrawPlayerMarkers(UndergroundTopScreenContext *ctx, PlayerMarkerData markerData[], Sprite *sprites[]);
 static void UndergroundTopScreen_FreeBackgrounds(BgConfig *bgConfig);
 static void UndergroundTopScreen_HandleMessageQueue(BgConfig *unused, Window *window, int *printerID, int *state, int *timer, MessageQueue *queue);
 static void MessageQueue_Init(MessageQueue *queue);
@@ -119,10 +138,14 @@ static void MessageQueue_Free(MessageQueue *queue);
 static BOOL MessageQueue_TryEnqueue(MessageQueue *queue, String *message);
 static String *MessageQueue_Dequeue(MessageQueue *queue);
 static BOOL MessageQueue_IsEmpty(MessageQueue *queue);
-static void UndergroundMap_DrawRadarAndBaseMarkers(OtherMarkerData markerData[], Sprite *sprites[]);
+static void UndergroundMap_DrawRadarAndBaseMarkers(UndergroundTopScreenContext *ctx, OtherMarkerData markerData[], Sprite *sprites[]);
+static void UndergroundMap_SetZoom(UndergroundTopScreenContext *ctx, BOOL zoomed);
+static void UndergroundMap_UpdateZoom(UndergroundTopScreenContext *ctx);
+static BOOL UndergroundMap_GetMarkerPosition(UndergroundTopScreenContext *ctx, int x, int z, VecFx32 *pos);
 static void UndergroundMap_FetchRadarAndBaseInfo(OtherMarkerData markerData[]);
 
 static UndergroundTopScreenContext *sUnused;
+static BOOL sZoomed = FALSE;
 
 static void UndergroundTopScreen_Task(SysTask *sysTask, void *data)
 {
@@ -136,6 +159,10 @@ static void UndergroundTopScreen_Task(SysTask *sysTask, void *data)
         UndergroundTopScreen_InitBackgrounds(bgConfig, &ctx->window);
         UndergroundMap_InitPlayerPositions(ctx->playerCoords, ctx->playerMarkers);
         MessageQueue_Init(&ctx->messageQueue);
+        ctx->zoomMap = NARC_AllocAndReadWholeMemberByIndexPair(NARC_INDEX_DATA__UNDERG_RADAR, zoom_map_bin, HEAP_ID_FIELD1);
+        ctx->zoomed = FALSE;
+        ctx->scrollX = 0;
+        ctx->scrollZ = 0;
         ctx->state++;
         break;
     case TOP_SCREEN_STATE_INIT_SPRITES:
@@ -203,6 +230,11 @@ static void UndergroundTopScreen_Task(SysTask *sysTask, void *data)
         GXLayers_EngineBToggleLayers(GX_PLANEMASK_BG1, FALSE);
         GXLayers_EngineBToggleLayers(GX_PLANEMASK_BG0, TRUE);
         Bg_MaskPalette(BG_LAYER_SUB_0, 0);
+
+        if (sZoomed) {
+            UndergroundMap_SetZoom(ctx, TRUE);
+        }
+
         ctx->state++;
         break;
     case TOP_SCREEN_STATE_FRAME_DELAY_2:
@@ -210,9 +242,15 @@ static void UndergroundTopScreen_Task(SysTask *sysTask, void *data)
         break;
     case TOP_SCREEN_STATE_MAIN:
         UndergroundMap_FetchPlayerPositions(ctx->parent->playerAvatar, ctx->playerCoords, ctx->playerMarkers);
-        UndergroundMap_DrawPlayerMarkers(ctx->playerMarkers, ctx->playerMarkerSprites);
+
+        if (JOY_NEW(ZOOM_TOGGLE_BUTTON)) {
+            UndergroundMap_SetZoom(ctx, !ctx->zoomed);
+        }
+
+        UndergroundMap_UpdateZoom(ctx);
+        UndergroundMap_DrawPlayerMarkers(ctx, ctx->playerMarkers, ctx->playerMarkerSprites);
         UndergroundMap_FetchRadarAndBaseInfo(ctx->otherMarkers);
-        UndergroundMap_DrawRadarAndBaseMarkers(ctx->otherMarkers, ctx->otherMarkerSprites);
+        UndergroundMap_DrawRadarAndBaseMarkers(ctx, ctx->otherMarkers, ctx->otherMarkerSprites);
         UndergroundTopScreen_HandleMessageQueue(ctx->bgConfig, &ctx->window, &ctx->printerID, &ctx->messageState, &ctx->messageTimer, &ctx->messageQueue);
         SpriteList_Update(ctx->spriteList);
         break;
@@ -234,8 +272,10 @@ static void UndergroundTopScreen_Task(SysTask *sysTask, void *data)
         Window_Remove(&ctx->window);
         Bg_FreeTilemapBuffer(bgConfig, BG_LAYER_SUB_3);
 
+        GXS_SetVisibleWnd(GX_WNDMASK_NONE);
         UndergroundTopScreen_FreeBackgrounds(bgConfig);
         MessageQueue_Free(&ctx->messageQueue);
+        Heap_Free(ctx->zoomMap);
 
         ctx->state++;
         break;
@@ -296,16 +336,114 @@ static void UndergroundMap_FetchPlayerPositions(PlayerAvatar *const playerAvatar
     }
 }
 
-static void UndergroundMap_DrawPlayerMarkers(PlayerMarkerData markerData[], Sprite *sprites[])
+static void UndergroundMap_SetZoom(UndergroundTopScreenContext *ctx, BOOL zoomed)
+{
+    if (zoomed) {
+        ctx->zoomTileX = -1;
+        ctx->zoomTileZ = -1;
+        ctx->zoomed = TRUE;
+        UndergroundMap_UpdateZoom(ctx);
+        G2S_SetWnd0Position(ZOOM_VIEW_X, ZOOM_VIEW_Y, ZOOM_VIEW_X + ZOOM_VIEW_WIDTH, ZOOM_VIEW_Y + ZOOM_VIEW_HEIGHT);
+        G2S_SetWnd0InsidePlane(GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, FALSE);
+        G2S_SetWndOutsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, FALSE);
+        GXS_SetVisibleWnd(GX_WNDMASK_W0);
+        GXLayers_EngineBToggleLayers(GX_PLANEMASK_BG1, TRUE);
+    } else {
+        GXS_SetVisibleWnd(GX_WNDMASK_NONE);
+        GXLayers_EngineBToggleLayers(GX_PLANEMASK_BG1, FALSE);
+        ctx->zoomed = FALSE;
+    }
+
+    sZoomed = zoomed;
+}
+
+static void UndergroundMap_UpdateZoom(UndergroundTopScreenContext *ctx)
+{
+    if (!ctx->zoomed) {
+        return;
+    }
+
+    int scrollX = ctx->playerCoords[0].x - ZOOM_VIEW_WIDTH / 2;
+    int scrollZ = ctx->playerCoords[0].z - ZOOM_VIEW_HEIGHT / 2;
+
+    if (scrollX > ZOOM_MAP_PIXELS - ZOOM_VIEW_WIDTH) {
+        scrollX = ZOOM_MAP_PIXELS - ZOOM_VIEW_WIDTH;
+    }
+
+    if (scrollX < 0) {
+        scrollX = 0;
+    }
+
+    if (scrollZ > ZOOM_MAP_PIXELS - ZOOM_VIEW_HEIGHT) {
+        scrollZ = ZOOM_MAP_PIXELS - ZOOM_VIEW_HEIGHT;
+    }
+
+    if (scrollZ < 0) {
+        scrollZ = 0;
+    }
+
+    ctx->scrollX = scrollX;
+    ctx->scrollZ = scrollZ;
+
+    int tileX = scrollX / TILE_WIDTH_PIXELS;
+    int tileZ = scrollZ / TILE_HEIGHT_PIXELS;
+
+    if (tileX != ctx->zoomTileX || tileZ != ctx->zoomTileZ) {
+        u16 *buffer = Bg_GetTilemapBuffer(ctx->bgConfig, BG_LAYER_SUB_1);
+
+        for (int row = 0; row <= ZOOM_VIEW_HEIGHT / TILE_HEIGHT_PIXELS; row++) {
+            int mapZ = tileZ + row;
+
+            for (int col = 0; col <= ZOOM_VIEW_WIDTH / TILE_WIDTH_PIXELS; col++) {
+                int mapX = tileX + col;
+                u16 tile = 0;
+
+                if (mapX < ZOOM_MAP_TILES && mapZ < ZOOM_MAP_TILES) {
+                    tile = ctx->zoomMap[mapZ * ZOOM_MAP_TILES + mapX];
+                }
+
+                buffer[(mapZ % 32) * 32 + (mapX % 32)] = tile;
+            }
+        }
+
+        Bg_CopyTilemapBufferToVRAM(ctx->bgConfig, BG_LAYER_SUB_1);
+        ctx->zoomTileX = tileX;
+        ctx->zoomTileZ = tileZ;
+    }
+
+    Bg_SetOffset(ctx->bgConfig, BG_LAYER_SUB_1, BG_OFFSET_UPDATE_SET_X, scrollX - ZOOM_VIEW_X);
+    Bg_SetOffset(ctx->bgConfig, BG_LAYER_SUB_1, BG_OFFSET_UPDATE_SET_Y, scrollZ - ZOOM_VIEW_Y);
+}
+
+static BOOL UndergroundMap_GetMarkerPosition(UndergroundTopScreenContext *ctx, int x, int z, VecFx32 *pos)
+{
+    int screenX, screenY;
+
+    if (ctx->zoomed) {
+        screenX = ZOOM_VIEW_X + x + UNDERGROUND_MAIN_AREA_START_X - ctx->scrollX;
+        screenY = ZOOM_VIEW_Y + z + UNDERGROUND_MAIN_AREA_START_Z - ctx->scrollZ;
+
+        if (screenX < ZOOM_VIEW_X || screenX >= ZOOM_VIEW_X + ZOOM_VIEW_WIDTH || screenY < ZOOM_VIEW_Y || screenY >= ZOOM_VIEW_Y + ZOOM_VIEW_HEIGHT) {
+            return FALSE;
+        }
+    } else {
+        screenX = MAP_MIN_X + x * MAP_WIDTH / (UNDERGROUND_MAIN_AREA_WIDTH + 1);
+        screenY = MAP_MIN_Y + z * MAP_HEIGHT / (UNDERGROUND_MAIN_AREA_DEPTH + 1);
+    }
+
+    pos->x = screenX * FX32_ONE;
+    pos->y = screenY * FX32_ONE + (HW_LCD_HEIGHT << FX32_SHIFT);
+    pos->z = FX32_ONE;
+
+    return TRUE;
+}
+
+static void UndergroundMap_DrawPlayerMarkers(UndergroundTopScreenContext *ctx, PlayerMarkerData markerData[], Sprite *sprites[])
 {
     for (int netID = 0; netID < MAX_CONNECTED_PLAYERS; netID++) {
-        if (markerData[netID].lifetime != 0) {
-            VecFx32 pos;
+        VecFx32 pos;
 
-            pos.x = (MAP_MIN_X + markerData[netID].x * MAP_WIDTH / (UNDERGROUND_MAIN_AREA_WIDTH + 1)) * FX32_ONE;
-            pos.y = (MAP_MIN_Y + markerData[netID].z * MAP_HEIGHT / (UNDERGROUND_MAIN_AREA_DEPTH + 1)) * FX32_ONE + (HW_LCD_HEIGHT << FX32_SHIFT);
-            pos.z = FX32_ONE;
-
+        if (markerData[netID].lifetime != 0 && UndergroundMap_GetMarkerPosition(ctx, markerData[netID].x, markerData[netID].z, &pos)) {
             Sprite_SetPosition(sprites[netID], &pos);
             Sprite_SetDrawFlag(sprites[netID], TRUE);
         } else {
@@ -333,26 +471,19 @@ static void UndergroundMap_FetchRadarAndBaseInfo(OtherMarkerData markerData[])
     }
 }
 
-static void UndergroundMap_DrawRadarAndBaseMarkers(OtherMarkerData markerData[], Sprite *sprites[])
+static void UndergroundMap_DrawRadarAndBaseMarkers(UndergroundTopScreenContext *ctx, OtherMarkerData markerData[], Sprite *sprites[])
 {
     for (int i = 0; i < MAX_RADAR_BLIPS + 1; i++) {
-        if (markerData[i].x != 0) {
-            VecFx32 pos;
+        VecFx32 pos;
 
-            pos.x = (MAP_MIN_X + markerData[i].x * MAP_WIDTH / (UNDERGROUND_MAIN_AREA_WIDTH + 1)) * FX32_ONE;
-            pos.y = (MAP_MIN_Y + markerData[i].z * MAP_HEIGHT / (UNDERGROUND_MAIN_AREA_DEPTH + 1)) * FX32_ONE + (HW_LCD_HEIGHT << FX32_SHIFT);
-            pos.z = FX32_ONE;
-
+        if (markerData[i].x != 0 && UndergroundMap_GetMarkerPosition(ctx, markerData[i].x, markerData[i].z, &pos)) {
             Sprite_SetPosition(sprites[i], &pos);
 
-            if (markerData[i].animID != markerData[i].prevAnimID) {
-                if (markerData[i].animID != 0) {
-                    Sprite_SetAnim(sprites[i], markerData[i].animID);
-                    Sprite_SetDrawFlag(sprites[i], TRUE);
-                } else {
-                    Sprite_SetDrawFlag(sprites[i], FALSE);
-                }
+            if (markerData[i].animID != markerData[i].prevAnimID && markerData[i].animID != 0) {
+                Sprite_SetAnim(sprites[i], markerData[i].animID);
             }
+
+            Sprite_SetDrawFlag(sprites[i], markerData[i].animID != 0);
         } else {
             Sprite_SetDrawFlag(sprites[i], FALSE);
         }
@@ -449,8 +580,8 @@ static void UndergroundTopScreen_InitBackgrounds(BgConfig *bgConfig, Window *win
 
     NARC *narc = NARC_ctor(NARC_INDEX_DATA__UNDERG_RADAR, HEAP_ID_FIELD1);
 
-    Graphics_LoadPaletteFromOpenNARC(narc, background_tiles_NCLR, PAL_LOAD_SUB_BG, 0, PALETTE_SIZE_BYTES * 2, HEAP_ID_FIELD1);
-    Graphics_LoadTilesToBgLayerFromOpenNARC(narc, background_tiles_NCGR, bgConfig, BG_LAYER_SUB_0, 0, 32 * 5 * TILE_SIZE_4BPP, FALSE, HEAP_ID_FIELD1);
+    Graphics_LoadPaletteFromOpenNARC(narc, background_tiles_NCLR, PAL_LOAD_SUB_BG, 0, PALETTE_SIZE_BYTES * MAP_PALETTE_COUNT, HEAP_ID_FIELD1);
+    Graphics_LoadTilesToBgLayerFromOpenNARC(narc, background_tiles_NCGR, bgConfig, BG_LAYER_SUB_0, 0, MAP_TILE_COUNT * TILE_SIZE_4BPP, FALSE, HEAP_ID_FIELD1);
     Graphics_LoadTilemapToBgLayerFromOpenNARC(narc, background_NSCR, bgConfig, BG_LAYER_SUB_0, 0, SCREEN_WIDTH_TILES * SCREEN_HEIGHT_TILES * sizeof(u16), FALSE, HEAP_ID_FIELD1);
 
     NARC_dtor(narc);

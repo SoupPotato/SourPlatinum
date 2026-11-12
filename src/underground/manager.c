@@ -8,6 +8,10 @@
 #include "constants/field_base_tiles.h"
 #include "constants/map_object.h"
 
+#include "constants/field_base_tiles.h"
+#include "generated/map_headers.h"
+#include "generated/vars_flags.h"
+
 #include "struct_decls/map_object.h"
 
 #include "field/field_system.h"
@@ -29,13 +33,17 @@
 #include "communication_information.h"
 #include "communication_system.h"
 #include "coordinates.h"
+#include "field_map_change.h"
 #include "field_system.h"
 #include "game_options.h"
 #include "graphics.h"
 #include "heap.h"
+#include "menu.h"
 #include "message.h"
+#include "player_avatar.h"
 #include "render_window.h"
 #include "save_player.h"
+#include "sourplatinum_config.h"
 #include "savedata.h"
 #include "string_gf.h"
 #include "string_template.h"
@@ -546,6 +554,108 @@ void UndergroundMan_OpenMenu(void)
     }
 }
 
+typedef struct HideawayEntrance {
+    u16 x;
+    u16 z;
+    u16 mapHeaderID;
+    u16 destX;
+    u16 destZ;
+} HideawayEntrance;
+
+typedef struct HideawayPrompt {
+    FieldSystem *fieldSystem;
+    const HideawayEntrance *entrance;
+    Menu *menu;
+} HideawayPrompt;
+
+#include "data/underground_hideaway_doors.h"
+
+static const WindowTemplate sHideawayYesNoTemplate = {
+    .bgLayer = BG_LAYER_MAIN_3,
+    .tilemapLeft = 25,
+    .tilemapTop = 13,
+    .width = YES_NO_MENU_TILE_W,
+    .height = YES_NO_MENU_TILE_H,
+    .palette = 13,
+    .baseTile = BASE_TILE_YES_NO_MENU
+};
+
+static void UndergroundMan_ForceEndHideawayPrompt(SysTask *sysTask, void *data)
+{
+    HideawayPrompt *prompt = data;
+
+    if (prompt->menu) {
+        Menu_DestroyForExit(prompt->menu, HEAP_ID_FIELD1);
+    }
+
+    Heap_Free(prompt);
+    SysTask_Done(sysTask);
+}
+
+static void UndergroundMan_HideawayPromptTask(SysTask *sysTask, void *data)
+{
+    HideawayPrompt *prompt = data;
+
+    if (prompt->menu == NULL) {
+        if (!UndergroundTextPrinter_IsPrinterActive(UndergroundMan_GetCommonTextPrinter())) {
+            prompt->menu = Menu_MakeYesNoChoice(prompt->fieldSystem->bgConfig, &sHideawayYesNoTemplate, BASE_TILE_STANDARD_WINDOW_FRAME, 11, HEAP_ID_FIELD1);
+        }
+
+        return;
+    }
+
+    int input = Menu_ProcessInputAndHandleExit(prompt->menu, HEAP_ID_FIELD1);
+
+    if (input == MENU_NOTHING_CHOSEN) {
+        return;
+    }
+
+    UndergroundTextPrinter_EraseMessageBoxWindow(UndergroundMan_GetCommonTextPrinter());
+    UndergroundMan_ClearCurrentSysTaskInfo();
+
+    if (input == MENU_YES) {
+        VarsFlags *varsFlags = SaveData_GetVarsFlags(prompt->fieldSystem->saveData);
+
+        *VarsFlags_GetVarAddress(varsFlags, VAR_HIDEAWAY_RETURN_X) = PlayerAvatar_GetXPos(prompt->fieldSystem->playerAvatar);
+        *VarsFlags_GetVarAddress(varsFlags, VAR_HIDEAWAY_RETURN_Z) = PlayerAvatar_GetZPos(prompt->fieldSystem->playerAvatar);
+        FieldMapChange_SetPendingHideaway(prompt->entrance->mapHeaderID, prompt->entrance->destX, prompt->entrance->destZ);
+        FieldTask_SetUndergroundMapChange(prompt->fieldSystem);
+    } else {
+        CommPlayerMan_ResumeFieldSystem();
+    }
+
+    Heap_Free(prompt);
+    SysTask_Done(sysTask);
+}
+
+static BOOL UndergroundMan_TryStartHideawayPrompt(int x, int z)
+{
+    for (int i = 0; i < NELEMS(sHideawayEntrances); i++) {
+#if SP_DEBUG_ANY_WALL_HIDEAWAY
+        if (!TerrainCollisionManager_CheckCollision(sUndergroundMan->fieldSystem, x, z)) {
+            continue;
+        }
+#else
+        if (sHideawayEntrances[i].x != x || sHideawayEntrances[i].z != z) {
+            continue;
+        }
+#endif
+
+        HideawayPrompt *prompt = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(HideawayPrompt));
+        MI_CpuClear8(prompt, sizeof(HideawayPrompt));
+        prompt->fieldSystem = sUndergroundMan->fieldSystem;
+        prompt->entrance = &sHideawayEntrances[i];
+
+        UndergroundTextPrinter_PrintText(UndergroundMan_GetCommonTextPrinter(), UndergroundCommon_Text_HideawayEntrance, FALSE, NULL);
+        SysTask *sysTask = SysTask_Start(UndergroundMan_HideawayPromptTask, prompt, 0);
+        UndergroundMan_SetCurrentSysTask(prompt, sysTask, UndergroundMan_ForceEndHideawayPrompt);
+        CommPlayerMan_PauseFieldSystem();
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 void UndergroundMan_ProgressInteractCooldown(void)
 {
     if (sUndergroundMan->interactCooldown != 0) {
@@ -571,6 +681,11 @@ void UndergroundMan_ProcessInteract(u8 flags)
 
     int x = CommPlayer_GetXInFrontOfPlayer(CommSys_CurNetId());
     int z = CommPlayer_GetZInFrontOfPlayer(CommSys_CurNetId());
+
+    if (UndergroundMan_TryStartHideawayPrompt(x, z)) {
+        sUndergroundMan->interactCooldown = 8;
+        return;
+    }
 
     if (Spheres_IsBuriedSphereAtCoordinates(x, z)) {
         flags |= FLAG_BURIED_SPHERE_IN_FRONT;

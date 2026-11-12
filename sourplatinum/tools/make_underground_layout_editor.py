@@ -1,0 +1,374 @@
+import base64
+import io
+import json
+import struct
+
+from PIL import Image
+
+R = '/mnt/c/cygwin/home/Matt/SourPlatinum/'
+matrix = json.load(open(R + 'res/field/matrices/map_matrix_002.json'))
+grid = [[int(c.split('_')[1]) for c in row] for row in matrix['maps']]
+ids = sorted({c for row in grid for c in row})
+
+pieces = {}
+for mid in ids:
+    d = open(R + 'res/field/maps/data/map_data_%03d.bin' % mid, 'rb').read()
+    p = d[16:16 + struct.unpack_from('<I', d, 0)[0]]
+    bits = ''.join('1' if struct.unpack_from('<H', p, 2 * i)[0] & 0x8000 else '0' for i in range(1024))
+    pieces[mid] = ''.join('%x' % int(bits[i:i + 4], 2) for i in range(0, 1024, 4))
+
+entrances = []
+small_icon = base64.b64encode(open(R + 'sourplatinum/tools/underground_layout_editor_assets/small_hideaway_icon.png', 'rb').read()).decode()
+sheet = Image.open(R + 'sourplatinum/tools/underground_layout_editor_assets/dual_tunnel_tiles.png').convert('RGB')
+FLOOR = (214, 186, 140)
+variants = {
+    653: (55, 95), 654: (93, 95), 656: (143, 95), 657: (182, 95), 662: (228, 95), 663: (267, 95), 659: (318, 95),
+    652: (55, 133), 651: (93, 133), 655: (143, 133), 658: (182, 133), 661: (228, 133), 664: (267, 133), 660: (318, 133),
+}
+for mid, (sx, sy) in variants.items():
+    bits = ''.join('0' if sheet.getpixel((sx + i % 32, sy + i // 32)) == FLOOR else '1' for i in range(1024))
+    pieces[1000 + mid] = ''.join('%x' % int(bits[i:i + 4], 2) for i in range(0, 1024, 4))
+buf = io.BytesIO()
+sheet.crop((9, 114, 41, 146)).save(buf, 'PNG')
+icon = base64.b64encode(buf.getvalue()).decode()
+
+html = r'''<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Underground Layout Editor</title>
+<style>
+:root {
+  --bg: #1d1b1a;
+  --panel: #2a2725;
+  --text: #ece6df;
+  --muted: #a99f95;
+  --accent: #e0a458;
+  --bad: #e5484d;
+  --ok: #46a758;
+  --line: #3d3835;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.4 system-ui, sans-serif; }
+header { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+header h1 { font-size: 16px; margin: 0 12px 0 0; }
+#selected { display: flex; align-items: center; gap: 8px; margin-left: auto; color: var(--muted); }
+#selected canvas { image-rendering: pixelated; width: 40px; height: 40px; border: 2px solid var(--accent); border-radius: 4px; }
+#selected b { color: var(--text); }
+button, label.btn { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; cursor: pointer; font: inherit; }
+button:hover, label.btn:hover { border-color: var(--accent); }
+button.on { border-color: var(--accent); color: var(--accent); }
+main { display: flex; gap: 16px; padding: 16px; align-items: flex-start; flex-wrap: wrap; }
+#palette { display: grid; grid-template-columns: repeat(5, 74px); gap: 8px; background: var(--panel); padding: 10px; border-radius: 8px; }
+.piece { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px; border-radius: 6px; border: 2px solid transparent; cursor: pointer; }
+.piece.sel { border-color: var(--accent); }
+.piece canvas { image-rendering: pixelated; width: 64px; height: 64px; }
+.piece span { font-size: 12px; color: var(--muted); }
+#side { display: flex; flex-direction: column; gap: 12px; width: 420px; }
+#info { background: var(--panel); padding: 10px; border-radius: 8px; color: var(--muted); }
+#info b { color: var(--text); }
+#grid { image-rendering: pixelated; cursor: crosshair; background: #000; max-width: 100%; }
+#status { min-height: 1.4em; }
+.bad { color: var(--bad); }
+.ok { color: var(--ok); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Underground Layout Editor</h1>
+  <button id="modePlace" class="on">Place pieces</button>
+  <button id="modeEntrance" hidden>Wall entrances</button>
+  <button id="toggleLock" class="on">Lock secret base area</button>
+  <button id="toggleCheck" class="on">Show mismatches</button>
+  <button id="undo">Undo</button>
+  <button id="reset">Reset to current</button>
+  <button id="save">Save layout file</button>
+  <label class="btn">Open layout file<input id="open" type="file" accept=".json" hidden></label>
+  <div id="selected">Selected: <canvas id="selCanvas" width="32" height="32"></canvas><b id="selName"></b></div>
+</header>
+<main>
+  <canvas id="grid"></canvas>
+  <div id="side">
+    <div id="palette"></div>
+    <div id="info">
+      <div id="status"></div>
+      <p><b>Place pieces:</b> pick a piece from the palette, or right-click a square on the grid to pick up its piece. Then left-click or drag to place it.</p>
+      <p>Pieces marked <b>H</b> are tunnel pieces with a small hideaway built in.</p>
+      <p><b>Big</b> is a big walk-through hideaway. Tunnels that run into it become its doors.</p>
+      <p><b>Mismatches</b> (red edges) are tunnels that run into rock in the next square.</p>
+      <p>The top two rows and the left column hold the secret base rooms (block 649).</p>
+      <p>Save the layout and send me the file to put it in the game.</p>
+    </div>
+  </div>
+</main>
+<script>
+const PIECES = __PIECES__;
+const START = __GRID__;
+const START_ENTRANCES = __ENTRANCES__;
+const HIDEAWAY = -1;
+const SMALL = -2;
+function label(id) { return id === HIDEAWAY ? 'Big' : id === SMALL ? 'Small' : id >= 1000 ? (id - 1000) + ' H' : String(id); }
+function parseCell(v) {
+  v = String(v);
+  if (v === 'HIDEAWAY') return HIDEAWAY;
+  if (v === 'SMALL_HIDEAWAY') return SMALL;
+  const n = parseInt(v.replace('MAP_', ''), 10);
+  return v.endsWith('_HIDEAWAY') ? 1000 + n : n;
+}
+const icon = new Image();
+icon.src = 'data:image/png;base64,__ICON__';
+const smallIcon = new Image();
+smallIcon.src = 'data:image/png;base64,__SMALL_ICON__';
+const N = 15, T = 32, S = 2;
+const WALL = '#3a281e', FLOOR = '#d6ba8c', BASE_TINT = 'rgba(120,110,170,0.35)';
+
+const solid = {};
+for (const id in PIECES) {
+  const hex = PIECES[id], a = new Uint8Array(1024);
+  for (let i = 0; i < 256; i++) {
+    const v = parseInt(hex[i], 16);
+    for (let b = 0; b < 4; b++) a[i * 4 + b] = (v >> (3 - b)) & 1;
+  }
+  solid[id] = a;
+}
+solid[HIDEAWAY] = new Uint8Array(1024).fill(1);
+
+function smallBase() {
+  const a = new Uint8Array(1024).fill(1);
+  for (let z = 11; z <= 20; z++) for (let x = 11; x <= 20; x++) a[z * T + x] = 0;
+  return a;
+}
+solid[SMALL] = smallBase();
+
+function edgeOpen(id, side, i) {
+  if (id === undefined || id === SMALL || id === HIDEAWAY) return false;
+  const a = solid[id];
+  if (side === 'w') return a[i * T + T - 1] === 0;
+  if (side === 'e') return a[i * T] === 0;
+  if (side === 'n') return a[(T - 1) * T + i] === 0;
+  return a[i] === 0;
+}
+
+function cellSolid(x, z) {
+  const id = grid[z][x];
+  if (id !== SMALL) return solid[id];
+  const a = smallBase();
+  const w = x > 0 ? grid[z][x - 1] : undefined, e = x < N - 1 ? grid[z][x + 1] : undefined;
+  const n = z > 0 ? grid[z - 1][x] : undefined, s = z < N - 1 ? grid[z + 1][x] : undefined;
+  for (let i = 0; i < T; i++) {
+    if (edgeOpen(w, 'w', i)) for (let k = 0; k <= 15; k++) a[i * T + k] = 0;
+    if (edgeOpen(e, 'e', i)) for (let k = 16; k < T; k++) a[i * T + k] = 0;
+    if (edgeOpen(n, 'n', i)) for (let k = 0; k <= 15; k++) a[k * T + i] = 0;
+    if (edgeOpen(s, 's', i)) for (let k = 16; k < T; k++) a[k * T + i] = 0;
+  }
+  return a;
+}
+
+let grid = START.map(r => r.slice());
+let entrances = START_ENTRANCES.map(e => e.slice());
+let current = 650, mode = 'place', locked = true, check = true;
+const history = [];
+
+const cv = document.getElementById('grid');
+cv.width = N * T * S; cv.height = N * T * S;
+const ctx = cv.getContext('2d');
+
+function isBaseCell(x, z) { return z < 2 || x === 0; }
+
+function tileSolid(tx, tz) {
+  if (tx < 0 || tz < 0 || tx >= N * T || tz >= N * T) return true;
+  return cellSolid(Math.floor(tx / T), Math.floor(tz / T))[(tz % T) * T + (tx % T)] === 1;
+}
+
+function drawPiece(c, id, ox, oy, s, arr) {
+  if (id === HIDEAWAY) {
+    c.fillStyle = WALL;
+    c.fillRect(ox, oy, T * s, T * s);
+    c.imageSmoothingEnabled = false;
+    c.drawImage(icon, ox, oy, T * s, T * s);
+    return;
+  }
+  const a = arr || solid[id];
+  for (let z = 0; z < T; z++) for (let x = 0; x < T; x++) {
+    c.fillStyle = a[z * T + x] ? WALL : FLOOR;
+    c.fillRect(ox + x * s, oy + z * s, s, s);
+  }
+  if (id === SMALL) {
+    c.imageSmoothingEnabled = false;
+    c.drawImage(smallIcon, ox + 11 * s, oy + 11 * s, 10 * s, 10 * s);
+  }
+}
+
+function mismatches() {
+  const bad = [];
+  for (let z = 0; z < N; z++) for (let x = 0; x < N; x++) {
+    if (x + 1 < N && grid[z][x] !== HIDEAWAY && grid[z][x + 1] !== HIDEAWAY) for (let i = 0; i < T; i++) {
+      const a = cellSolid(x, z)[i * T + T - 1], b = cellSolid(x + 1, z)[i * T];
+      if (a !== b) bad.push([(x + 1) * T, z * T + i, 'v']);
+    }
+    if (z + 1 < N && grid[z][x] !== HIDEAWAY && grid[z + 1][x] !== HIDEAWAY) for (let i = 0; i < T; i++) {
+      const a = cellSolid(x, z)[(T - 1) * T + i], b = cellSolid(x, z + 1)[i];
+      if (a !== b) bad.push([x * T + i, (z + 1) * T, 'h']);
+    }
+  }
+  return bad;
+}
+
+function draw() {
+  for (let z = 0; z < N; z++) for (let x = 0; x < N; x++) {
+    drawPiece(ctx, grid[z][x], x * T * S, z * T * S, S, cellSolid(x, z));
+    if (isBaseCell(x, z)) { ctx.fillStyle = BASE_TINT; ctx.fillRect(x * T * S, z * T * S, T * S, T * S); }
+  }
+  ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 1;
+  for (let i = 0; i <= N; i++) {
+    ctx.beginPath(); ctx.moveTo(i * T * S + 0.5, 0); ctx.lineTo(i * T * S + 0.5, N * T * S); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, i * T * S + 0.5); ctx.lineTo(N * T * S, i * T * S + 0.5); ctx.stroke();
+  }
+  ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.font = '10px system-ui';
+  for (let z = 0; z < N; z++) for (let x = 0; x < N; x++) ctx.fillText(label(grid[z][x]), x * T * S + 3, z * T * S + 11);
+  const bad = check ? mismatches() : [];
+  ctx.fillStyle = '#e5484d';
+  for (const [x, z, d] of bad) {
+    if (d === 'v') ctx.fillRect(x * S - 2, z * S, 4, S);
+    else ctx.fillRect(x * S, z * S - 2, S, 4);
+  }
+  if (hover && mode === 'place') {
+    ctx.strokeStyle = '#e0a458'; ctx.lineWidth = 3;
+    ctx.strokeRect(hover.x * T * S + 1.5, hover.z * T * S + 1.5, T * S - 3, T * S - 3);
+  }
+  ctx.strokeStyle = '#ff2b2b'; ctx.lineWidth = 3;
+  ctx.imageSmoothingEnabled = false;
+  for (const [x, z] of entrances) {
+    ctx.drawImage(smallIcon, x * S + S / 2 - 8, z * S + S / 2 - 8, 16, 16);
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x * S + S / 2 - 8.5, z * S + S / 2 - 8.5, 17, 17);
+  }
+  const st = document.getElementById('status');
+  const edges = new Set(bad.map(b => b[2] + Math.floor(b[0] / T) + ',' + Math.floor(b[1] / T))).size;
+  st.innerHTML = (check ? (bad.length ? '<span class="bad">' + edges + ' mismatched edge(s)</span>' : '<span class="ok">All edges line up</span>') + ' &middot; ' : '') + grid.flat().filter(v => v === HIDEAWAY).length + ' big, ' + grid.flat().filter(v => v >= 1000).length + ' small hideaway(s)';
+}
+
+function showSelected() {
+  const c = document.getElementById('selCanvas').getContext('2d');
+  drawPiece(c, current, 0, 0, 1);
+  document.getElementById('selName').textContent = 'block ' + label(current);
+}
+
+function buildPalette() {
+  showSelected();
+  const pal = document.getElementById('palette');
+  pal.innerHTML = '';
+  for (const id of Object.keys(PIECES).map(Number).sort((a, b) => a - b).concat([HIDEAWAY])) {
+    const d = document.createElement('div');
+    d.className = 'piece' + (id === current ? ' sel' : '');
+    const c = document.createElement('canvas'); c.width = T; c.height = T;
+    drawPiece(c.getContext('2d'), id, 0, 0, 1);
+    const sp = document.createElement('span');
+    const used = grid.flat().filter(v => v === id).length;
+    sp.textContent = label(id) + ' (' + used + ')';
+    d.append(c, sp);
+    d.onclick = () => { current = id; buildPalette(); };
+    pal.append(d);
+  }
+}
+
+function snapshot() {
+  history.push(JSON.stringify({ grid, entrances }));
+  if (history.length > 200) history.shift();
+}
+
+function cellAt(ev) {
+  const r = cv.getBoundingClientRect();
+  const px = (ev.clientX - r.left) * (cv.width / r.width) / S, pz = (ev.clientY - r.top) * (cv.height / r.height) / S;
+  return { tx: Math.floor(px), tz: Math.floor(pz), x: Math.floor(px / T), z: Math.floor(pz / T) };
+}
+
+let painting = false, strokeSaved = false, hover = null;
+function place(ev) {
+  const { x, z } = cellAt(ev);
+  if (x < 0 || z < 0 || x >= N || z >= N) return;
+  if (locked && isBaseCell(x, z)) return;
+  if (grid[z][x] === current) return;
+  if (!strokeSaved) { snapshot(); strokeSaved = true; }
+  grid[z][x] = current;
+  draw(); buildPalette();
+}
+
+cv.addEventListener('contextmenu', ev => {
+  ev.preventDefault();
+  const { x, z } = cellAt(ev);
+  if (x >= 0 && z >= 0 && x < N && z < N) { current = grid[z][x]; setMode('place'); buildPalette(); draw(); }
+});
+cv.addEventListener('mousedown', ev => {
+  if (ev.button !== 0) return;
+  if (mode === 'place') { painting = true; strokeSaved = false; place(ev); return; }
+  const { tx, tz } = cellAt(ev);
+  const i = entrances.findIndex(e => e[0] === tx && e[1] === tz);
+  if (i >= 0) { snapshot(); entrances.splice(i, 1); draw(); return; }
+  if (!tileSolid(tx, tz)) { flash('Entrances go on rock tiles, next to a tunnel.'); return; }
+  if (tileSolid(tx - 1, tz) && tileSolid(tx + 1, tz) && tileSolid(tx, tz - 1) && tileSolid(tx, tz + 1)) { flash('That rock tile is not next to a tunnel.'); return; }
+  snapshot(); entrances.push([tx, tz]); draw();
+});
+cv.addEventListener('mousemove', ev => {
+  const c = cellAt(ev);
+  const h = c.x >= 0 && c.z >= 0 && c.x < N && c.z < N ? { x: c.x, z: c.z } : null;
+  if (!hover || !h || hover.x !== h.x || hover.z !== h.z) { hover = h; draw(); }
+  if (painting) place(ev);
+});
+cv.addEventListener('mouseleave', () => { hover = null; draw(); });
+window.addEventListener('mouseup', () => { painting = false; });
+
+function flash(msg) { const st = document.getElementById('status'); st.innerHTML = '<span class="bad">' + msg + '</span>'; setTimeout(draw, 1800); }
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('modePlace').classList.toggle('on', m === 'place');
+  document.getElementById('modeEntrance').classList.toggle('on', m === 'entrance');
+}
+document.getElementById('modePlace').onclick = () => setMode('place');
+document.getElementById('modeEntrance').onclick = () => setMode('entrance');
+document.getElementById('toggleLock').onclick = ev => { locked = !locked; ev.target.classList.toggle('on', locked); };
+document.getElementById('toggleCheck').onclick = ev => { check = !check; ev.target.classList.toggle('on', check); draw(); };
+document.getElementById('undo').onclick = () => {
+  if (!history.length) return;
+  const s = JSON.parse(history.pop()); grid = s.grid; entrances = s.entrances; draw(); buildPalette();
+};
+document.getElementById('reset').onclick = () => {
+  if (!confirm('Go back to the current game layout? Your changes will be lost.')) return;
+  snapshot(); grid = START.map(r => r.slice()); entrances = START_ENTRANCES.map(e => e.slice()); draw(); buildPalette();
+};
+document.getElementById('save').onclick = () => {
+  const out = { name: 'ugmap', headers: [], altitudes: [], maps: grid.map(r => r.map(v => v === HIDEAWAY ? 'HIDEAWAY' : v === SMALL ? 'SMALL_HIDEAWAY' : v >= 1000 ? 'MAP_' + (v - 1000) + '_HIDEAWAY' : 'MAP_' + v)), hideaway_entrances: entrances };
+  const blob = new Blob([JSON.stringify(out, null, 4) + '\n'], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'underground_layout.json'; a.click();
+  URL.revokeObjectURL(a.href);
+};
+document.getElementById('open').onchange = ev => {
+  const f = ev.target.files[0]; if (!f) return;
+  f.text().then(t => {
+    try {
+      const d = JSON.parse(t);
+      const g = d.maps.map(r => r.map(parseCell));
+      if (g.length !== N || g.some(r => r.length !== N || r.some(v => v !== HIDEAWAY && v !== SMALL && !(v in PIECES)))) throw new Error('not a 15x15 layout of known pieces');
+      snapshot(); grid = g; entrances = []; draw(); buildPalette();
+    } catch (e) { flash('Could not open that file: ' + e.message); }
+  });
+  ev.target.value = '';
+};
+
+icon.onload = () => { buildPalette(); draw(); };
+smallIcon.onload = () => draw();
+buildPalette(); draw();
+</script>
+</body>
+</html>
+'''
+
+html = (html.replace('__PIECES__', json.dumps({str(k): v for k, v in pieces.items()}))
+        .replace('__GRID__', json.dumps(grid))
+        .replace('__ENTRANCES__', json.dumps(entrances))
+        .replace('__ICON__', icon)
+        .replace('__SMALL_ICON__', small_icon))
+open(R + 'sourplatinum/tools/underground_layout_editor.html', 'w', encoding='utf-8').write(html)
+print('ok', len(html))

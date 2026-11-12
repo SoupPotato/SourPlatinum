@@ -294,7 +294,8 @@ matrix_data_srcs = files(
     'map_matrix_285.json',
     'map_matrix_286.json',
     'map_matrix_287.json',
-    'map_matrix_288.json'
+    'map_matrix_288.json',
+    'map_matrix_289.json'
 )
 
 map_matrix_narc = custom_target('map_matrix.narc',

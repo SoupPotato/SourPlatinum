@@ -848,6 +848,7 @@ ScriptCommand(SCRCMD_BUFFERFLOORNUMBER,                                    ScrCm
 ScriptCommand(SCRCMD_BUFFERPARTYMONSPECIESNAMEWITHARTICLE,                 ScrCmd_BufferPartyMonSpeciesNameWithArticle)
 ScriptCommand(SCRCMD_USEFLYFROMAPP,                                        ScrCmd_UseFlyFromApp)
 ScriptCommand(SCRCMD_USEREPEL,                                            ScrCmd_UseRepel)
+ScriptCommand(SCRCMD_RETURNTOUNDERGROUND,                                 ScrCmd_ReturnToUnderground)
 
 // clang-format on
 
