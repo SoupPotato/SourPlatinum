@@ -12,6 +12,12 @@
   {"key": "pillar", "label": "Pillar", "prop": 508},
   {"key": "rock_mound", "label": "Rock mound", "prop": 53, "scale": 0.5},
   {"key": "crater", "label": "Crater", "prop": 72, "walkable": true},
-  {"key": "sand_pit", "label": "Sand pit", "prop": 272, "walkable": true},
-  {"key": "lava_pool", "label": "Lava pool", "prop": 584, "scale": 0.5}
+  {"key": "sand_pit", "label": "Boulder", "prop": 272},
+  {"key": "lava_pool", "label": "Lava pool", "prop": 584, "scale": 0.5},
+  {"key": "rock_big_bright", "label": "Big rock", "map": 75, "texture_set": "map_texture_set_006", "materials": ["searock"], "radius": 24},
+  {"key": "rock_small_bright2", "label": "Small rock", "map": 75, "texture_set": "map_texture_set_006", "materials": ["searock"], "radius": 24, "scale": 0.5},
+  {"key": "rock_small_bright", "label": "Pebbles", "map": 23, "texture_set": "map_texture_set_007", "materials": ["c3_iwa_s"], "radius": 24},
+  {"key": "rock_large_bright", "label": "Dark pebbles", "map": 23, "texture_set": "map_texture_set_007", "materials": ["c3_iwa_l"], "radius": 24},
+  {"key": "rock_dark", "label": "Big dark rock", "map": 374, "texture_set": "map_texture_set_068", "materials": ["dun_srock"], "radius": 24},
+  {"key": "rock_small_dark", "label": "Small dark rock", "map": 374, "texture_set": "map_texture_set_068", "materials": ["dun_srock"], "radius": 24, "scale": 0.5}
 ]

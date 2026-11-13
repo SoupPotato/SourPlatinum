@@ -1,0 +1,79 @@
+[
+    {
+        "endTime": 43200,
+        "lights": [
+            {
+                "enabled": true,
+                "color": {
+                    "red": 11,
+                    "green": 11,
+                    "blue": 16
+                },
+                "direction": {
+                    "x": 0.463134765625,
+                    "y": -0.87890625,
+                    "z": -0.11376953125
+                }
+            },
+            {
+                "enabled": false,
+                "color": {
+                    "red": 0,
+                    "green": 0,
+                    "blue": 0
+                },
+                "direction": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            {
+                "enabled": true,
+                "color": {
+                    "red": 22,
+                    "green": 18,
+                    "blue": 0
+                },
+                "direction": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "enabled": true,
+                "color": {
+                    "red": 31,
+                    "green": 31,
+                    "blue": 31
+                },
+                "direction": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "diffuseColor": {
+            "red": 14,
+            "green": 14,
+            "blue": 16
+        },
+        "ambientColor": {
+            "red": 10,
+            "green": 10,
+            "blue": 10
+        },
+        "specularColor": {
+            "red": 14,
+            "green": 14,
+            "blue": 16
+        },
+        "emissionColor": {
+            "red": 8,
+            "green": 8,
+            "blue": 11
+        }
+    }
+]

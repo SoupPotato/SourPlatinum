@@ -58,6 +58,13 @@
 
 #include "res/text/bank/location_names.h"
 
+typedef struct HideawayTerrain {
+    u16 mapHeaderID;
+    u16 terrain;
+} HideawayTerrain;
+
+#include "data/underground_hideaway_terrain.h"
+
 static int CalcTerrain(const FieldSystem *fieldSystem, enum BattleBackground background);
 static void SetBackgroundAndTerrain(FieldBattleDTO *dto, const FieldSystem *fieldSystem);
 
@@ -502,6 +509,14 @@ static void SetBackgroundAndTerrain(FieldBattleDTO *dto, const FieldSystem *fiel
     }
 
     dto->terrain = CalcTerrain(fieldSystem, dto->background);
+
+    if (player->playerState != PLAYER_AVATAR_SURFING) {
+        for (int i = 0; i < NELEMS(sHideawayTerrains); i++) {
+            if (sHideawayTerrains[i].mapHeaderID == fieldSystem->location->mapHeaderID) {
+                dto->terrain = sHideawayTerrains[i].terrain;
+            }
+        }
+    }
 }
 
 void FieldBattleDTO_SetWaterTerrain(FieldBattleDTO *dto)

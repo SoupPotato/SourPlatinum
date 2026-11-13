@@ -3,7 +3,7 @@
  "tex_base": 74,
  "matrix_base": 289,
  "hideaways": {
-  "hideaway_test": {
+  "hideaway_grassland": {
    "biome": "grassland",
    "matrix": "map_matrix_289",
    "area_data": "area_data_075",
@@ -23,10 +23,180 @@
       16,
       5
      ],
-     "step_back": "South"
+     "step_back": "South",
+     "level": 0
+    },
+    {
+     "tile": [
+      3,
+      16
+     ],
+     "facing": "W",
+     "arrive": [
+      4,
+      16
+     ],
+     "step_back": "East",
+     "level": 0
+    },
+    {
+     "tile": [
+      28,
+      16
+     ],
+     "facing": "E",
+     "arrive": [
+      27,
+      16
+     ],
+     "step_back": "West",
+     "level": 0
+    },
+    {
+     "tile": [
+      16,
+      27
+     ],
+     "facing": "S",
+     "arrive": [
+      16,
+      26
+     ],
+     "step_back": "North",
+     "level": 0
     }
    ],
-   "header": "MAP_HEADER_GRAND_UNDERGROUND_HIDEAWAY_1"
+   "header": "MAP_HEADER_GRAND_UNDERGROUND_HIDEAWAY_1",
+   "battle_bg": "BACKGROUND_AARON",
+   "battle_terrain": "TERRAIN_PLAIN",
+   "encounters": {
+    "land_rate": 20,
+    "water_rate": 0,
+    "land": [
+     {
+      "species": "SPECIES_CATERPIE",
+      "min": 10,
+      "max": 10
+     },
+     {
+      "species": "SPECIES_WEEDLE",
+      "min": 10,
+      "max": 10
+     },
+     {
+      "species": "SPECIES_CATERPIE",
+      "min": 10,
+      "max": 10
+     },
+     {
+      "species": "SPECIES_WEEDLE",
+      "min": 10,
+      "max": 10
+     },
+     {
+      "species": "SPECIES_CATERPIE",
+      "min": 10,
+      "max": 10
+     },
+     {
+      "species": "SPECIES_WEEDLE",
+      "min": 10,
+      "max": 10
+     },
+     {
+      "species": "SPECIES_CATERPIE",
+      "min": 10,
+      "max": 10
+     },
+     {
+      "species": "SPECIES_WEEDLE",
+      "min": 10,
+      "max": 10
+     },
+     {
+      "species": "SPECIES_CATERPIE",
+      "min": 10,
+      "max": 10
+     },
+     {
+      "species": "SPECIES_WEEDLE",
+      "min": 10,
+      "max": 10
+     },
+     {
+      "species": "SPECIES_CATERPIE",
+      "min": 10,
+      "max": 10
+     },
+     {
+      "species": "SPECIES_WEEDLE",
+      "min": 10,
+      "max": 10
+     }
+    ],
+    "water": [
+     {
+      "species": "SPECIES_NONE",
+      "min": 1,
+      "max": 1
+     },
+     {
+      "species": "SPECIES_NONE",
+      "min": 1,
+      "max": 1
+     },
+     {
+      "species": "SPECIES_NONE",
+      "min": 1,
+      "max": 1
+     },
+     {
+      "species": "SPECIES_NONE",
+      "min": 1,
+      "max": 1
+     },
+     {
+      "species": "SPECIES_NONE",
+      "min": 1,
+      "max": 1
+     },
+     {
+      "species": "SPECIES_NONE",
+      "min": 1,
+      "max": 1
+     },
+     {
+      "species": "SPECIES_NONE",
+      "min": 1,
+      "max": 1
+     },
+     {
+      "species": "SPECIES_NONE",
+      "min": 1,
+      "max": 1
+     },
+     {
+      "species": "SPECIES_NONE",
+      "min": 1,
+      "max": 1
+     },
+     {
+      "species": "SPECIES_NONE",
+      "min": 1,
+      "max": 1
+     },
+     {
+      "species": "SPECIES_NONE",
+      "min": 1,
+      "max": 1
+     },
+     {
+      "species": "SPECIES_NONE",
+      "min": 1,
+      "max": 1
+     }
+    ]
+   }
   }
  },
  "map_files": [

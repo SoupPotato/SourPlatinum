@@ -986,9 +986,38 @@ def texture_xml(index, name, original_height=None, path=None):
     return tex, pal, w, h
 
 
+def convex_quad(q):
+    pts = [v[0] for v in q]
+    n = cross(sub(pts[1], pts[0]), sub(pts[2], pts[0]))
+    length = math.sqrt(dot(n, n))
+    if length < 1e-6:
+        return False
+    n = mul(n, 1.0 / length)
+    if abs(dot(sub(pts[3], pts[0]), n)) > 0.01:
+        return False
+    for k in range(4):
+        a, b, c = pts[k], pts[(k + 1) % 4], pts[(k + 2) % 4]
+        if dot(cross(sub(b, a), sub(c, b)), n) <= 1e-6:
+            return False
+    return True
+
+
+def pair_quad(t1, t2):
+    (a, b, c), (a2, c2, d) = t1, t2
+    if a[0] != a2[0] or c[0] != c2[0] or a[2] != a2[2] or c[2] != c2[2]:
+        return None
+    du, dv = a2[1][0] - a[1][0], a2[1][1] - a[1][1]
+    if abs(du - round(du)) > 1e-6 or abs(dv - round(dv)) > 1e-6:
+        return None
+    if abs(c2[1][0] - c[1][0] - du) > 1e-6 or abs(c2[1][1] - c[1][1] - dv) > 1e-6:
+        return None
+    q = [a, b, c, (d[0], (d[1][0] - du, d[1][1] - dv), d[2])]
+    return q if convex_quad(q) else None
+
+
 def write_imd(block, path, materials=None, texture_paths=None):
     tex_xml, pal_xml, mat_xml, poly_xml, disp_xml = [], [], [], [], []
-    total_v = total_t = 0
+    total_v = total_t = total_q = 0
     lo, hi = [1e9] * 3, [-1e9] * 3
     used = [m for m in (materials or MATERIALS) if any(f[0] == m[0] for f in block.faces)]
     for i, (mname, tname, pid, emit) in enumerate(used):
@@ -1004,31 +1033,62 @@ def write_imd(block, path, materials=None, texture_paths=None):
                        'specular="0 0 0" emission="%d %d %d" shininess_table_flag="off" tex_image_idx="%d" tex_palette_idx="%d" '
                        'tex_tiling="repeat repeat" tex_scale="1.000000 1.000000" tex_rotate="0.000000" tex_translate="0.000000 0.000000" '
                        'tex_gen_mode="none"/>' % (i, mname, alpha, pid if alpha == 31 else 10 + i, emit, emit, emit, i, i))
-        cmds = []
-        ntri = 0
+        tri_list, quad_list = [], []
+        pending = None
         for mat, pts, uvs, cols in block.faces:
             if mat != mname:
                 continue
-            for k in range(1, len(pts) - 1):
-                for j in (0, k, k + 1):
-                    p = pts[j]
+            verts = [(tuple(pts[j]), tuple(uvs[j][:2]), tuple(cols[j])) for j in range(len(pts))]
+            if len(verts) == 4 and convex_quad(verts):
+                quad_list.append(verts)
+                continue
+            for k in range(1, len(verts) - 1):
+                t = (verts[0], verts[k], verts[k + 1])
+                if pending is not None:
+                    q = pair_quad(pending, t)
+                    if q:
+                        quad_list.append(q)
+                        pending = None
+                        continue
+                    tri_list.append(pending)
+                pending = t
+        if pending is not None:
+            tri_list.append(pending)
+        last_clr = [None]
+
+        def emit(group):
+            cmds = []
+            for poly in group:
+                for p, uv, col in poly:
                     ds = (p[0], p[2], -p[1])
                     for a in range(3):
                         lo[a] = min(lo[a], ds[a])
                         hi[a] = max(hi[a], ds[a])
-                    cmds.append('            <tex st="%s %s"/>' % (f6(uvs[j][0] * w), f6((1.0 - uvs[j][1]) * h)))
-                    cmds.append('            <clr rgb="%d %d %d"/>' % tuple(max(0, min(31, int(round(c * 31)))) for c in cols[j]))
+                    cmds.append('            <tex st="%s %s"/>' % (f6(uv[0] * w), f6((1.0 - uv[1]) * h)))
+                    clr = tuple(max(0, min(31, int(round(c * 31)))) for c in col)
+                    if clr != last_clr[0]:
+                        cmds.append('            <clr rgb="%d %d %d"/>' % clr)
+                        last_clr[0] = clr
                     cmds.append('            <pos_xyz xyz="%s %s %s"/>' % tuple(f6(a / 64.0) for a in ds))
-                ntri += 1
-        total_v += ntri * 3
+            return cmds
+        prim_xml = []
+        for kind, group, nv in (('triangles', tri_list, 3), ('quads', quad_list, 4)):
+            if not group:
+                continue
+            last_clr[0] = None
+            prim_xml.append('            <primitive index="%d" type="%s" vertex_size="%d">\n            <mtx idx="0"/>\n%s\n            </primitive>'
+                            % (len(prim_xml), kind, len(group) * nv, '\n'.join(emit(group))))
+        ntri, nquad = len(tri_list), len(quad_list)
+        nvert = ntri * 3 + nquad * 4
+        total_v += nvert
         total_t += ntri
-        prims = ('          <primitive_array size="1">\n            <primitive index="0" type="triangles" vertex_size="%d">\n'
-                 '            <mtx idx="0"/>\n%s\n            </primitive>\n          </primitive_array>\n' % (ntri * 3, '\n'.join(cmds)))
-        poly_xml.append('      <polygon index="%d" name="polygon%d" vertex_size="%d" polygon_size="%d" triangle_size="%d" quad_size="0" '
+        total_q += nquad
+        prims = ('          <primitive_array size="%d">\n%s\n          </primitive_array>\n' % (len(prim_xml), '\n'.join(prim_xml)))
+        poly_xml.append('      <polygon index="%d" name="polygon%d" vertex_size="%d" polygon_size="%d" triangle_size="%d" quad_size="%d" '
                         'volume_min="0.000000 0.000000 0.000000" volume_max="0.000000 0.000000 0.000000" volume_r="0.000000" '
                         'mtx_prim_size="1" nrm_flag="off" clr_flag="on" tex_flag="on">\n        <mtx_prim index="0">\n'
                         '          <mtx_list size="1">0</mtx_list>\n%s        </mtx_prim>\n      </polygon>'
-                        % (i, i, ntri * 3, ntri, ntri, prims))
+                        % (i, i, nvert, ntri + nquad, ntri, nquad, prims))
         disp_xml.append('        <display index="%d" material="%d" polygon="%d" priority="0"/>' % (i, i, i))
     n = len(used)
     lo = [v / 64.0 for v in lo]
@@ -1063,16 +1123,16 @@ def write_imd(block, path, materials=None, texture_paths=None):
         '    <node_array size="1">',
         '      <node index="0" name="world_root" kind="mesh" parent="-1" child="-1" brother_next="-1" brother_prev="-1" draw_mtx="on" '
         'billboard="off" scale="1.000000 1.000000 1.000000" rotate="0.000000 0.000000 0.000000" translate="0.000000 0.000000 0.000000" '
-        'visibility="on" display_size="%d" vertex_size="%d" polygon_size="%d" triangle_size="%d" quad_size="0" '
-        'volume_min="0.000000 0.000000 0.000000" volume_max="0.000000 0.000000 0.000000" volume_r="0.000000">' % (n, total_v, total_t, total_t),
+        'visibility="on" display_size="%d" vertex_size="%d" polygon_size="%d" triangle_size="%d" quad_size="%d" '
+        'volume_min="0.000000 0.000000 0.000000" volume_max="0.000000 0.000000 0.000000" volume_r="0.000000">' % (n, total_v, total_t + total_q, total_t, total_q),
         '\n'.join(disp_xml),
         '      </node>',
         '    </node_array>',
-        '    <output_info vertex_size="%d" polygon_size="%d" triangle_size="%d" quad_size="0"/>' % (total_v, total_t, total_t),
+        '    <output_info vertex_size="%d" polygon_size="%d" triangle_size="%d" quad_size="%d"/>' % (total_v, total_t + total_q, total_t, total_q),
         '  </body>',
         '</imd>', ''])
     open(path, 'w', encoding='utf-8').write(xml)
-    return total_t
+    return total_t + 2 * total_q
 
 
 def find_converter():

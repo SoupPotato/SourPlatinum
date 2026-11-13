@@ -87,6 +87,40 @@ typedef struct UnownFormsGroup {
     const u8 *forms;
 } UnownFormsGroup;
 
+typedef struct HideawayEncounterSlot {
+    u16 species;
+    u8 minLevel;
+    u8 maxLevel;
+} HideawayEncounterSlot;
+
+typedef struct HideawayEncounters {
+    u16 mapHeaderID;
+    u8 landRate;
+    u8 waterRate;
+    HideawayEncounterSlot land[MAX_GRASS_ENCOUNTERS];
+    HideawayEncounterSlot water[MAX_GRASS_ENCOUNTERS];
+} HideawayEncounters;
+
+#include "data/underground_hideaway_encounters.h"
+
+static BOOL sHideawayEncounter = FALSE;
+
+static const HideawayEncounters *FindHideawayEncounters(FieldSystem *fieldSystem)
+{
+    for (int i = 0; i < NELEMS(sHideawayEncounters); i++) {
+        if (sHideawayEncounters[i].mapHeaderID == fieldSystem->location->mapHeaderID) {
+            return &sHideawayEncounters[i];
+        }
+    }
+
+    return NULL;
+}
+
+BOOL WildEncounters_MapHasEncounters(FieldSystem *fieldSystem)
+{
+    return MapHeader_HasWildEncounters(fieldSystem->location->mapHeaderID) || FindHideawayEncounters(fieldSystem) != NULL;
+}
+
 static BOOL ShouldGetRandomEncounter(FieldSystem *fieldSystem, const u32 encounterRate, const u8 tileBehavior);
 static u8 GetTileEncounterRateAndType(FieldSystem *fieldSystem, u8 tileBehavior, u8 *encounterType);
 static BOOL GracePeriodStepsUsed(FieldSystem *fieldSystem, u32 param1);
@@ -249,6 +283,11 @@ BOOL WildEncounters_TryWildEncounter(FieldSystem *fieldSystem)
     tileBehavior = TerrainCollisionManager_GetTileBehavior(fieldSystem, playerX, playerZ);
 
     u8 encounterRate = GetTileEncounterRateAndType(fieldSystem, tileBehavior, &encounterType);
+    const HideawayEncounters *hideaway = FindHideawayEncounters(fieldSystem);
+
+    if (hideaway != NULL && TileBehavior_HasEncounters(tileBehavior)) {
+        encounterRate = encounterType == ENCOUNTER_TYPE_SURF ? hideaway->waterRate : hideaway->landRate;
+    }
 
     if (encounterRate == 0) {
         return FALSE;
@@ -324,7 +363,28 @@ BOOL WildEncounters_TryWildEncounter(FieldSystem *fieldSystem)
 
     FieldBattleDTO_Init(battleParams, fieldSystem);
 
-    if (encounterType == ENCOUNTER_TYPE_GRASS) {
+    if (hideaway != NULL) {
+        const HideawayEncounterSlot *slots = encounterType == ENCOUNTER_TYPE_SURF ? hideaway->water : hideaway->land;
+
+        for (int i = 0; i < MAX_GRASS_ENCOUNTERS; i++) {
+            encounterTable[i].species = slots[i].species;
+            encounterTable[i].minLevel = slots[i].minLevel;
+            encounterTable[i].maxLevel = slots[i].maxLevel;
+        }
+
+        sHideawayEncounter = TRUE;
+
+        if (!withPartner) {
+            encounterSuccess = TryGenerateWildMon(firstPartyMon, 0xff, &encounterFieldParams, encounterTable, encounterType, 1, battleParams);
+        } else {
+            battleParams->trainerIDs[BATTLER_PLAYER_2] = SystemVars_GetPartnerTrainerID(SaveData_GetVarsFlags(fieldSystem->saveData));
+            Trainer_Encounter(battleParams, fieldSystem->saveData, HEAP_ID_FIELD2);
+            encounterSuccess = TryGenerateWildMon(firstPartyMon, 0xff, &encounterFieldParams, encounterTable, encounterType, 1, battleParams)
+                && TryGenerateWildMon(firstPartyMon, 0xff, &encounterFieldParams, encounterTable, encounterType, 3, battleParams);
+        }
+
+        sHideawayEncounter = FALSE;
+    } else if (encounterType == ENCOUNTER_TYPE_GRASS) {
         for (int i = 0; i < MAX_GRASS_ENCOUNTERS; i++) {
             encounterTable[i].species = encounterData->grassEncounters.encounters[i].species;
             encounterTable[i].maxLevel = encounterData->grassEncounters.encounters[i].level;
@@ -466,6 +526,11 @@ BOOL WildEncounters_TrySweetScentEncounter(FieldSystem *fieldSystem, FieldTask *
     u8 tileBehavior = TerrainCollisionManager_GetTileBehavior(fieldSystem, playerX, playerZ);
 
     u8 encounterRate = GetTileEncounterRateAndType(fieldSystem, tileBehavior, &encounterType);
+    const HideawayEncounters *hideaway = FindHideawayEncounters(fieldSystem);
+
+    if (hideaway != NULL && TileBehavior_HasEncounters(tileBehavior)) {
+        encounterRate = encounterType == ENCOUNTER_TYPE_SURF ? hideaway->waterRate : hideaway->landRate;
+    }
 
     if (encounterRate == 0) {
         return FALSE;
@@ -511,7 +576,28 @@ BOOL WildEncounters_TrySweetScentEncounter(FieldSystem *fieldSystem, FieldTask *
 
     FieldBattleDTO_Init(battleParams, fieldSystem);
 
-    if (encounterType == ENCOUNTER_TYPE_GRASS) {
+    if (hideaway != NULL) {
+        const HideawayEncounterSlot *slots = encounterType == ENCOUNTER_TYPE_SURF ? hideaway->water : hideaway->land;
+
+        for (int i = 0; i < MAX_GRASS_ENCOUNTERS; i++) {
+            encounterTable[i].species = slots[i].species;
+            encounterTable[i].minLevel = slots[i].minLevel;
+            encounterTable[i].maxLevel = slots[i].maxLevel;
+        }
+
+        sHideawayEncounter = TRUE;
+
+        if (!withPartner) {
+            encounterSuccess = TryGenerateWildMon(firstPartyMon, 0xff, &encounterFieldParams, encounterTable, encounterType, 1, battleParams);
+        } else {
+            battleParams->trainerIDs[BATTLER_PLAYER_2] = SystemVars_GetPartnerTrainerID(SaveData_GetVarsFlags(fieldSystem->saveData));
+            Trainer_Encounter(battleParams, fieldSystem->saveData, HEAP_ID_FIELD2);
+            encounterSuccess = TryGenerateWildMon(firstPartyMon, 0xff, &encounterFieldParams, encounterTable, encounterType, 1, battleParams)
+                && TryGenerateWildMon(firstPartyMon, 0xff, &encounterFieldParams, encounterTable, encounterType, 3, battleParams);
+        }
+
+        sHideawayEncounter = FALSE;
+    } else if (encounterType == ENCOUNTER_TYPE_GRASS) {
         for (int i = 0; i < MAX_GRASS_ENCOUNTERS; i++) {
             encounterTable[i].species = encounterData->grassEncounters.encounters[i].species;
             encounterTable[i].maxLevel = encounterData->grassEncounters.encounters[i].level;
@@ -1123,15 +1209,15 @@ static BOOL TryGenerateWildMon(Pokemon *firstPartyMon, const int fishingRodType,
         }
 
         encounterSlot = TryFindHigherLevelSlot(encounterTable, encounterFieldParams, encounterSlot);
-        level = encounterTable[encounterSlot].maxLevel;
+        level = sHideawayEncounter ? GetWildMonLevel(&encounterTable[encounterSlot], encounterFieldParams) : encounterTable[encounterSlot].maxLevel;
         break;
     case ENCOUNTER_TYPE_SURF:
         // BUG: Magnet Pull doesn't function in water because its encounter slot gets overwritten when the Static check returns FALSE.
-        forcedSlot = TryGetSlotForTypeMatchAbility(firstPartyMon, encounterFieldParams, encounterTable, MAX_WATER_ENCOUNTERS, TYPE_STEEL, ABILITY_MAGNET_PULL, &encounterSlot);
-        forcedSlot = TryGetSlotForTypeMatchAbility(firstPartyMon, encounterFieldParams, encounterTable, MAX_WATER_ENCOUNTERS, TYPE_ELECTRIC, ABILITY_STATIC, &encounterSlot);
+        forcedSlot = TryGetSlotForTypeMatchAbility(firstPartyMon, encounterFieldParams, encounterTable, sHideawayEncounter ? MAX_GRASS_ENCOUNTERS : MAX_WATER_ENCOUNTERS, TYPE_STEEL, ABILITY_MAGNET_PULL, &encounterSlot);
+        forcedSlot = TryGetSlotForTypeMatchAbility(firstPartyMon, encounterFieldParams, encounterTable, sHideawayEncounter ? MAX_GRASS_ENCOUNTERS : MAX_WATER_ENCOUNTERS, TYPE_ELECTRIC, ABILITY_STATIC, &encounterSlot);
 
         if (!forcedSlot) {
-            encounterSlot = GetWaterEncounterSlot();
+            encounterSlot = sHideawayEncounter ? GetGroundEncounterSlot() : GetWaterEncounterSlot();
         }
 
         level = GetWildMonLevel(&encounterTable[encounterSlot], encounterFieldParams);

@@ -1,0 +1,409 @@
+{
+ "backgrounds": {
+  "BACKGROUND_PLAIN": {
+   "day": "bg_BACKGROUND_PLAIN_day.png",
+   "evening": "bg_BACKGROUND_PLAIN_evening.png",
+   "night": "bg_BACKGROUND_PLAIN_night.png"
+  },
+  "BACKGROUND_WATER": {
+   "day": "bg_BACKGROUND_WATER_day.png",
+   "evening": "bg_BACKGROUND_WATER_evening.png",
+   "night": "bg_BACKGROUND_WATER_night.png"
+  },
+  "BACKGROUND_CITY": {
+   "day": "bg_BACKGROUND_CITY_day.png",
+   "evening": "bg_BACKGROUND_CITY_evening.png",
+   "night": "bg_BACKGROUND_CITY_night.png"
+  },
+  "BACKGROUND_FOREST": {
+   "day": "bg_BACKGROUND_FOREST_day.png",
+   "evening": "bg_BACKGROUND_FOREST_evening.png",
+   "night": "bg_BACKGROUND_FOREST_night.png"
+  },
+  "BACKGROUND_MOUNTAIN": {
+   "day": "bg_BACKGROUND_MOUNTAIN_day.png",
+   "evening": "bg_BACKGROUND_MOUNTAIN_evening.png",
+   "night": "bg_BACKGROUND_MOUNTAIN_night.png"
+  },
+  "BACKGROUND_SNOW": {
+   "day": "bg_BACKGROUND_SNOW_day.png",
+   "evening": "bg_BACKGROUND_SNOW_evening.png",
+   "night": "bg_BACKGROUND_SNOW_night.png"
+  },
+  "BACKGROUND_INDOORS_1": {
+   "day": "bg_BACKGROUND_INDOORS_1_day.png",
+   "evening": "bg_BACKGROUND_INDOORS_1_evening.png",
+   "night": "bg_BACKGROUND_INDOORS_1_night.png"
+  },
+  "BACKGROUND_INDOORS_2": {
+   "day": "bg_BACKGROUND_INDOORS_2_day.png",
+   "evening": "bg_BACKGROUND_INDOORS_2_evening.png",
+   "night": "bg_BACKGROUND_INDOORS_2_night.png"
+  },
+  "BACKGROUND_INDOORS_3": {
+   "day": "bg_BACKGROUND_INDOORS_3_day.png",
+   "evening": "bg_BACKGROUND_INDOORS_3_evening.png",
+   "night": "bg_BACKGROUND_INDOORS_3_night.png"
+  },
+  "BACKGROUND_CAVE_1": {
+   "day": "bg_BACKGROUND_CAVE_1_day.png",
+   "evening": "bg_BACKGROUND_CAVE_1_evening.png",
+   "night": "bg_BACKGROUND_CAVE_1_night.png"
+  },
+  "BACKGROUND_CAVE_2": {
+   "day": "bg_BACKGROUND_CAVE_2_day.png",
+   "evening": "bg_BACKGROUND_CAVE_2_evening.png",
+   "night": "bg_BACKGROUND_CAVE_2_night.png"
+  },
+  "BACKGROUND_CAVE_3": {
+   "day": "bg_BACKGROUND_CAVE_3_day.png",
+   "evening": "bg_BACKGROUND_CAVE_3_evening.png",
+   "night": "bg_BACKGROUND_CAVE_3_night.png"
+  },
+  "BACKGROUND_AARON": {
+   "day": "bg_BACKGROUND_AARON_day.png",
+   "evening": "bg_BACKGROUND_AARON_evening.png",
+   "night": "bg_BACKGROUND_AARON_night.png"
+  },
+  "BACKGROUND_BERTHA": {
+   "day": "bg_BACKGROUND_BERTHA_day.png",
+   "evening": "bg_BACKGROUND_BERTHA_evening.png",
+   "night": "bg_BACKGROUND_BERTHA_night.png"
+  },
+  "BACKGROUND_FLINT": {
+   "day": "bg_BACKGROUND_FLINT_day.png",
+   "evening": "bg_BACKGROUND_FLINT_evening.png",
+   "night": "bg_BACKGROUND_FLINT_night.png"
+  },
+  "BACKGROUND_LUCIAN": {
+   "day": "bg_BACKGROUND_LUCIAN_day.png",
+   "evening": "bg_BACKGROUND_LUCIAN_evening.png",
+   "night": "bg_BACKGROUND_LUCIAN_night.png"
+  },
+  "BACKGROUND_CYNTHIA": {
+   "day": "bg_BACKGROUND_CYNTHIA_day.png",
+   "evening": "bg_BACKGROUND_CYNTHIA_evening.png",
+   "night": "bg_BACKGROUND_CYNTHIA_night.png"
+  },
+  "BACKGROUND_DISTORTION_WORLD": {
+   "day": "bg_BACKGROUND_DISTORTION_WORLD_day.png",
+   "evening": "bg_BACKGROUND_DISTORTION_WORLD_evening.png",
+   "night": "bg_BACKGROUND_DISTORTION_WORLD_night.png"
+  },
+  "BACKGROUND_BATTLE_TOWER": {
+   "day": "bg_BACKGROUND_BATTLE_TOWER_day.png",
+   "evening": "bg_BACKGROUND_BATTLE_TOWER_evening.png",
+   "night": "bg_BACKGROUND_BATTLE_TOWER_night.png"
+  },
+  "BACKGROUND_BATTLE_FACTORY": {
+   "day": "bg_BACKGROUND_BATTLE_FACTORY_day.png",
+   "evening": "bg_BACKGROUND_BATTLE_FACTORY_evening.png",
+   "night": "bg_BACKGROUND_BATTLE_FACTORY_night.png"
+  },
+  "BACKGROUND_BATTLE_ARCADE": {
+   "day": "bg_BACKGROUND_BATTLE_ARCADE_day.png",
+   "evening": "bg_BACKGROUND_BATTLE_ARCADE_evening.png",
+   "night": "bg_BACKGROUND_BATTLE_ARCADE_night.png"
+  },
+  "BACKGROUND_BATTLE_CASTLE": {
+   "day": "bg_BACKGROUND_BATTLE_CASTLE_day.png",
+   "evening": "bg_BACKGROUND_BATTLE_CASTLE_evening.png",
+   "night": "bg_BACKGROUND_BATTLE_CASTLE_night.png"
+  },
+  "BACKGROUND_BATTLE_HALL": {
+   "day": "bg_BACKGROUND_BATTLE_HALL_day.png",
+   "evening": "bg_BACKGROUND_BATTLE_HALL_evening.png",
+   "night": "bg_BACKGROUND_BATTLE_HALL_night.png"
+  }
+ },
+ "terrains": {
+  "TERRAIN_PLAIN": {
+   "player": {
+    "day": "ground_TERRAIN_PLAIN_player_day.png",
+    "evening": "ground_TERRAIN_PLAIN_player_evening.png",
+    "night": "ground_TERRAIN_PLAIN_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_PLAIN_enemy_day.png",
+    "evening": "ground_TERRAIN_PLAIN_enemy_evening.png",
+    "night": "ground_TERRAIN_PLAIN_enemy_night.png"
+   }
+  },
+  "TERRAIN_SAND": {
+   "player": {
+    "day": "ground_TERRAIN_SAND_player_day.png",
+    "evening": "ground_TERRAIN_SAND_player_evening.png",
+    "night": "ground_TERRAIN_SAND_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_SAND_enemy_day.png",
+    "evening": "ground_TERRAIN_SAND_enemy_evening.png",
+    "night": "ground_TERRAIN_SAND_enemy_night.png"
+   }
+  },
+  "TERRAIN_GRASS": {
+   "player": {
+    "day": "ground_TERRAIN_GRASS_player_day.png",
+    "evening": "ground_TERRAIN_GRASS_player_evening.png",
+    "night": "ground_TERRAIN_GRASS_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_GRASS_enemy_day.png",
+    "evening": "ground_TERRAIN_GRASS_enemy_evening.png",
+    "night": "ground_TERRAIN_GRASS_enemy_night.png"
+   }
+  },
+  "TERRAIN_PUDDLE": {
+   "player": {
+    "day": "ground_TERRAIN_PUDDLE_player_day.png",
+    "evening": "ground_TERRAIN_PUDDLE_player_evening.png",
+    "night": "ground_TERRAIN_PUDDLE_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_PUDDLE_enemy_day.png",
+    "evening": "ground_TERRAIN_PUDDLE_enemy_evening.png",
+    "night": "ground_TERRAIN_PUDDLE_enemy_night.png"
+   }
+  },
+  "TERRAIN_MOUNTAIN": {
+   "player": {
+    "day": "ground_TERRAIN_MOUNTAIN_player_day.png",
+    "evening": "ground_TERRAIN_MOUNTAIN_player_evening.png",
+    "night": "ground_TERRAIN_MOUNTAIN_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_MOUNTAIN_enemy_day.png",
+    "evening": "ground_TERRAIN_MOUNTAIN_enemy_evening.png",
+    "night": "ground_TERRAIN_MOUNTAIN_enemy_night.png"
+   }
+  },
+  "TERRAIN_CAVE": {
+   "player": {
+    "day": "ground_TERRAIN_CAVE_player_day.png",
+    "evening": "ground_TERRAIN_CAVE_player_evening.png",
+    "night": "ground_TERRAIN_CAVE_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_CAVE_enemy_day.png",
+    "evening": "ground_TERRAIN_CAVE_enemy_evening.png",
+    "night": "ground_TERRAIN_CAVE_enemy_night.png"
+   }
+  },
+  "TERRAIN_SNOW": {
+   "player": {
+    "day": "ground_TERRAIN_SNOW_player_day.png",
+    "evening": "ground_TERRAIN_SNOW_player_evening.png",
+    "night": "ground_TERRAIN_SNOW_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_SNOW_enemy_day.png",
+    "evening": "ground_TERRAIN_SNOW_enemy_evening.png",
+    "night": "ground_TERRAIN_SNOW_enemy_night.png"
+   }
+  },
+  "TERRAIN_WATER": {
+   "player": {
+    "day": "ground_TERRAIN_WATER_player_day.png",
+    "evening": "ground_TERRAIN_WATER_player_evening.png",
+    "night": "ground_TERRAIN_WATER_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_WATER_enemy_day.png",
+    "evening": "ground_TERRAIN_WATER_enemy_evening.png",
+    "night": "ground_TERRAIN_WATER_enemy_night.png"
+   }
+  },
+  "TERRAIN_ICE": {
+   "player": {
+    "day": "ground_TERRAIN_ICE_player_day.png",
+    "evening": "ground_TERRAIN_ICE_player_evening.png",
+    "night": "ground_TERRAIN_ICE_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_ICE_enemy_day.png",
+    "evening": "ground_TERRAIN_ICE_enemy_evening.png",
+    "night": "ground_TERRAIN_ICE_enemy_night.png"
+   }
+  },
+  "TERRAIN_BUILDING": {
+   "player": {
+    "day": "ground_TERRAIN_BUILDING_player_day.png",
+    "evening": "ground_TERRAIN_BUILDING_player_evening.png",
+    "night": "ground_TERRAIN_BUILDING_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_BUILDING_enemy_day.png",
+    "evening": "ground_TERRAIN_BUILDING_enemy_evening.png",
+    "night": "ground_TERRAIN_BUILDING_enemy_night.png"
+   }
+  },
+  "TERRAIN_GREAT_MARSH": {
+   "player": {
+    "day": "ground_TERRAIN_GREAT_MARSH_player_day.png",
+    "evening": "ground_TERRAIN_GREAT_MARSH_player_evening.png",
+    "night": "ground_TERRAIN_GREAT_MARSH_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_GREAT_MARSH_enemy_day.png",
+    "evening": "ground_TERRAIN_GREAT_MARSH_enemy_evening.png",
+    "night": "ground_TERRAIN_GREAT_MARSH_enemy_night.png"
+   }
+  },
+  "TERRAIN_BRIDGE": {
+   "player": {
+    "day": "ground_TERRAIN_BRIDGE_player_day.png",
+    "evening": "ground_TERRAIN_BRIDGE_player_evening.png",
+    "night": "ground_TERRAIN_BRIDGE_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_BRIDGE_enemy_day.png",
+    "evening": "ground_TERRAIN_BRIDGE_enemy_evening.png",
+    "night": "ground_TERRAIN_BRIDGE_enemy_night.png"
+   }
+  },
+  "TERRAIN_AARON": {
+   "player": {
+    "day": "ground_TERRAIN_AARON_player_day.png",
+    "evening": "ground_TERRAIN_AARON_player_evening.png",
+    "night": "ground_TERRAIN_AARON_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_AARON_enemy_day.png",
+    "evening": "ground_TERRAIN_AARON_enemy_evening.png",
+    "night": "ground_TERRAIN_AARON_enemy_night.png"
+   }
+  },
+  "TERRAIN_BERTHA": {
+   "player": {
+    "day": "ground_TERRAIN_BERTHA_player_day.png",
+    "evening": "ground_TERRAIN_BERTHA_player_evening.png",
+    "night": "ground_TERRAIN_BERTHA_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_BERTHA_enemy_day.png",
+    "evening": "ground_TERRAIN_BERTHA_enemy_evening.png",
+    "night": "ground_TERRAIN_BERTHA_enemy_night.png"
+   }
+  },
+  "TERRAIN_FLINT": {
+   "player": {
+    "day": "ground_TERRAIN_FLINT_player_day.png",
+    "evening": "ground_TERRAIN_FLINT_player_evening.png",
+    "night": "ground_TERRAIN_FLINT_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_FLINT_enemy_day.png",
+    "evening": "ground_TERRAIN_FLINT_enemy_evening.png",
+    "night": "ground_TERRAIN_FLINT_enemy_night.png"
+   }
+  },
+  "TERRAIN_LUCIAN": {
+   "player": {
+    "day": "ground_TERRAIN_LUCIAN_player_day.png",
+    "evening": "ground_TERRAIN_LUCIAN_player_evening.png",
+    "night": "ground_TERRAIN_LUCIAN_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_LUCIAN_enemy_day.png",
+    "evening": "ground_TERRAIN_LUCIAN_enemy_evening.png",
+    "night": "ground_TERRAIN_LUCIAN_enemy_night.png"
+   }
+  },
+  "TERRAIN_CYNTHIA": {
+   "player": {
+    "day": "ground_TERRAIN_CYNTHIA_player_day.png",
+    "evening": "ground_TERRAIN_CYNTHIA_player_evening.png",
+    "night": "ground_TERRAIN_CYNTHIA_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_CYNTHIA_enemy_day.png",
+    "evening": "ground_TERRAIN_CYNTHIA_enemy_evening.png",
+    "night": "ground_TERRAIN_CYNTHIA_enemy_night.png"
+   }
+  },
+  "TERRAIN_DISTORTION_WORLD": {
+   "player": {
+    "day": "ground_TERRAIN_DISTORTION_WORLD_player_day.png",
+    "evening": "ground_TERRAIN_DISTORTION_WORLD_player_evening.png",
+    "night": "ground_TERRAIN_DISTORTION_WORLD_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_DISTORTION_WORLD_enemy_day.png",
+    "evening": "ground_TERRAIN_DISTORTION_WORLD_enemy_evening.png",
+    "night": "ground_TERRAIN_DISTORTION_WORLD_enemy_night.png"
+   }
+  },
+  "TERRAIN_BATTLE_TOWER": {
+   "player": {
+    "day": "ground_TERRAIN_BATTLE_TOWER_player_day.png",
+    "evening": "ground_TERRAIN_BATTLE_TOWER_player_evening.png",
+    "night": "ground_TERRAIN_BATTLE_TOWER_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_BATTLE_TOWER_enemy_day.png",
+    "evening": "ground_TERRAIN_BATTLE_TOWER_enemy_evening.png",
+    "night": "ground_TERRAIN_BATTLE_TOWER_enemy_night.png"
+   }
+  },
+  "TERRAIN_BATTLE_FACTORY": {
+   "player": {
+    "day": "ground_TERRAIN_BATTLE_FACTORY_player_day.png",
+    "evening": "ground_TERRAIN_BATTLE_FACTORY_player_evening.png",
+    "night": "ground_TERRAIN_BATTLE_FACTORY_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_BATTLE_FACTORY_enemy_day.png",
+    "evening": "ground_TERRAIN_BATTLE_FACTORY_enemy_evening.png",
+    "night": "ground_TERRAIN_BATTLE_FACTORY_enemy_night.png"
+   }
+  },
+  "TERRAIN_BATTLE_ARCADE": {
+   "player": {
+    "day": "ground_TERRAIN_BATTLE_ARCADE_player_day.png",
+    "evening": "ground_TERRAIN_BATTLE_ARCADE_player_evening.png",
+    "night": "ground_TERRAIN_BATTLE_ARCADE_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_BATTLE_ARCADE_enemy_day.png",
+    "evening": "ground_TERRAIN_BATTLE_ARCADE_enemy_evening.png",
+    "night": "ground_TERRAIN_BATTLE_ARCADE_enemy_night.png"
+   }
+  },
+  "TERRAIN_BATTLE_CASTLE": {
+   "player": {
+    "day": "ground_TERRAIN_BATTLE_CASTLE_player_day.png",
+    "evening": "ground_TERRAIN_BATTLE_CASTLE_player_evening.png",
+    "night": "ground_TERRAIN_BATTLE_CASTLE_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_BATTLE_CASTLE_enemy_day.png",
+    "evening": "ground_TERRAIN_BATTLE_CASTLE_enemy_evening.png",
+    "night": "ground_TERRAIN_BATTLE_CASTLE_enemy_night.png"
+   }
+  },
+  "TERRAIN_BATTLE_HALL": {
+   "player": {
+    "day": "ground_TERRAIN_BATTLE_HALL_player_day.png",
+    "evening": "ground_TERRAIN_BATTLE_HALL_player_evening.png",
+    "night": "ground_TERRAIN_BATTLE_HALL_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_BATTLE_HALL_enemy_day.png",
+    "evening": "ground_TERRAIN_BATTLE_HALL_enemy_evening.png",
+    "night": "ground_TERRAIN_BATTLE_HALL_enemy_night.png"
+   }
+  },
+  "TERRAIN_GIRATINA": {
+   "player": {
+    "day": "ground_TERRAIN_GIRATINA_player_day.png",
+    "evening": "ground_TERRAIN_GIRATINA_player_evening.png",
+    "night": "ground_TERRAIN_GIRATINA_player_night.png"
+   },
+   "enemy": {
+    "day": "ground_TERRAIN_GIRATINA_enemy_day.png",
+    "evening": "ground_TERRAIN_GIRATINA_enemy_evening.png",
+    "night": "ground_TERRAIN_GIRATINA_enemy_night.png"
+   }
+  }
+ }
+}

@@ -1,0 +1,949 @@
+{
+ "lighting_set_000": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     24,
+     24,
+     20
+    ],
+    "direction": [
+     -0.498779296875,
+     -0.8662109375,
+     0.02685546875
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     2,
+     2,
+     13
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     31,
+     31,
+     31
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "diffuse": [
+   16,
+   16,
+   16
+  ],
+  "ambient": [
+   10,
+   12,
+   12
+  ],
+  "emission": [
+   14,
+   14,
+   14
+  ],
+  "label": "Outdoors (follows the clock)",
+  "fixed": false
+ },
+ "lighting_set_001": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     23,
+     23,
+     25
+    ],
+    "direction": [
+     -0.498779296875,
+     -0.8662109375,
+     0.02685546875
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     4,
+     4,
+     16
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "diffuse": [
+   16,
+   16,
+   16
+  ],
+  "ambient": [
+   14,
+   14,
+   14
+  ],
+  "emission": [
+   16,
+   16,
+   16
+  ],
+  "label": "Cave",
+  "fixed": false
+ },
+ "lighting_set_002": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     7,
+     7,
+     12
+    ],
+    "direction": [
+     0.463134765625,
+     -0.87890625,
+     -0.11376953125
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     22,
+     18,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     31,
+     31,
+     31
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "diffuse": [
+   14,
+   14,
+   16
+  ],
+  "ambient": [
+   10,
+   10,
+   10
+  ],
+  "emission": [
+   8,
+   8,
+   11
+  ],
+  "label": "Dark cave (Mt. Coronet)",
+  "fixed": false
+ },
+ "lighting_set_003": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     24,
+     24,
+     18
+    ],
+    "direction": [
+     -0.498779296875,
+     -0.8662109375,
+     0.02685546875
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     2,
+     2,
+     12
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     31,
+     31,
+     31
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "diffuse": [
+   16,
+   16,
+   16
+  ],
+  "ambient": [
+   10,
+   12,
+   12
+  ],
+  "emission": [
+   14,
+   14,
+   14
+  ],
+  "label": "Lighting set 3",
+  "fixed": false
+ },
+ "lighting_set_004": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     12,
+     12,
+     22
+    ],
+    "direction": [
+     -0.125244140625,
+     -0.87109375,
+     -0.21826171875
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     0,
+     2,
+     10
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     31,
+     31,
+     31
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "diffuse": [
+   11,
+   11,
+   13
+  ],
+  "ambient": [
+   10,
+   10,
+   10
+  ],
+  "emission": [
+   13,
+   13,
+   14
+  ],
+  "label": "Dawn (fixed)",
+  "fixed": true
+ },
+ "lighting_set_005": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     15,
+     15,
+     22
+    ],
+    "direction": [
+     -0.41943359375,
+     -0.866943359375,
+     -0.2705078125
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     0,
+     0,
+     10
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     31,
+     31,
+     31
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "diffuse": [
+   12,
+   12,
+   12
+  ],
+  "ambient": [
+   8,
+   8,
+   8
+  ],
+  "emission": [
+   14,
+   14,
+   18
+  ],
+  "label": "Morning (fixed)",
+  "fixed": true
+ },
+ "lighting_set_006": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     18,
+     18,
+     21
+    ],
+    "direction": [
+     -0.44580078125,
+     -0.8662109375,
+     -0.17138671875
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     1,
+     1,
+     11
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     31,
+     31,
+     31
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "diffuse": [
+   13,
+   13,
+   13
+  ],
+  "ambient": [
+   9,
+   9,
+   9
+  ],
+  "emission": [
+   14,
+   14,
+   16
+  ],
+  "label": "Day (fixed)",
+  "fixed": true
+ },
+ "lighting_set_007": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     24,
+     24,
+     20
+    ],
+    "direction": [
+     -0.498779296875,
+     -0.8662109375,
+     0.02685546875
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     2,
+     2,
+     13
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     31,
+     31,
+     31
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "diffuse": [
+   16,
+   16,
+   16
+  ],
+  "ambient": [
+   10,
+   12,
+   12
+  ],
+  "emission": [
+   14,
+   14,
+   14
+  ],
+  "label": "Noon (fixed)",
+  "fixed": true
+ },
+ "lighting_set_008": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     20,
+     18,
+     16
+    ],
+    "direction": [
+     -0.17822265625,
+     -0.869140625,
+     -0.02001953125
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     3,
+     4,
+     10
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     31,
+     31,
+     31
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "diffuse": [
+   15,
+   15,
+   15
+  ],
+  "ambient": [
+   11,
+   12,
+   12
+  ],
+  "emission": [
+   12,
+   11,
+   11
+  ],
+  "label": "Afternoon (fixed)",
+  "fixed": true
+ },
+ "lighting_set_009": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     17,
+     13,
+     10
+    ],
+    "direction": [
+     0.463134765625,
+     -0.87890625,
+     -0.11376953125
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     14,
+     6,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     31,
+     31,
+     31
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "diffuse": [
+   14,
+   14,
+   14
+  ],
+  "ambient": [
+   12,
+   12,
+   12
+  ],
+  "emission": [
+   9,
+   7,
+   7
+  ],
+  "label": "Sunset (fixed)",
+  "fixed": true
+ },
+ "lighting_set_010": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     11,
+     12,
+     15
+    ],
+    "direction": [
+     0.463134765625,
+     -0.87890625,
+     -0.11376953125
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     10,
+     4,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     31,
+     31,
+     31
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "diffuse": [
+   14,
+   14,
+   14
+  ],
+  "ambient": [
+   12,
+   12,
+   12
+  ],
+  "emission": [
+   8,
+   8,
+   9
+  ],
+  "label": "Dusk (fixed)",
+  "fixed": true
+ },
+ "lighting_set_011": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     11,
+     11,
+     16
+    ],
+    "direction": [
+     0.463134765625,
+     -0.87890625,
+     -0.11376953125
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     22,
+     18,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     31,
+     31,
+     31
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "diffuse": [
+   14,
+   14,
+   16
+  ],
+  "ambient": [
+   10,
+   10,
+   10
+  ],
+  "emission": [
+   8,
+   8,
+   11
+  ],
+  "label": "Night (fixed)",
+  "fixed": true
+ },
+ "reference": {
+  "lights": [
+   {
+    "enabled": true,
+    "color": [
+     24,
+     24,
+     20
+    ],
+    "direction": [
+     -0.498779296875,
+     -0.8662109375,
+     0.02685546875
+    ]
+   },
+   {
+    "enabled": false,
+    "color": [
+     0,
+     0,
+     0
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     2,
+     2,
+     13
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "enabled": true,
+    "color": [
+     31,
+     31,
+     31
+    ],
+    "direction": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "diffuse": [
+   16,
+   16,
+   16
+  ],
+  "ambient": [
+   10,
+   12,
+   12
+  ],
+  "emission": [
+   14,
+   14,
+   14
+  ]
+ }
+}

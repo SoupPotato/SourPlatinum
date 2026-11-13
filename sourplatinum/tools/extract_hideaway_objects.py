@@ -265,6 +265,8 @@ def main():
         textures = {}
         for mat, cos, uvs, cols, n, lo, hi in tris:
             image = images.get(mat)
+            if not image or not os.path.exists(os.path.join(src_dir, image + '.png')):
+                continue
             tex = None
             if image and os.path.exists(os.path.join(src_dir, image + '.png')):
                 raw = open(os.path.join(src_dir, image + '.png'), 'rb').read()
@@ -279,7 +281,8 @@ def main():
                 textures[tex] = os.path.join('tex', tex + '.png')
             g2 = groups.setdefault(tex or '', {'tex': tex or '', 'pos': [], 'uv': [], 'col': []})
             for p, uv, c in zip(cos, uvs, cols):
-                g2['pos'] += [round((p[0] - ox) * scale, 3), round((p[1] - oy) * scale, 3), round((p[2] - oz) * scale + lift, 3)]
+                z = (p[2] - oz) * scale
+                g2['pos'] += [round((p[0] - ox) * scale, 3), round((p[1] - oy) * scale, 3), round(max(z, 0.5) if z < 0.5 else z + lift, 3)]
                 g2['uv'] += [round(uv[0], 4), round(uv[1], 4)]
                 g2['col'] += [round(v, 3) for v in c]
         allx = [v for g2 in groups.values() for v in g2['pos'][0::3]]

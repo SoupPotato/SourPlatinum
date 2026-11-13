@@ -298,9 +298,9 @@ def door_stamps(apicula, tmp):
                 c, r = ac + dx, ar + dy
                 x0, x1, y0, y1 = tile_rect(c, r)
                 out = []
-                for mat, poly in tiles.get((c, r), []):
-                    if mat == 'black' and max(p[0][2] for p in poly) - level < WALL_HEIGHT - 1:
-                        continue
+                kept = [(mat, poly) for mat, poly in tiles.get((c, r), [])
+                        if not (mat == 'black' and max(p[0][2] for p in poly) - level < WALL_HEIGHT - 1)]
+                for mat, poly in canonical(kept):
                     for k in range(1, len(poly) - 1):
                         tri = [poly[0], poly[k], poly[k + 1]]
                         out.append({'m': mat,

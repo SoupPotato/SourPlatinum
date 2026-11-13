@@ -68,6 +68,9 @@ FLOOR_LEVEL = 16.0
 STOREY = 16.0
 COLL_FLOOR = 0x0008
 COLL_BLOCK = 0x8000
+COLL_WATER = 0x0010
+NOT_SURFABLE = ('magma',)
+WATER_SURFACE = 8.0
 WALL_TEXTURES = ['dun_wall_n', 'dun_wall_s', 'dun_wall_e', 'dun_wall_w', 'dun_wall_c', 'dun_floor', 'dun_floor2']
 DOOR_TEXTURES = ['dun_dhole', 'dun_ent2']
 BASE_FLOORS = ('dun_floor', 'dun_floor3', 'dun_floor4')
@@ -76,6 +79,30 @@ FRONT_TO_DOOR = {(0, 1): 'N', (0, -1): 'S', (1, 0): 'W', (-1, 0): 'E'}
 STEP_BACK = {'N': 'South', 'S': 'North', 'W': 'East', 'E': 'West'}
 WEIGHTS = [1, 2, 1, 2, 0, 2, 1, 2, 1]
 ROCK_TOP = 'rock'
+ALIASES = {'rock': 'dun_floor2', 'cave': 'dun_floor'}
+LIGHTING = json.load(open(os.path.join(B.ASSETS, 'hideaway_lighting.json')))
+
+
+def floor_light(seg):
+    out = []
+    for ch in range(3):
+        c = seg['emission'][ch] / 31.0
+        for light in seg['lights']:
+            if not light['enabled']:
+                continue
+            lc = light['color'][ch] / 31.0
+            ndl = max(0.0, -light['direction'][1])
+            c += seg['ambient'][ch] / 31.0 * lc + seg['diffuse'][ch] / 31.0 * lc * ndl
+        out.append(c)
+    return out
+
+
+def lighting_tint(name):
+    seg = LIGHTING.get(name)
+    if not seg or not seg.get('fixed'):
+        return (1.0, 1.0, 1.0)
+    here, ref = floor_light(seg), floor_light(LIGHTING['reference'])
+    return tuple(min(1.0, here[k] / ref[k]) if ref[k] > 0 else 1.0 for k in range(3))
 OBJ_DIR = os.path.join(B.ASSETS, 'hideaway_objects')
 _OBJECTS = {}
 
@@ -136,6 +163,36 @@ def stretch(tris, axis, n):
     return out
 
 
+MODEL_LIMIT = 0xF000
+
+
+def plain_floor(tris):
+    if len(tris) != 2 or not all(t['w'] for t in tris) or tris[0]['m'] != tris[1]['m']:
+        return None
+    zs = [p[2] for t in tris for p in t['p']]
+    cols = set(tuple(round(v, 3) for v in col) for t in tris for col in t['c'])
+    area = sum(abs((t['p'][1][0] - t['p'][0][0]) * (t['p'][2][1] - t['p'][0][1]) - (t['p'][2][0] - t['p'][0][0]) * (t['p'][1][1] - t['p'][0][1])) / 2 for t in tris)
+    if max(zs) - min(zs) > 0.01 or len(cols) != 1 or abs(area - B.T * B.T) > 0.5:
+        return None
+    a, b, c = tris[0]['p']
+    up = (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0
+    return (tris[0]['m'], round(zs[0], 2), cols.pop(), up)
+
+
+def fan(key, nx, ny):
+    mat, z, col, up = key
+    w, h = nx * B.T, ny * B.T
+    ring = [(k * B.T, 0.0) for k in range(nx)] + [(w, k * B.T) for k in range(ny)] + \
+           [(w - k * B.T, h) for k in range(nx)] + [(0.0, h - k * B.T) for k in range(ny)]
+    centre = (w / 2, h / 2)
+    out = []
+    for i in range(len(ring)):
+        a, b = ring[i], ring[(i + 1) % len(ring)]
+        pts = [centre, a, b] if up else [centre, b, a]
+        out.append({'m': mat, 'p': [[p[0], p[1], z] for p in pts], 'uv': [[0, 0]] * 3, 'c': [list(col)] * 3, 'w': True})
+    return out
+
+
 class Faces:
     def __init__(self, name):
         self.name = name
@@ -148,6 +205,7 @@ def normalise(data):
     h, w = len(tiles), len(tiles[0])
     palette = list(data.get('palette') or [biome['floor'], biome['floor2'], biome['liquid']])
     heights = data.get('heights')
+    levels = data.get('levels')
     paint = data.get('paint')
     legacy = {'.': biome['floor'], ',': biome['floor2'], '~': biome['liquid']}
 
@@ -162,11 +220,14 @@ def normalise(data):
             ch = tiles[r][c]
             if ch == ',':
                 tiles[r][c] = '.'
-            hv = heights[r][c] if heights else None
-            if tiles[r][c] in '#X':
-                H[r][c] = int(hv) if hv and hv.isdigit() and int(hv) > 0 else DEFAULT_ROCK_HEIGHT
-            elif tiles[r][c] == '~':
-                H[r][c] = int(hv) if hv and hv.isdigit() else 0
+            if levels:
+                H[r][c] = int(levels[r][c])
+            else:
+                hv = heights[r][c] if heights else None
+                if tiles[r][c] in '#X':
+                    H[r][c] = int(hv) if hv and hv.isdigit() and int(hv) > 0 else DEFAULT_ROCK_HEIGHT
+                elif tiles[r][c] == '~':
+                    H[r][c] = -int(hv) if hv and hv.isdigit() else 0
             pv = paint[r][c] if paint else None
             if pv is not None and pv != '-' and pv != ' ':
                 P[r][c] = palette[int(pv, 36)]
@@ -177,7 +238,7 @@ def normalise(data):
             if tiles[r][c] in '.~' and P[r][c] is None:
                 P[r][c] = legacy[tiles[r][c]]
             if P[r][c] and P[r][c].startswith('@'):
-                P[r][c] = biome[P[r][c][1:]]
+                P[r][c] = biome.get(P[r][c][1:], biome['floor'])
     return tiles, H, P
 
 
@@ -192,6 +253,10 @@ class Hideaway:
         if self.w not in (32, 64) or self.h not in (32, 64) or any(len(r) != self.w for r in self.grid):
             raise ValueError('hideaway must be 32x32 or 64x64 tiles')
         self.objects = data.get('objects', [])
+        self.walls = data.get('walls') or self.biome['walls']
+        self.brightness = float(data.get('brightness', 1.0))
+        tint = lighting_tint(data.get('lighting'))
+        self.mult = tuple(self.brightness * t for t in tint)
         self.levels()
         self.missing = {}
         self.warnings = []
@@ -205,40 +270,32 @@ class Hideaway:
 
     def levels(self):
         w, h = self.w, self.h
-        L = [[0] * w for _ in range(h)]
-        U = [[0] * w for _ in range(h)]
-        for r in range(h):
-            for c in range(w):
-                t = self.grid[r][c]
-                if t in '#X':
-                    L[r][c] = self.height[r][c]
-                elif t == '~':
-                    U[r][c] = self.height[r][c]
-        changed = True
-        while changed:
+        L = [[self.height[r][c] for c in range(w)] for r in range(h)]
+        for _ in range(4 * (w + h)):
             changed = False
             for r in range(h):
                 for c in range(w):
                     t = self.grid[r][c]
+                    near = [(c + dx, r + dy) for dx, dy in NEIGHBOURS if (dx or dy) and self.inside(c + dx, r + dy)]
                     if t in '#X':
-                        low = min([max(L[r + dy][c + dx], 0) for dx, dy in NEIGHBOURS
-                                   if (dx or dy) and self.inside(c + dx, r + dy)] or [L[r][c]])
-                        v = min(self.height[r][c], low + 1)
-                        if v != L[r][c]:
-                            L[r][c] = v
-                            changed = True
+                        v = min(self.height[r][c], min([L[y][x] for x, y in near] or [L[r][c]]) + 1)
                     elif t == '~':
-                        low = min([(U[r + dy][c + dx] if self.grid[r + dy][c + dx] == '~' else -1) for dx, dy in NEIGHBOURS
-                                   if (dx or dy) and self.inside(c + dx, r + dy)] or [U[r][c]])
-                        v = min(self.height[r][c], low + 1)
-                        if v != U[r][c]:
-                            U[r][c] = v
-                            changed = True
+                        rims = [L[y][x] if self.grid[y][x] == '~' else L[y][x] + 1 for x, y in near if self.grid[y][x] not in '#X']
+                        v = max(self.height[r][c], max(rims) - 1) if rims else self.height[r][c]
+                    else:
+                        continue
+                    if v != L[r][c]:
+                        L[r][c] = v
+                        changed = True
+            if not changed:
+                break
+        self.L = L
         for r in range(h):
             for c in range(w):
-                if self.grid[r][c] == '~':
-                    L[r][c] = -U[r][c]
-        self.L = L
+                if self.grid[r][c] == '.':
+                    for dx, dy in NEIGHBOURS:
+                        if self.inside(c + dx, r + dy) and self.grid[r + dy][c + dx] == '.' and abs(L[r + dy][c + dx] - L[r][c]) > 1:
+                            self.level_warnings = getattr(self, 'level_warnings', set()) | {(c, r)}
         self.slope = [[any(self.inside(c + dx, r + dy) and L[r + dy][c + dx] < L[r][c] for dx, dy in NEIGHBOURS)
                        for c in range(w)] for r in range(h)]
 
@@ -305,18 +362,19 @@ class Hideaway:
                         return self.paint[r + dy][c + dx]
         return self.paint[r][c] or self.biome['floor']
 
-    def is_water(self, c, r):
-        return self.inside(c, r) and self.grid[r][c] == '~' and self.L[r][c] == 0 and not self.slope[r][c]
+    def is_water(self, c, r, level):
+        return self.inside(c, r) and self.grid[r][c] == '~' and self.L[r][c] == level and not self.slope[r][c]
 
     def water_sig(self, c, r):
-        if self.grid[r][c] not in '.~' or self.L[r][c] != 0 or self.slope[r][c]:
+        level = self.L[r][c]
+        if self.grid[r][c] not in '.~' or self.slope[r][c]:
             return None
         sig = ''
         for dy in (-1, 0, 1):
             for dx in (-1, 0, 1):
-                if self.inside(c + dx, r + dy) and self.L[r + dy][c + dx] != 0:
+                if self.inside(c + dx, r + dy) and self.L[r + dy][c + dx] != level:
                     return None
-                sig += 'w' if self.is_water(c + dx, r + dy) else 'l'
+                sig += 'w' if self.is_water(c + dx, r + dy, level) else 'l'
         return sig if 'w' in sig else None
 
     def water_piece(self, sig, kit='sea'):
@@ -360,18 +418,19 @@ class Hideaway:
                 mat, world = liquid, True
             elif mat in ('puddle_b',):
                 world = True
-            uv = [(u, 1.0 - v) for u, v in t['uv']] if mat in EDGE_OF.values() else t['uv']
-            shade = 1.0 if t['m'] in ('water', 'puddle_b') else WATER_SHADE
+            uv = t['uv']
+            shade = 1.0 if t['m'] in ('water', 'puddle_b', 'lakep') else WATER_SHADE
             cols = [[v * shade for v in col] for col in t['c']]
-            out.append({'m': mat, 'p': t['p'], 'uv': uv, 'c': cols, 'w': world})
+            out.append({'m': mat, 'p': [[p[0], p[1], p[2] + self.L[r][c] * STOREY] for p in t['p']], 'uv': uv, 'c': cols, 'w': world})
         return out
 
     def edge_for(self, c, r):
-        if self.grid[r][c] != '.' or self.L[r][c] != 0 or self.slope[r][c] or self.paint[r][c] in EDGE_OF:
+        level = self.L[r][c]
+        if self.grid[r][c] != '.' or self.slope[r][c] or self.paint[r][c] in EDGE_OF:
             return None
         best = None
         for fam in EDGE_OF:
-            mask = ''.join('1' if self.info(c + dx, r + dy) == (0, False) and self.grid[r + dy][c + dx] == '.' and self.paint[r + dy][c + dx] == fam else '0'
+            mask = ''.join('1' if self.info(c + dx, r + dy) == (level, False) and self.grid[r + dy][c + dx] == '.' and self.paint[r + dy][c + dx] == fam else '0'
                            for dx, dy in EDGE_NEIGHBOURS)
             n = mask.count('1')
             if n and (best is None or n > best[0]):
@@ -407,7 +466,7 @@ class Hideaway:
                 world_uv = True
             elif mat in BASE_FLOORS and max(zs) < 1.0 and edge:
                 mat = edge[0]
-                uv = [(u, 1.0 - v) for u, v in (bilinear(edge[1], p[0], p[1]) for p in t['p'])]
+                uv = [bilinear(edge[1], p[0], p[1]) for p in t['p']]
             elif mat in BASE_FLOORS and max(zs) < 1.0:
                 mat = self.paint_at(c, r, o)
                 world_uv = True
@@ -444,29 +503,30 @@ class Hideaway:
                     self.warnings.append('exit at %d,%d has no floor in front of it' % (c, r))
                     continue
                 (fx, fy), name = front
+                base = self.L[r + fy][c + fx]
                 stamp = KIT['doors'][name]
                 for cell in stamp['cells']:
                     depth = cell['dy'] if fx == 0 else cell['dx']
                     depth_sign = fy if fx == 0 else fx
-                    want = 0 if depth * depth_sign > 0 else (1 if depth == 0 else 2)
+                    want = base + (0 if depth * depth_sign > 0 else (1 if depth == 0 else 2))
                     pos = (c + cell['dx'], r + cell['dy'])
                     if not self.inside(*pos) or self.L[pos[1]][pos[0]] != want:
                         self.warnings.append('exit at %d,%d needs a straight wall 3 tiles wide with floor in front' % (c, r))
                     tris = []
                     for t in cell['tris']:
                         mat, uv, world = t['m'], t['uv'], False
-                        if mat in BASE_FLOORS and max(p[2] for p in t['p']) < 1.0 and self.inside(*pos):
-                            mat, world = self.paint_at(pos[0], pos[1], 0), True
+                        if (mat in BASE_FLOORS or mat == 'dun_ent2') and max(p[2] for p in t['p']) < 1.0 and self.inside(*pos):
+                            mat, world = self.paint_at(pos[0], pos[1], base), True
                         elif mat == 'black':
                             continue
-                        tris.append({'m': mat, 'p': t['p'], 'uv': uv, 'c': t['c'], 'w': world})
+                        tris.append({'m': mat, 'p': [[p[0], p[1], p[2] + base * STOREY] for p in t['p']], 'uv': uv, 'c': t['c'], 'w': world})
                     tiles[pos] = tris
                     self.stamped.add(pos)
-                self.exits.append({'tile': [c, r], 'facing': name, 'arrive': [c + fx, r + fy], 'step_back': STEP_BACK[name]})
+                self.exits.append({'tile': [c, r], 'facing': name, 'arrive': [c + fx, r + fy], 'step_back': STEP_BACK[name], 'level': base})
         return tiles
 
     def material_paths(self, used):
-        walls = os.path.join(TEX_DIR, 'walls_' + self.biome['walls'])
+        walls = os.path.join(TEX_DIR, 'walls_' + self.walls)
         paths = {}
         for n in used:
             if n in WALL_TEXTURES:
@@ -487,7 +547,12 @@ class Hideaway:
             shape = tuple((t['m'], t['w'], tuple(tuple(round(v, 2) for v in p) for p in t['p']),
                            tuple(round(u, 3) for uv in t['uv'] for u in uv) if not t['w'] else (),
                            tuple(round(v, 2) for col in t['c'] for v in col)) for t in tris)
-            keys[(c, r)] = (hash(shape), invariant(tris, 0), invariant(tris, 1))
+            flat = max(p[2] for t in tris for p in t['p']) - min(p[2] for t in tris for p in t['p']) < 0.01
+            plain = plain_floor(tris)
+            if plain:
+                keys[(c, r)] = (plain, True, True)
+            else:
+                keys[(c, r)] = (hash(shape), invariant(tris, 0) and not flat, invariant(tris, 1) and not flat)
         done = set()
         out = []
         for my in range(self.h // 32):
@@ -504,10 +569,15 @@ class Hideaway:
                         if key and key[2]:
                             while r + ny < my * 32 + 32 and all(keys.get((c + k, r + ny)) == key and (c + k, r + ny) not in done for k in range(nx)):
                                 ny += 1
+                        if key and isinstance(key[0], tuple) and nx * ny <= nx + ny:
+                            nx = ny = 1
                         for k in range(nx):
                             for j in range(ny):
                                 done.add((c + k, r + j))
-                        out.append((c, r, nx, ny, stretch(stretch(tiles[(c, r)], 0, nx), 1, ny)))
+                        if key and isinstance(key[0], tuple) and (nx > 1 or ny > 1):
+                            out.append((c, r, nx, ny, fan(key[0], nx, ny)))
+                        else:
+                            out.append((c, r, nx, ny, stretch(stretch(tiles[(c, r)], 0, nx), 1, ny)))
         return out
 
     def build(self):
@@ -515,6 +585,7 @@ class Hideaway:
         used = set(WALL_TEXTURES) | set(DOOR_TEXTURES)
         for tris in tiles.values():
             for t in tris:
+                t['m'] = ALIASES.get(t['m'], t['m'])
                 used.add(t['m'])
         for o in self.objects:
             mesh = object_mesh(o['key'])
@@ -542,7 +613,7 @@ class Hideaway:
                     uvs = [((gx0 + p[0]) / w, (gy0 + p[1]) / h) for p in t['p']]
                 su = math.floor(min(u[0] for u in uvs))
                 sv = math.floor(min(u[1] for u in uvs))
-                holder.faces.append((mat, pts, [(u[0] - su, u[1] - sv) for u in uvs], [tuple(c) for c in t['c']]))
+                holder.faces.append((mat, pts, [(u[0] - su, u[1] - sv) for u in uvs], [tuple(c[k] * self.mult[k] for k in range(3)) for c in t['c']]))
         for my in range(self.h // 32):
             for mx in range(self.w // 32):
                 maps.setdefault((mx, my), Faces('%s_%d_%d' % (self.name, mx, my)))
@@ -566,7 +637,7 @@ class Hideaway:
                         x, y, z = pos[3 * k:3 * k + 3]
                         pts.append((cx + x * ca - y * sa, cy + x * sa + y * ca, cz + z))
                         uvs.append((uv[2 * k], uv[2 * k + 1]))
-                        cols.append(tuple(col[3 * k:3 * k + 3]))
+                        cols.append(tuple(col[3 * k + j] * self.mult[j] for j in range(3)))
                     su = math.floor(min(u[0] for u in uvs))
                     sv = math.floor(min(u[1] for u in uvs))
                     holder.faces.append((mat, pts, [(u[0] - su, u[1] - sv) for u in uvs], cols))
@@ -584,6 +655,25 @@ class Hideaway:
                     out.add((o['x'] + dx, o['z'] + dy))
         return out
 
+    def walk_levels(self, mx, my):
+        exits = {tuple(e['tile']): e['level'] for e in self.exits}
+        out = {}
+        for lr in range(32):
+            for lc in range(32):
+                c, r = mx * 32 + lc, my * 32 + lr
+                if (c, r) in exits:
+                    out[(lc, lr)] = FLOOR_LEVEL + exits[(c, r)] * STOREY
+                elif self.grid[r][c] == '.' and not self.slope[r][c]:
+                    out[(lc, lr)] = FLOOR_LEVEL + self.L[r][c] * STOREY
+                elif self.surfable(c, r):
+                    out[(lc, lr)] = FLOOR_LEVEL + self.L[r][c] * STOREY - WATER_SURFACE
+        return out
+
+    def surfable(self, c, r):
+        if self.grid[r][c] != '~' or self.slope[r][c] or self.water_sig(c, r) is None:
+            return False
+        return self.nearest_paint(c, r, '~') not in NOT_SURFABLE
+
     def collision(self, mx, my):
         blocked = self.blocked()
         out = bytearray()
@@ -591,9 +681,66 @@ class Hideaway:
             for lc in range(32):
                 c, r = mx * 32 + lc, my * 32 + lr
                 ch = self.grid[r][c]
-                walk = ch in '.X' and (c, r) not in blocked
-                out += struct.pack('<H', COLL_FLOOR if walk else COLL_BLOCK)
+                walk = (ch == 'X' or (ch == '.' and not self.slope[r][c])) and (c, r) not in blocked
+                if walk:
+                    out += struct.pack('<H', COLL_FLOOR)
+                elif (c, r) not in blocked and self.surfable(c, r):
+                    out += struct.pack('<H', COLL_WATER)
+                else:
+                    out += struct.pack('<H', COLL_BLOCK)
         return bytes(out)
+
+
+def level_bdhc(levels):
+    if not levels or len(set(levels.values())) == 1:
+        return flat_bdhc(next(iter(levels.values())) if levels else FLOOR_LEVEL)
+    rects = []
+    done = set()
+    for r in range(32):
+        for c in range(32):
+            if (c, r) in done or (c, r) not in levels:
+                continue
+            lv = levels[(c, r)]
+            w = 1
+            while (c + w, r) in levels and levels[(c + w, r)] == lv and (c + w, r) not in done:
+                w += 1
+            h = 1
+            while all((c + k, r + h) in levels and levels[(c + k, r + h)] == lv and (c + k, r + h) not in done for k in range(w)):
+                h += 1
+            for k in range(w):
+                for j in range(h):
+                    done.add((c + k, r + j))
+            rects.append((c, r, w, h, lv))
+    points, consts, plates = [], [], []
+    for c, r, w, h, lv in rects:
+        p0 = len(points)
+        points.append((-B.HALF + c * B.T, -B.HALF + r * B.T))
+        points.append((-B.HALF + (c + w) * B.T, -B.HALF + (r + h) * B.T))
+        height = -lv
+        if height not in consts:
+            consts.append(height)
+        plates.append((p0, p0 + 1, 0, consts.index(height)))
+    bounds = sorted(set(v for c, r, w, h, lv in rects for v in (-B.HALF + r * B.T, -B.HALF + (r + h) * B.T)))
+    strips, access = [], []
+    for i in range(1, len(bounds)):
+        lo, hi = bounds[i - 1], bounds[i]
+        members = [k for k, (c, r, w, h, lv) in enumerate(rects) if -B.HALF + r * B.T <= hi and -B.HALF + (r + h) * B.T >= lo]
+        strips.append((hi, len(members), len(access)))
+        access += members
+    out = bytearray(b'BDHC')
+    out += struct.pack('<6H', len(points), 1, len(consts), len(plates), len(strips), len(access))
+    for x, z in points:
+        out += struct.pack('<2i', int(x * 4096), int(z * 4096))
+    out += struct.pack('<3i', 0, 4096, 0)
+    for k in consts:
+        out += struct.pack('<i', int(k * 4096))
+    for p in plates:
+        out += struct.pack('<4H', *p)
+    for hi, n, start in strips:
+        out += struct.pack('<iHH', int(hi * 4096), n, start)
+    for a in access:
+        out += struct.pack('<H', a)
+    return bytes(out)
 
 
 def flat_bdhc(height):
@@ -642,7 +789,7 @@ def build(path, out_dir=None):
         print('g3dcvtr.exe not found; set G3DCVTR to its path')
         return 1
     materials = [(n, n, 0, 0) for n in sorted(paths)]
-    bdhc = flat_bdhc(FLOOR_LEVEL)
+
     info = {'name': hide.name, 'biome': data['biome'], 'size': [hide.w // 32, hide.h // 32], 'maps': [], 'exits': hide.exits,
             'textures': sorted(paths), 'objects': len(hide.objects)}
     for (mx, my), holder in sorted(maps.items(), key=lambda kv: (kv[0][1], kv[0][0])):
@@ -654,7 +801,11 @@ def build(path, out_dir=None):
         model = convert(conv, base + '.imd', base + '.nsbmd', '-emdl')
         if model is None:
             return 1
+        if len(model) > MODEL_LIMIT:
+            print('error: %s is %d bytes; the game only has room for %d per map. Simplify this part of the hideaway.' % (holder.name, len(model), MODEL_LIMIT))
+            return 1
         perm = hide.collision(mx, my)
+        bdhc = level_bdhc(hide.walk_levels(mx, my))
         blob = struct.pack('<4I', len(perm), 0, len(model), len(bdhc)) + perm + model + bdhc
         open(base + '_map_data.bin', 'wb').write(blob)
         info['maps'].append({'x': mx, 'y': my, 'file': os.path.basename(base) + '_map_data.bin', 'triangles': tris, 'bytes': len(blob)})

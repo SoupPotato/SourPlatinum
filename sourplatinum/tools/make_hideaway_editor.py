@@ -1,7 +1,9 @@
 import base64
 import json
 import os
+import struct
 import sys
+import zlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -21,6 +23,46 @@ def png_size(path):
 
 
 kit = json.load(open(os.path.join(ASSETS, 'cave_kit.json')))
+walls_info = json.load(open(os.path.join(ASSETS, 'hideaway_walls.json')))
+lighting_info = json.load(open(os.path.join(ASSETS, 'hideaway_lighting.json')))
+battle = {'backgrounds': {}, 'terrains': {}}
+bdir = os.path.join(ASSETS, 'battle_previews')
+if os.path.exists(os.path.join(bdir, 'index.json')):
+    bidx = json.load(open(os.path.join(bdir, 'index.json')))
+    for name, times in bidx['backgrounds'].items():
+        battle['backgrounds'][name] = {t: data_uri(os.path.join(bdir, f)) for t, f in times.items()}
+    for name, sides in bidx['terrains'].items():
+        battle['terrains'][name] = {s: {t: data_uri(os.path.join(bdir, f)) for t, f in times.items()} for s, times in sides.items()}
+GENERATED = os.path.join(os.path.dirname(os.path.dirname(HERE)), 'generated')
+backgrounds = [l.strip() for l in open(os.path.join(GENERATED, 'battle_backgrounds.txt')) if l.strip() and not l.strip().endswith('_MAX')]
+terrains = [l.strip() for l in open(os.path.join(GENERATED, 'battle_terrains.txt')) if l.strip() and not l.strip().endswith('_MAX')]
+REPO = os.path.dirname(os.path.dirname(HERE))
+SPECIAL_NAMES = {'NIDORAN_F': 'Nidoran F', 'NIDORAN_M': 'Nidoran M', 'MR_MIME': 'Mr. Mime', 'MIME_JR': 'Mime Jr.',
+                 'PORYGON_Z': 'Porygon-Z', 'HO_OH': 'Ho-Oh', 'FARFETCHD': "Farfetch'd"}
+
+
+def png_bytes(w, h, rows):
+    raw = b''.join(b'\x00' + bytes(v for px in row for v in px) for row in rows)
+    chunk = lambda kind, data: struct.pack('>I', len(data)) + kind + data + struct.pack('>I', zlib.crc32(kind + data) & 0xffffffff)
+    return (b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('>IIBBBBB', w, h, 8, 6, 0, 0, 0))
+            + chunk(b'IDAT', zlib.compress(raw, 9)) + chunk(b'IEND', b''))
+
+
+species = []
+for line in open(os.path.join(GENERATED, 'species.txt')):
+    const = line.strip()
+    if not const.startswith('SPECIES_') or const in ('SPECIES_NONE', 'SPECIES_EGG', 'SPECIES_BAD_EGG'):
+        continue
+    key = const[len('SPECIES_'):]
+    label = SPECIAL_NAMES.get(key, key.replace('_', ' ').title())
+    icon = None
+    path = os.path.join(REPO, 'res', 'pokemon', key.lower(), 'icon.png')
+    if os.path.exists(path):
+        w, h, px = B.read_png(path)[:3]
+        back = px[0][0]
+        rows = [[(0, 0, 0, 0) if p == back else p for p in row[:32]] for row in px[:32]]
+        icon = 'data:image/png;base64,' + base64.b64encode(png_bytes(32, 32, rows)).decode()
+    species.append({'id': const, 'name': label, 'icon': icon})
 edges = json.load(open(os.path.join(ASSETS, 'ground_edges.json')))
 water_kit = json.load(open(os.path.join(ASSETS, 'water_kit.json')))
 edge_sheets = set(v['edge'] for v in edges['families'].values()) | {water_kit['bank'], 'puddle_b'}
@@ -83,6 +125,18 @@ button, label.btn, select, input[type=text] { background: var(--panel); color: v
 button, label.btn { cursor: pointer; }
 button:hover, label.btn:hover { border-color: var(--accent); }
 button.on { border-color: var(--accent); color: var(--accent); }
+#encPanel { margin: 0 16px 16px; }
+#encPanel table { border-collapse: collapse; width: 100%; max-width: 760px; }
+#encPanel th { text-align: left; color: var(--muted); font-weight: 600; font-size: 12px; padding: 4px 6px; border-bottom: 1px solid var(--line); }
+#encPanel td { padding: 2px 6px; border-bottom: 1px solid var(--line); }
+#encPanel td.num { color: var(--muted); width: 36px; }
+#encPanel .mon { width: 32px; height: 32px; image-rendering: pixelated; display: block; }
+#encPanel input { background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 4px 6px; font: inherit; }
+#encPanel input.species { width: 180px; }
+#encPanel input.species.bad { border-color: var(--bad); }
+#encPanel input.lv { width: 56px; }
+#encSummary { margin-top: 8px; }
+#encWarn { color: var(--bad); }
 main { display: flex; gap: 16px; padding: 16px; align-items: flex-start; flex-wrap: wrap; }
 #grid { image-rendering: pixelated; cursor: crosshair; background: #000; max-width: 100%; touch-action: none; }
 #view { position: relative; }
@@ -123,6 +177,13 @@ kbd { background: #00000055; border: 1px solid var(--line); border-radius: 3px; 
   <button id="toggle3d" class="on">3D view</button>
   <button id="resetView">Reset camera</button>
 </header>
+<div id="settings" style="padding:8px 16px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+  <label>Cave walls <select id="walls"></select></label>
+  <label>Lighting <select id="lighting"></select></label>
+  <label>Brightness <input type="range" id="brightness" min="40" max="100" step="5" style="vertical-align:middle"> <span id="brightnessValue"></span></label>
+  <label>Battle background <select id="battleBg"></select></label>
+  <label>Battle ground <select id="battleTerrain"></select></label>
+</div>
 <main>
   <canvas id="grid"></canvas>
   <div id="view"><canvas id="view3d"></canvas><div id="viewHint">Drag to orbit &middot; right-drag to pan &middot; scroll to zoom</div></div>
@@ -136,9 +197,10 @@ kbd { background: #00000055; border: 1px solid var(--line); border-radius: 3px; 
         <button data-tool="X"><span class="swatch" style="background:#000;border:1px solid #b5713f"></span>Exit <kbd>4</kbd></button>
         <button data-tool="height"><span class="swatch" style="background:linear-gradient(#ece6df,#3a281e)"></span>Height only <kbd>5</kbd></button>
       </div>
+      <div class="row"><span class="label">Floor level</span><span class="tools" id="floorLevels"></span></div>
       <div class="row"><span class="label">Rock height</span><span class="tools" id="rockHeights"></span></div>
-      <div class="row"><span class="label">Water depth</span><span class="tools" id="liquidDepths"></span></div>
-      <p>Rock rises one storey per tile, like the cave walls. Height 2 is the normal cave wall. Water at depth 0 is a pond or river: it sits just below the ground with an overworld-style shoreline. Depth 1 or 2 makes a deeper pit with cave-wall banks (good for lava).</p>
+      <div class="row"><span class="label">Water level</span><span class="tools" id="liquidLevels"></span></div>
+      <p>Levels are in storeys; 0 is the normal floor. Floors at other levels stay walkable, and a one-tile cave bank forms where levels meet (the higher tile becomes the bank). Rock rises one storey per tile; height 2 is the normal cave wall. Water level 0 is a pond with an overworld shoreline; lower water sinks into a pit with cave-wall banks (good for lava).</p>
     </div>
     <div class="panel">
       <h2>Textures <kbd>6</kbd></h2>
@@ -152,6 +214,15 @@ kbd { background: #00000055; border: 1px solid var(--line); border-radius: 3px; 
       <p id="objHint">Objects stand on the level of the tile under their corner and block the tiles they cover (flowers, craters and pools stay walkable). <b>R</b> turns the next object.</p>
     </div>
     <div class="panel">
+      <h2>Previews</h2>
+      <canvas id="battlePreview" width="256" height="192" style="width:256px;height:192px;image-rendering:pixelated;border-radius:4px;background:#000;display:block"></canvas>
+      <div class="row" style="align-items:flex-start">
+        <canvas id="lightPreview" width="96" height="96" style="width:96px;height:96px;border-radius:4px;background:#000"></canvas>
+        <p id="lightText" style="flex:1;margin:0"></p>
+      </div>
+      <p>The battle preview uses the chosen background and ground, in the day, evening or night palette that matches the lighting. The ball shows how the lighting shades the player, Pokémon and NPCs. Fixed times of day also tint the hideaway map itself.</p>
+    </div>
+    <div class="panel">
       <h2>Hideaway</h2>
       <div id="status"></div>
       <div id="warnings"></div>
@@ -159,11 +230,31 @@ kbd { background: #00000055; border: 1px solid var(--line); border-radius: 3px; 
     <div class="panel">
       <h2>Adding it to the game</h2>
       <p>Drag to paint. Hold <b>Shift</b> while dragging to fill a rectangle. Right-click a tile to pick up its terrain, height and texture.</p>
-      <p><b>Exit</b> goes in a straight cave wall (height 2) right next to the floor, with rock on both sides. It becomes the doorway back to the Underground. Use one exit.</p>
+      <p><b>Exit</b> goes in a straight cave wall two storeys above the floor in front of it, with rock on both sides. Every exit leads back to the Underground; players arrive at the first one.</p>
       <p>Save the file into <code>tools/underground_block_editor_assets/hideaways</code>, then run <code>py -3 install_hideaways.py</code> in the tools folder.</p>
     </div>
   </div>
 </main>
+<section class="panel" id="encPanel">
+  <h2>Encounters</h2>
+  <div class="tools">
+    <button data-enc="land" class="on">Land (cave floor)</button>
+    <button data-enc="water">Water (surfing)</button>
+  </div>
+  <div class="row">
+    <span class="label">Encounter rate</span>
+    <input type="number" id="encRate" min="0" max="255" class="lv">
+    <span id="encRateHint" style="color:var(--muted)"></span>
+  </div>
+  <table>
+    <thead><tr><th>Slot</th><th></th><th>Pokémon</th><th>Min level</th><th>Max level</th><th>Encounter chance</th><th>Slot ratio</th></tr></thead>
+    <tbody id="encRows"></tbody>
+  </table>
+  <datalist id="speciesList"></datalist>
+  <div id="encSummary"></div>
+  <p id="encWarn"></p>
+  <p>Hideaways work like caves: every floor tile can start a battle, and surfable water uses the water table. Each slot has its own level range. The rate is how often battles start (caves in Platinum use about 10; 0 turns them off). If any slot is empty while the rate is above 0, the installer turns that table off.</p>
+</section>
 <script>
 const BIOMES = __BIOMES__;
 const HTEX = __HTEX__;
@@ -174,6 +265,44 @@ const KIT = __KIT__;
 const EDGES = __EDGES__;
 const WATER_KIT = __WATER__;
 const TEX_ALPHA = __ALPHA__;
+const WALLS = __WALLS__;
+const BGS = __BGS__;
+const TERRAINS = __TERRAINS__;
+const LIGHTING = __LIGHTING__;
+const SPECIES = __SPECIES__;
+const BATTLE = __BATTLE__;
+const LIGHTINGS = {};
+for (const [k, v] of Object.entries(LIGHTING)) if (k !== 'reference') LIGHTINGS[k] = v.label;
+function currentLighting() { return extra.lighting || (WALLS[wallStyle()] || {}).lighting || 'lighting_set_001'; }
+function lightAt(seg, n) {
+  const out = [0, 0, 0];
+  for (let ch = 0; ch < 3; ch++) {
+    let c = seg.emission[ch] / 31;
+    for (const l of seg.lights) {
+      if (!l.enabled) continue;
+      const lc = l.color[ch] / 31;
+      const ndl = Math.max(0, -(l.direction[0] * n[0] + l.direction[1] * n[1] + l.direction[2] * n[2]));
+      c += seg.ambient[ch] / 31 * lc + seg.diffuse[ch] / 31 * lc * ndl;
+    }
+    out[ch] = c;
+  }
+  return out;
+}
+function lightingTint() {
+  const seg = LIGHTING[currentLighting()];
+  if (!seg || !seg.fixed) return [1, 1, 1];
+  const here = lightAt(seg, [0, 1, 0]), ref = lightAt(LIGHTING.reference, [0, 1, 0]);
+  return here.map((v, k) => ref[k] > 0 ? Math.min(1, v / ref[k]) : 1);
+}
+function battleTime() {
+  const label = (LIGHTING[currentLighting()] || {}).label || '';
+  if (/Night/.test(label)) return 'night';
+  if (/Sunset|Dusk/.test(label)) return 'evening';
+  return 'day';
+}
+const DEFAULT_TERRAIN = { grassland: 'TERRAIN_GRASS', riverbank: 'TERRAIN_GRASS', swampy: 'TERRAIN_GREAT_MARSH', icy: 'TERRAIN_ICE', whiteout: 'TERRAIN_SNOW', rocky: 'TERRAIN_SAND', sandsear: 'TERRAIN_SAND', volcanic: 'TERRAIN_MOUNTAIN', fountainspring: 'TERRAIN_PLAIN' };
+function wallStyle() { return extra.walls || BIOMES[biome].walls; }
+function brightness() { return extra.brightness === undefined ? 1 : +extra.brightness; }
 const SYMMETRIES = [[1, 0, 0, 1], [0, -1, 1, 0], [-1, 0, 0, -1], [0, 1, -1, 0], [-1, 0, 0, 1], [1, 0, 0, -1], [0, 1, 1, 0], [0, -1, -1, 0]];
 const EDGE_OF = {};
 for (const [f, v] of Object.entries(EDGES.families)) EDGE_OF[f] = v.edge;
@@ -184,13 +313,14 @@ function canonMask(mask) {
   return m.join('');
 }
 function edgeFor(x, z, lv) {
-  if (T[z][x] !== '.' || lv.L[z][x] !== 0 || lv.slope[z][x] || EDGE_OF[nameOf(Pn[z][x])]) return null;
+  const level = lv.L[z][x];
+  if (T[z][x] !== '.' || lv.slope[z][x] || EDGE_OF[nameOf(Pn[z][x])]) return null;
   let best = null;
   for (const fam of Object.keys(EDGE_OF)) {
     let mask = '', n = 0;
     for (const [dx, dy] of EDGES.neighbours) {
       const xx = x + dx, zz = z + dy;
-      const on = inside(xx, zz) && lv.L[zz][xx] === 0 && !lv.slope[zz][xx] && T[zz][xx] === '.' && nameOf(Pn[zz][xx]) === fam;
+      const on = inside(xx, zz) && lv.L[zz][xx] === level && !lv.slope[zz][xx] && T[zz][xx] === '.' && nameOf(Pn[zz][xx]) === fam;
       mask += on ? '1' : '0'; if (on) n++;
     }
     if (n && (!best || n > best[0])) best = [n, fam, mask];
@@ -218,7 +348,7 @@ const FRONT_TO_DOOR = { '0,1': 'N', '0,-1': 'S', '1,0': 'W', '-1,0': 'E' };
 
 let N = 32, S = 20, biome = 'grassland', extra = {};
 let T = [], Hh = [], Pn = [], objects = [];
-let tool = '.', rockHeight = 2, liquidDepth = 1, curTex = '@floor', curObj = null, curRot = 0;
+let tool = '.', floorLevel = 0, rockHeight = 2, liquidLevel = 0, curTex = '@floor', curObj = null, curRot = 0;
 let painting = false, rectStart = null, hover = null, before = null;
 const undoStack = [], redoStack = [];
 const cv = document.getElementById('grid');
@@ -232,13 +362,14 @@ function texPath(key) {
   const b = BIOMES[biome];
   if (!key) return null;
   if (key[0] === '@') return 'floors/' + b[key.slice(1)];
-  if (key === 'rock') return 'walls_' + b.walls + '/dun_floor2';
+  if (key === 'rock') return 'walls_' + wallStyle() + '/dun_floor2';
+  if (key === 'cave') return 'walls_' + wallStyle() + '/dun_floor';
   return 'floors/' + key;
 }
 function texLabel(key) {
   if (!key) return 'none';
   if (key[0] === '@') return { '@floor': 'Type floor', '@floor2': 'Type floor 2', '@path': 'Type path', '@liquid': 'Type liquid' }[key] + ' (' + BIOMES[biome][key.slice(1)] + ')';
-  return key === 'rock' ? 'Rock' : key;
+  return key === 'rock' ? 'Rock top' : key === 'cave' ? 'Cave floor' : key;
 }
 
 const images = {};
@@ -282,10 +413,13 @@ function fromFile(d) {
       if (!pv && c === '.') p = '@floor';
       if (!pv && c === '~') p = '@liquid';
       if (c === 'D') c = 'X';
-      const hv = d.heights ? d.heights[z][x] : null;
       let h = 0;
-      if (c === '#' || c === 'X') h = hv && +hv > 0 ? +hv : 2;
-      else if (c === '~') h = hv ? +hv : 0;
+      if (d.levels) h = +d.levels[z][x];
+      else {
+        const hv = d.heights ? d.heights[z][x] : null;
+        if (c === '#' || c === 'X') h = hv && +hv > 0 ? +hv : 2;
+        else if (c === '~') h = hv ? -hv : 0;
+      }
       T[z].push(c); Hh[z].push(h); Pn[z].push(p);
     }
   }
@@ -297,15 +431,16 @@ function toFile() {
   const idx = k => { let i = palette.indexOf(k); if (i < 0) { palette.push(k); i = palette.length - 1; } return i.toString(36); };
   const name = (document.getElementById('name').value || 'hideaway').replace(/[^A-Za-z0-9_-]/g, '_');
   const tiles = T.map(r => r.join(''));
-  const heights = Hh.map(r => r.map(v => String(v)).join(''));
+  const levelRows = Hh.map(r => r.slice());
   const paint = Pn.map(r => r.map(p => p ? idx(p) : '-').join(''));
-  return Object.assign({}, extra, { name, biome, palette, tiles, heights, paint, objects: objects.map(o => Object.assign({}, o)) });
+  return Object.assign({}, extra, { name, biome, palette, tiles, levels: levelRows, paint, objects: objects.map(o => Object.assign({}, o)) });
 }
 
-function snapshot() { return JSON.stringify({ T, Hh, Pn, objects, N }); }
+function snapshot() { return JSON.stringify({ T, Hh, Pn, objects, N, extra }); }
 function restore(s) {
   const d = JSON.parse(s);
-  T = d.T; Hh = d.Hh; Pn = d.Pn; objects = d.objects;
+  T = d.T; Hh = d.Hh; Pn = d.Pn; objects = d.objects; extra = d.extra || {};
+  if (window.refreshSettings) refreshSettings();
   if (d.N !== N) { N = d.N; resizeGrid(); }
   draw();
 }
@@ -317,36 +452,30 @@ function resizeGrid() {
 }
 
 function levels() {
-  const L = [], U = [];
-  for (let z = 0; z < N; z++) {
-    L.push([]); U.push([]);
-    for (let x = 0; x < N; x++) {
-      const t = T[z][x];
-      L[z].push(t === '#' || t === 'X' ? Hh[z][x] : 0);
-      U[z].push(t === '~' ? Hh[z][x] : 0);
-    }
-  }
-  let changed = true;
-  while (changed) {
-    changed = false;
+  const L = Hh.map(r => r.slice());
+  for (let iter = 0; iter < 4 * N + 8; iter++) {
+    let changed = false;
     for (let z = 0; z < N; z++) for (let x = 0; x < N; x++) {
       const t = T[z][x];
+      let v;
       if (t === '#' || t === 'X') {
         let low = Infinity;
-        for (const [dx, dy] of NB) { if ((dx || dy) && inside(x + dx, z + dy)) low = Math.min(low, Math.max(L[z + dy][x + dx], 0)); }
-        if (low === Infinity) low = L[z][x];
-        const v = Math.min(Hh[z][x], low + 1);
-        if (v !== L[z][x]) { L[z][x] = v; changed = true; }
+        for (const [dx, dy] of NB) if ((dx || dy) && inside(x + dx, z + dy)) low = Math.min(low, L[z + dy][x + dx]);
+        v = Math.min(Hh[z][x], (low === Infinity ? L[z][x] : low) + 1);
       } else if (t === '~') {
-        let low = Infinity;
-        for (const [dx, dy] of NB) { if ((dx || dy) && inside(x + dx, z + dy)) low = Math.min(low, T[z + dy][x + dx] === '~' ? U[z + dy][x + dx] : -1); }
-        if (low === Infinity) low = U[z][x];
-        const v = Math.min(Hh[z][x], low + 1);
-        if (v !== U[z][x]) { U[z][x] = v; changed = true; }
-      }
+        let high = -Infinity;
+        for (const [dx, dy] of NB) {
+          if (!(dx || dy) || !inside(x + dx, z + dy)) continue;
+          const nt = T[z + dy][x + dx];
+          if (nt === '#' || nt === 'X') continue;
+          high = Math.max(high, nt === '~' ? L[z + dy][x + dx] : L[z + dy][x + dx] + 1);
+        }
+        v = high === -Infinity ? Hh[z][x] : Math.max(Hh[z][x], high - 1);
+      } else continue;
+      if (v !== L[z][x]) { L[z][x] = v; changed = true; }
     }
+    if (!changed) break;
   }
-  for (let z = 0; z < N; z++) for (let x = 0; x < N; x++) if (T[z][x] === '~') L[z][x] = -U[z][x];
   const slope = [];
   for (let z = 0; z < N; z++) {
     slope.push([]);
@@ -371,10 +500,11 @@ function exitProblems(lv) {
     const f = exitFront(x, z);
     if (!f) { bad.push([x, z]); continue; }
     let ok = true;
+    const base = lv.L[z + f[1]][x + f[0]];
     for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) {
       const dx = f[0] === 0 ? a : b, dz = f[0] === 0 ? b : a;
       const depth = f[0] === 0 ? dz * f[1] : dx * f[0];
-      const want = depth > 0 ? 0 : (depth === 0 ? 1 : 2);
+      const want = base + (depth > 0 ? 0 : (depth === 0 ? 1 : 2));
       if (!inside(x + dx, z + dz) || lv.L[z + dz][x + dx] !== want) ok = false;
     }
     if (!ok) bad.push([x, z]);
@@ -421,18 +551,18 @@ function draw() {
       const tw = img.width, th = img.height, sx = (x * 16) % tw, sy = (z * 16) % th;
       ctx.drawImage(img, sx, sy, Math.min(16, tw - sx), Math.min(16, th - sy), x * S, z * S, S, S);
     } else {
-      ctx.fillStyle = t === 'X' ? '#000' : t === '~' ? '#4a7fc0' : t === '.' ? '#6fbf4a' : ROCK_SHADES[Math.min(5, Hh[z][x])];
+      ctx.fillStyle = t === 'X' ? '#000' : t === '~' ? '#4a7fc0' : t === '.' ? '#6fbf4a' : ROCK_SHADES[Math.max(0, Math.min(5, Hh[z][x]))];
       ctx.fillRect(x * S, z * S, S, S);
     }
     if (t === '#' && img) { ctx.fillStyle = 'rgba(30,18,10,0.35)'; ctx.fillRect(x * S, z * S, S, S); }
-    if (t === '~' || t === '#') {
-      const l = lv.L[z][x];
-      if (lv.slope[z][x]) { ctx.fillStyle = 'rgba(0,0,0,0.22)'; ctx.fillRect(x * S, z * S, S, S); }
-      if ((t === '#' && Hh[z][x] !== 2) || (t === '~' && Hh[z][x] > 0) || (t === '#' && Pn[z][x])) {
+    if (t !== 'X') {
+      if (lv.slope[z][x]) { ctx.fillStyle = t === '.' ? 'rgba(0,0,0,0.38)' : 'rgba(0,0,0,0.22)'; ctx.fillRect(x * S, z * S, S, S); }
+      const unusual = (t === '#' && (Hh[z][x] !== 2 || Pn[z][x])) || (t !== '#' && Hh[z][x] !== 0);
+      if (unusual && S >= 10) {
         ctx.fillStyle = 'rgba(255,255,255,0.85)';
         ctx.font = Math.max(8, Math.floor(S * 0.5)) + 'px system-ui';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        if (S >= 10) ctx.fillText(t === '~' ? '-' + Hh[z][x] : String(Hh[z][x]), x * S + S / 2, z * S + S / 2 + 1);
+        ctx.fillText(String(Hh[z][x]), x * S + S / 2, z * S + S / 2 + 1);
       }
     }
   }
@@ -490,12 +620,15 @@ function draw() {
   if (hover) {
     const [hx, hz] = hover, t = T[hz][hx];
     const kind = { '.': 'floor', '#': 'rock', '~': 'water', 'X': 'exit' }[t];
-    info += '<br>tile ' + hx + ', ' + hz + ': ' + kind + (t === '#' ? ' height ' + Hh[hz][hx] : t === '~' ? ' depth ' + Hh[hz][hx] : '') + ' &middot; level ' + lv.L[hz][hx] + (lv.slope[hz][hx] ? ' (slope)' : '') + ' &middot; ' + texLabel(Pn[hz][hx]);
+    info += '<br>tile ' + hx + ', ' + hz + ': ' + kind + ' set to ' + Hh[hz][hx] + ' &middot; level ' + lv.L[hz][hx] + (lv.slope[hz][hx] ? ' (bank, not walkable)' : '') + ' &middot; ' + texLabel(Pn[hz][hx]);
   }
   document.getElementById('status').innerHTML = info;
   const warn = [];
-  if (exits !== 1) warn.push('A hideaway needs exactly one exit.');
-  if (bad.length) warn.push(bad.length + ' exit(s) need a straight height-2 wall 3 tiles wide with floor in front (marked red).');
+  if (exits < 1) warn.push('A hideaway needs an exit.');
+  if (bad.length) warn.push(bad.length + ' exit(s) need a straight wall two storeys above the floor in front, 3 tiles wide (marked red).');
+  let cliffs = 0;
+  for (let z = 0; z < N; z++) for (let x = 0; x < N; x++) if (T[z][x] === '.') for (const [dx, dy] of NB) if (inside(x + dx, z + dy) && T[z + dy][x + dx] === '.' && Hh[z + dy][x + dx] - Hh[z][x] > 1) { cliffs++; break; }
+  if (cliffs) warn.push(cliffs + ' floor tile(s) sit next to floor two or more levels higher; leave a tile between level changes.');
   const missing = objects.filter(o => !PROPS[o.key]).length;
   if (missing) warn.push(missing + ' object(s) are not in the catalogue.');
   document.getElementById('warnings').textContent = warn.join(' ');
@@ -514,18 +647,19 @@ function apply(x, z) {
   const t = T[z][x];
   if (tool === '.') {
     if (t !== '.') Pn[z][x] = curTex && curTex !== 'rock' && curTex !== '@liquid' ? curTex : '@floor';
-    T[z][x] = '.'; Hh[z][x] = 0;
+    T[z][x] = '.'; Hh[z][x] = floorLevel;
   } else if (tool === '#') {
     if (t !== '#') Pn[z][x] = null;
     T[z][x] = '#'; Hh[z][x] = rockHeight;
   } else if (tool === '~') {
     if (t !== '~') Pn[z][x] = '@liquid';
-    T[z][x] = '~'; Hh[z][x] = liquidDepth;
+    T[z][x] = '~'; Hh[z][x] = liquidLevel;
   } else if (tool === 'X') {
-    T[z][x] = 'X'; Hh[z][x] = 2; Pn[z][x] = null;
+    T[z][x] = 'X'; Hh[z][x] = 9; Pn[z][x] = null;
   } else if (tool === 'height') {
     if (t === '#') Hh[z][x] = rockHeight;
-    else if (t === '~') Hh[z][x] = liquidDepth;
+    else if (t === '~') Hh[z][x] = liquidLevel;
+    else if (t === '.') Hh[z][x] = floorLevel;
   } else if (tool === 'paint') {
     if (t !== 'X') Pn[z][x] = curTex;
   } else if (tool === 'erase') {
@@ -556,7 +690,7 @@ cv.addEventListener('pointerdown', e => {
   const [x, z] = t;
   if (e.button === 2) {
     const k = T[z][x];
-    if (k === '#') rockHeight = Hh[z][x]; else if (k === '~') liquidDepth = Hh[z][x];
+    if (k === '#') rockHeight = Hh[z][x]; else if (k === '~') liquidLevel = Hh[z][x]; else if (k === '.') floorLevel = Hh[z][x];
     if (Pn[z][x]) curTex = Pn[z][x];
     setTool(k); refreshPanels(); return;
   }
@@ -592,27 +726,28 @@ function setTool(t) {
 document.querySelectorAll('[data-tool]').forEach(b => b.addEventListener('click', () => setTool(b.dataset.tool)));
 
 function refreshPanels() {
+  document.querySelectorAll('#floorLevels button').forEach(b => b.classList.toggle('on', +b.dataset.v === floorLevel));
   document.querySelectorAll('#rockHeights button').forEach(b => b.classList.toggle('on', +b.dataset.v === rockHeight));
-  document.querySelectorAll('#liquidDepths button').forEach(b => b.classList.toggle('on', +b.dataset.v === liquidDepth));
+  document.querySelectorAll('#liquidLevels button').forEach(b => b.classList.toggle('on', +b.dataset.v === liquidLevel));
   document.querySelectorAll('#texPalette button').forEach(b => b.classList.toggle('on', tool === 'paint' && (b.dataset.key || null) === (curTex || null) && b.dataset.key !== undefined));
   document.querySelectorAll('#objPalette button').forEach(b => b.classList.toggle('on', tool === 'object' && b.dataset.id === curObj));
 }
 
-for (const v of [1, 2, 3, 4]) {
-  const b = document.createElement('button'); b.textContent = v; b.dataset.v = v;
-  b.onclick = () => { rockHeight = v; if (tool !== '#' && tool !== 'height') setTool('#'); refreshPanels(); };
-  document.getElementById('rockHeights').appendChild(b);
+function levelButtons(id, values, set, toolFor) {
+  for (const v of values) {
+    const b = document.createElement('button'); b.textContent = v; b.dataset.v = v;
+    b.onclick = () => { set(v); if (tool !== toolFor && tool !== 'height') setTool(toolFor); refreshPanels(); };
+    document.getElementById(id).appendChild(b);
+  }
 }
-for (const v of [0, 1, 2]) {
-  const b = document.createElement('button'); b.textContent = v; b.dataset.v = v;
-  b.onclick = () => { liquidDepth = v; if (tool !== '~' && tool !== 'height') setTool('~'); refreshPanels(); };
-  document.getElementById('liquidDepths').appendChild(b);
-}
+levelButtons('floorLevels', [-3, -2, -1, 0, 1, 2, 3], v => { floorLevel = v; }, '.');
+levelButtons('rockHeights', [-1, 0, 1, 2, 3, 4, 5], v => { rockHeight = v; }, '#');
+levelButtons('liquidLevels', [-3, -2, -1, 0, 1], v => { liquidLevel = v; }, '~');
 
 function buildTexPalette() {
   const pal = document.getElementById('texPalette');
   pal.innerHTML = '';
-  const keys = [null, 'rock', '@floor', '@floor2', '@path', '@liquid'].concat(FLOORS);
+  const keys = [null, 'rock', 'cave', '@floor', '@floor2', '@path', '@liquid'].concat(FLOORS);
   for (const k of keys) {
     const b = document.createElement('button');
     if (k !== null) b.dataset.key = k; else b.dataset.key = '';
@@ -620,7 +755,7 @@ function buildTexPalette() {
     const p = texPath(k);
     th.style.background = p ? 'url(' + HTEX[p] + ') 0 0 / 20px 20px' : '#000';
     const nm = document.createElement('span'); nm.className = 'name';
-    nm.textContent = k === null ? 'None' : k === 'rock' ? 'Rock' : k[0] === '@' ? { '@floor': 'Type 1', '@floor2': 'Type 2', '@path': 'Type path', '@liquid': 'Type liquid' }[k] : k;
+    nm.textContent = k === null ? 'None' : k === 'rock' ? 'Rock top' : k === 'cave' ? 'Cave floor' : k[0] === '@' ? { '@floor': 'Type 1', '@floor2': 'Type 2', '@path': 'Type path', '@liquid': 'Type liquid' }[k] : k;
     b.title = texLabel(k);
     b.append(th, nm);
     b.onclick = () => { curTex = k; setTool('paint'); };
@@ -667,8 +802,169 @@ const biomeSel = document.getElementById('biome');
 for (const [k, b] of Object.entries(BIOMES)) {
   const o = document.createElement('option'); o.value = k; o.textContent = b.label; biomeSel.appendChild(o);
 }
-function setBiome(b) { biome = b; biomeSel.value = b; buildTexPalette(); draw(); }
+function setBiome(b) { biome = b; biomeSel.value = b; buildTexPalette(); refreshSettings(); draw(); }
 biomeSel.onchange = () => setBiome(biomeSel.value);
+
+function fillSelect(id, entries) {
+  const s = document.getElementById(id);
+  for (const [v, label] of entries) { const o = document.createElement('option'); o.value = v; o.textContent = label; s.appendChild(o); }
+}
+const pretty = s => s.replace(/^(BACKGROUND|TERRAIN)_/, '').toLowerCase().replace(/_/g, ' ').replace(/^./, c => c.toUpperCase());
+fillSelect('walls', [['', 'Type default']].concat(Object.entries(WALLS).map(([k, w]) => [k, w.label])));
+fillSelect('lighting', [['', 'Default for the cave walls']].concat(Object.entries(LIGHTINGS)));
+fillSelect('battleBg', BGS.map(b => [b, pretty(b)]));
+fillSelect('battleTerrain', TERRAINS.map(t => [t, pretty(t)]));
+const previewImages = {};
+function previewImage(src, then) {
+  if (!src) return null;
+  if (previewImages[src]) return previewImages[src].complete ? previewImages[src] : null;
+  const img = new Image();
+  img.onload = then;
+  img.src = src;
+  previewImages[src] = img;
+  return null;
+}
+function drawPreviews() {
+  const c = document.getElementById('battlePreview'), g = c.getContext('2d');
+  g.imageSmoothingEnabled = false;
+  g.fillStyle = '#000'; g.fillRect(0, 0, 256, 192);
+  const time = battleTime();
+  const bgName = extra.battle_bg || 'BACKGROUND_CAVE_3';
+  const terrain = extra.battle_terrain || DEFAULT_TERRAIN[biome] || 'TERRAIN_CAVE';
+  const bgs = BATTLE.backgrounds[bgName] || {};
+  const bg = previewImage(bgs[time] || bgs.day, drawPreviews);
+  if (bg) g.drawImage(bg, 0, 0);
+  const t = BATTLE.terrains[terrain] || {};
+  const enemy = t.enemy ? previewImage(t.enemy[time] || t.enemy.day, drawPreviews) : null;
+  const player = t.player ? previewImage(t.player[time] || t.player.day, drawPreviews) : null;
+  if (enemy) g.drawImage(enemy, 184 - enemy.width / 2, 92 - enemy.height / 2);
+  if (player) g.drawImage(player, 64 - player.width / 2, 132 - player.height / 2);
+  const lc = document.getElementById('lightPreview'), l = lc.getContext('2d');
+  const seg = LIGHTING[currentLighting()];
+  const img = l.createImageData(96, 96);
+  const refMax = Math.max(...lightAt(LIGHTING.reference, [0, 0.5, 0.866]));
+  for (let y = 0; y < 96; y++) for (let x = 0; x < 96; x++) {
+    const nx = (x - 48) / 40, ny = (48 - y) / 40, r2 = nx * nx + ny * ny, i = (y * 96 + x) * 4;
+    if (r2 > 1 || !seg) { img.data[i + 3] = 255; continue; }
+    const nz = Math.sqrt(1 - r2);
+    const col = lightAt(seg, [nx, ny * 0.5 + nz * 0.5, ny * -0.5 + nz * 0.866]);
+    for (let k = 0; k < 3; k++) img.data[i + k] = Math.min(255, Math.round(col[k] / refMax * 235));
+    img.data[i + 3] = 255;
+  }
+  l.putImageData(img, 0, 0);
+  const tint = lightingTint().map(v => Math.round(v * 100));
+  document.getElementById('lightText').innerHTML = '<b>' + ((seg || {}).label || currentLighting()) + '</b><br>' +
+    (seg && seg.fixed ? 'Map tint: ' + tint.join(' / ') + '% (red / green / blue)' : 'Map colours are left as they are; only characters are lit.') +
+    '<br>Battle palette: ' + battleTime();
+}
+
+const ENC_SLOTS = 12, ENC_RATIO = [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1];
+const SPECIES_BY_ID = {}, SPECIES_BY_NAME = {};
+for (const s of SPECIES) { SPECIES_BY_ID[s.id] = s; SPECIES_BY_NAME[s.name.toLowerCase()] = s; }
+document.getElementById('speciesList').innerHTML = SPECIES.map(s => '<option value="' + s.name.replace(/"/g, '&quot;') + '">').join('');
+let encKind = 'land';
+function encData() {
+  const e = extra.encounters || {};
+  const out = { land_rate: e.land_rate || 0, water_rate: e.water_rate || 0, land: [], water: [] };
+  for (const k of ['land', 'water'])
+    for (let i = 0; i < ENC_SLOTS; i++) {
+      const s = (e[k] || [])[i] || {};
+      out[k].push({ species: s.species || 'SPECIES_NONE', min: s.min || 1, max: s.max || s.min || 1 });
+    }
+  return out;
+}
+function setEnc(fn) {
+  before = snapshot();
+  const d = encData();
+  fn(d);
+  const empty = ['land', 'water'].every(k => !d[k + '_rate'] && d[k].every(s => s.species === 'SPECIES_NONE'));
+  if (empty) delete extra.encounters; else extra.encounters = d;
+  commit();
+  store('ugHideawayEditor2', JSON.stringify(toFile()));
+  refreshEncounters();
+}
+function refreshEncounters() {
+  const d = encData(), rows = d[encKind];
+  document.querySelectorAll('[data-enc]').forEach(b => b.classList.toggle('on', b.dataset.enc === encKind));
+  document.getElementById('encRate').value = d[encKind + '_rate'];
+  document.getElementById('encRateHint').textContent = d[encKind + '_rate'] ? '' : 'off';
+  const body = document.getElementById('encRows');
+  if (body.children.length !== ENC_SLOTS) {
+    body.innerHTML = '';
+    for (let i = 0; i < ENC_SLOTS; i++) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td class="num">' + (i + 1) + '</td><td><img class="mon" alt=""></td>' +
+        '<td><input class="species" list="speciesList" placeholder="None"></td>' +
+        '<td><input class="lv min" type="number" min="1" max="100"></td>' +
+        '<td><input class="lv max" type="number" min="1" max="100"></td>' +
+        '<td>' + ENC_RATIO[i] + '%</td><td>' + ENC_RATIO[i] + '</td>';
+      const sp = tr.querySelector('.species'), mn = tr.querySelector('.min'), mx = tr.querySelector('.max');
+      sp.onchange = () => {
+        const v = sp.value.trim().toLowerCase();
+        const s = v === '' ? null : SPECIES_BY_NAME[v];
+        if (v !== '' && !s) { sp.classList.add('bad'); return; }
+        setEnc(d => { d[encKind][i].species = s ? s.id : 'SPECIES_NONE'; });
+      };
+      const level = (el, key) => () => {
+        const n = Math.max(1, Math.min(100, parseInt(el.value, 10) || 1));
+        setEnc(d => {
+          const slot = d[encKind][i];
+          slot[key] = n;
+          if (key === 'min' && slot.max < n) slot.max = n;
+          if (key === 'max' && slot.min > n) slot.min = n;
+        });
+      };
+      mn.onchange = level(mn, 'min'); mx.onchange = level(mx, 'max');
+      body.appendChild(tr);
+    }
+  }
+  rows.forEach((s, i) => {
+    const tr = body.children[i], info = SPECIES_BY_ID[s.species];
+    const sp = tr.querySelector('.species');
+    sp.classList.remove('bad');
+    if (document.activeElement !== sp) sp.value = info ? info.name : '';
+    tr.querySelector('.min').value = s.min;
+    tr.querySelector('.max').value = s.max;
+    const img = tr.querySelector('.mon');
+    if (info && info.icon) { img.src = info.icon; img.style.visibility = ''; } else { img.removeAttribute('src'); img.style.visibility = 'hidden'; }
+  });
+  const totals = {};
+  rows.forEach((s, i) => { if (s.species !== 'SPECIES_NONE') totals[s.species] = (totals[s.species] || 0) + ENC_RATIO[i]; });
+  document.getElementById('encSummary').innerHTML = Object.keys(totals).length ? '<b>Totals:</b> ' +
+    Object.entries(totals).sort((a, b) => b[1] - a[1]).map(([k, v]) => (SPECIES_BY_ID[k] || { name: k }).name + ' ' + v + '%').join(', ') : '';
+  const warn = [];
+  for (const k of ['land', 'water'])
+    if (d[k + '_rate'] && d[k].some(s => s.species === 'SPECIES_NONE'))
+      warn.push((k === 'land' ? 'Land' : 'Water') + ' has empty slots, so its encounters will be turned off.');
+  document.getElementById('encWarn').textContent = warn.join(' ');
+}
+document.querySelectorAll('[data-enc]').forEach(b => b.onclick = () => { encKind = b.dataset.enc; refreshEncounters(); });
+document.getElementById('encRate').onchange = e => {
+  const n = Math.max(0, Math.min(255, parseInt(e.target.value, 10) || 0));
+  setEnc(d => { d[encKind + '_rate'] = n; });
+};
+
+function refreshSettings() {
+  refreshEncounters();
+  document.getElementById('walls').value = extra.walls || '';
+  document.getElementById('lighting').value = extra.lighting || '';
+  document.getElementById('brightness').value = Math.round(brightness() * 100);
+  document.getElementById('brightnessValue').textContent = Math.round(brightness() * 100) + '%';
+  document.getElementById('battleBg').value = extra.battle_bg || 'BACKGROUND_CAVE_3';
+  document.getElementById('battleTerrain').value = extra.battle_terrain || DEFAULT_TERRAIN[biome] || 'TERRAIN_CAVE';
+  drawPreviews();
+}
+function setting(key, value, dflt) {
+  before = snapshot();
+  if (value === '' || value === dflt) delete extra[key]; else extra[key] = value;
+  commit();
+  refreshSettings(); buildTexPalette(); draw();
+}
+document.getElementById('walls').onchange = e => setting('walls', e.target.value, '');
+document.getElementById('lighting').onchange = e => setting('lighting', e.target.value, '');
+document.getElementById('brightness').oninput = e => setting('brightness', +e.target.value / 100, 1);
+document.getElementById('battleBg').onchange = e => setting('battle_bg', e.target.value, 'BACKGROUND_CAVE_3');
+document.getElementById('battleTerrain').onchange = e => setting('battle_terrain', e.target.value, DEFAULT_TERRAIN[biome] || 'TERRAIN_CAVE');
 
 document.getElementById('size').onchange = e => {
   const n = parseInt(e.target.value, 10);
@@ -713,13 +1009,14 @@ function openData(d, fallbackName) {
   const n = Array.isArray(d.tiles) ? d.tiles.length : 0;
   if ((n !== 32 && n !== 64) || d.tiles.some(r => r.length !== n)) { alert('Not a 32x32 or 64x64 hideaway file'); return false; }
   extra = Object.assign({}, d);
-  for (const k of ['tiles', 'name', 'biome', 'palette', 'heights', 'paint', 'objects']) delete extra[k];
+  for (const k of ['tiles', 'name', 'biome', 'palette', 'heights', 'levels', 'paint', 'objects']) delete extra[k];
   biome = BIOMES[d.biome] ? d.biome : 'grassland';
   biomeSel.value = biome;
   fromFile(d);
   N = n; resizeGrid();
   document.getElementById('name').value = d.name || fallbackName || 'hideaway';
   buildTexPalette();
+  refreshSettings();
   draw();
   return true;
 }
@@ -816,13 +1113,14 @@ setTool('.');
 
   function buildTerrain() {
     const lv = levels(), L = lv.L, SL = lv.slope;
-    const isWater = (x, z) => inside(x, z) && T[z][x] === '~' && L[z][x] === 0 && !SL[z][x];
+    const isWater = (x, z, lvl) => inside(x, z) && T[z][x] === '~' && L[z][x] === lvl && !SL[z][x];
     function waterSig(x, z) {
-      if ((T[z][x] !== '.' && T[z][x] !== '~') || L[z][x] !== 0 || SL[z][x]) return null;
+      const lvl = L[z][x];
+      if ((T[z][x] !== '.' && T[z][x] !== '~') || SL[z][x]) return null;
       let sig = '';
       for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
-        if (inside(x + dx, z + dy) && L[z + dy][x + dx] !== 0) return null;
-        sig += isWater(x + dx, z + dy) ? 'w' : 'l';
+        if (inside(x + dx, z + dy) && L[z + dy][x + dx] !== lvl) return null;
+        sig += isWater(x + dx, z + dy, lvl) ? 'w' : 'l';
       }
       return sig.includes('w') ? sig : null;
     }
@@ -868,7 +1166,7 @@ setTool('.');
       }
       return Pn[z][x] || '@floor';
     }
-    const b = BIOMES[biome], walls = 'walls_' + b.walls + '/';
+    const walls = 'walls_' + wallStyle() + '/';
     const matPath = m => WALL_TEXTURES.includes(m) ? walls + m : (m === 'dun_dhole' || m === 'dun_ent2') ? m : texPath(m);
     const tiles = [];
     for (let z = 0; z < N; z++) {
@@ -885,8 +1183,8 @@ setTool('.');
             if (tr.m === 'floor') { path = texPath(nearestPaint(x, z, '.')); world = true; }
             else if (tr.m === 'water') { path = texPath(liquid); world = true; }
             else { path = 'floors/' + tr.m; world = tr.m === 'puddle_b'; }
-            const shade = (tr.m === 'water' || tr.m === 'puddle_b') ? 1 : 0.81;
-            out.push({ path, p: tr.p, uv: tr.uv, c: tr.c.map(c => c.map(v => v * shade)), w: world });
+            const shade = (tr.m === 'water' || tr.m === 'puddle_b' || tr.m === 'lakep') ? 1 : 0.81;
+            out.push({ path, p: tr.p.map(p => [p[0], p[1], p[2] + level * STOREY]), uv: tr.uv, c: tr.c.map(c => c.map(v => v * shade)), w: world });
           }
         } else if (!(!slope && (t === '#' || t === 'X') && !Pn[z][x])) {
           const [sig, o] = code(x, z);
@@ -916,19 +1214,21 @@ setTool('.');
       const f = exitFront(x, z);
       if (!f) continue;
       const st = KIT.doors[FRONT_TO_DOOR[f[0] + ',' + f[1]]];
+      const base = L[z + f[1]][x + f[0]];
       for (const cell of st.cells) {
         const xx = x + cell.dx, zz = z + cell.dy;
         if (!inside(xx, zz)) continue;
         const out = [];
         for (const tr of cell.tris) {
           if (tr.m === 'black') continue;
-          if (BASE_FLOORS.includes(tr.m) && Math.max(...tr.p.map(p => p[2])) < 1) out.push({ path: texPath(paintAt(xx, zz, 0)), p: tr.p, uv: tr.uv, c: tr.c, w: true });
-          else out.push({ path: matPath(tr.m), p: tr.p, uv: tr.uv, c: tr.c, w: false });
+          const p = tr.p.map(q => [q[0], q[1], q[2] + base * STOREY]);
+          if ((BASE_FLOORS.includes(tr.m) || tr.m === 'dun_ent2') && Math.max(...tr.p.map(q => q[2])) < 1) out.push({ path: texPath(paintAt(xx, zz, base)), p, uv: tr.uv, c: tr.c, w: true });
+          else out.push({ path: matPath(tr.m), p, uv: tr.uv, c: tr.c, w: false });
         }
         tiles[zz][xx] = out;
       }
     }
-    const groups = {}, half = N * 8;
+    const groups = {}, half = N * 8, tint = lightingTint(), bright = [0, 1, 2].map(k => brightness() * tint[k]);
     for (let z = 0; z < N; z++) for (let x = 0; x < N; x++) {
       const x0 = -half + 16 * x, y0 = half - 16 * (z + 1), gx0 = 16 * x, gy0 = 16 * (N - z - 1);
       for (const tr of tiles[z][x]) {
@@ -937,7 +1237,7 @@ setTool('.');
         for (let k = 0; k < 3; k++) {
           const p = tr.p[k];
           const uv = tr.w ? [(gx0 + p[0]) / sz[0], (gy0 + p[1]) / sz[1]] : tr.uv[k];
-          push(g, [x0 + p[0], y0 + p[1], p[2]], uv, tr.c[k]);
+          push(g, [x0 + p[0], y0 + p[1], p[2]], uv, tr.c[k].map((v, j) => v * bright[j]));
         }
       }
     }
@@ -1010,7 +1310,7 @@ setTool('.');
           const grp = Group();
           for (let i = 0, k = 0; i < g.pos.length; i += 3, k++) {
             const x = g.pos[i], y = g.pos[i + 1];
-            push(grp, [cx + x * ca - y * sa, cy + x * sa + y * ca, cz + g.pos[i + 2]], [g.uv[2 * k], g.uv[2 * k + 1]], [g.col[3 * k], g.col[3 * k + 1], g.col[3 * k + 2]]);
+            push(grp, [cx + x * ca - y * sa, cy + x * sa + y * ca, cz + g.pos[i + 2]], [g.uv[2 * k], g.uv[2 * k + 1]], [0, 1, 2].map(j => g.col[3 * k + j] * brightness() * lightingTint()[j]));
           }
           addGroup(grp, g.img ? mat(g.img) : plain);
         }
@@ -1076,6 +1376,8 @@ setTool('.');
 out = (html.replace('__BIOMES__', json.dumps(biomes)).replace('__HTEX__', json.dumps(tex)).replace('__HSIZE__', json.dumps(sizes))
        .replace('__FLOORS__', json.dumps(floors)).replace('__PROPS__', json.dumps(props, separators=(',', ':')))
        .replace('__KIT__', json.dumps(kit, separators=(',', ':'))).replace('__EDGES__', json.dumps(edges, separators=(',', ':')))
-       .replace('__WATER__', json.dumps(water_kit, separators=(',', ':'))).replace('__ALPHA__', json.dumps(alpha)))
+       .replace('__WATER__', json.dumps(water_kit, separators=(',', ':'))).replace('__ALPHA__', json.dumps(alpha))
+       .replace('__SPECIES__', json.dumps(species, separators=(',', ':')))
+       .replace('__WALLS__', json.dumps(walls_info)).replace('__LIGHTING__', json.dumps(lighting_info)).replace('__BATTLE__', json.dumps(battle)).replace('__BGS__', json.dumps(backgrounds)).replace('__TERRAINS__', json.dumps(terrains)))
 open(os.path.join(HERE, 'hideaway_editor.html'), 'w', encoding='utf-8').write(out)
 print('wrote hideaway_editor.html with %d textures and %d objects' % (len(floors), len(props)))

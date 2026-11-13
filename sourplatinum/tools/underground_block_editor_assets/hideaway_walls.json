@@ -1,0 +1,9 @@
+{
+  "052": {"label": "Oreburgh Gate (brown)", "lighting": "lighting_set_001"},
+  "068": {"label": "Mt. Coronet (dark blue)", "lighting": "lighting_set_002"},
+  "069": {"label": "Mt. Coronet upper floors (brown)", "lighting": "lighting_set_002"},
+  "055": {"label": "Turnback Cave", "lighting": "lighting_set_001"},
+  "056": {"label": "Stark Mountain", "lighting": "lighting_set_001"},
+  "064": {"label": "Snowpoint Temple", "lighting": "lighting_set_001"},
+  "070": {"label": "Victory Road", "lighting": "lighting_set_001"}
+}
